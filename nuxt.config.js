@@ -37,8 +37,12 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     '@nuxt/image',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
   ],
+
+  router: {
+    middleware: ['init-app']
+  },
 
   components: true,
   loading: false,

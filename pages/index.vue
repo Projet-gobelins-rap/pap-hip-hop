@@ -25,7 +25,6 @@ export default class Home extends Vue {
     console.log($socket,'socket from plugin')
     console.log(this.globalStore,'global store')
 
-
     console.log(this.$device,'<-- device object')
 
     $socket.on("success_m", (user, users) => {
