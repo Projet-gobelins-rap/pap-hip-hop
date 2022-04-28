@@ -6,7 +6,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: "Nuxt.js starter",
+    title: "Pap'hiphop",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -37,6 +37,7 @@ export default {
   buildModules: [
     '@nuxt/typescript-build',
     '@nuxt/image',
+    '@nuxtjs/device'
   ],
 
   components: true,

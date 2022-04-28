@@ -28,7 +28,8 @@
       "@nuxt/types",
       "@types/node",
       "@type/three",
-      "@nuxt/image"
+      "@nuxt/image",
+      "@nuxtjs/device"
     ]
   },
 //  "include": ["types/**/*.ts"],

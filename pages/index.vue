@@ -25,6 +25,9 @@ export default class Home extends Vue {
     console.log($socket,'socket from plugin')
     console.log(this.globalStore,'global store')
 
+
+    console.log(this.$device,'<-- device object')
+
     $socket.on("success_m", (user, users) => {
       console.log("connected");
       console.log(user.code);
@@ -34,9 +37,7 @@ export default class Home extends Vue {
     $socket.on("phone_connected", (user) => {
       console.log("phone_connected on Desktop");
       console.log(user,"<--- user connected");
-      // $socket.join('room')
       console.log($socket,'<--- socket ')
-
       // this.globalStore.setUserData({phone:Object.keys(user)[0],desktop:Object.keys(user)[1]})
     });
   }
