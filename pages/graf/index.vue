@@ -2,7 +2,7 @@
   <section class="home">
     {{ this.graf }}
     <p class="display"></p>
-    <img class="grafImg" src="images/sky.jpeg" alt="">
+    <img class="grafImg" src="images/wall-1.png" alt="">
     <canvas class="canvas-graf"></canvas>
     <button class="canvas-reset">Passer à l'etape 2</button>
   </section>
@@ -35,7 +35,7 @@ export default class GraffActivity extends Vue {
   position: absolute
   left: 0
   top: 0
-  background: url("/images/sky.jpeg")
+  background: url("/images/wall-1.png")
   background-size: cover
   background-repeat: no-repeat
   background-position: left top

@@ -52,7 +52,9 @@ export default class Graf {
   setupCanvas() {
     let self = this
     this.img.onload = () => {
-      self.ctx.drawImage(self.img, 0, 0, self.size.width, self.size.height);
+      // self.ctx.drawImage(self.img, 0, 0, self.size.width, self.size.height);
+
+      this.drawImageProp(this.ctx,self.img,0,0, self.size.width, self.size.height,0,0)
       self.ctx.globalCompositeOperation = "destination-out";
     }
   }
@@ -90,14 +92,15 @@ export default class Graf {
 
   updateCanvasBackground() {
     this.canvasUpdated = true
-    this.grafCanvas.style.background = "url('/images/wall-2.png')"
-    this.imgUrl = '/images/sky.jpeg'
+    this.grafCanvas.style.backgroundImage = "url('/images/wall-2.png')"
+    this.imgUrl = '/images/wall-1.png'
     this.img.src = this.imgUrl
     let self = this
     gsap.to(this.grafImg,{opacity:0})
     this.img.onload = () => {
       this.ctx.globalCompositeOperation = "source-over";
-      self.ctx.drawImage(self.img, 0, 0, self.size.width, self.size.height);
+      this.drawImageProp(this.ctx,self.img,0,0, self.size.width, self.size.height,0,0)
+      // self.ctx.drawImage(self.img, 0, 0, self.size.width, self.size.height);
       self.ctx.globalCompositeOperation = "destination-out";
     }
     this.erasedPercentage = 0
@@ -125,6 +128,56 @@ export default class Graf {
     this.display.innerText = this.erasedPercentage.toString()
 
   }
+
+  drawImageProp(ctx:any, img:any, x:number, y:number, w:number, h:number, offsetX:number, offsetY:number) {
+
+    if (arguments.length === 2) {
+      x = y = 0;
+      w = ctx.canvas.width;
+      h = ctx.canvas.height;
+    }
+
+    // default offset is center
+    offsetX = typeof offsetX === "number" ? offsetX : 0.5;
+    offsetY = typeof offsetY === "number" ? offsetY : 0.5;
+
+    // keep bounds [0.0, 1.0]
+    if (offsetX < 0) offsetX = 0;
+    if (offsetY < 0) offsetY = 0;
+    if (offsetX > 1) offsetX = 1;
+    if (offsetY > 1) offsetY = 1;
+
+    let iw = img.width,
+      ih = img.height,
+      r = Math.min(w / iw, h / ih),
+      nw = iw * r,   // new prop. width
+      nh = ih * r,   // new prop. height
+      cx, cy, cw, ch, ar = 1;
+
+    // decide which gap to fill
+    if (nw < w) ar = w / nw;
+    if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh;  // updated
+    nw *= ar;
+    nh *= ar;
+
+    // calc source rectangle
+    cw = iw / (nw / w);
+    ch = ih / (nh / h);
+
+    cx = (iw - cw) * offsetX;
+    cy = (ih - ch) * offsetY;
+
+    // make sure source rectangle is valid
+    if (cx < 0) cx = 0;
+    if (cy < 0) cy = 0;
+    if (cw > iw) cw = iw;
+    if (ch > ih) ch = ih;
+
+    // fill image in dest. rectangle
+    ctx.drawImage(img, cx, cy, cw, ch,  x, y, w, h);
+  }
+
+
 
   resize() {
 

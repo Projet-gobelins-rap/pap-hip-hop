@@ -28,10 +28,6 @@ export default {
     host: '0'
   },
 
-  modules: [
-    'nuxt-socket-io',
-  ],
-
   plugins: ['~/plugins/socket.io.js'],
 
   buildModules: [

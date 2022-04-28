@@ -1,6 +1,6 @@
 <template>
   <section class="intro">
-    <CustomButton @click.native="goToNextStep" text="Commencer"></CustomButton>
+    <span>mobileConnection</span>
   </section>
 </template>
 
@@ -13,18 +13,19 @@ import CustomButton from "~/components/buttons/button.vue";
     CustomButton
   },
 })
-export default class Intro extends Vue {
+export default class mobileConnection extends Vue {
 
   public stepStore = getModule(stepStore,this.$store)
 
   mounted() {
   }
 
-  goToNextStep(){
-
-    this.stepStore.setIntroState(true)
-    this.$router.push('/connection')
-  }
+  // goToNextStep(){
+  //
+  //   this.stepStore.setIntroState(true)
+  //   console.log(this.$nuxt)
+  //   this.$router.push('/about')
+  // }
 
 }
 </script>

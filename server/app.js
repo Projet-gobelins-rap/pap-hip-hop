@@ -31,6 +31,7 @@ io.on('connection', socket => {
           users[user].phone = socket.id
           socket.broadcast.to(user).emit("phone_connected", users[user]);
           socket.emit("phone_connected");
+          console.log(users[user],'OOOOO')
         }
       }
     })
@@ -46,8 +47,8 @@ io.on('connection', socket => {
     console.log(users);
   });
 
-  socket.emit('success_m', users[socket.id])
 
+  console.log(users[socket.id],'<-- USERRS')
   socket.on('destroy', () => {
     console.log('destroyed')
   })
@@ -57,6 +58,11 @@ io.on('connection', socket => {
     console.log('user disconnected');
     delete users[socket.id];
   });
+
+  socket.on('desktop-connection',()=>{
+    socket.emit('success_m', users[socket.id])
+  })
+
 })
 
 module.exports = {
