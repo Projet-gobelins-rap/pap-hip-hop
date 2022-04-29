@@ -1,10 +1,10 @@
 import {
   AnimationClip,
-  AnimationMixer,
+  AnimationMixer, AnimationObjectGroup,
   AxesHelper,
   Camera,
   Clock,
-  Euler,
+  Euler, Object3D,
   PerspectiveCamera,
   Raycaster,
   Scene,
@@ -119,9 +119,6 @@ export default class SceneManager{
     this._init()
   }
 
-  _init() {
-
-  }
 
   // PUBLIC METHODS
   /**
@@ -210,6 +207,227 @@ export default class SceneManager{
     this._isRayCasting = true
 
     return this
+  }
+
+  /**
+   * Disable RayCasting detection
+   */
+  public disableRayCasting() {
+    this._isRayCasting = false
+
+    return this
+  }
+
+  /**
+   * Enable axes helper
+   */
+  public enableAxesHelpers(size: number = 10) {
+    const axesHelper = new AxesHelper(size)
+    this._scene.add(axesHelper)
+
+    return this
+  }
+
+  /**
+   * Init intern mandatory events
+   */
+  public _bindEvents() {
+    this._bindExternEvents(this)
+
+    window.addEventListener('resize', event => {
+      this._onWindowResizeCallback(this, event)
+    })
+  }
+
+  /**
+   * Helper to toggle visible property of objects
+   */
+  public setObjectVisibility(objectList: Array<string>, visibleObject: string | null = null) {
+    objectList.forEach(objectName => {
+      this._scene.getObjectByName(objectName)!.visible = (visibleObject) ? objectName === visibleObject : true
+    })
+  }
+
+  /**
+   * Create animationMixer for 3D object
+   */
+  public createAnimationMixer(name: string, object: Object3D | AnimationObjectGroup) {
+    const mixer = new AnimationMixer(object)
+    this._animationMixers.push({ name, instance: mixer })
+  }
+
+  /**
+   * Remove animationMixer for 3D object
+   */
+  public removeAnimationMixer(name: string) {
+    this._animationMixers = this._animationMixers.filter(mixer => mixer.name === name)
+  }
+
+  public getAnimationMixer(name: string) {
+    const mixer = this._animationMixers.find(mixer => mixer.name === name)
+    if (!mixer) {
+      throw new Error(`Mixer ${name} doesn't exist !`)
+    }
+
+    return mixer
+  }
+
+  /**
+   * Play animation of specific object and animation mixer
+   */
+  public generateAnimationAction(animationClip: AnimationClip, mixerName: string, withLoop: boolean = true) {
+    const mixer = this.getAnimationMixer(mixerName)
+    return mixer.instance.clipAction(animationClip)
+  }
+
+  // - PRIVATE
+  /**
+   * Init elements after property binding into constructor
+   */
+  private _init() {
+    this._initRenderer()
+    this._initControls()
+
+    this._bindEvents()
+
+    this._checkConfig()
+  }
+
+  /**
+   * Init renderer
+   */
+  private _initRenderer() {
+    this._renderer.setSize(this._canvas.width, this._canvas.height)
+    this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, this._defaultRatio))
+  }
+
+  /**
+   * Init controls for camera
+   */
+  private _initControls() {
+    if (this._isOrbitControlActivated) {
+      this._controls = new OrbitControls(this._camera, this._canvas)
+      this._controls.enableDamping = true
+    }
+  }
+
+  /**
+   * Check configuration and warn weird things
+   */
+  private _checkConfig() {
+    if (!(this._camera instanceof PerspectiveCamera)) {
+      console.warn('Your camera is not Perspective Camera')
+    }
+  }
+
+  /**
+   * Update loop of the scene
+   */
+  private _tick() {
+    if (!this._isPlaying) return
+
+    // if (this._isStatsActive && this._stats) this._stats.begin()
+    this._render()
+    // if (this._isStatsActive && this._stats) this._stats.end()
+
+    this._requestId = requestAnimationFrame(this._tick.bind(this))
+  }
+
+  /**
+   * Logic to render the scene (for each frame)
+   */
+  private _render() {
+    const elapsedTime = this._clock.getElapsedTime()
+    this._deltaTime = elapsedTime - this._previousTime
+    this._previousTime = elapsedTime
+
+    this._onRenderCallback.forEach(renderCallback => {
+      renderCallback(this)
+    })
+
+    if (this._controls) {
+      this._controls.update()
+    }
+
+    if (this._isRayCasting) {
+      this._rayCaster.setFromCamera(this._mousePositions, this._camera)
+      const intersects = this._rayCaster.intersectObjects(this._scene.children, true)
+      this._onRayCasterIntersectCallback(this, intersects)
+    }
+
+    if (this._camera instanceof PerspectiveCamera) {
+      this._camera.updateProjectionMatrix()
+    }
+
+    this._animationMixers.forEach(mixer => {
+      mixer.instance.update(this._deltaTime)
+    })
+
+
+    if (this._composer){
+      this._composer.render(this._deltaTime)
+    } else {
+      this._renderer.render(this._scene, this._camera)
+    }
+
+  }
+
+  // - GETTERS
+  get camera(): Camera {
+    return this._camera
+  }
+
+  get clock(): Clock {
+    return this._clock
+  }
+
+  // get gui(): GUI {
+  //   return this._gui
+  // }
+
+  get renderer(): WebGLRenderer {
+    return this._renderer
+  }
+
+  get scene(): Scene {
+    return this._scene
+  }
+
+  get currentIntersect(): any {
+    return this._currentIntersect
+  }
+
+  get mousePositions(): Vector2 {
+    return this._mousePositions
+  }
+
+  get deltaTime(): number {
+    return this._deltaTime
+  }
+
+  get width(): number {
+    return this._canvas.width
+  }
+
+  get height(): number {
+    return this._canvas.height
+  }
+
+  get canvas(): HTMLCanvasElement {
+    return this._canvas
+  }
+
+  get defaultRatio() {
+    return this._defaultRatio
+  }
+
+  // get globalSceneRotation() {
+  //   return this._globalSceneRotation
+  // }
+
+  // setters
+  set currentIntersect(currentIntersect: any) {
+    this._currentIntersect = currentIntersect
   }
 
 }

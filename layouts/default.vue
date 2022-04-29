@@ -23,6 +23,7 @@ export default class Default extends Vue {
 
   head() {
 
+
   }
 
   mounted(){
