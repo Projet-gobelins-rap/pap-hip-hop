@@ -29,5 +29,4 @@ export default class Loader extends VuexModule{
   get Imgs(){
     return this._imgs
   }
-
 }
