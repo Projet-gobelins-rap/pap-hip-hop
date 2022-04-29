@@ -107,7 +107,7 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     return new WebGLRenderer({
       canvas: this._data.canvas,
       antialias: true,
-      alpha: false,
+      alpha: true,
       // powerPreference: 'high-performance'
     })
   }
@@ -115,19 +115,6 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
-    // this._addGltfGlobalScene()
-    // this._addGltfTom()
-    // //this._addGltfOutside()
-    // //this._addAnimateElements()
-    // this._prepareTelevision()
-    // this._addStickersSkate()
-    // this._addNotebook()
-    // this._addCat()
-    // this._addBedroomPaper()
-    // this._addPhone()
-    // this._addClouds()
-    // this._addRecordPlayer()
-    // this._addComputer()
   }
 
   addCube(){
