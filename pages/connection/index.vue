@@ -1,6 +1,6 @@
 <template>
-  <section class="home">
-    {{ this.home }}
+  <section class="desktopConnection">
+    <div>Connecte toi à l'expérience sur ton mobile et saisie le code suivant : </div>
     <span id="code">{{this.code}}</span>
   </section>
 </template>
@@ -36,6 +36,9 @@ export default class Connection extends Vue {
       console.log("phone_connected on Desktop");
       console.log(user,"<--- user connected");
       console.log($socket,'<--- socket ')
+
+      this.$router.push('/')
+      // TODO :: Stocker notre user dans le store
       // this.globalStore.setUserData({phone:Object.keys(user)[0],desktop:Object.keys(user)[1]})
     });
   }
