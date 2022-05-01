@@ -36,12 +36,13 @@ export default class Home extends Vue {
   }
 }
 </script>
-
+ 
 <style lang="sass" scoped>
 #canvasGlobalScene
   position: absolute
   left: 0
   top: 0
+  z-index: 1
 </style>
 
 
