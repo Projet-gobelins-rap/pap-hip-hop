@@ -43,3 +43,7 @@ export default class Home extends Vue {
   left: 0
   top: 0
 </style>
+
+
+
+ 

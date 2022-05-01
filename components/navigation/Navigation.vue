@@ -7,7 +7,7 @@
      <nuxt-link to="/about">About</nuxt-link>
    </div>
    <div class="navigation__items">
-     <nuxt-link to="/connect">Connect</nuxt-link>
+     <nuxt-link to="/connection">Connect</nuxt-link>
    </div>
    <div class="navigation__items">
      <nuxt-link to="/graf">Graf</nuxt-link>
