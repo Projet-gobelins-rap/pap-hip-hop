@@ -60,9 +60,13 @@ io.on('connection', socket => {
   });
 
   socket.on('desktop-connection',()=>{
-    socket.emit('success_m', users[socket.id])
+    console.log('desktop-connection');
+    socket.emit('success-desktop', users[socket.id])
   })
 
+  socket.on('test', () =>{
+    console.log('test');
+  })
 })
 
 module.exports = {

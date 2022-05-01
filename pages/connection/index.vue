@@ -22,10 +22,10 @@ export default class Connection extends Vue {
   mounted() {
     console.log($socket,'socket from plugin')
     console.log(this.globalStore,'global store')
-
+    
     $socket.emit('desktop-connection')
 
-    $socket.on("success_m", user => {
+    $socket.on("success-desktop", user => {
       console.log("connected");
       console.log(user.code);
       console.log(user);
