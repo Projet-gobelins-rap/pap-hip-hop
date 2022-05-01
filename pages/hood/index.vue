@@ -6,20 +6,23 @@
 
 <script lang="ts">
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
+import hoodSceneStore from "~/store/hoodSceneStore";
+import HoodSceneInstance from "~/core/scene/HoodScene";
+import HoodSceneInitializer from "~/core/utils/initializers/HoodSceneInitializer";
+
 import stepStore from "~/store/stepStore";
 @Component({
-  components: {
-  },
+  components: {},
 })
-
-export default class GrenierScene extends Vue {
-  public stepStore = getModule(stepStore,this.$store)
-
+export default class HoodScene extends Vue {
+  public stepStore = getModule(stepStore, this.$store);
+ 
   mounted() {
-
-    console.log('Boyz in da hood');
-    
+    new HoodSceneInitializer({
+      canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
+      hoodSceneStore: this.hoodSceneStore,
+    }).init();
+    console.log("Boyz in da hood");
   }
-
 }
 </script>
