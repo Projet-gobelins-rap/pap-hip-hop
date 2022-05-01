@@ -21,9 +21,11 @@ import stepStore from "~/store/stepStore";
 export default class GrenierScene extends Vue {
   public grenierSceneStore = getModule(grenierSceneStore,this.$store)
   public stepStore = getModule(stepStore,this.$store)
+  public introMotion:boolean = this.stepStore.introMotionState
 
   mounted() {
 
+    // TODO :: instancier notre scene quand la video est skip
     new GrenierSceneInitializer({
       canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
       grenierSceneStore: this.grenierSceneStore
@@ -32,6 +34,5 @@ export default class GrenierScene extends Vue {
     // GrenierSceneInstance.context.
   }
 
-  // TODO :: watch les changements de valeur du store pour masquer le composant vidéo
 }
 </script>

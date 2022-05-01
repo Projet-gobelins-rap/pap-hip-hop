@@ -20,7 +20,7 @@ export default class stepStore extends VuexModule {
   @Mutation
   public skipIntroMotionState(introMotionState:boolean){
     console.log(introMotionState,'on est dans le store')
-    this._intro = introMotionState
+    this._introMotion = introMotionState
   }
 
   // Getters
