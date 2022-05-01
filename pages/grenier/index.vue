@@ -1,17 +1,17 @@
 <template>
   <section class="grenier">
-    <IntroMotion></IntroMotion>
+    <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
 </template>
 
 <script lang="ts">
-import { Vue, Component, getModule } from "nuxt-property-decorator";
+import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierSceneInstance from "~/core/scene/GrenierScene";
 import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneInitializer";
 import IntroMotion from "~/components/medias/IntroMotion.vue";
-
+import stepStore from "~/store/stepStore";
 @Component({
   components: {
     IntroMotion
@@ -20,6 +20,7 @@ import IntroMotion from "~/components/medias/IntroMotion.vue";
 
 export default class GrenierScene extends Vue {
   public grenierSceneStore = getModule(grenierSceneStore,this.$store)
+  public stepStore = getModule(stepStore,this.$store)
 
   mounted() {
 
@@ -29,7 +30,8 @@ export default class GrenierScene extends Vue {
     }).init()
 
     // GrenierSceneInstance.context.
-
   }
+
+  // TODO :: watch les changements de valeur du store pour masquer le composant vidéo
 }
 </script>
