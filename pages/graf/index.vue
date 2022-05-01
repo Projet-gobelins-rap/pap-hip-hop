@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Vue, Component, getModule } from "nuxt-property-decorator";
-import Graf from "~/core/scripts/Graf";
+import Graf from "~/core/interactions/Graf";
 import $socket from "~/plugins/socket.io";
 
 @Component({

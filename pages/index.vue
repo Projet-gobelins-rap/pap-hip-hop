@@ -1,31 +1,48 @@
 <template>
   <section class="home">
-<!--    {{ this.home }}-->
-<!--    <span id="code">{{this.code}}</span>-->
 
-  <h1>home</h1>
-  <CustomButton @click.native="goToNextStep" text="Commencer"></CustomButton>
+    <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
 
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, getModule } from "nuxt-property-decorator";
-import stepStore from "~/store/stepStore";
-import CustomButton from "~/components/buttons/button.vue";
-
+import globalSceneStore from "~/store/globalSceneStore";
+import $socket from "~/plugins/socket.io";
+import GlobalScene from "~/core/scene/GlobalScene";
+import GlobalSceneInitializer from "~/core/utils/initializers/GlobalSceneInitializer";
+//
 @Component({
-  components: {
-    CustomButton
-  }
+  components: {},
 })
+export default class Home extends Vue {
 
-export default class HomeMobile extends Vue {
-
-  public stepStore = getModule(stepStore,this.$store)
+  public globalSceneStore = getModule(globalSceneStore,this.$store)
 
   mounted() {
+    // Initialize Scene
+    new GlobalSceneInitializer({
+      canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
+      globalSceneStore: this.globalSceneStore
+    }).init()
+
+    console.log(GlobalScene,'global scene')
+
   }
+
+  stopSceneRender() {
+    GlobalScene.context.pause()
+  }
+}
+</script>
+
+<style lang="sass" scoped>
+#canvasGlobalScene
+  position: absolute
+  left: 0
+  top: 0
+</style>
 
   goToNextStep(){
 
