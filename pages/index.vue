@@ -44,15 +44,6 @@ export default class Home extends Vue {
   top: 0
 </style>
 
-  goToNextStep(){
-
-    this.stepStore.setIntroState(true)
-    this.$router.push('/_mobile/mobileConnection')
-  }
- 
-}
-
-</script>
 
 
  
