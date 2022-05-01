@@ -1,18 +1,21 @@
 <template>
   <section class="grenier">
+    <IntroMotion></IntroMotion>
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, getModule } from "nuxt-property-decorator";
-import GlobalSceneInitializer from "~/core/utils/initializers/GlobalSceneInitializer";
 import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierSceneInstance from "~/core/scene/GrenierScene";
 import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneInitializer";
+import IntroMotion from "~/components/medias/IntroMotion.vue";
 
 @Component({
-  components: {},
+  components: {
+    IntroMotion
+  },
 })
 
 export default class GrenierScene extends Vue {

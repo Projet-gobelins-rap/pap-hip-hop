@@ -8,6 +8,7 @@ import {User} from "~/core/types";
 })
 export default class stepStore extends VuexModule {
   private _intro:boolean = false
+  private _introMotion:boolean = false
 
   // Mutations
   @Mutation
@@ -15,9 +16,20 @@ export default class stepStore extends VuexModule {
     console.log(introState,'on est dans le store')
     this._intro = introState
   }
-  
+
+  @Mutation
+  public setIntroMotionState(introMotionState:boolean){
+    console.log(introMotionState,'on est dans le store')
+    this._intro = introMotionState
+  }
+
   // Getters
   get introState(){
     return this._intro
   }
+
+  get introMotionState(){
+    return this._introMotion
+  }
+
 }
