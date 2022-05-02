@@ -15,6 +15,9 @@
    <div class="navigation__items">
      <nuxt-link to="/grenier">Grenier</nuxt-link>
    </div>
+   <div class="navigation__items">
+     <nuxt-link to="/hood">Hood</nuxt-link>
+   </div>
 
  </div>
 </template>
