@@ -14,24 +14,31 @@ import IntroMotion from "~/components/medias/IntroMotion.vue";
 import stepStore from "~/store/stepStore";
 @Component({
   components: {
-    IntroMotion
+    IntroMotion,
   },
 })
 
 export default class GrenierScene extends Vue {
   public grenierSceneStore = getModule(grenierSceneStore,this.$store)
   public stepStore = getModule(stepStore,this.$store)
-  public introMotion:boolean = this.stepStore.introMotionState
 
   mounted() {
-
-    // TODO :: instancier notre scene quand la video est skip
-    new GrenierSceneInitializer({
-      canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
-      grenierSceneStore: this.grenierSceneStore
-    }).init()
-
     // GrenierSceneInstance.context.
+  }
+
+
+  get motion() {
+    return this.stepStore.introMotionState
+  }
+
+  @Watch('motion',{ immediate: true,deep:true })
+  onMotionValueChanged(val:boolean) {
+    if (val) {
+      new GrenierSceneInitializer({
+        canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
+        grenierSceneStore: this.grenierSceneStore
+      }).init()
+    }
   }
 
 }
