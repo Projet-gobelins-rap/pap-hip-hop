@@ -29,10 +29,10 @@
       "@types/node",
       "@type/three",
       "@nuxt/image",
-      "@nuxtjs/device"
+      "@nuxtjs/device",
     ]
   },
-//  "include": ["types/**/*.ts"],
+  "include": ["core/types/prismic.d.ts"],
   "exclude": [
     "node_modules",
     ".nuxt",

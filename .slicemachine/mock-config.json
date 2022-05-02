@@ -1,0 +1,13 @@
+{
+  "_cts": {
+    "desktopMedias": {}
+  },
+  "slices": {
+    "Ekip": {},
+    "MediaSlice": {
+      "default": {
+        "primary": {}
+      }
+    }
+  }
+}

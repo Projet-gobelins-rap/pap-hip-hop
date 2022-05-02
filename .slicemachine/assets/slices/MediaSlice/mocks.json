@@ -1,0 +1,34 @@
+[
+  {
+    "variation": "default",
+    "name": "Default",
+    "slice_type": "media_slice",
+    "items": [
+      {
+        "media": {
+          "link_type": "media",
+          "url": "https://source.unsplash.com/daily"
+        }
+      },
+      {
+        "media": {
+          "link_type": "media",
+          "url": "https://source.unsplash.com/daily"
+        }
+      },
+      {
+        "media": {
+          "link_type": "media",
+          "url": "https://source.unsplash.com/daily"
+        }
+      },
+      {
+        "media": {
+          "link_type": "media",
+          "url": "https://source.unsplash.com/daily"
+        }
+      }
+    ],
+    "primary": {}
+  }
+]
