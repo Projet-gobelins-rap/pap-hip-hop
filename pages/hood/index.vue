@@ -11,17 +11,18 @@ import HoodSceneInstance from "~/core/scene/HoodScene";
 import HoodSceneInitializer from "~/core/utils/initializers/HoodSceneInitializer";
 
 import stepStore from "~/store/stepStore";
-@Component({
+@Component({ 
   components: {},
 })
 export default class HoodScene extends Vue {
+  public hoodSceneStore = getModule(hoodSceneStore,this.$store)
   public stepStore = getModule(stepStore, this.$store);
  
   mounted() {
     new HoodSceneInitializer({
       canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
       hoodSceneStore: this.hoodSceneStore,
-    }).init();
+    }).init(); 
     console.log("Boyz in da hood");
   }
 }
