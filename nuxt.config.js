@@ -1,3 +1,5 @@
+import { apiEndpoint } from './sm.json'
+
 export default {
   target: "static",
   ssr: false,
@@ -34,6 +36,7 @@ export default {
     '@nuxt/typescript-build',
     '@nuxt/image',
     '@nuxtjs/device',
+    '@nuxtjs/prismic'
   ],
 
   router: {
@@ -52,6 +55,11 @@ export default {
     '@/assets/style/app.styl',
   ],
 
+  prismic: {
+    endpoint: apiEndpoint,
+    modern: true
+    /* see configuration for more */
+  },
   /*
    ** Build configuration
    */
@@ -61,7 +69,8 @@ export default {
      */
     extend(config, ctx) {
       config.resolve.alias["vue"] = "vue/dist/vue.common";
-    }
+    },
+    transpile: ["@prismicio/vue"],
   },
 
   generate: {
