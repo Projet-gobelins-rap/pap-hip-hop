@@ -8,11 +8,6 @@
 <!--      </dialog>-->
     </div>
 
-
-<!--        <div v-for="(item, i) in this.desktopMedias.slices[0].items" :key="`slice-item-${i}`">-->
-<!--          <PrismicLink :field="item.media">My Link</PrismicLink>-->
-<!--        </div>-->
-
   </section>
 </template>
 

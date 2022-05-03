@@ -1,20 +1,20 @@
 <template>
-  <div class="dialog">
-    <div class="dialog-content">
-      <div class="dialog-infos">
-        <picture class="dialog-infos--pic">
+  <div class="chat">
+    <div class="chat-content">
+      <div class="chat-infos">
+        <picture class="chat-infos--pic">
           <PrismicImage
-            class="dialog-infos--img"
+            class="chat-infos--img"
             :field="content.primary.Photo"
           />
         </picture>
-        <p class="dialog-infos--name">{{ content.primary.Nom }}</p>
+        <p class="chat-infos--name">{{ content.primary.Nom }}</p>
       </div>
-      <PrismicRichText class="dialog-text" :field="content.primary.Text" />
+      <PrismicRichText class="chat-text" :field="content.primary.Text" />
     </div>
-    <div class="dialog-choices" v-if="content.items.length > 0">
+    <div class="chat-choices" v-if="content.items.length > 0">
       <div
-        class="dialog-choice"
+        class="chat-choice"
         v-for="(item, i) in content.items"
         :key="`slice-item-${i}`"
       >
@@ -31,16 +31,16 @@
 <script lang="ts">
 import { Vue, Component, getModule, Prop } from "nuxt-property-decorator";
 import CustomButton from "~/components/buttons/button.vue";
-import dialogStore from "~/store/dialogStore";
+import chatStore from "~/store/chatStore";
 
 @Component({
   components: {
     CustomButton,
   },
 })
-export default class DialogComponent extends Vue {
+export default class ChatComponent extends Vue {
   @Prop({ required: true }) readonly content!: any;
-  public dialogStore = getModule(dialogStore, this.$store);
+  public chatStore = getModule(chatStore, this.$store);
 
   mounted() {
     console.log(this.content);
@@ -51,14 +51,14 @@ export default class DialogComponent extends Vue {
     // }
 
     // TODO : handle click on text if no choices buttons
-    document.querySelector(".dialog-text")?.addEventListener("click", (e) => {
-      this.dialogStore.setDiaglogStep("next");
+    document.querySelector(".chat-text")?.addEventListener("click", (e) => {
+      this.chatStore.setChatStep("next");
     });
   }
 
-  // update dialogStep value in dialogStore
+  // update dialogStep value in chatStore
   nextStep(action: string) {
-    this.dialogStore.setDiaglogStep(action);
+    this.chatStore.setChatStep(action);
   }
 }
 </script>

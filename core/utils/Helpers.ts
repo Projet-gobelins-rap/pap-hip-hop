@@ -16,4 +16,11 @@ export default class Helpers {
       height: window.innerHeight
     }
   }
+
+  /**
+  * Return 
+  */
+  public static onlySpaces(str) {
+    return str.trim().length === 0;
+  }
 }

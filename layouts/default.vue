@@ -35,16 +35,16 @@ export default class Default extends Vue {
 
   mounted(){
 
-    this.$nuxt.$on("loadDesktopMedia",(desktopMedia)=>{
-      this.desktopMedias = desktopMedia.desktopMedias.slices[0].items
-      console.log(this.desktopMedias)
-      this.desktopMedias.forEach((el)=>{
-        console.log(el.media.url)
-      })
-      console.log('gooo')
-      this.initApp()
+    // this.$nuxt.$on("loadDesktopMedia",(desktopMedia)=>{
+    //   this.desktopMedias = desktopMedia.desktopMedias.slices[0].items
+    //   console.log(this.desktopMedias)
+    //   this.desktopMedias.forEach((el)=>{
+    //     console.log(el.media.url)
+    //   })
+    //   console.log('gooo')
+    //   this.initApp()
 
-    })
+    // })
 
   }
 
