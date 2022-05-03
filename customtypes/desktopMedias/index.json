@@ -10,7 +10,7 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
-            "media_slice": {
+            "medias": {
               "type": "SharedSlice"
             }
           }

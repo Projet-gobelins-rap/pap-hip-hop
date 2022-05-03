@@ -5,8 +5,8 @@ export enum ASSET_TYPE {
   GLTF,
   IMAGE,
   VIDEO,
-  FBX,
-  AUDIO
+  AUDIO,
+  FBX
 }
 
 /**
@@ -25,8 +25,8 @@ export enum VIDEO_ASSET {
  * Name given to image asset in order to retrieve it through AssetManager
  */
 export enum IMAGE_ASSET {
-  STICKER = 'stickers',
-  BOOMBOX = 'boombox',
+  STICKER = 'STICKER',
+  BOOMBOX = 'BOOMBOX',
 }
 
 /**

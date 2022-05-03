@@ -20,6 +20,8 @@
 import { Vue, Component, getModule } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
+import {AssetsManager} from "../../core/managers";
+import {IMAGE_ASSET} from "../../core/enums";
 @Component({
   components: {
     CustomButton
@@ -47,6 +49,7 @@ export default class Intro extends Vue {
   public stepStore = getModule(stepStore,this.$store)
 
   mounted() {
+    // console.log(AssetsManager.getImage(IMAGE_ASSET.BOOMBOX))
   }
 
   goToNextStep(){
