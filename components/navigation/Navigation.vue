@@ -4,7 +4,7 @@
     <nuxt-link to="/">Home</nuxt-link>
    </div>
    <div class="navigation__items">
-     <nuxt-link to="/about">About</nuxt-link>
+     <nuxt-link to="/_mobile/connection">Mobile co</nuxt-link>
    </div>
    <div class="navigation__items">
      <nuxt-link to="/connection">Connect</nuxt-link>
@@ -31,5 +31,4 @@ export default class Navigation extends Vue{
     console.log('Navigation log')
   }
 }
-
 </script>
