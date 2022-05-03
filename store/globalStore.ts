@@ -8,6 +8,7 @@ import {User} from "~/core/types";
 })
 export default class globalStore extends VuexModule {
   private _user:User | null = null
+  private _isAppInit: boolean = false;
 
   // Mutations
   @Mutation
@@ -16,9 +17,17 @@ export default class globalStore extends VuexModule {
     this._user = userData
   }
 
+  @Mutation
+  public setIsAppInit(isInit: boolean) {
+    this._isAppInit = isInit;
+  }
 
   // Getters
   get userData(){
     return this._user
+  }
+
+  get isAppInit() {
+    return this._isAppInit;
   }
 }

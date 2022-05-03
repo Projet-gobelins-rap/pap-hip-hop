@@ -9,7 +9,10 @@
 <script lang="ts">
 
 import Navigation from '~/components/navigation/Navigation.vue'
-import {Vue, Component} from "nuxt-property-decorator";
+import {Vue, Component, getModule} from "nuxt-property-decorator";
+import {AssetsManager} from "../core/managers";
+import AssetManagerInitializer from "../core/utils/initializers/AssetManagerInitializer";
+import globalStore from "../store/globalStore";
 
 @Component({
   components: {
@@ -19,16 +22,26 @@ import {Vue, Component} from "nuxt-property-decorator";
 
 export default class Default extends Vue {
   public icon: string = '🚧'
-  // public socket:any
-
-  head() {
-
-
-  }
-
+  public globalStore = getModule(globalStore, this.$store);
+  public loadingProgressions: string = "0";
   mounted(){
+    this.initApp()
   }
 
+  public async initApp() {
+    if (!this.globalStore.isAppInit) {
+      /* We need to download all asset before init app */
+      new AssetManagerInitializer(null).init();
+      await AssetsManager.onProgress((done, total) => {
+        this.loadingProgressions = Math.floor((done / total) * 100).toString();
+        console.log(this.loadingProgressions,' <---- LOADING')
+      }).load();
+
+
+
+      this.globalStore.setIsAppInit(true);
+    }
+  }
 }
 
 </script>
