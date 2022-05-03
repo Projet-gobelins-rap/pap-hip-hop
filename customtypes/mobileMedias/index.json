@@ -1,6 +1,6 @@
 {
-  "id": "desktopMedias",
-  "label": "desktopMedias",
+  "id": "mobileMedias",
+  "label": "mobileMedias",
   "repeatable": false,
   "status": true,
   "json": {

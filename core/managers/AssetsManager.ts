@@ -19,7 +19,7 @@ import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
  */
 class AssetsManager {
   // - PROPERTIES
-  private _assetSource: Array<AssetSource>
+  public _assetSource: Array<AssetSource>
   private _imageAssets: Array<ImageAsset>
   private _videoAssets: Array<VideoAsset>
   private _gltfAssets: Array<GltfAsset>
@@ -177,7 +177,7 @@ class AssetsManager {
   /**
    * Register new asset source
    */
-  private _registerSource(name: string, type: ASSET_TYPE, url: string, localUrl: string | null) {
+  public _registerSource(name: string, type: ASSET_TYPE, url: string, localUrl: string | null) {
     const source: AssetSource = {
       name: name,
       type: type,
