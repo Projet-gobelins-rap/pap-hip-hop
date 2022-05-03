@@ -1,5 +1,6 @@
 <template>
   <div
+      :style="style()"
       class="point point-0"
   >
     <div :class="{ isCompleted: isCompleted() }" class="center">
