@@ -1,9 +1,20 @@
 import {Initializers} from "~/core/defs";
 import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierScene from "~/core/scene/GrenierScene";
-import {SceneManager} from "~/core/managers";
-import {BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import {AssetsManager, SceneManager} from "~/core/managers";
+import {
+  AmbientLight,
+  BoxGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from "three";
 import Helpers from "~/core/utils/Helpers";
+import {GLTF_ASSET} from "../../enums";
+import {degToRad} from "three/src/math/MathUtils";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
@@ -81,12 +92,13 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
    */
   private _createCamera() {
     const camera = new PerspectiveCamera(
-      50,
+      70,
       this._data.canvas.width / this._data.canvas.height,
       1,
       1000
     )
-    camera.position.set(0, 0, 5)
+    camera.position.set(0, 0, 25)
+    camera.rotateX(degToRad(90))
 
     return camera
   }
@@ -115,6 +127,27 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
+    this._addGltfGrenierScene()
+  }
+
+  private _addGltfGrenierScene() {
+    const grenierSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data
+    console.log(grenierSceneGltf)
+    grenierSceneGltf.scene.position.set(0, 0, 0)
+
+    this._scene.add(grenierSceneGltf.scene)
+    // GrenierScene.context.scene.traverse( child => {
+    //
+    //   if (child.name ==='socle'){
+    //     child.receiveShadow = true
+    //   }
+    //
+    // } );
+    grenierSceneGltf.scene.scale.set(0.02, 0.02, 0.02)
+    const light = new AmbientLight( 0x404040 ); // soft white light
+    this._scene.add( light );
+
+    this._scene.add(grenierSceneGltf.scene)
   }
 
   addCube(){
