@@ -3,7 +3,7 @@
     <navigation/>
     <h1>{{this.icon}}</h1>
 
-    <div v-if="$device.isDesktop">{{this.desktopMediasURL}}</div>
+    <div v-if="$device.isDesktop">{{this.desktopMediasURL}}</div> 
     <div v-if="$device.isMobileOrTablet">{{this.mobileMediasURL}}</div>
     <nuxt />
   </div>
