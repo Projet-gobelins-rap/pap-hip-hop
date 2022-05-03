@@ -1,12 +1,16 @@
 <template>
   <section class="home">
     {{ this.graf }}
-    
+    <p class="display"></p>
+    <img class="grafImg" src="images/wall-1.png" alt="">
+    <canvas class="canvas-graf"></canvas>
+    <button class="canvas-reset">Passer à l'etape 2</button>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, getModule } from "nuxt-property-decorator";
+import Graf from "~/core/interactions/Graf";
 import $socket from "~/plugins/socket.io";
 
 @Component({
@@ -18,7 +22,7 @@ export default class GraffActivity extends Vue {
     console.clear();
     console.log("mounted hook on HOME page");
 
-    
+    new Graf()
 
     console.log($socket,'socket from plugin')
 

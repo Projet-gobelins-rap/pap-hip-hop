@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <navigation/>
-    <h1>{{this.icon}}</h1>
     <nuxt />
   </div>
 </template>
