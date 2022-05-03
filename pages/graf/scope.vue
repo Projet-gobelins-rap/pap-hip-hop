@@ -1,25 +1,99 @@
 <template>
   <section class="scope desktop">
     {{ this.graf }}
-    <img class="scope-background" src="/images/graf/city-rooftop.png" alt="">
+    <img class="scope-background" src="/images/graf/city-rooftop.png" alt="" />
+    <ChatComponent v-if="currentChat" :content="currentChat" />
   </section>
 </template>
 
 <script lang="ts">
-import { Vue, Component, getModule } from "nuxt-property-decorator";
+import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
+import chatStore from "~/store/chatStore";
+import ChatComponent from "~/components/contentOverlays/chat.vue";
 import $socket from "~/plugins/socket.io";
 
+
 @Component({
-  components: {},
+  components: {
+    ChatComponent,
+  },
+  async asyncData({ $prismic, error }) {
+    try {
+      const scopeContent = (await $prismic.api.getSingle("interaction-graff"))
+        .data;
+      const conversation = scopeContent?.slices1;
+      const currentChat = conversation[0];
+
+      return {
+        conversation,
+        currentChat,
+      };
+    } catch (e) {
+      // Returns error page
+      //   error({ statusCode: 404, message: 'Content not found' })
+    }
+  },
 })
 export default class GraffActivity extends Vue {
   public graf: string = "Scope";
+  public scopeContent: object;
+  public conversation: any;
+  public chatDialogStep: string;
+  public currentChat: object;
+  public currentChatNum: number = 0;
+  public chatStore = getModule(chatStore, this.$store);
+
   mounted() {
     console.clear();
-    console.log("mounted hook on HOME page");
+  }
 
-    console.log($socket,'socket from plugin')
+  // Set next linked chat by using identifier in current chat
+  setDialogByID() {
+    for (const key in this.conversation) {
+      const element = this.conversation[key];
+      
+      if (element.primary.Identifiant === this.chatDialogStep) {
+        this.currentChat = element;
+        this.currentChatNum = parseInt(key)
+      }
+    }
+  }
 
-  } 
+  // Set next message in conversation order
+  setNextDialog() {
+    this.currentChatNum++;
+    this.currentChat = this.conversation[this.currentChatNum];
+  }
+
+  // get chatStep from store
+  get chatStep() {
+    return this.chatStore.chatStep;
+  }
+
+  // watch dialogStep change in chatStore store
+  @Watch("chatStep", { immediate: true, deep: true })
+  setChatStep(val: string) {
+
+    if (val) {
+      switch (val) {
+        case "next":
+          this.setNextDialog();
+          break;
+
+        case "custom":
+          console.log("custom 1");
+          break;
+
+        case "custom2":
+          console.log("custom 2");
+          break;
+        
+        default:
+          this.chatDialogStep = val;
+          this.setDialogByID();
+          break;
+      }
+    } 
+  }
 }
 </script>
