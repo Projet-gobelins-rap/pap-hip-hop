@@ -14,6 +14,7 @@ export enum ASSET_TYPE {
  */
 export enum GLTF_ASSET {
   GLOBAL_SCENE= 'globalScene',
+  BOODER= 'BOODER',
 
 }
 

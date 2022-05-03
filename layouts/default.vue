@@ -9,9 +9,8 @@
 <script lang="ts">
 
 import Navigation from '~/components/navigation/Navigation.vue'
-import {Vue, Component, getModule} from "nuxt-property-decorator";
+import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import {AssetsManager} from "../core/managers";
-import AssetManagerInitializer from "../core/utils/initializers/AssetManagerInitializer";
 import globalStore from "../store/globalStore";
 import {IMAGE_ASSET} from "../core/enums";
 
@@ -59,8 +58,6 @@ export default class Default extends Vue {
           type:mediaType
         })
       })
-      console.log(this.desktopMediasURL)
-      console.log('gooo')
       this.initApp()
     })
 
@@ -68,7 +65,6 @@ export default class Default extends Vue {
 
   public async initApp() {
     if (!this.globalStore.isAppInit) {
-
       // new AssetManagerInitializer(null).init();
       /* We need to download all asset before init app */
       this.desktopMediasURL.forEach(el=>{
@@ -79,10 +75,22 @@ export default class Default extends Vue {
         console.log(this.loadingProgressions,' <---- LOADING')
       }).load();
 
-
       this.globalStore.setIsAppInit(true);
     }
   }
+
+  get appState() {
+    return this.globalStore.isAppInit
+  }
+
+  @Watch('appState',{ immediate: true,deep:true })
+  onMotionValueChanged(val:boolean) {
+    if (val) {
+      // INSTANCE img
+      console.log(AssetsManager.getImage(IMAGE_ASSET.STICKER))
+    }
+  }
+
 }
 
 </script>
