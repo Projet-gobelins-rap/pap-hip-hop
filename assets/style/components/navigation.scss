@@ -1,0 +1,25 @@
+.navigation {
+  display: flex;
+  padding: 30px 60px;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  &__logo {
+    margin-right: auto;
+    a {
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+  }
+
+  &__items {
+    a {
+      display: block;
+      text-decoration: none;
+      line-height: 1.3;
+    }
+  }
+}
