@@ -1,4 +1,4 @@
-import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types";
+import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types/asset";
 import {ASSET_TYPE} from "~/core/enums/asset";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
