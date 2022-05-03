@@ -52,7 +52,7 @@ export default {
   // css: ["@/assets/css/resetr.css", "@/assets/css/common.css"],
 
   css: [
-    '@/assets/style/app.styl',
+    '@/assets/style/app.scss',
   ],
 
   prismic: {
