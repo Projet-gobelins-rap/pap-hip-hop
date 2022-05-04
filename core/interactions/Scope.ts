@@ -22,6 +22,7 @@ export default class Scope {
     public debugY: HTMLElement
     public focusTimeOut: any
     public focusTarget: boolean = false
+    public focusTimeline: any 
 
     private MAX_Y_ANGLE: number = 50
     private MAX_X_ANGLE: number = 50
@@ -41,6 +42,14 @@ export default class Scope {
             height: window.innerHeight,
         }
 
+        this.focusTimeline = gsap.timeline()
+        this.focusTimeline.to('.mobileScope-progress--bar', {
+            width: '100%',
+            duration: 1,
+            ease: 'none'
+        })
+        this.focusTimeline.pause()
+        
         this.init()
     }
 
@@ -181,6 +190,8 @@ export default class Scope {
 
                     if (!this.focusTarget) {
                         console.log('1');
+                        this.focusTimeline.play()
+
                         this.focusTimeOut = setTimeout(() => {
                             console.log('2');
 
@@ -191,9 +202,14 @@ export default class Scope {
                     }
                     this.focusTarget = true
                 } else {
-                    clearTimeout(this.focusTimeOut)
+                    if (this.focusTarget) {
+                        this.focusTimeline.restart()
+                        this.focusTimeline.pause()
+                        clearTimeout(this.focusTimeOut)
 
-                    this.focusTarget = false
+                        this.focusTarget = false
+                    }
+
                 }
             }
         }

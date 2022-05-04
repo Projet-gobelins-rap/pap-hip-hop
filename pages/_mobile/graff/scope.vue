@@ -3,6 +3,9 @@
     <div class="mobileScope-debug">
       <span class="mobileScope-debug--x"></span>
       <span class="mobileScope-debug--y"></span>
+      <span class="mobileScope-progress">
+        <span class="mobileScope-progress--bar"></span>
+      </span>
       <!-- <span class="mobileScope-debug--nx">{{ nomalizeTranslation.x.toFixed(2) }}</span>
       <span class="mobileScope-debug--ny">{{ nomalizeTranslation.y.toFixed(2) }}</span> -->
     </div>

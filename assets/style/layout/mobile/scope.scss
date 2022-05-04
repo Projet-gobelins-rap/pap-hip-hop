@@ -8,6 +8,7 @@
     &-debug {
         display: flex;
         flex-direction: column;
+        align-items: center;
         position: relative;
         transform: rotate(90deg);
         z-index: 9999;
@@ -54,5 +55,21 @@
         width: 100%;
         height: 100%;
         z-index: 5;
+    }
+
+    &-progress {
+        height: 2px;
+        width: 60px;
+        background-color: white;
+        position: relative;
+
+        &--bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0;
+            background-color: green;
+        }
     }
 }
