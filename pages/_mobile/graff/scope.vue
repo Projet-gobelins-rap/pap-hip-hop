@@ -1,23 +1,31 @@
 <template>
   <section class="mobileScope">
     <div class="mobileScope-debug">
-      <span>{{ rotation.x.toFixed(2) }}</span>
-      <span>{{ rotation.y.toFixed(2) }}</span>
-      <span>{{ rotation.z.toFixed(2) }}</span>
+      <span class="mobileScope-debug--x"></span>
+      <span class="mobileScope-debug--y"></span>
+      <!-- <span class="mobileScope-debug--nx">{{ nomalizeTranslation.x.toFixed(2) }}</span>
+      <span class="mobileScope-debug--ny">{{ nomalizeTranslation.y.toFixed(2) }}</span> -->
+    </div>
+
+    <div class="mobileScope-landscape">
+        <div class="mobileScope-wrapper">
+            <img class="mobileScope-img" src="/images/graf/city-rooftop.png" alt="">
+            <svg class="mobileScope-markers" width="3076" height="1829" viewBox="0 0 3076 1829" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect class="mobileScope-marker" x="685" y="549" width="120" height="120" fill="#ED6FD9" />
+                <rect class="mobileScope-marker" x="1538" y="794" width="120" height="120" fill="#ED6FD9" />
+                <rect class="mobileScope-marker" x="2010" y="429" width="120" height="120" fill="#ED6FD9" />
+            </svg>
+        </div>
     </div>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
-import { Euler, Quaternion, Vector3 } from "three";
 import stepStore from "~/store/stepStore";
-import {
-  Gyroscope,
-  AbsoluteOrientationSensor,
-  RelativeOrientationSensor,
-} from "~/core/polyfill/motion-sensor.js";
-
+import Scope from "~/core/interactions/Scope.ts"
+ 
 @Component({
   components: {},
 })
@@ -25,64 +33,25 @@ export default class MobileScope extends Vue {
   public stepStore = getModule(stepStore, this.$store);
   public gyroscope: any;
   public sensor: any;
-  public rotation: object = {
+  public rotation: any = {
     x: 0,
     y: 0,
-    z: 0,
+  };
+  public nomalizeTranslation: any = {
+    x: 0,
+    y: 0,
   };
 
   mounted() {
     console.clear();
     console.log("scope");
-    // And they're ready for use!
-    // this.gyroscope = new Gyroscope({ frequency: 15 });
-    // console.log([this.gyroscope, this.orientation]);
-    this.initSensor();
-    // screen.orientation.lock("portrait")
-  }
+    const scopeInteraction = new Scope()
 
-  initSensor() {
-    // let gyroscope = new Gyroscope({ frequency: 60 });
-
-    // gyroscope.addEventListener("reading", (e: any) => {
-    //   //   console.log("Angular velocity along the X-axis " + gyroscope.x);
-    //   //   console.log("Angular velocity along the Y-axis " + gyroscope.y);
-    //   //   console.log("Angular velocity along the Z-axis " + gyroscope.z);
-    //   // console.clear();
-    // });
-    // const b = new Vector3(0, 0, 0);
-    // b.applyEuler(a);
-
-    // gyroscope.start();
-    this.sensor = new RelativeOrientationSensor({ referenceFrame: "screen" });
-
-    this.sensor.onreading = () => {
-      //   this.checkbound(this.sensor.x, this.sensor.y);
-      // console.log(this.sensor.quaternion);
-      let quarternion = new Quaternion(
-        this.sensor.quaternion[0],
-        this.sensor.quaternion[1],
-        this.sensor.quaternion[2],
-        this.sensor.quaternion[3]
-      );
-      this.rotation = new Euler().setFromQuaternion(quarternion);
+    this.rotation = {
+        x: scopeInteraction.normalizePosition.x,
+        y: scopeInteraction.normalizePosition.y,
     };
-    this.sensor.onerror = (event: any) => {
-      if (event.error.name == "NotReadableError") {
-        console.log("Sensor is not available.");
-      }
-    };
-    this.sensor.start();
 
-    setTimeout(() => {
-      this.sensor.stop();
-    }, 100);
-  }
-
-  checkbound(x: any, y: any) {
-    if (x > 5) {
-      console.log("oui");
-    }
   }
 }
 </script>
