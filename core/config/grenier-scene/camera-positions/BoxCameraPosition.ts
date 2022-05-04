@@ -10,9 +10,9 @@ const BoxCameraPosition: CameraPosition = {
     GrenierScene.context.scene.getObjectByName("cube2")!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.x = 0
+    cameraPos.x = 15
     cameraPos.y = 5
-    cameraPos.z = -5
+    cameraPos.z = 5
 
     return { cameraPos, lookAtPosition }
   }

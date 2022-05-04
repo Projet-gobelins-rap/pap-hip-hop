@@ -20,6 +20,8 @@ import IntroMotion from "~/components/medias/IntroMotion.vue";
 import stepStore from "~/store/stepStore";
 import PosterInteractPoint from "../../core/config/grenier-scene/interact-points/objects/PosterInteractPoint";
 import grenierScene from "~/core/scene/GrenierScene";
+import SprayInteractPoint from "../../core/config/grenier-scene/interact-points/objects/SprayInteractPoint";
+import BoxInteractPoint from "../../core/config/grenier-scene/interact-points/objects/BoxInteractPoint";
 
 @Component({
   components: {
@@ -37,6 +39,8 @@ export default class GrenierScene extends Vue {
 
   addInteractionPoints() {
     this.grenierSceneStore.addInteractivePoint(PosterInteractPoint.name);
+    this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
+    this.grenierSceneStore.addInteractivePoint(BoxInteractPoint.name);
   }
 
   get motion() {

@@ -11,8 +11,8 @@ const SprayCameraPosition: CameraPosition = {
     const cameraPos = lookAtPosition.clone()
 
     cameraPos.x = 0
-    cameraPos.y = 5
-    cameraPos.z = -5
+    cameraPos.y = 35
+    cameraPos.z = 5
 
     return { cameraPos, lookAtPosition }
   }
