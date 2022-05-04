@@ -23,7 +23,8 @@ export default class mobileConnection extends Vue {
 
   mounted() {
     $socket.on("phone_connected", (user) => {
-      this.$router.push("/_mobile/off");
+      // this.$router.push("/_mobile/off");
+      this.$router.push("/_mobile/graff/scope");
     });
   }
 

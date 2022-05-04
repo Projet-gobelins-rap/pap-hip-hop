@@ -1,0 +1,14 @@
+.mobileScope {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 100%;
+
+    &-debug {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transform: rotate(-90deg);
+    }
+}

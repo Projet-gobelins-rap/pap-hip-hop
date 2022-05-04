@@ -37,7 +37,9 @@ export default class Connection extends Vue {
       console.log(user,"<--- user connected");
       console.log($socket,'<--- socket ')
 
-      this.$router.push('/grenier')
+      // this.$router.push('/grenier')
+      this.$router.push("/_mobile/graff/scope");
+      
       // TODO :: Stocker notre user dans le store
       // this.globalStore.setUserData({phone:Object.keys(user)[0],desktop:Object.keys(user)[1]})
     });
