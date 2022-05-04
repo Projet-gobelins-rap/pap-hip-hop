@@ -22,7 +22,7 @@ import {
   WindowResizeCallback
 } from "~/core/types/scene";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
-
+import {gsap} from 'gsap'
 export default class SceneManager{
 
   // - PROPERTIES
@@ -176,6 +176,61 @@ export default class SceneManager{
     this._presetCameraPositions.push(position)
 
     return this
+  }
+
+  /**
+   * Move the camera to the preset position
+   */
+  public goToPresetPosition(
+    name: string,
+    duration: number,
+    successCallBack: DefaultSceneManagerCallback = function () {
+    },
+    errorCallBack: DefaultSceneManagerCallback = function () {
+    }
+  ) {
+    const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
+
+    if (!presetCameraPosition) {
+      console.log('Camera preset position is not registered')
+      errorCallBack(this)
+      return
+    }
+
+    const { cameraPos: newCameraPosition, lookAtPosition } = presetCameraPosition.coords()
+
+    const originPosition = new Vector3().copy(this._camera.position);
+    const originRotation = new Euler().copy(this._camera.rotation);
+
+    this._camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
+    this._camera.lookAt(lookAtPosition);
+    const destinationRotation = new Euler().copy(this._camera.rotation)
+
+    this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
+    this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
+
+    gsap.to(this._camera.position, {
+      duration,
+      x: newCameraPosition.x,
+      y: newCameraPosition.y,
+      z: newCameraPosition.z,
+      ease: "sine.inOut",
+      onComplete: () => {
+        // this.enableParallax()
+        successCallBack(this)
+      },
+      onStart: () => {
+        // SoundDesignManager.playSound(AUDIO_ASSET.SWOOSH);
+        // this.disableParallax()
+      }
+    });
+    gsap.to(this._camera.rotation, {
+      duration,
+      x: destinationRotation.x,
+      y: destinationRotation.y,
+      z: destinationRotation.z,
+      ease: "sine.inOut",
+    })
   }
 
   /**

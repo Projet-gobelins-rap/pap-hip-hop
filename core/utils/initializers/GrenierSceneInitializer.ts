@@ -1,9 +1,21 @@
 import {Initializers} from "~/core/defs";
 import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierScene from "~/core/scene/GrenierScene";
-import {SceneManager} from "~/core/managers";
-import {BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import {AssetsManager, SceneManager} from "~/core/managers";
+import {
+  AmbientLight,
+  BoxGeometry,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from "three";
 import Helpers from "~/core/utils/Helpers";
+import {GLTF_ASSET} from "../../enums";
+import {degToRad} from "three/src/math/MathUtils";
+import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
@@ -12,7 +24,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     GrenierScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     // this._addLights(true)
-    // this._registerPresetPositions()
+    this._registerPresetPositions()
     // this._optimizeScene()
     //this._configGUI()
 
@@ -46,6 +58,17 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
+        for (const point of this._data.grenierSceneStore.activeInteractionPoints) {
+          const screenPosition = point.canvasCoords().clone()
+          screenPosition.project(GrenierScene.context.camera)
+          const updateData = {
+            name: point.name,
+            transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
+            transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
+          }
+          this._data.grenierSceneStore.updatePositionsInteractivePoint(updateData)
+        }
+
       },
       onResume: (ctx) => {
 
@@ -67,26 +90,17 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   }
 
   /**
-   * Create gui
-   */
-  private _configGUI() {
-    // let sceneFolder = GrenierScene.context.gui.addFolder("Scene")
-    // sceneFolder.add(GrenierScene.context.scene.position, 'x', -500, 500, 0.01).listen()
-    // sceneFolder.add(GrenierScene.context.scene.position, 'y', -500, 500, 0.01).listen()
-    // sceneFolder.add(GrenierScene.context.scene.position, 'z', -500, 500, 0.01).listen()
-  }
-
-  /**
    * Create perspective camera
    */
   private _createCamera() {
     const camera = new PerspectiveCamera(
-      50,
+      70,
       this._data.canvas.width / this._data.canvas.height,
       1,
       1000
     )
-    camera.position.set(0, 0, 5)
+    camera.position.set(0, 0, 25)
+    camera.rotateX(degToRad(90))
 
     return camera
   }
@@ -112,17 +126,59 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     })
   }
 
+  /**
+   * Register preset camera positions
+   */
+  private _registerPresetPositions() {
+    GrenierSceneConfig.cameraPositions.forEach(presetPosition => {
+      GrenierScene.context.registerPresetCameraPositions(presetPosition)
+    })
+  }
+
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
+    this._addGltfGrenierScene()
+  }
+
+  private _addGltfGrenierScene() {
+    const grenierSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data
+    console.log(grenierSceneGltf)
+    grenierSceneGltf.scene.position.set(0, 0, 0)
+
+    this._scene.add(grenierSceneGltf.scene)
+    // GrenierScene.context.scene.traverse( child => {
+    //
+    //   if (child.name ==='socle'){
+    //     child.receiveShadow = true
+    //   }
+    //
+    // } );
+    grenierSceneGltf.scene.scale.set(0.02, 0.02, 0.02)
+    const light = new AmbientLight( 0x404040 ); // soft white light
+    this._scene.add( light );
+
+    this._scene.add(grenierSceneGltf.scene)
   }
 
   addCube(){
     // this._scene.
-    const geometry = new BoxGeometry();
-    const material = new MeshBasicMaterial( { color: 0x00ff00 } );
-    const cube = new Mesh( geometry, material );
-    this._scene.add( cube );
+
+    let nbCube = 3
+    let cubeColor = [0x0000ff,0x00ff00,0xff0000]
+    let cubePos = [0,10,20]
+
+    for (let i =0;i<nbCube;i++){
+      const geometry = new BoxGeometry();
+      const material = new MeshBasicMaterial( { color: cubeColor[i] } );
+      const cube = new Mesh( geometry, material );
+      cube.name = 'cube'+i
+      cube.position.x = cubePos[i]
+      this._scene.add( cube );
+      console.log(cube)
+    }
+
+
 
   }
 
