@@ -110,11 +110,9 @@ export default class GrenierScene extends Vue {
   // }
 
   goBack() {
-    // this.chatStore
+
     this.grenierSceneStore.setIsChatDisplay(false)
     console.log(this.grenierSceneStore.isChatDisplay)
-    // this.currentChat = null
-    console.log('BACK TO GRENIER')
   }
 
   goToCity() {
@@ -126,18 +124,15 @@ export default class GrenierScene extends Vue {
 
     if (val) {
       switch (val) {
+        case "reading":
+          break;
         case "back":
           this.goBack();
+          this.chatStore.setChatStep("reading");
           break;
-
         case "goToCity":
           this.goToCity();
           break;
-
-        // default:
-        //   this.chatDialogStep = val;
-        //   this.setDialogByID();
-        //   break;
       }
     }
   }
