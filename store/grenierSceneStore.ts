@@ -10,6 +10,10 @@ import GrenierSceneHelper from "../core/config/grenier-scene/GrenierSceneHelper"
 export default class grenierSceneStore extends VuexModule {
   // private _user:User | null = null
   private _activeInteractionPoints: Array<InteractionPoint> = []
+  /**
+   * When camera is moving, we set this property true
+   */
+  private _isCameraMoving: boolean = false
   // Mutations
   // @Mutation
   // public setUserData(userData:User){
@@ -43,10 +47,20 @@ export default class grenierSceneStore extends VuexModule {
     }
   }
 
+  @Mutation
+  public setIsCameraMoving(isMoving: boolean) {
+    this._isCameraMoving = isMoving
+
+    return this
+  }
    // Getters
 
   get activeInteractionPoints() {
     return this._activeInteractionPoints
+  }
+
+  get isCameraMoving() {
+    return this._isCameraMoving
   }
   // get userData(){
   //   return this._user

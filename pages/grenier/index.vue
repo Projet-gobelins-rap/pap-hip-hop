@@ -1,7 +1,7 @@
 <template>
   <section class="grenier">
     <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
-    <InteractionPoints
+    <InteractionPoints @click.native="goToInteractionPoint(point)"
       class="interactive-points"
       :data="point"
       v-for="(point, index) in grenierSceneStore.activeInteractionPoints"
@@ -19,6 +19,7 @@ import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneIniti
 import IntroMotion from "~/components/medias/IntroMotion.vue";
 import stepStore from "~/store/stepStore";
 import PosterInteractPoint from "../../core/config/grenier-scene/interact-points/objects/posterInteractPoint";
+import grenierScene from "~/core/scene/GrenierScene";
 
 @Component({
   components: {
@@ -40,6 +41,18 @@ export default class GrenierScene extends Vue {
 
   get motion() {
     return this.stepStore.introMotionState
+  }
+
+  goToInteractionPoint(point) {
+    console.log('GO TO')
+    console.log(point.name)
+
+    grenierScene.context.goToPresetPosition(point.name, 2, () => {
+      this.grenierSceneStore.setIsCameraMoving(false);
+      console.log('ekippppp')
+      // this.canDisplayScenarioCard = true;
+    });
+
   }
 
   @Watch('motion',{ immediate: true,deep:true })

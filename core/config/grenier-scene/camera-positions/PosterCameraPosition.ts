@@ -1,15 +1,18 @@
-import GlobalScene from "~/core/scene/GlobalScene";
+import GrenierScene from "../../../scene/GrenierScene";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {Vector3} from "three";
 
 const PosterCameraPosition: CameraPosition = {
   name: 'poster',
 
   coords: () => {
-    const lookAtPosition = GlobalScene.context.scene.getObjectByName('chambre')!.position
+    const lookAtPosition = new Vector3()
+    GrenierScene.context.scene.getObjectByName("cube")!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
-    cameraPos.x = 210
-    cameraPos.y = 160
-    cameraPos.z = 25
+
+    cameraPos.x = -500
+    cameraPos.y = 200
+    cameraPos.z = 360
 
     return { cameraPos, lookAtPosition }
   }

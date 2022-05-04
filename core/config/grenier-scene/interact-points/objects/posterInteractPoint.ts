@@ -8,12 +8,10 @@ const PosterInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene
-      .getObjectByName("chambre")!
-      .getWorldPosition(position);
+    GrenierScene.context.scene.getObjectByName("cube")!.getWorldPosition(position);
 
-    position.y = 1 + position.y + 80;
-    position.x = 1 + position.x - 50;
+    position.y = 1 + position.y;
+    position.x = 1 + position.x;
 
     return position;
   },
@@ -23,7 +21,7 @@ const PosterInteractPoint: InteractionPoint = {
   },
 
 
-  url: () => null,
+  url: () => '/',
 
   transformX: 0,
 

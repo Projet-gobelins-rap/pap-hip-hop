@@ -15,6 +15,7 @@ import {
 import Helpers from "~/core/utils/Helpers";
 import {GLTF_ASSET} from "../../enums";
 import {degToRad} from "three/src/math/MathUtils";
+import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
@@ -23,7 +24,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     GrenierScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     // this._addLights(true)
-    // this._registerPresetPositions()
+    this._registerPresetPositions()
     // this._optimizeScene()
     //this._configGUI()
 
@@ -57,6 +58,17 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
+        for (const point of this._data.grenierSceneStore.activeInteractionPoints) {
+          const screenPosition = point.canvasCoords().clone()
+          screenPosition.project(GrenierScene.context.camera)
+          const updateData = {
+            name: point.name,
+            transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
+            transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
+          }
+          this._data.grenierSceneStore.updatePositionsInteractivePoint(updateData)
+        }
+
       },
       onResume: (ctx) => {
 
@@ -75,16 +87,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       }
     })
 
-  }
-
-  /**
-   * Create gui
-   */
-  private _configGUI() {
-    // let sceneFolder = GrenierScene.context.gui.addFolder("Scene")
-    // sceneFolder.add(GrenierScene.context.scene.position, 'x', -500, 500, 0.01).listen()
-    // sceneFolder.add(GrenierScene.context.scene.position, 'y', -500, 500, 0.01).listen()
-    // sceneFolder.add(GrenierScene.context.scene.position, 'z', -500, 500, 0.01).listen()
   }
 
   /**
@@ -124,6 +126,15 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     })
   }
 
+  /**
+   * Register preset camera positions
+   */
+  private _registerPresetPositions() {
+    GrenierSceneConfig.cameraPositions.forEach(presetPosition => {
+      GrenierScene.context.registerPresetCameraPositions(presetPosition)
+    })
+  }
+
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
@@ -155,6 +166,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     const geometry = new BoxGeometry();
     const material = new MeshBasicMaterial( { color: 0x00ff00 } );
     const cube = new Mesh( geometry, material );
+    cube.name = 'cube'
     this._scene.add( cube );
 
   }

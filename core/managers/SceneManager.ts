@@ -192,6 +192,7 @@ export default class SceneManager{
     const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
 
     if (!presetCameraPosition) {
+      console.log('Camera preset position is not registered')
       errorCallBack(this)
       return
     }
