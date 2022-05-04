@@ -22,18 +22,36 @@ import PosterInteractPoint from "../../core/config/grenier-scene/interact-points
 import grenierScene from "~/core/scene/GrenierScene";
 import SprayInteractPoint from "../../core/config/grenier-scene/interact-points/objects/SprayInteractPoint";
 import BoxInteractPoint from "../../core/config/grenier-scene/interact-points/objects/BoxInteractPoint";
+import chatStore from "~/store/chatStore";
 
 @Component({
   components: {
     IntroMotion,
+  },
+  async asyncData({ $prismic, error }) {
+    try {
+      const dialogContent = (await $prismic.api.getSingle("grenier"))
+        .data;
+      const conversation = dialogContent?.slices1;
+
+      return {
+        conversation,
+      };
+    } catch (e) {
+      // Returns error page
+      //   error({ statusCode: 404, message: 'Content not found' })
+    }
   },
 })
 
 export default class GrenierScene extends Vue {
   public grenierSceneStore = getModule(grenierSceneStore,this.$store)
   public stepStore = getModule(stepStore,this.$store)
+  public chatStore = getModule(chatStore, this.$store);
+  public conversation: any;
 
   mounted() {
+    console.log(this.conversation,'conversation')
     // GrenierSceneInstance.context.
   }
 
@@ -50,10 +68,19 @@ export default class GrenierScene extends Vue {
   goToInteractionPoint(point) {
     console.log('GO TO')
     console.log(point.name)
+    let currentElem
+    this.conversation.forEach((element)=>{
+      console.log(element,'<----')
+      if (element.primary.Identifiant === point.name) {
+        currentElem = element
+        return currentElem
+      }
+    })
 
     grenierScene.context.goToPresetPosition(point.name, 2, () => {
       this.grenierSceneStore.setIsCameraMoving(false);
       console.log('ekippppp')
+      console.log(currentElem,'current elem')
       // this.canDisplayScenarioCard = true;
     });
 
