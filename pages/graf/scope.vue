@@ -74,10 +74,15 @@ export default class GraffActivity extends Vue {
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
 
-    if (val) {
+    if (val) { 
+      console.log(val);
+      
       switch (val) {
+        case "reading":
+          break;
         case "next":
           this.setNextDialog();
+          this.chatStore.setChatStep("reading");
           break;
 
         case "custom":
