@@ -9,7 +9,7 @@ export default class Scope {
     public sensor: any
     public grafCanvas: HTMLCanvasElement
     public landscape: HTMLElement
-    public markers: HTMLElement
+    public markers: any
     public baseX: number
     public latestX: number
     public normalizePosition: { x: number, y: number }
@@ -17,23 +17,24 @@ export default class Scope {
     public size: { width: number; height: number; }
     public clientSizes: { width: number; height: number; } = { height: 1440, width: 780 }
     public mobileSizes: { width: number; height: number; } = { height: window.innerHeight, width: window.innerWidth }
-
+    public places: any
     public debugX: HTMLElement
     public debugY: HTMLElement
+    public focusTimeOut: any
+    public focusTarget: boolean = false
 
     private MAX_Y_ANGLE: number = 50
     private MAX_X_ANGLE: number = 50
+    private colideRange: number = 0.05
 
     constructor() {
 
         this.landscape = document.querySelector('.mobileScope-wrapper')
-        this.markers = document.querySelector('.display')
+        this.markers = [...document.querySelectorAll('.mobileScope-marker')]
         this.debugX = document.querySelector('.mobileScope-debug--x')
         this.debugY = document.querySelector('.mobileScope-debug--y')
 
         this.latestX = 0
-
-
 
         this.size = {
             width: window.innerWidth,
@@ -46,9 +47,45 @@ export default class Scope {
     init() {
         // this.initSensor()
         this.normalizePosition = { x: 0, y: 0 }
+        this.initPlaces()
         this.deviceOrientation()
         this.animationLoop()
         this.calibrateYRotation()
+
+        // gsap.set( this.places[0].icon, {
+        //     fill: "#FF0000"
+        // })
+        // gsap.set( this.places[1].icon, {
+        //     fill: "#00ff00"
+        // })
+        // gsap.set( this.places[2].icon, {
+        //     fill: "#0000ff"
+        // })
+
+    }
+
+    initPlaces() {
+        this.places = [
+            {
+                id: 1,
+                x: 0.07,
+                y: 0.07,
+                found: false,
+                icon: this.markers[1]
+            }, {
+                id: 2,
+                x: -0.85,
+                y: 0.40,
+                found: false,
+                icon: this.markers[0]
+            }, {
+                id: 3,
+                x: 0.60,
+                y: 0.55,
+                found: false,
+                icon: this.markers[2]
+            }
+        ]
     }
 
     deviceOrientation() {
@@ -131,6 +168,37 @@ export default class Scope {
         })
     }
 
+    findPlace() {
+        for (const key in this.places) {
+            const place = this.places[key];
+
+            if (this.normalizePosition.y <= (place.y + this.colideRange) && this.normalizePosition.y > (place.y - this.colideRange)) {
+
+                if (this.normalizePosition.x <= (place.x + this.colideRange) && this.normalizePosition.x > (place.x - this.colideRange)) {
+                    // gsap.set(place.icon, {
+                    //     fill: "#FF0000"
+                    // })
+
+                    if (!this.focusTarget) {
+                        console.log('1');
+                        this.focusTimeOut = setTimeout(() => {
+                            console.log('2');
+
+                            gsap.set(place.icon, {
+                                fill: "#00ff00"
+                            })
+                        }, 1000);
+                    }
+                    this.focusTarget = true
+                } else {
+                    clearTimeout(this.focusTimeOut)
+
+                    this.focusTarget = false
+                }
+            }
+        }
+    }
+
     handleDeviceOrientation(data) {
         let x,
             y,
@@ -179,10 +247,15 @@ export default class Scope {
 
         this.normalizePosition.x = x * 0.01
         this.normalizePosition.y = (y * 0.01 - 0.5) * 2
+
+
+        this.debugX.innerHTML = this.normalizePosition.x.toFixed(2)
+        this.debugY.innerHTML = this.normalizePosition.y.toFixed(2)
     }
 
     animationLoop() {
         this.moveScope()
+        this.findPlace()
         requestAnimationFrame(this.animationLoop.bind(this))
     }
 
@@ -201,6 +274,10 @@ export default class Scope {
         ) {
             //   console.log("Tel rotate : Vamos !");
         }
+    }
+
+    focusTimeHanlde() {
+
     }
 
     normalize(val: number, max: number, min: number): number {
