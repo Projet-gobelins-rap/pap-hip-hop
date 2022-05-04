@@ -1,6 +1,7 @@
 <template>
   <section class="grenier">
     <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
+    <ChatComponent v-if="this.chatElementState" :content="currentChat" />
     <InteractionPoints @click.native="goToInteractionPoint(point)"
       class="interactive-points"
       :data="point"
@@ -23,10 +24,12 @@ import grenierScene from "~/core/scene/GrenierScene";
 import SprayInteractPoint from "../../core/config/grenier-scene/interact-points/objects/SprayInteractPoint";
 import BoxInteractPoint from "../../core/config/grenier-scene/interact-points/objects/BoxInteractPoint";
 import chatStore from "~/store/chatStore";
+import ChatComponent from "~/components/contentOverlays/chat.vue";
 
 @Component({
   components: {
     IntroMotion,
+    ChatComponent
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -49,6 +52,7 @@ export default class GrenierScene extends Vue {
   public stepStore = getModule(stepStore,this.$store)
   public chatStore = getModule(chatStore, this.$store);
   public conversation: any;
+  public currentChat:any
 
   mounted() {
     console.log(this.conversation,'conversation')
@@ -61,26 +65,23 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.addInteractivePoint(BoxInteractPoint.name);
   }
 
-  get motion() {
-    return this.stepStore.introMotionState
-  }
-
   goToInteractionPoint(point) {
     console.log('GO TO')
     console.log(point.name)
-    let currentElem
+
     this.conversation.forEach((element)=>{
       console.log(element,'<----')
       if (element.primary.Identifiant === point.name) {
-        currentElem = element
-        return currentElem
+        this.currentChat = element
+        return this.currentChat
       }
     })
 
     grenierScene.context.goToPresetPosition(point.name, 2, () => {
       this.grenierSceneStore.setIsCameraMoving(false);
+      this.grenierSceneStore.setIsChatDisplay(true)
       console.log('ekippppp')
-      console.log(currentElem,'current elem')
+      console.log(this.currentChat,'current elem')
       // this.canDisplayScenarioCard = true;
     });
 
@@ -95,7 +96,62 @@ export default class GrenierScene extends Vue {
       }).init()
 
       this.addInteractionPoints()
+
+      console.log(this.chatStore.chatStep,'<------ chat step')
     }
+  }
+
+  // @Watch('chatElementState',{ immediate: true,deep:true })
+  // onChatDisplay(val:boolean) {
+  //   console.log('val change')
+  //   if (val) {
+  //     console.log('chat is display')
+  //   }
+  // }
+
+  goBack() {
+    // this.chatStore
+    this.grenierSceneStore.setIsChatDisplay(false)
+    console.log(this.grenierSceneStore.isChatDisplay)
+    // this.currentChat = null
+    console.log('BACK TO GRENIER')
+  }
+
+  goToCity() {
+    console.log('GO TO CITY')
+  }
+  // watch dialogStep change in chatStore store
+  @Watch("chatStep", { immediate: true, deep: true })
+  setChatStep(val: string) {
+
+    if (val) {
+      switch (val) {
+        case "back":
+          this.goBack();
+          break;
+
+        case "goToCity":
+          this.goToCity();
+          break;
+
+        // default:
+        //   this.chatDialogStep = val;
+        //   this.setDialogByID();
+        //   break;
+      }
+    }
+  }
+
+  get chatStep() {
+    return this.chatStore.chatStep;
+  }
+
+  get motion() {
+    return this.stepStore.introMotionState
+  }
+
+  get chatElementState() {
+    return this.grenierSceneStore.isChatDisplay
   }
 
 }
