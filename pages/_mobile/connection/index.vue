@@ -1,8 +1,7 @@
 <template>
-  <section class="intro">
-    <span>mobileConnection</span>
-    <input v-model="codeValue" type="number">
-    <button @click="Connect">Valider</button>
+  <section class="mobileConnection">
+    <input class="mobileConnection-input" v-model="codeValue" type="number" />
+    <button class="mobileConnection-button" @click="Connect">Valider</button>
   </section>
 </template>
 
@@ -11,30 +10,29 @@ import { Vue, Component, getModule } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
 import $socket from "~/plugins/socket.io";
+import permisions from "~/core/utils/Permisions";
 @Component({
   components: {
-    CustomButton
+    CustomButton,
   },
 })
 export default class mobileConnection extends Vue {
-  public codeValue:number | null = null
+  public codeValue: number | null = null;
 
-  public stepStore = getModule(stepStore,this.$store)
+  public stepStore = getModule(stepStore, this.$store);
 
   mounted() {
     $socket.on("phone_connected", (user) => {
-      alert("phone_connected");
-      this.$router.push('/_mobile/off')
+      this.$router.push("/_mobile/off");
     });
   }
 
   Connect() {
-    console.log("eee")
+    console.log("eee");
+    permisions.requestOrientation();
     console.log(this.codeValue);
     $socket.emit("connect_code", this.codeValue);
   }
-
-
 
   // goToNextStep(){
   //
@@ -42,10 +40,5 @@ export default class mobileConnection extends Vue {
   //   console.log(this.$nuxt)
   //   this.$router.push('/about')
   // }
-
 }
 </script>
-
-<style lang="sass" scoped>
-
-</style>

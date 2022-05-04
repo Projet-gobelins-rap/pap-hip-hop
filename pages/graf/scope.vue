@@ -3,6 +3,7 @@
     {{ this.graf }}
     <img class="scope-background" src="/images/graf/city-rooftop.png" alt="" />
     <ChatComponent v-if="currentChat" :content="currentChat" />
+    
   </section>
 </template>
 
