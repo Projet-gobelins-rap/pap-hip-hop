@@ -18,7 +18,7 @@ import GrenierSceneInstance from "~/core/scene/GrenierScene";
 import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneInitializer";
 import IntroMotion from "~/components/medias/IntroMotion.vue";
 import stepStore from "~/store/stepStore";
-import PosterInteractPoint from "../../core/config/grenier-scene/interact-points/objects/posterInteractPoint";
+import PosterInteractPoint from "../../core/config/grenier-scene/interact-points/objects/PosterInteractPoint";
 import grenierScene from "~/core/scene/GrenierScene";
 
 @Component({

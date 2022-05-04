@@ -163,11 +163,22 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
   addCube(){
     // this._scene.
-    const geometry = new BoxGeometry();
-    const material = new MeshBasicMaterial( { color: 0x00ff00 } );
-    const cube = new Mesh( geometry, material );
-    cube.name = 'cube'
-    this._scene.add( cube );
+
+    let nbCube = 3
+    let cubeColor = [0x0000ff,0x00ff00,0xff0000]
+    let cubePos = [0,10,20]
+
+    for (let i =0;i<nbCube;i++){
+      const geometry = new BoxGeometry();
+      const material = new MeshBasicMaterial( { color: cubeColor[i] } );
+      const cube = new Mesh( geometry, material );
+      cube.name = 'cube'+i
+      cube.position.x = cubePos[i]
+      this._scene.add( cube );
+      console.log(cube)
+    }
+
+
 
   }
 
