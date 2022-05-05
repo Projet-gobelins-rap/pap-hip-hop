@@ -1,15 +1,12 @@
 
-const {generateId} =  require('./generateId')
+const {generatePin} =  require('./generateId')
 
 const handleSocket = (socket, io) => {
   let roomId = null
   socket.on('server:join', async (id) => {
-    console.log('id : ' + id);
     if (id === null || id === '') {
-      id = await generateId()
+      id = await generatePin()
     }
-    console.log('g id : ' + id);
-    
     roomId = id 
     socket.join(id.toString())
     socket.emit('server:joined', id)
@@ -17,8 +14,8 @@ const handleSocket = (socket, io) => {
     const devicesInRoom = io.sockets.adapter.rooms.get(roomId)?.size
 
     if (devicesInRoom >= 2) {
-      socket.broadcast.to(roomId).emit('server:paired')
-      socket.emit('server:paired')
+      socket.broadcast.to(roomId).emit('server:paired', roomId)
+      socket.emit('server:paired', roomId)
     }
   })
 
@@ -27,7 +24,6 @@ const handleSocket = (socket, io) => {
     socket.broadcast.to(roomId).emit(eventName, ...args)
   })
 }  
-
 
 module.exports = {
   handleSocket

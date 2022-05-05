@@ -1,6 +1,5 @@
 <template>
   <section class="mobileConnection">
-    <p>{{this.codeValue}}</p>
     <input class="mobileConnection-input" v-model="codeValue" type="text" />
     <button class="mobileConnection-button" @click="connect">Valider</button>
   </section>
@@ -18,24 +17,18 @@ import permisions from "~/core/utils/Permisions";
   },
 })
 export default class mobileConnection extends Vue {
-  public codeValue: any;
+  public codeValue: any | null = null;
 
   public stepStore = getModule(stepStore, this.$store);
 
   mounted() {
-    // $socket.io.on("phone_connected", (user) => {
-    //   // this.$router.push("/_mobile/off");
-    //   this.$router.push("/_mobile/graff/scope");
-    // });
     $socket.io.on("server:paired", (user) => {
       this.$router.push("/_mobile/graff/scope");
     })
-
   }
 
   connect() {
     permisions.requestOrientation();
-    alert(this.codeValue);
     $socket.io.emit("server:join", this.codeValue);
   }
 

@@ -28,6 +28,7 @@ export default class Connection extends Vue {
     $socket.io.emit("server:join", "");
     $socket.io.on("server:joined", (id) => {
       console.log("joined : " + id);
+      this.code = id
     });
 
     $socket.io.on("server:paired", (user) => {
