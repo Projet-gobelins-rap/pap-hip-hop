@@ -1,5 +1,5 @@
 <template>
-  <div class="onboardingWrapper">
+  <div v-if="this.onboardingDisplay" class="onboardingWrapper">
 
     <swiper
       v-if="!content.items[0].isFullscreen"
@@ -11,7 +11,7 @@
       @swiper="onSwiper"
       @slideChange="onSlideChange"
     >
-      <button @click="" class="swiper__close">CLOSE</button>
+      <button @click="hideOnboarding" class="swiper__close">CLOSE</button>
 
       <swiper-slide
         v-for="(item, i) in content.items"
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from "nuxt-property-decorator";
+import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
 
 import { Navigation, Pagination } from 'swiper'
 
@@ -47,6 +47,7 @@ import { SwiperCore, Swiper, SwiperSlide } from 'swiper-vue2'
 
 // Import Swiper styles
 import 'swiper/swiper-bundle.css'
+import onboardingStore from "../../store/onboardingStore";
 SwiperCore.use([Navigation, Pagination])
 
 
@@ -60,13 +61,15 @@ export default class Onboarding extends Vue{
   @Prop({ required: true }) readonly content!: any;
   public isFullscreen:boolean = false
   public displayNavigation:string = this.content.items.length <= 1 ? '' : 'navigation'
+  public onboardingStore = getModule(onboardingStore,this.$store)
   mounted(){
     console.log('Onboarding component')
 
   }
 
   hideOnboarding() {
-    
+    this.onboardingStore.setOnboardingDisplay(false)
+    console.log('hide')
   }
 
   onSwiper (swiper) {
@@ -75,6 +78,10 @@ export default class Onboarding extends Vue{
 
   onSlideChange () {
     console.log('slide change')
+  }
+
+  get onboardingDisplay() {
+    return this.onboardingStore.isOnboardingDisplay;
   }
 
 
