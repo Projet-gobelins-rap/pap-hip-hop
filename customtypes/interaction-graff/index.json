@@ -17,7 +17,7 @@
         }
       }
     },
-    "Tab dialog": {
+    "dialog-intro": {
       "slices1": {
         "type": "Slices",
         "fieldset": "Slice Zone",
@@ -29,6 +29,20 @@
           }
         }
       }
-    }
+    },
+    "dialog-focus": {
+      "slices2": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "dialog-graff": {}
   }
 }

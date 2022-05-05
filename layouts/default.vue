@@ -30,12 +30,10 @@ import {IMAGE_ASSET} from "../core/enums";
     }
 
   },
-
-
 })
 
 export default class Default extends Vue {
-  public icon: string = '🚧'
+ 
   public globalStore = getModule(globalStore, this.$store);
   public loadingProgressions: string = "0";
   public desktopMedias:any
@@ -43,6 +41,7 @@ export default class Default extends Vue {
 
   public mobileMedias:any
   public mobileMediasURL:[{name:string,url:string,type:number}] = []
+
   mounted(){
 
     this.$nuxt.$on("loadDesktopMedia",(desktopMedia)=>{
@@ -134,7 +133,6 @@ export default class Default extends Vue {
       }
     }
   }
-
 }
 
 </script>

@@ -12,7 +12,7 @@ import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import $socket from "~/plugins/socket.io";
-
+import websocketManagerInstance  from "~/core/managers/WebsocketManager"
 
 @Component({
   components: {
@@ -46,6 +46,12 @@ export default class GraffActivity extends Vue {
 
   mounted() {
     console.clear();
+    console.log($socket);
+    
+    $socket.io.on('step', data => {
+      console.log(data);
+      
+    })
   }
 
   // Set next linked chat by using identifier in current chat

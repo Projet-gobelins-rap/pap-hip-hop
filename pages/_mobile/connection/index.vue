@@ -22,7 +22,7 @@ export default class mobileConnection extends Vue {
   public stepStore = getModule(stepStore, this.$store);
 
   mounted() {
-    $socket.on("phone_connected", (user) => {
+    $socket.io.on("phone_connected", (user) => {
       // this.$router.push("/_mobile/off");
       this.$router.push("/_mobile/graff/scope");
     });
@@ -32,7 +32,7 @@ export default class mobileConnection extends Vue {
     console.log("eee");
     permisions.requestOrientation();
     console.log(this.codeValue);
-    $socket.emit("connect_code", this.codeValue);
+    $socket.io.emit("connect_code", this.codeValue);
   }
 
   // goToNextStep(){
