@@ -7,12 +7,18 @@ const BoxCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("cube2")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("shoeshelf")!.getWorldPosition(lookAtPosition)
+
+    console.log(lookAtPosition,'lookAt')
+    // global.
+    // lookAtPosition.x = lookAtPosition.x * 0.95
+    // lookAtPosition.z = lookAtPosition.z * 1.1
+
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.x = 15
-    cameraPos.y = 5
-    cameraPos.z = 5
+    // cameraPos.x = -15
+    // cameraPos.y = 23
+    // cameraPos.z = 13
 
     return { cameraPos, lookAtPosition }
   }

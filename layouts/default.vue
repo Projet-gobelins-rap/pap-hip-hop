@@ -62,6 +62,9 @@ export default class Default extends Vue {
         else if (el.mediaType === 'AUDIO') {
           mediaType = 3
         }
+        else if (el.mediaType === 'FBX') {
+          mediaType = 4
+        }
 
         this.desktopMediasURL.push({
           name:el.mediaName[0].text,

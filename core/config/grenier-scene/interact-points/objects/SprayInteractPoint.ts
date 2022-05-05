@@ -8,14 +8,14 @@ const SprayInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("cube1")!.getWorldPosition(position);
+    GrenierScene.context.scene.getObjectByName("sofa")!.getWorldPosition(position);
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;
 
     return position;
   },
-
+  // isVisible: true,
   isCompleted: () => {
     return false;
   },

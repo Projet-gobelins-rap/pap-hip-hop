@@ -7,6 +7,7 @@ import SprayInteractPoint from "./interact-points/objects/SprayInteractPoint";
 import BoxInteractPoint from "./interact-points/objects/BoxInteractPoint";
 import SprayCameraPosition from "./camera-positions/SprayCameraPosition";
 import BoxCameraPosition from "./camera-positions/BoxCameraPosition";
+import {InitialCameraPosition} from "./camera-positions";
 
 const GrenierSceneConfig = {
   // // ROOMS
@@ -34,7 +35,8 @@ const GrenierSceneConfig = {
     /* Global */
     PosterCameraPosition,
     SprayCameraPosition,
-    BoxCameraPosition
+    BoxCameraPosition,
+    InitialCameraPosition
   ] as Array<CameraPosition>,
 
   // INTERACT POINTS
