@@ -33,6 +33,7 @@
     "express": "^4.17.1",
     "gsap": "^3.8.0",
     "imagesloaded": "^4.1.4",
+    "nanoid": "^3.3.4",
     "nuxt": "^2.15.3",
     "nuxt-property-decorator": "^2.9.1",
     "nuxt-sm": "^0.1.6",
