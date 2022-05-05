@@ -1,8 +1,9 @@
 <template>
-  <section class="home">
+  <section class="graffDraw">
     {{ this.graf }}
+    <img class="graffDraw-background" src="/images/wall-0.png" alt="">
     <p class="display"></p>
-    <img class="grafImg" src="images/wall-1.png" alt="">
+    <img class="grafImg" src="/images/wall-1.png" alt="">
     <canvas class="canvas-graf"></canvas>
     <button class="canvas-reset">Passer à l'etape 2</button>
   </section>
@@ -22,7 +23,7 @@ export default class GraffActivity extends Vue {
     console.clear();
     console.log("mounted hook on HOME page");
 
-    new Graf()
+    // new Graf()
 
     console.log($socket,'socket from plugin')
 

@@ -11,7 +11,6 @@ import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import $socket from "~/plugins/socket.io";
-import websocketManagerInstance from "~/core/managers/WebsocketManager";
 
 @Component({
   components: {
@@ -114,6 +113,7 @@ export default class GraffActivity extends Vue {
         case "nextStep":
           this.$router.push("/graf/draw");
           this.chatStore.setChatStep("none");
+          $socket.io.emit('goTo', {path: '/_mobile/graff/listing', replace: true} )
           break;
         case "back":
           // TODO : back like in grenier scene

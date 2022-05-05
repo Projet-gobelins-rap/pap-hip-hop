@@ -43,6 +43,19 @@
         }
       }
     },
-    "dialog-graff": {}
+    "dialog-graff": {},
+    "listing-graff": {
+      "slices4": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "graff_selection": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
   }
 }
