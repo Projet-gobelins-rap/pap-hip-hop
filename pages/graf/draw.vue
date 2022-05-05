@@ -61,6 +61,8 @@ export default class GraffActivity extends Vue {
 
     this.handleMobileSelection();
     console.log($socket, "socket from plugin");
+
+    this.getGraffValue()
   }
 
   handleMobileSelection() {
@@ -74,6 +76,14 @@ export default class GraffActivity extends Vue {
     console.log(this.graffSketchsList);
     new Graf(this.activePreview);
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
+  }
+  getGraffValue() {
+    $socket.io.on('graffValues', data => {
+      let dataSplitted = data.split(':')
+      console.log([dataSplitted[0], dataSplitted[1]]);
+      
+    })
+    
   }
 }
 </script>

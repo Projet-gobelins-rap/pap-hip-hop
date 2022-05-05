@@ -24,4 +24,8 @@ export default class Helpers {
   public static lerp(start: number, end: number, value: number) {
     return (1 - value) * start + value * end;
   }
+
+  public static normalize(val: number, max: number, min: number): number {
+    return (val - min) / (max - min);
+  }
 }
