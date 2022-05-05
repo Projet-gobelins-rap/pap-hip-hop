@@ -14,6 +14,7 @@ export default class grenierSceneStore extends VuexModule {
    * When camera is moving, we set this property true
    */
   private _isCameraMoving: boolean = false
+  private _isChatDisplay: boolean = false
   // Mutations
   // @Mutation
   // public setUserData(userData:User){
@@ -53,6 +54,13 @@ export default class grenierSceneStore extends VuexModule {
 
     return this
   }
+
+  @Mutation
+  public setIsChatDisplay(isDisplay: boolean) {
+    this._isChatDisplay = isDisplay
+
+    return this
+  }
    // Getters
 
   get activeInteractionPoints() {
@@ -62,6 +70,11 @@ export default class grenierSceneStore extends VuexModule {
   get isCameraMoving() {
     return this._isCameraMoving
   }
+
+  get isChatDisplay() {
+    return this._isChatDisplay
+  }
+
   // get userData(){
   //   return this._user
   // }

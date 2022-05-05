@@ -19,6 +19,7 @@ import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config"
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
+  public cameraInitialPosition:Vector3
   private _scene:Scene
   init():void {
     GrenierScene.setSceneContext(this._createSceneContext())
@@ -69,6 +70,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
           this._data.grenierSceneStore.updatePositionsInteractivePoint(updateData)
         }
 
+        // console.log(camera.position)
       },
       onResume: (ctx) => {
 
@@ -99,7 +101,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       1,
       1000
     )
-    camera.position.set(0, 0, 25)
+    camera.position.set(50, 30, -50)
+    this.cameraInitialPosition = new Vector3(50, 30, -50)
     camera.rotateX(degToRad(90))
 
     return camera
@@ -137,16 +140,15 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
   private _addSceneElements() {
     console.log('add scene elements')
-    this.addCube()
     this._addGltfGrenierScene()
   }
 
   private _addGltfGrenierScene() {
-    const grenierSceneGltf = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data
-    console.log(grenierSceneGltf)
-    grenierSceneGltf.scene.position.set(0, 0, 0)
+    const grenierSceneFbx = AssetsManager.getFbx(GLTF_ASSET.GRENIER).data
+    console.log(grenierSceneFbx)
+    grenierSceneFbx.position.set(0, -10, 0)
 
-    this._scene.add(grenierSceneGltf.scene)
+    this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {
     //
     //   if (child.name ==='socle'){
@@ -154,32 +156,12 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     //   }
     //
     // } );
-    grenierSceneGltf.scene.scale.set(0.02, 0.02, 0.02)
+    grenierSceneFbx.scale.set(0.25, 0.25, 0.25)
     const light = new AmbientLight( 0x404040 ); // soft white light
     this._scene.add( light );
 
-    this._scene.add(grenierSceneGltf.scene)
-  }
-
-  addCube(){
-    // this._scene.
-
-    let nbCube = 3
-    let cubeColor = [0x0000ff,0x00ff00,0xff0000]
-    let cubePos = [0,10,20]
-
-    for (let i =0;i<nbCube;i++){
-      const geometry = new BoxGeometry();
-      const material = new MeshBasicMaterial( { color: cubeColor[i] } );
-      const cube = new Mesh( geometry, material );
-      cube.name = 'cube'+i
-      cube.position.x = cubePos[i]
-      this._scene.add( cube );
-      console.log(cube)
-    }
-
-
-
+    console.log(grenierSceneFbx,'SCENE')
+    this._scene.add(grenierSceneFbx)
   }
 
 }

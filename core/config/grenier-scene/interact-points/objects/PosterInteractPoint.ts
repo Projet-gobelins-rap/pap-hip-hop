@@ -8,7 +8,7 @@ const PosterInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("cube0")!.getWorldPosition(position);
+    GrenierScene.context.scene.getObjectByName("poster01")!.getWorldPosition(position);
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;
@@ -16,6 +16,7 @@ const PosterInteractPoint: InteractionPoint = {
     return position;
   },
 
+  // isVisible: true,
   isCompleted: () => {
     return false;
   },

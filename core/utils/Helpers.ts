@@ -16,4 +16,12 @@ export default class Helpers {
       height: window.innerHeight
     }
   }
+
+  /**
+   * Interpolation method
+   * https://en.wikipedia.org/wiki/Linear_interpolation
+   */
+  public static lerp(start: number, end: number, value: number) {
+    return (1 - value) * start + value * end;
+  }
 }
