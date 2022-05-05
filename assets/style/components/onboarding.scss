@@ -1,0 +1,51 @@
+.onboardingWrapper {
+  width: 100vw;
+  height: 100vh;
+  .onboarding {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    left: 0;
+    top: 0;
+    background: rgba(255, 0, 0, 0.2);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .swiper-container {
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(255, 0, 0, 0.2);
+  }
+  .swiper__itemWrapper {
+    display: flex;
+  }
+  .swiper__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+  }
+  .swiper__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+  }
+
+  // OVERRIDE COLORS
+  .swiper-button-prev, .swiper-button-next {
+    color: $darkGrey;
+  }
+  .swiper-pagination-bullet-active {
+    background: $darkGrey;
+  }
+}
