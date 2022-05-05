@@ -23,6 +23,7 @@ import {
 } from "~/core/types/scene";
 import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
 import {gsap} from 'gsap'
+import Helpers from "../utils/Helpers";
 export default class SceneManager{
 
   // - PROPERTIES
@@ -40,6 +41,9 @@ export default class SceneManager{
   // private _stats: Stats | null
   private _defaultRatio: number
   private _currentIntersect: null
+
+  // Parallax
+  private _globalSceneRotation: { x: number, y: number }
 
   // Animations
   private _animationMixers: Array<AnimationMixerElement>
@@ -86,7 +90,7 @@ export default class SceneManager{
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
-    // this._globalSceneRotation = {x: 0, y: 0}
+    this._globalSceneRotation = {x: 0, y: 0}
 
     this._isPlaying = false
     this._isRayCasting = false
@@ -284,10 +288,46 @@ export default class SceneManager{
   }
 
   /**
+   * Enable parallax camera on mouse move
+   */
+  public enableParallax() {
+    this._isParallaxActive = true
+
+    return this
+  }
+
+  /**
+   * Disable parallax camera on mouse move
+   */
+  public disableParallax() {
+    this._isParallaxActive = false
+
+    return this
+  }
+
+
+  /**
    * Init intern mandatory events
    */
   public _bindEvents() {
     this._bindExternEvents(this)
+
+    document.addEventListener('mousemove', event => {
+
+      this._mousePositions.x = event.clientX / this._canvas.width / 2
+      this._mousePositions.y = event.clientY / this._canvas.height / 2
+      this._onMouseMoveCanvasCallback(this, event)
+
+      if (this._isParallaxActive) {
+        // TODO :: UPDATE LE PARALLAX AVEC GSAP POUR LE RENDRE PLUS SMOOTH
+        this._globalSceneRotation.x = Helpers.lerp(this._globalSceneRotation.x, this._mousePositions.x, 0.3)
+        this._globalSceneRotation.y = Helpers.lerp(this._globalSceneRotation.y, this._mousePositions.y, 0.3)
+
+        this._scene.rotation.x = - this._globalSceneRotation.y * 0.15
+        this._scene.rotation.y = - this._globalSceneRotation.x * 0.3
+
+      }
+    })
 
     window.addEventListener('resize', event => {
       this._onWindowResizeCallback(this, event)
@@ -476,9 +516,9 @@ export default class SceneManager{
     return this._defaultRatio
   }
 
-  // get globalSceneRotation() {
-  //   return this._globalSceneRotation
-  // }
+  get globalSceneRotation() {
+    return this._globalSceneRotation
+  }
 
   // setters
   set currentIntersect(currentIntersect: any) {

@@ -54,7 +54,6 @@ export default class GrenierScene extends Vue {
   public conversation: any;
   public currentChat:any
 
-  // TODO :: MASQUER LE POINT D'INTERACTION ACTIF
   mounted() {
     console.log(this.conversation,'conversation')
   }
@@ -65,7 +64,14 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.addInteractivePoint(BoxInteractPoint.name);
   }
 
+  removeInteractionsPoints() {
+    this.grenierSceneStore.removeInteractivePoint(PosterInteractPoint.name);
+    this.grenierSceneStore.removeInteractivePoint(SprayInteractPoint.name);
+    this.grenierSceneStore.removeInteractivePoint(BoxInteractPoint.name);
+  }
+
   goToInteractionPoint(point) {
+
     this.conversation.forEach((element)=>{
       if (element.primary.Identifiant === point.name) {
         this.currentChat = element
@@ -73,14 +79,10 @@ export default class GrenierScene extends Vue {
       }
     })
 
+    this.removeInteractionsPoints()
     grenierScene.context.goToPresetPosition(point.name, 2, () => {
       this.grenierSceneStore.setIsCameraMoving(false);
       this.grenierSceneStore.setIsChatDisplay(true)
-      // point.isVisible = false
-
-      console.log(point,'points')
-
-      // this.grenierSceneStore.
     });
 
   }
@@ -92,7 +94,7 @@ export default class GrenierScene extends Vue {
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
         grenierSceneStore: this.grenierSceneStore
       }).init()
-      grenierScene.context.disableOrbitControl()
+      grenierScene.context.disableOrbitControl().enableParallax()
 
       this.addInteractionPoints()
     }
@@ -112,6 +114,7 @@ export default class GrenierScene extends Vue {
     console.log(this.grenierSceneStore.isChatDisplay)
     grenierScene.context.goToPresetPosition('initial',2,()=>{
       console.log('INITIAL POSITION')
+      this.addInteractionPoints()
     })
   }
 
