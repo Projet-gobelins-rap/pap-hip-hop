@@ -193,7 +193,6 @@ export default class Scope {
                             if (!place.found) {
                                 $socket.step('scope-focus:' + place.slug)
                                 $socket.test()
-                                alert('oui')
                             }
                             place.found = true
                             

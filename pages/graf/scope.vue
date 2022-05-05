@@ -23,11 +23,14 @@ import websocketManagerInstance  from "~/core/managers/WebsocketManager"
       const scopeContent = (await $prismic.api.getSingle("interaction-graff"))
         .data;
       const conversation = scopeContent?.slices1;
+      const focusPoints = scopeContent?.slices2;
+      
       const currentChat = conversation[0];
 
       return {
-        conversation,
+        conversation, 
         currentChat,
+        focusPoints
       };
     } catch (e) {
       // Returns error page
@@ -40,6 +43,7 @@ export default class GraffActivity extends Vue {
   public scopeContent: object;
   public conversation: any;
   public chatDialogStep: string;
+  public focusPoints: object;
   public currentChat: object;
   public currentChatNum: number = 0;
   public chatStore = getModule(chatStore, this.$store);
@@ -49,9 +53,24 @@ export default class GraffActivity extends Vue {
     console.log($socket);
     
     $socket.io.on('step', data => {
-      console.log(data);
-      
+     
+      let dataInfos = data.split(":")
+      if (dataInfos[0] === "scope-focus") {
+      this.displayFocusPointInfos(dataInfos[1])
+      }
     })
+    console.log(this.focusPoints);
+    
+  }
+
+  displayFocusPointInfos(data: string) {
+
+    for (const key in this.focusPoints) {
+      const element = this.focusPoints[key];
+       if (element.primary.Identifiant === data) {
+          this.currentChat = element;
+      }
+    }
   }
 
   // Set next linked chat by using identifier in current chat
@@ -98,6 +117,13 @@ export default class GraffActivity extends Vue {
 
         case "custom2":
           console.log("custom 2");
+          break;
+        case "nextStep":
+          this.$router.push("/graf/draw");
+          this.chatStore.setChatStep("none");
+          break;
+        case "back":
+          // TODO : back like in grenier scene
           break;
         
         default:
