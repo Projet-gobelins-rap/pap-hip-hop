@@ -1,11 +1,10 @@
 <template>
   <section class="graffDraw">
-    {{ this.graf }}
     <picture class="graffDraw-background">
       <img class="graffDraw-background--img" src="/images/wall-0.png" alt="" />
     </picture>
     <div class="graffDraw-preview">
-      <img class="graffDraw-preview--img" src="" alt="" />
+      <img class="graffDraw-preview--img" :src="activePreviewUrl" alt=""/>
     </div>
     <p class="display"></p>
     <img class="grafImg" src="/images/wall-1.png" alt="" />
@@ -21,16 +20,45 @@ import $socket from "~/plugins/socket.io";
 
 @Component({
   components: {},
+  async asyncData({ $prismic, error }) {
+    try {
+      const prismicContent = (await $prismic.api.getSingle("interaction-graff"))
+        .data;
+
+      const graffSketchsList = prismicContent.slices4.map(
+        (slice: any) => slice.items
+      );
+
+      return {
+        graffSketchsList,
+      };
+    } catch (e) {
+      // Returns error page
+      //   error({ statusCode: 404, message: 'Content not found' })
+    }
+  },
 })
 export default class GraffActivity extends Vue {
-  public graf: string = "Graf 🚧";
+  public graffSketchsList: any;
+  public activePreview: any | null = null;
+  public activePreviewUrl: string ="";
+
   mounted() {
     console.clear();
     console.log("mounted hook on HOME page");
-
+    console.log(this.graffSketchsList);
     // new Graf()
 
+    this.handleMobileSelection();
     console.log($socket, "socket from plugin");
+  }
+
+  handleMobileSelection() { 
+    $socket.io.on("graffSelected", (idx) => {
+      this.activePreview = this.graffSketchsList[idx];
+      this.activePreviewUrl = this.activePreview[0].layer.url;
+      
+    });
   }
 }
 </script>
