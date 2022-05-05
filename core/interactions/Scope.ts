@@ -1,9 +1,5 @@
 import { gsap } from 'gsap'
-import { Euler, Quaternion } from 'three';
-import {
-    AbsoluteOrientationSensor,
-    RelativeOrientationSensor,
-} from "../polyfill/motion-sensor.js";
+import $socket from "../../plugins/socket.io"
 
 export default class Scope {
     public sensor: any
@@ -60,17 +56,6 @@ export default class Scope {
         this.deviceOrientation()
         this.animationLoop()
         this.calibrateYRotation()
-
-        // gsap.set( this.places[0].icon, {
-        //     fill: "#FF0000"
-        // })
-        // gsap.set( this.places[1].icon, {
-        //     fill: "#00ff00"
-        // })
-        // gsap.set( this.places[2].icon, {
-        //     fill: "#0000ff"
-        // })
-
     }
 
     initPlaces() {
@@ -80,19 +65,22 @@ export default class Scope {
                 x: 0.07,
                 y: 0.07,
                 found: false,
-                icon: this.markers[1]
+                icon: this.markers[1],
+                slug: "good"
             }, {
                 id: 2,
                 x: -0.85,
                 y: 0.40,
                 found: false,
-                icon: this.markers[0]
+                icon: this.markers[0],
+                slug: "bad-1"
             }, {
                 id: 3,
                 x: 0.60,
                 y: 0.55,
                 found: false,
-                icon: this.markers[2]
+                icon: this.markers[2],
+                slug: "bad-2"
             }
         ]
     }
@@ -102,65 +90,6 @@ export default class Scope {
             this.handleDeviceOrientation(data)
         }, false)
     }
-
-
-    // initSensor() {
-    //     // TODO : user test, switch with RelativeOrientationSensor + calibration step ?
-    //     this.sensor = new AbsoluteOrientationSensor({ frequency: 60, referenceFrame: "device" });
-
-    //     // sensor loop
-    //     this.sensor.onreading = () => {
-    //         let quarternion = new Quaternion(
-    //             this.sensor.quaternion[0],
-    //             this.sensor.quaternion[1],
-    //             this.sensor.quaternion[2],
-    //             this.sensor.quaternion[3]
-    //         );
-    //         this.rotation = new Euler().setFromQuaternion(quarternion);
-
-    //         // TODO : Step + onboarding steps
-    //         this.stepRotate();
-
-
-
-    //         // Finally not working well (:
-    //         let angleY = (this.latestX = this.rotation.y)
-
-    //         if (this.baseX !== null) {
-
-    //             angleY = angleY - this.baseX
-    //             angleY -= 0
-    //             angleY %= Math.PI * 2
-    //         }
-
-    //         let nY = this.normalize(this.rotation.x, Math.PI / 2, 0);
-    //         let nX =  this.normalize(angleY, Math.PI / 6, -Math.PI / 6);
-
-
-    //         if (nX <= 1 && nX >= 0) {
-
-    //             this.normalizePosition.x = (nX - 0.5) * 2
-    //         }
-
-    //         if (nY <= 1 && nY >= 0) {
-    //             this.normalizePosition.y = (nY - 0.5) * 2
-    //         }
-
-    //         this.moveScope()
-
-    //         this.debugX.innerHTML = angleY.toFixed(2)
-    //         this.debugY.innerHTML = this.normalizePosition.x.toFixed(2)
-    //         // debugPos.innerHTML = y.toFixed(2) + " : " + x.toFixed(2)
-    //     };
-
-
-    //     this.sensor.onerror = (event: any) => {
-    //         if (event.error.name == "NotReadableError") {
-    //             console.log("Sensor is not available.");
-    //         }
-    //     };
-    //     this.sensor.start();
-    // }
 
     calibrateYRotation() {
         document.addEventListener('click', e => {
@@ -182,14 +111,8 @@ export default class Scope {
             const place = this.places[key];
 
             if (this.normalizePosition.y <= (place.y + this.colideRange) && this.normalizePosition.y > (place.y - this.colideRange)) {
-
                 if (this.normalizePosition.x <= (place.x + this.colideRange) && this.normalizePosition.x > (place.x - this.colideRange)) {
-                    // gsap.set(place.icon, {
-                    //     fill: "#FF0000"
-                    // })
-
-                    if (!this.focusTarget) {
-                        console.log('1');
+                    if (!this.focusTarget && !this.focusTimeOut) {
                         this.focusTimeline.play()
 
                         this.focusTimeOut = setTimeout(() => {
@@ -198,6 +121,12 @@ export default class Scope {
                             gsap.set(place.icon, {
                                 fill: "#00ff00"
                             })
+                            if (!place.found) {
+                                $socket.io.emit('scope-focus', place.slug)
+                                
+                            }
+                            place.found = true
+                            
                         }, 1000);
                     }
                     this.focusTarget = true
@@ -206,10 +135,10 @@ export default class Scope {
                         this.focusTimeline.restart()
                         this.focusTimeline.pause()
                         clearTimeout(this.focusTimeOut)
+                        this.focusTimeOut = null
 
                         this.focusTarget = false
                     }
-
                 }
             }
         }
@@ -282,7 +211,6 @@ export default class Scope {
     //     })
     // }
 
-
     stepRotate() {
         if (
             (this.rotation.z >= Math.PI / 2 && this.rotation.z < Math.PI) ||
@@ -290,10 +218,6 @@ export default class Scope {
         ) {
             //   console.log("Tel rotate : Vamos !");
         }
-    }
-
-    focusTimeHanlde() {
-
     }
 
     normalize(val: number, max: number, min: number): number {

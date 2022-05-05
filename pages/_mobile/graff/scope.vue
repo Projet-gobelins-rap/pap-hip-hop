@@ -28,6 +28,7 @@
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import Scope from "~/core/interactions/Scope.ts"
+
  
 @Component({
   components: {},
@@ -46,7 +47,8 @@ export default class MobileScope extends Vue {
   };
 
   mounted() {
-    console.clear();
+    
+    // console.clear();
     console.log("scope");
     const scopeInteraction = new Scope()
 

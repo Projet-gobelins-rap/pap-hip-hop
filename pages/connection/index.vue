@@ -1,7 +1,9 @@
 <template>
   <section class="desktopConnection">
-    <div>Connecte toi à l'expérience sur ton mobile et saisie le code suivant : </div>
-    <span id="code">{{this.code}}</span>
+    <div>
+      Connecte toi à l'expérience sur ton mobile et saisie le code suivant :
+    </div>
+    <span id="code">{{ this.code }}</span>
   </section>
 </template>
 
@@ -9,40 +11,55 @@
 import { Vue, Component, getModule } from "nuxt-property-decorator";
 import globalStore from "~/store/globalStore";
 import $socket from "~/plugins/socket.io";
+// import websocketManagerInstance from "~/core/managers/WebsocketManager"
 
 @Component({
   components: {},
 })
 export default class Connection extends Vue {
   public home: string = "Home 🚧";
-  public code: number = 0
+  public code: number = 0;
 
-  public globalStore = getModule(globalStore,this.$store)
+  public globalStore = getModule(globalStore, this.$store);
 
   mounted() {
-    console.log($socket,'socket from plugin')
-    console.log(this.globalStore,'global store')
-    
-    $socket.emit('desktop-connection')
+    console.log(this.globalStore, "global store");
 
-    $socket.on("success-desktop", user => {
-      console.log("connected");
-      console.log(user.code);
-      console.log(user);
-      this.code = user.code;
+    $socket.io.emit("server:join", "");
+    $socket.io.on("server:joined", (id) => {
+      console.log("joined : " + id);
+      this.code = id
     });
 
-    $socket.on("phone_connected", (user) => {
-      console.log("phone_connected on Desktop");
-      console.log(user,"<--- user connected");
-      console.log($socket,'<--- socket ')
-
-      // this.$router.push('/grenier')
-      this.$router.push("/_mobile/graff/scope");
-      
-      // TODO :: Stocker notre user dans le store
-      // this.globalStore.setUserData({phone:Object.keys(user)[0],desktop:Object.keys(user)[1]})
+    $socket.io.on("server:paired", (user) => {
+      this.$router.push("/graf/scope");
     });
+
+    // if (!$socket.code) {
+    //   $socket.desktopConnection();
+
+    //   $socket.io.on("success-desktop", user => {
+    //     console.log("connected");
+    //     console.log(user.code);
+    //     console.log(user);
+    //     this.code = user.code;
+    //     $socket.code = user.code;
+    //   });
+    // } else {
+    //   this.code = $socket.code;
+    // }
+
+    // $socket.io.on("phone_connected", (user) => {
+    //   console.log("phone_connected on Desktop");
+    //   console.log(user,"<--- user connected");
+    //   console.log($socket,'<--- socket ')
+
+    //   // this.$router.push('/grenier')
+    //   this.$router.push("/graf/scope");
+
+    // //   // TODO :: Stocker notre user dans le store
+    // //   // this.globalStore.setUserData({phone:Object.keys(user)[0],desktop:Object.keys(user)[1]})
+    // });
   }
 }
 </script>
