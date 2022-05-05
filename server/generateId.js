@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid');
 
 const generateId = async function () {
-    return nanoid(15)
+    return nanoid(3)
 }
 
 module.exports = {

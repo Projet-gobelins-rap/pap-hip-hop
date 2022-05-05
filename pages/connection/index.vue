@@ -25,11 +25,15 @@ export default class Connection extends Vue {
   mounted() {
     console.log(this.globalStore, "global store");
 
-    $socket.io.emit('server:join', '')
-    $socket.io.on('server:joined', id => {
-      console.log('joined : ' + id); 
-    })
- 
+    $socket.io.emit("server:join", "");
+    $socket.io.on("server:joined", (id) => {
+      console.log("joined : " + id);
+    });
+
+    $socket.io.on("server:paired", (user) => {
+      this.$router.push("/graf/scope");
+    });
+
     // if (!$socket.code) {
     //   $socket.desktopConnection();
 
