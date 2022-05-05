@@ -5,11 +5,12 @@
 	color: $darkGrey;
 }
 body {
-	overflow: hidden;
+	// overflow: hidden;
 	background: #dcd3d0;
 }
 .main {
-	height: 100vh;
+	min-height: 100vh;
+	height: auto;
 	display: flex;
 	flex-direction: column;
 }

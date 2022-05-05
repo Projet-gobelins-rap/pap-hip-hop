@@ -2,6 +2,7 @@
 
     position: relative;
     height: 100%;
+    width: 100%;
     display: flex;
 
     &-background {
@@ -10,8 +11,17 @@
         top: 0;
         height: 100%;
         width: 100%;
-        object-fit: cover;
         z-index: 1;
         pointer-events: none;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        &--img {
+            // min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+        }
     }
+
 }
