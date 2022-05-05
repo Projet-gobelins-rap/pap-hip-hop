@@ -48,22 +48,20 @@ export default class GraffActivity extends Vue {
   public chatStore = getModule(chatStore, this.$store);
 
   mounted() {
-    console.clear();
-    console.log($socket);
+    // console.clear();
+    // console.log($socket);
 
-    $socket.io.on("step", (data) => {
-      let dataInfos = data.split(":");
-      if (dataInfos[0] === "scope-focus") {
-        this.displayFocusPointInfos(dataInfos[1]);
-      }
+    $socket.io.on("scope-focus", id => {
+        this.displayFocusPointInfos(id);
+      
     });
     console.log(this.focusPoints);
   }
 
-  displayFocusPointInfos(data: string) {
+  displayFocusPointInfos(id: string) {
     for (const key in this.focusPoints) {
       const element = this.focusPoints[key];
-      if (element.primary.Identifiant === data) {
+      if (element.primary.Identifiant === id) {
         this.currentChat = element;
       }
     }

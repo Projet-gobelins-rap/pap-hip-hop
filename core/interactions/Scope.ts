@@ -122,8 +122,8 @@ export default class Scope {
                                 fill: "#00ff00"
                             })
                             if (!place.found) {
-                                $socket.step('scope-focus:' + place.slug)
-                                $socket.test()
+                                $socket.io.emit('scope-focus', place.slug)
+                                
                             }
                             place.found = true
                             
