@@ -123,7 +123,6 @@ export default class Scope {
                             })
                             if (!place.found) {
                                 $socket.io.emit('scope-focus', place.slug)
-                                
                             }
                             place.found = true
                             

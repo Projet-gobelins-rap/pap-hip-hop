@@ -1,10 +1,23 @@
 <template>
-  <section class="home">
-    {{ this.graf }}
-    <p class="display"></p>
-    <img class="grafImg" src="images/wall-1.png" alt="">
-    <canvas class="canvas-graf"></canvas>
-    <button class="canvas-reset">Passer à l'etape 2</button>
+  <section class="graffDraw">
+    <picture class="graffDraw-background">
+      <img class="graffDraw-background--img" src="/images/wall-0.png" alt="" />
+    </picture>
+    <div class="graffDraw-preview" v-if="!graffInstance">
+      <img class="graffDraw-preview--img" :src="activePreviewUrl" alt="" />
+      <CustomButton
+        class="graffDraw-preview--button"
+        v-if="activePreviewUrl"
+        @click.native="valideSelectedGraff"
+        :text="'choisir ce graff'"
+      />
+    </div>
+    <div class="graffDraw-container">
+      <p class="graffDraw-display display"></p>
+      <img class="graffDraw-img" src="/images/wall-1.png" alt="" />
+      <canvas class="graffDraw-canvas"></canvas>
+      <button class="graffDraw-reset">Passer à l'etape 2</button>
+    </div>
   </section>
 </template>
 
@@ -12,50 +25,55 @@
 import { Vue, Component, getModule } from "nuxt-property-decorator";
 import Graf from "~/core/interactions/Graf";
 import $socket from "~/plugins/socket.io";
+import CustomButton from "~/components/buttons/button.vue";
 
 @Component({
-  components: {},
+  components: {
+    CustomButton,
+  },
+  async asyncData({ $prismic, error }) {
+    try {
+      const prismicContent = (await $prismic.api.getSingle("interaction-graff"))
+        .data;
+
+      const graffSketchsList = prismicContent.slices4.map(
+        (slice: any) => slice.items
+      );
+
+      return {
+        graffSketchsList,
+      };
+    } catch (e) {
+      // Returns error page
+      //   error({ statusCode: 404, message: 'Content not found' })
+    }
+  },
 })
 export default class GraffActivity extends Vue {
-  public graf: string = "Graf 🚧";
+  public graffSketchsList: any;
+  public activePreview: any | null = null;
+  public activePreviewUrl: string = "";
+  public graffInstance: Graf | null = null
+
   mounted() {
     console.clear();
     console.log("mounted hook on HOME page");
 
-    new Graf()
+    this.handleMobileSelection();
+    console.log($socket, "socket from plugin");
+  }
 
-    console.log($socket,'socket from plugin')
+  handleMobileSelection() {
+    $socket.io.on("graffSelected", (idx) => {
+      this.activePreview = this.graffSketchsList[idx];
+      this.activePreviewUrl = this.activePreview[0].layer.url;
+    });
+  }
 
+  valideSelectedGraff() {
+    console.log(this.graffSketchsList);
+    new Graf(this.activePreview);
+    $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
   }
 }
 </script>
-
-<style lang="sass" scoped>
-.canvas-graf
-  position: absolute
-  left: 0
-  top: 0
-  background: url("/images/wall-1.png")
-  background-size: cover
-  background-repeat: no-repeat
-  background-position: left top
-.canvas-reset
-  position: absolute
-  left: 0
-  top: 0
-  z-index: 15
-.display
-  position: absolute
-  left: 20px
-  top: 30px
-  z-index: 20
-  font-size: 20px
-  color: red
-.grafImg
-  position: absolute
-  left: 0
-  top: 0
-  z-index: 12
-  opacity: 0
-  pointer-events: none
-</style>
