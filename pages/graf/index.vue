@@ -1,7 +1,7 @@
 <template>
-  <section class="home">
-    {{ this.graf }}
-    
+  <section class="graf">
+    <nuxt-link to="/graf/scope">Scope</nuxt-link>
+    <nuxt-link to="/graf/draw">Draw</nuxt-link>
   </section>
 </template>
 
@@ -18,40 +18,16 @@ export default class GraffActivity extends Vue {
     console.clear();
     console.log("mounted hook on HOME page");
 
-    
-
-    console.log($socket,'socket from plugin')
-
+    console.log($socket, "socket from plugin");
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.canvas-graf
-  position: absolute
-  left: 0
-  top: 0
-  background: url("/images/wall-1.png")
-  background-size: cover
-  background-repeat: no-repeat
-  background-position: left top
-.canvas-reset
-  position: absolute
-  left: 0
-  top: 0
-  z-index: 15
-.display
-  position: absolute
-  left: 20px
-  top: 30px
-  z-index: 20
-  font-size: 20px
-  color: red
-.grafImg
-  position: absolute
-  left: 0
-  top: 0
-  z-index: 12
-  opacity: 0
-  pointer-events: none
+.graf
+  display: flex
+  align-items: center
+  justify-content: center
+  position: relative
+  height: 100%
 </style>
