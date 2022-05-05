@@ -1,9 +1,4 @@
 import { gsap } from 'gsap'
-import { Euler, Quaternion } from 'three';
-import {
-    AbsoluteOrientationSensor,
-    RelativeOrientationSensor,
-} from "../polyfill/motion-sensor.js";
 import $socket from "../../plugins/socket.io"
 
 export default class Scope {
@@ -96,65 +91,6 @@ export default class Scope {
         }, false)
     }
 
-
-    // initSensor() {
-    //     // TODO : user test, switch with RelativeOrientationSensor + calibration step ?
-    //     this.sensor = new AbsoluteOrientationSensor({ frequency: 60, referenceFrame: "device" });
-
-    //     // sensor loop
-    //     this.sensor.onreading = () => {
-    //         let quarternion = new Quaternion(
-    //             this.sensor.quaternion[0],
-    //             this.sensor.quaternion[1],
-    //             this.sensor.quaternion[2],
-    //             this.sensor.quaternion[3]
-    //         );
-    //         this.rotation = new Euler().setFromQuaternion(quarternion);
-
-    //         // TODO : Step + onboarding steps
-    //         this.stepRotate();
-
-
-
-    //         // Finally not working well (:
-    //         let angleY = (this.latestX = this.rotation.y)
-
-    //         if (this.baseX !== null) {
-
-    //             angleY = angleY - this.baseX
-    //             angleY -= 0
-    //             angleY %= Math.PI * 2
-    //         }
-
-    //         let nY = this.normalize(this.rotation.x, Math.PI / 2, 0);
-    //         let nX =  this.normalize(angleY, Math.PI / 6, -Math.PI / 6);
-
-
-    //         if (nX <= 1 && nX >= 0) {
-
-    //             this.normalizePosition.x = (nX - 0.5) * 2
-    //         }
-
-    //         if (nY <= 1 && nY >= 0) {
-    //             this.normalizePosition.y = (nY - 0.5) * 2
-    //         }
-
-    //         this.moveScope()
-
-    //         this.debugX.innerHTML = angleY.toFixed(2)
-    //         this.debugY.innerHTML = this.normalizePosition.x.toFixed(2)
-    //         // debugPos.innerHTML = y.toFixed(2) + " : " + x.toFixed(2)
-    //     };
-
-
-    //     this.sensor.onerror = (event: any) => {
-    //         if (event.error.name == "NotReadableError") {
-    //             console.log("Sensor is not available.");
-    //         }
-    //     };
-    //     this.sensor.start();
-    // }
-
     calibrateYRotation() {
         document.addEventListener('click', e => {
             this.baseX = this.latestX
@@ -175,12 +111,7 @@ export default class Scope {
             const place = this.places[key];
 
             if (this.normalizePosition.y <= (place.y + this.colideRange) && this.normalizePosition.y > (place.y - this.colideRange)) {
-
                 if (this.normalizePosition.x <= (place.x + this.colideRange) && this.normalizePosition.x > (place.x - this.colideRange)) {
-                    // gsap.set(place.icon, {
-                    //     fill: "#FF0000"
-                    // })
-
                     if (!this.focusTarget && !this.focusTimeOut) {
                         this.focusTimeline.play()
 
@@ -191,8 +122,7 @@ export default class Scope {
                                 fill: "#00ff00"
                             })
                             if (!place.found) {
-                                $socket.step('scope-focus:' + place.slug)
-                                $socket.test()
+                                $socket.io.emit('scope-focus', place.slug)
                             }
                             place.found = true
                             
@@ -208,7 +138,6 @@ export default class Scope {
 
                         this.focusTarget = false
                     }
-
                 }
             }
         }
@@ -281,7 +210,6 @@ export default class Scope {
     //     })
     // }
 
-
     stepRotate() {
         if (
             (this.rotation.z >= Math.PI / 2 && this.rotation.z < Math.PI) ||
@@ -289,10 +217,6 @@ export default class Scope {
         ) {
             //   console.log("Tel rotate : Vamos !");
         }
-    }
-
-    focusTimeHanlde() {
-
     }
 
     normalize(val: number, max: number, min: number): number {

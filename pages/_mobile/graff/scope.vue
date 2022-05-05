@@ -47,7 +47,8 @@ export default class MobileScope extends Vue {
   };
 
   mounted() {
-    console.clear();
+    
+    // console.clear();
     console.log("scope");
     const scopeInteraction = new Scope()
 

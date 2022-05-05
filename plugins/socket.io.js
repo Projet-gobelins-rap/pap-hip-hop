@@ -9,26 +9,27 @@ class WebsocketManager {
       autoConnect: true,
     })
     this.state = this.io ? 'connected' : 'disconnected'
-    this.code = null
+    this.room = '667'
     console.log(this.state);
+
+    // TODO : if local storage
+    if (this.room) {
+      this.autoConnect()
+    }
   }
 
-  step(action) {
-    this.io.emit('step', action)
-  }
-  test() {
-    this.io.emit('test')
-  }
-
-  listenStep(action) {
-    this.io.on('step', data => {
-      return data
-    })
+  autoConnect() {
+    this.io.emit("server:join", this.room);
+    this.io.on("server:paired", (user) => {
+      console.log('oui');
+      // TODO : go to progression in local storage
+    });
   }
 
-  desktopConnection() {
-    this.io.emit('desktop-connection', this.io.id)
+  setRoom(roomId) {
+    this.room = roomId
 
+    // TODO : Push to local storage
   }
 }
 

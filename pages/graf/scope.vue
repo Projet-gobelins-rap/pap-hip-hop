@@ -3,7 +3,6 @@
     {{ this.graf }}
     <img class="scope-background" src="/images/graf/city-rooftop.png" alt="" />
     <ChatComponent v-if="currentChat" :content="currentChat" />
-    
   </section>
 </template>
 
@@ -12,7 +11,6 @@ import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import $socket from "~/plugins/socket.io";
-import websocketManagerInstance  from "~/core/managers/WebsocketManager"
 
 @Component({
   components: {
@@ -24,13 +22,13 @@ import websocketManagerInstance  from "~/core/managers/WebsocketManager"
         .data;
       const conversation = scopeContent?.slices1;
       const focusPoints = scopeContent?.slices2;
-      
+
       const currentChat = conversation[0];
 
       return {
-        conversation, 
+        conversation,
         currentChat,
-        focusPoints
+        focusPoints,
       };
     } catch (e) {
       // Returns error page
@@ -49,26 +47,20 @@ export default class GraffActivity extends Vue {
   public chatStore = getModule(chatStore, this.$store);
 
   mounted() {
-    console.clear();
-    console.log($socket);
-    
-    $socket.io.on('step', data => {
-     
-      let dataInfos = data.split(":")
-      if (dataInfos[0] === "scope-focus") {
-      this.displayFocusPointInfos(dataInfos[1])
-      }
-    })
+    // console.clear();
+    // console.log($socket);
+
+    $socket.io.on("scope-focus", (id) => {
+      this.displayFocusPointInfos(id);
+    });
     console.log(this.focusPoints);
-    
   }
 
-  displayFocusPointInfos(data: string) {
-
+  displayFocusPointInfos(id: string) {
     for (const key in this.focusPoints) {
       const element = this.focusPoints[key];
-       if (element.primary.Identifiant === data) {
-          this.currentChat = element;
+      if (element.primary.Identifiant === id) {
+        this.currentChat = element;
       }
     }
   }
@@ -77,10 +69,10 @@ export default class GraffActivity extends Vue {
   setDialogByID() {
     for (const key in this.conversation) {
       const element = this.conversation[key];
-      
+
       if (element.primary.Identifiant === this.chatDialogStep) {
         this.currentChat = element;
-        this.currentChatNum = parseInt(key)
+        this.currentChatNum = parseInt(key);
       }
     }
   }
@@ -99,10 +91,9 @@ export default class GraffActivity extends Vue {
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
-
-    if (val) { 
+    if (val) {
       console.log(val);
-      
+
       switch (val) {
         case "reading":
           break;
@@ -121,17 +112,21 @@ export default class GraffActivity extends Vue {
         case "nextStep":
           this.$router.push("/graf/draw");
           this.chatStore.setChatStep("none");
+          $socket.io.emit("goTo", {
+            path: "/_mobile/graff/listing",
+            replace: true,
+          });
           break;
         case "back":
           // TODO : back like in grenier scene
           break;
-        
+
         default:
           this.chatDialogStep = val;
           this.setDialogByID();
           break;
       }
-    } 
+    }
   }
 }
 </script>
