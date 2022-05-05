@@ -7,12 +7,12 @@ const SprayCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("cube1")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("sofa")!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
 
-    cameraPos.x = 0
-    cameraPos.y = 35
-    cameraPos.z = 5
+    cameraPos.x = 28
+    cameraPos.y = 20
+    cameraPos.z = -12
 
     return { cameraPos, lookAtPosition }
   }
