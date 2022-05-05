@@ -1,0 +1,13 @@
+.onboarding {
+  width: 100vw;
+  height: 100vh;
+  .swiper-container {
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: red;
+  }
+}

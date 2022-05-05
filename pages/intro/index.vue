@@ -4,6 +4,7 @@
 <!--      <dialog >-->
 <!--        <userCard></userCard>-->
 <!--        <textCard></textCard>-->
+        <Onboarding></Onboarding>
         <CustomButton  @click.native="goToNextStep" text="Commencer"></CustomButton>
 <!--      </dialog>-->
     </div>
@@ -17,9 +18,11 @@ import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
 import {AssetsManager} from "../../core/managers";
 import {IMAGE_ASSET} from "../../core/enums";
+import Onboarding from '../../components/contentOverlays/onboarding'
 @Component({
   components: {
-    CustomButton
+    CustomButton,
+    Onboarding
   },
 
   //
