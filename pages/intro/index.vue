@@ -4,7 +4,7 @@
 <!--      <dialog >-->
 <!--        <userCard></userCard>-->
 <!--        <textCard></textCard>-->
-        <Onboarding></Onboarding>
+        <Onboarding :content="onboardingData"></Onboarding>
         <CustomButton  @click.native="goToNextStep" text="Commencer"></CustomButton>
 <!--      </dialog>-->
     </div>
@@ -26,27 +26,32 @@ import Onboarding from '../../components/contentOverlays/onboarding'
   },
 
   //
-  // async asyncData({ $prismic, error }) {
-  //
-  //   try{
-  //
-  //     const desktopMedias = (await $prismic.api.getSingle('desktopMedias')).data
-  //
-  //     return {
-  //       desktopMedias,
-  //     }
-  //   } catch (e) {
-  //     // Returns error page
-  //     error({ statusCode: 404, message: 'Page not found' })
-  //   }
-  // },
+  async asyncData({ $prismic, error }) {
+
+    try{
+
+      const onboardingRequest = (await $prismic.api.getSingle('intro')).data
+
+      const onboardingData = onboardingRequest?.slices[0];
+
+      return {
+        onboardingData,
+      }
+    } catch (e) {
+      // Returns error page
+      error({ statusCode: 404, message: 'Page not found' })
+    }
+  },
 
 })
 export default class Intro extends Vue {
 
   public stepStore = getModule(stepStore,this.$store)
+  public onboardingData:any
 
   mounted() {
+
+    console.log(this.onboardingData,'<- onboarding')
     // console.log(AssetsManager.getImage(IMAGE_ASSET.BOOMBOX))
   }
 

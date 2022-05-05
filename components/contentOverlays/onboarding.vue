@@ -1,31 +1,45 @@
 <template>
-  <div class="onboarding">
-    <h1>Onboarding</h1>
-
+  <div class="onboardingWrapper">
 
     <swiper
+      v-if="!content.items[0].isFullscreen"
       :slides-per-view="1"
       :loop="false"
       navigation
+      this.displayNavigation
       :pagination="{ clickable: true }"
       @swiper="onSwiper"
       @slideChange="onSlideChange"
     >
+      <button @click="" class="swiper__close">CLOSE</button>
+
       <swiper-slide
-        v-for="n in 5"
-        :key="n"
-        class="test"
+        v-for="(item, i) in content.items"
+        :key="`slice-item-${i}`"
+        class="swiper__itemWrapper"
         :class="{test_2: true}"
       >
-        <div>{{ n }}</div>
+        <div class="swiper__item">
+          <img :src="item.icon.url" alt="">
+          <PrismicRichText :field="item.description" />
+        </div>
+        <div v-if="item.icon2.url && item.description2" class="swiper__item">
+          <img :src="item.icon2.url" alt="">
+          <PrismicRichText :field="item.description2" />
+        </div>
       </swiper-slide>
     </swiper>
+
+    <div class="onboarding" v-else>
+      <img :src="content.items[0].icon.url" alt="">
+      <PrismicRichText :field="content.items[0].description" />
+    </div>
 
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "nuxt-property-decorator";
+import {Component, Prop, Vue} from "nuxt-property-decorator";
 
 import { Navigation, Pagination } from 'swiper'
 
@@ -43,10 +57,16 @@ SwiperCore.use([Navigation, Pagination])
   }
 })
 export default class Onboarding extends Vue{
-
+  @Prop({ required: true }) readonly content!: any;
+  public isFullscreen:boolean = false
+  public displayNavigation:string = this.content.items.length <= 1 ? '' : 'navigation'
   mounted(){
     console.log('Onboarding component')
 
+  }
+
+  hideOnboarding() {
+    
   }
 
   onSwiper (swiper) {
