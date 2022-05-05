@@ -4,6 +4,7 @@ import {
     AbsoluteOrientationSensor,
     RelativeOrientationSensor,
 } from "../polyfill/motion-sensor.js";
+import $socket from "../../plugins/socket.io"
 
 export default class Scope {
     public sensor: any
@@ -60,17 +61,6 @@ export default class Scope {
         this.deviceOrientation()
         this.animationLoop()
         this.calibrateYRotation()
-
-        // gsap.set( this.places[0].icon, {
-        //     fill: "#FF0000"
-        // })
-        // gsap.set( this.places[1].icon, {
-        //     fill: "#00ff00"
-        // })
-        // gsap.set( this.places[2].icon, {
-        //     fill: "#0000ff"
-        // })
-
     }
 
     initPlaces() {
@@ -80,19 +70,22 @@ export default class Scope {
                 x: 0.07,
                 y: 0.07,
                 found: false,
-                icon: this.markers[1]
+                icon: this.markers[1],
+                slug: "good"
             }, {
                 id: 2,
                 x: -0.85,
                 y: 0.40,
                 found: false,
-                icon: this.markers[0]
+                icon: this.markers[0],
+                slug: "bad-1"
             }, {
                 id: 3,
                 x: 0.60,
                 y: 0.55,
                 found: false,
-                icon: this.markers[2]
+                icon: this.markers[2],
+                slug: "bad-2"
             }
         ]
     }
@@ -188,8 +181,7 @@ export default class Scope {
                     //     fill: "#FF0000"
                     // })
 
-                    if (!this.focusTarget) {
-                        console.log('1');
+                    if (!this.focusTarget && !this.focusTimeOut) {
                         this.focusTimeline.play()
 
                         this.focusTimeOut = setTimeout(() => {
@@ -198,6 +190,12 @@ export default class Scope {
                             gsap.set(place.icon, {
                                 fill: "#00ff00"
                             })
+                            if (!place.found) {
+                                $socket.step('scope-focus:' + place.slug)
+                                $socket.test()
+                            }
+                            place.found = true
+                            
                         }, 1000);
                     }
                     this.focusTarget = true
@@ -206,6 +204,7 @@ export default class Scope {
                         this.focusTimeline.restart()
                         this.focusTimeline.pause()
                         clearTimeout(this.focusTimeOut)
+                        this.focusTimeOut = null
 
                         this.focusTarget = false
                     }

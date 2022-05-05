@@ -9,7 +9,7 @@
 <script lang="ts">
 import { Vue, Component, getModule } from "nuxt-property-decorator";
 import globalSceneStore from "~/store/globalSceneStore";
-import $socket from "~/plugins/socket.io";
+// import $socket from "~/plugins/socket.io";
 import GlobalScene from "~/core/scene/GlobalScene";
 import GlobalSceneInitializer from "~/core/utils/initializers/GlobalSceneInitializer";
 //

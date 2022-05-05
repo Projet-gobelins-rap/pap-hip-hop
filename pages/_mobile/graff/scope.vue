@@ -28,6 +28,7 @@
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import Scope from "~/core/interactions/Scope.ts"
+
  
 @Component({
   components: {},
