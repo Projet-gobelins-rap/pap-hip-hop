@@ -19,14 +19,15 @@ export default class Graf {
   public gridBlocks:any[]
   public dirtyBlocks:any[]
 
-  constructor() {
-
-    this.display = document.querySelector('.display')!
-    this.grafCanvas = document.querySelector('.canvas-graf')!
+  constructor(layerLister: any) {
+    console.log(layerLister);
+    
+    this.display = document.querySelector('.graffDraw-display')!
+    this.grafCanvas = document.querySelector('.graffDraw-canvas')!
     this.imgUrl = '/images/wall-0.png'
     this.ctx = this.grafCanvas.getContext('2d')!
-    this.grafImg = document.querySelector('.grafImg')!
-    this.resetStepBtn = document.querySelector('.canvas-reset')!
+    this.grafImg = document.querySelector('.graffDraw-img')!
+    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
     this.img = new Image()
     this.erasedPercentage = 0
     this.canvasUpdated = false
