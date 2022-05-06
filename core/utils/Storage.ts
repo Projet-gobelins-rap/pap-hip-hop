@@ -3,6 +3,7 @@ class Storage {
 
   private _mode:STORAGE_TYPE
 
+  // TODO typer correctement nos paramètres de méthodes
   constructor() {
     this._mode = STORAGE_TYPE.LOCAL_STORAGE
   }

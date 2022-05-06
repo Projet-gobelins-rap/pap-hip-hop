@@ -1,4 +1,5 @@
 import io from 'socket.io-client'
+import $storage from "@/core/utils/Storage";
 
 class WebsocketManager {
   constructor() {
@@ -12,8 +13,11 @@ class WebsocketManager {
     this.room = '667'
     console.log(this.state);
 
-    // TODO : if local storage
-    if (this.room) {
+    // ON SET LA VALEUR ICI POUR LE DEV MODE --> TODO --> a remove quand on passera en production
+    $storage.setInLocalStorage('room',this.room)
+
+    if ($storage.getInLocalStorage('room')) {
+      console.log('ON PASSE')
       this.autoConnect()
     }
   }
@@ -29,7 +33,7 @@ class WebsocketManager {
   setRoom(roomId) {
     this.room = roomId
 
-    // TODO : Push to local storage
+    $storage.setInLocalStorage('room',this.room)
   }
 }
 
