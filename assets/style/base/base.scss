@@ -9,8 +9,8 @@ body {
 	background: #dcd3d0;
 }
 .main {
-	min-height: 100vh;
-	height: auto;
+	height: 100vh;
+	// height: auto;
 	display: flex;
 	flex-direction: column;
 }
@@ -30,3 +30,4 @@ body {
 	top: 0;
 	z-index: 1;
 }
+

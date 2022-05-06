@@ -32,13 +32,5 @@ export default class mobileConnection extends Vue {
     permisions.requestOrientation();
     $socket.io.emit("server:join", this.codeValue);
   }
-
-
-  // goToNextStep(){
-  //
-  //   this.stepStore.setIntroState(true)
-  //   console.log(this.$nuxt)
-  //   this.$router.push('/about')
-  // }
 }
 </script>
