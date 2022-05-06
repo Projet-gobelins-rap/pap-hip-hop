@@ -5,12 +5,27 @@
   "status": true,
   "json": {
     "Main": {
+      "collectableid": {
+        "type": "Text",
+        "config": {
+          "label": "Collectableid",
+          "placeholder": ""
+        }
+      },
       "model": {
         "type": "Link",
         "config": {
           "label": "Model",
           "placeholder": "",
           "select": "media"
+        }
+      },
+      "image": {
+        "type": "Image",
+        "config": {
+          "label": "Image",
+          "constraint": {},
+          "thumbnails": []
         }
       },
       "title": {

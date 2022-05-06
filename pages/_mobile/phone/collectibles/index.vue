@@ -1,6 +1,8 @@
 <template>
   <section class="collectibles">
-      <h1>Collectables</h1>
+    <h1>Collectables</h1>
+
+
   </section>
 </template>
 
@@ -15,13 +17,23 @@ import permisions from "~/core/utils/Permisions";
   components: {
     CustomButton,
   },
+  async asyncData({ $prismic, error }) {
+    const collectibles = await $prismic.api.query(
+        $prismic.predicates.at('document.type', 'collectable')
+    )
+    if (collectibles) {
+      return { collectibles };
+    } else {
+      error({ statusCode: 404, message: "Page not found" });
+    }
+  },
 })
 export default class collectibles extends Vue {
-
   public stepStore = getModule(stepStore, this.$store);
+  public collectibles: any;
 
   mounted() {
-    
+    console.log(this.collectibles); 
   }
 }
 </script>
