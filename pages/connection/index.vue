@@ -34,32 +34,6 @@ export default class Connection extends Vue {
     $socket.io.on("server:paired", (user) => {
       this.$router.push("/graf/scope");
     });
-
-    // if (!$socket.code) {
-    //   $socket.desktopConnection();
-
-    //   $socket.io.on("success-desktop", user => {
-    //     console.log("connected");
-    //     console.log(user.code);
-    //     console.log(user);
-    //     this.code = user.code;
-    //     $socket.code = user.code;
-    //   });
-    // } else {
-    //   this.code = $socket.code;
-    // }
-
-    // $socket.io.on("phone_connected", (user) => {
-    //   console.log("phone_connected on Desktop");
-    //   console.log(user,"<--- user connected");
-    //   console.log($socket,'<--- socket ')
-
-    //   // this.$router.push('/grenier')
-    //   this.$router.push("/graf/scope");
-
-    // //   // TODO :: Stocker notre user dans le store
-    // //   // this.globalStore.setUserData({phone:Object.keys(user)[0],desktop:Object.keys(user)[1]})
-    // });
   }
 }
 </script>
