@@ -19,6 +19,7 @@ import CustomButton from "~/components/buttons/button.vue";
 import {AssetsManager} from "../../core/managers";
 import {IMAGE_ASSET} from "../../core/enums";
 import Onboarding from '../../components/contentOverlays/onboarding'
+import $storage from "../../core/utils/Storage";
 @Component({
   components: {
     CustomButton,
