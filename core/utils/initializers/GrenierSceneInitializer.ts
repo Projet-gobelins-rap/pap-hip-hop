@@ -16,6 +16,9 @@ import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET } from "../../enums";
 import { degToRad } from "three/src/math/MathUtils";
 import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
+import { Character } from "../../models/character"
+
+import { Outfitloader } from "../../managers/OutfitLoader"
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
@@ -38,7 +41,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _createSceneContext() {
     // Set canvas dimensions
     this._data.canvas.width = window.innerWidth
-    this._data.canvas.height = window.innerHeight 
+    this._data.canvas.height = window.innerHeight
     // this._data.canvas.width = Helpers.getWindowSizes().width
     // this._data.canvas.height = Helpers.getWindowSizes().height
 
@@ -155,11 +158,14 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     papy.position.set(-50, -10, -20)
     papy.scale.set(4, 4, 4)
-    papy.rotateY(Math.PI /2)
+    papy.rotateY(Math.PI / 2)
     this._scene.add(papy)
 
+    const loadedCollection = new Outfitloader()
+    new Character(papy, 'papy', loadedCollection)
+
     console.log(grenierScene);
-    
+
     // this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {
     //

@@ -1,0 +1,20 @@
+{
+    "pnj": [
+        {
+            "name": "papy",
+            "head": "hair-afro",
+            "color": "green"
+
+        },
+        {
+            "name": "afrojack",
+            "head": "hair-afro",
+            "color": "purple",
+            "position": {
+                "x": 2,
+                "y": 0,
+                "z": 0
+            }
+        }
+    ]
+}

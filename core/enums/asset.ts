@@ -16,9 +16,8 @@ export enum GLTF_ASSET {
   GLOBAL_SCENE = 'globalScene',
   GRENIER = 'GRENIER',
   HUMANOIDE = 'HUMANOIDE',
-  BOB = 'BOB',
+  BOB = 'BOB', 
   AFRO = 'AFRO',
-
 }
 
 export enum VIDEO_ASSET {
@@ -31,6 +30,7 @@ export enum VIDEO_ASSET {
 export enum IMAGE_ASSET {
   STICKER = 'STICKER',
   BOOMBOX = 'BOOMBOX',
+  COLOR_TEXTURE = 'COLOR_TEXTURE',
 }
 
 /**
@@ -38,4 +38,15 @@ export enum IMAGE_ASSET {
  */
 export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
+}
+
+
+/**
+ * Name given to sprite texture color
+ */
+export enum TEXTURE_COLOR {
+  White = "white",
+  Purple = "purple",
+  Orange = "orange",
+  Green = "green",
 }
