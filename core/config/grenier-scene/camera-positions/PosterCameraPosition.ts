@@ -7,7 +7,7 @@ const PosterCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("poster01")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("affiche")!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
 
     cameraPos.x = 0

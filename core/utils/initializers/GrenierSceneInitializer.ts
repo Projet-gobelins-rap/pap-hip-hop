@@ -146,13 +146,20 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   }
 
   private _addGltfGrenierScene() {
-    const grenierSceneFbx = AssetsManager.getFbx(GLTF_ASSET.GRENIER).data
-    const pnjGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
-    console.log(typeof pnjGltf.scene[0])
-    console.log(pnjGltf.scene[0])
-    grenierSceneFbx.position.set(0, -10, 0)
+    const grenierScene = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data.scene
+    const papy = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data.scene
 
-    this._scene.add(pnjGltf.scene)
+    grenierScene.position.set(-40, -10, 20)
+    grenierScene.scale.set(0.25, 0.25, 0.25)
+    grenierScene.rotateY(Math.PI / 2)
+
+    papy.position.set(-50, -10, -20)
+    papy.scale.set(4, 4, 4)
+    papy.rotateY(Math.PI /2)
+    this._scene.add(papy)
+
+    console.log(grenierScene);
+    
     // this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {
     //
@@ -161,13 +168,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     //   }
     //
     // } );
-    grenierSceneFbx.scale.set(0.25, 0.25, 0.25)
-    const light = new AmbientLight(0x404040); // soft white light
+    const light = new AmbientLight(0xdddddd); // soft white light
     this._scene.add(light);
 
-    console.log(grenierSceneFbx, 'SCENE')
-    console.log(pnjGltf, 'SCENE')
-    this._scene.add(grenierSceneFbx)
+    this._scene.add(grenierScene)
   }
 
 }

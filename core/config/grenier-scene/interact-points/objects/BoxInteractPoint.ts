@@ -8,7 +8,7 @@ const BoxInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("shoeshelf")!.getWorldPosition(position);
+    GrenierScene.context.scene.getObjectByName("carton-3")!.getWorldPosition(position);
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;
