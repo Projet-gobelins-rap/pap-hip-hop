@@ -13,8 +13,11 @@ export enum ASSET_TYPE {
  * Name given to gltf asset in order to retrieve it through AssetManager
  */
 export enum GLTF_ASSET {
-  GLOBAL_SCENE= 'globalScene',
-  GRENIER= 'GRENIER',
+  GLOBAL_SCENE = 'globalScene',
+  GRENIER = 'GRENIER',
+  HUMANOIDE = 'HUMANOIDE',
+  BOB = 'BOB',
+  AFRO = 'AFRO',
 
 }
 

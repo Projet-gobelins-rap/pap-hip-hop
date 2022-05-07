@@ -1,7 +1,7 @@
-import {Initializers} from "~/core/defs";
+import { Initializers } from "~/core/defs";
 import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierScene from "~/core/scene/GrenierScene";
-import {AssetsManager, SceneManager} from "~/core/managers";
+import { AssetsManager, SceneManager } from "~/core/managers";
 import {
   AmbientLight,
   BoxGeometry,
@@ -13,15 +13,15 @@ import {
   WebGLRenderer
 } from "three";
 import Helpers from "~/core/utils/Helpers";
-import {GLTF_ASSET} from "../../enums";
-import {degToRad} from "three/src/math/MathUtils";
+import { GLTF_ASSET } from "../../enums";
+import { degToRad } from "three/src/math/MathUtils";
 import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
-  public cameraInitialPosition:Vector3
-  private _scene:Scene
-  init():void {
+  public cameraInitialPosition: Vector3
+  private _scene: Scene
+  init(): void {
     GrenierScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     // this._addLights(true)
@@ -37,8 +37,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
    */
   private _createSceneContext() {
     // Set canvas dimensions
-    this._data.canvas.width = Helpers.getWindowSizes().width
-    this._data.canvas.height = Helpers.getWindowSizes().height
+    this._data.canvas.width = window.innerWidth
+    this._data.canvas.height = window.innerHeight 
+    // this._data.canvas.width = Helpers.getWindowSizes().width
+    // this._data.canvas.height = Helpers.getWindowSizes().height
 
     // Create camera
     const camera = this._createCamera()
@@ -145,10 +147,13 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
   private _addGltfGrenierScene() {
     const grenierSceneFbx = AssetsManager.getFbx(GLTF_ASSET.GRENIER).data
-    console.log(grenierSceneFbx)
+    const pnjGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
+    console.log(typeof pnjGltf.scene[0])
+    console.log(pnjGltf.scene[0])
     grenierSceneFbx.position.set(0, -10, 0)
 
-    this._scene.add(grenierSceneFbx)
+    this._scene.add(pnjGltf.scene)
+    // this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {
     //
     //   if (child.name ==='socle'){
@@ -157,10 +162,11 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     //
     // } );
     grenierSceneFbx.scale.set(0.25, 0.25, 0.25)
-    const light = new AmbientLight( 0x404040 ); // soft white light
-    this._scene.add( light );
+    const light = new AmbientLight(0x404040); // soft white light
+    this._scene.add(light);
 
-    console.log(grenierSceneFbx,'SCENE')
+    console.log(grenierSceneFbx, 'SCENE')
+    console.log(pnjGltf, 'SCENE')
     this._scene.add(grenierSceneFbx)
   }
 
