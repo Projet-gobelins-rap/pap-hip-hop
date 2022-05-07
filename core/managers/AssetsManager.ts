@@ -1,7 +1,8 @@
-import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types/asset";
+import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset, TextureAsset} from "~/core/types/asset";
 import {ASSET_TYPE} from "~/core/enums/asset";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
+import {TextureLoader} from "three";
 
 /**
  * @description
@@ -24,12 +25,14 @@ class AssetsManager {
   private _videoAssets: Array<VideoAsset>
   private _gltfAssets: Array<GltfAsset>
   private _fbxAssets: Array<FbxAsset>
+  private _textureAssets: Array<TextureAsset>
   private _audioAssets: Array<AudioAsset>
   private _isLocalMode: boolean = false
 
   // -- Loaders
   private _gltfLoader: GLTFLoader
   private _fbxLoader: FBXLoader
+  private _textureLoader: TextureLoader
 
   // -- Events
   private _onProgressCallback: ProgressCallback
@@ -40,12 +43,14 @@ class AssetsManager {
     this._assetSource = []
     this._imageAssets = []
     this._videoAssets = []
+    this._textureAssets = []
     this._gltfAssets = []
     this._fbxAssets = []
     this._audioAssets = []
 
     this._gltfLoader = new GLTFLoader()
     this._fbxLoader = new FBXLoader()
+    this._textureLoader = new TextureLoader()
 
     this._onProgressCallback = function () {}
     this._onSuccessCallback = function () {}
@@ -165,6 +170,17 @@ class AssetsManager {
   }
 
   /**
+   * Retrieve fbx asset loaded
+   */
+  public getTexture(name: string): TextureAsset {
+
+    console.log("----> : " + name);
+    const texture = this._textureAssets.find(object => object.source.name === name) || null
+    if (!texture) throw new Error(`texture asset ${name} is not founded`)
+    return texture
+  }
+
+  /**
    * Retrieve audio asset loaded
    */
   public getAudio(name: string): AudioAsset {
@@ -201,6 +217,9 @@ class AssetsManager {
         case ASSET_TYPE.VIDEO:
           await this._loadVideoAsset(source)
           break
+        case ASSET_TYPE.TEXTURE:
+          await this._textureAsset(source)
+          break
         case ASSET_TYPE.FBX:
           await this._loadFbx(source)
           break
@@ -235,6 +254,20 @@ class AssetsManager {
       image.src = source.url
       this._imageAssets.push({source, data: image})
       resolve()
+    })
+  }
+
+  /**
+   * Image loader handler
+   */
+  private async _textureAsset(source: AssetSource): Promise<void> {
+    return new Promise<void>(resolve => {
+      this._textureLoader.load(source.url, texture => {
+        
+        this._textureAssets.push({source, data: texture})
+        
+        resolve()
+      })
     })
   }
 

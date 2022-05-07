@@ -13,7 +13,7 @@ import {
   WebGLRenderer
 } from "three";
 import Helpers from "~/core/utils/Helpers";
-import { GLTF_ASSET } from "../../enums";
+import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import { degToRad } from "three/src/math/MathUtils";
 import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
 import { Character } from "../../models/character"
@@ -162,6 +162,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     this._scene.add(papy)
 
     const loadedCollection = new Outfitloader()
+
+    console.log (AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE))
     new Character(papy, 'papy', loadedCollection)
 
     console.log(grenierScene);

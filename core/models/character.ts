@@ -3,7 +3,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DoubleSide, MeshBasicMaterial } from 'three'
 // import { loadedCollection } from '../managers/OutfitLoader'
 import { getTextureColorSpec } from '../config/global/textureColorMapping'
-
+import AssetManager from '../managers/AssetsManager'
+import {TEXTURE_ASSET} from '../enums/asset' 
+ 
 // import texture from '../../textures/texture.png'
 // import {getTextureColorSpec} from './texureMapEnum'
 // import { mainTexture } from './utils'
@@ -32,26 +34,11 @@ export class Character {
 
         this.setParamsByName()
         // this.display()
-        // this.loadMaterial()
-
-        setTimeout(() => {
-            console.log(this.loadedCollection);
-            
-            this.loadOutfit()
-        }, 1000);
+        this.loadMaterial()
+        this.loadOutfit()
     }
 
     public loadMaterial() {
-        const loader = new THREE.TextureLoader()
-
-        loader.load(texture, async (tex) => {
-            tex.magFilter = THREE.NearestFilter
-            tex.offset = this.outfitParams.colorMap.offset;
-            tex.repeat = this.outfitParams.colorMap.repeat;
-            this.material = new THREE.MeshMatcapMaterial({
-                map: tex
-            })
-        })
     }
     public loadOutfit() {
 

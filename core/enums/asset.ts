@@ -6,8 +6,9 @@ export enum ASSET_TYPE {
   IMAGE,
   VIDEO,
   AUDIO,
+  TEXTURE,
   FBX
-}
+} 
 
 /**
  * Name given to gltf asset in order to retrieve it through AssetManager
@@ -30,7 +31,6 @@ export enum VIDEO_ASSET {
 export enum IMAGE_ASSET {
   STICKER = 'STICKER',
   BOOMBOX = 'BOOMBOX',
-  COLOR_TEXTURE = 'COLOR_TEXTURE',
 }
 
 /**
@@ -38,6 +38,14 @@ export enum IMAGE_ASSET {
  */
 export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
+}
+
+
+/**
+ * Name given to texture assets in order to retrieve it through AssetManager
+ */
+export enum TEXTURE_ASSET {
+  COLOR_TEXTURE = 'COLOR_TEXTURE',
 }
 
 

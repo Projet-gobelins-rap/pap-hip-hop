@@ -1,7 +1,7 @@
 import {ASSET_TYPE} from "~/core/enums";
 import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
-import {Group} from "three";
+import {Group, Texture} from "three";
 
 /**
  * Asset source
@@ -34,6 +34,11 @@ export interface VideoAsset extends AssetElement<HTMLVideoElement>{}
  * Gltf asset element
  */
 export interface GltfAsset extends AssetElement<GLTF>{}
+
+/**
+ * Texture asset element
+ */
+export interface TextureAsset extends AssetElement<Texture>{}
 
 /**
  * Fbx asset element
