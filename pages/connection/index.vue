@@ -32,7 +32,8 @@ export default class Connection extends Vue {
     });
 
     $socket.io.on("server:paired", (user) => {
-      this.$router.push("/graf/scope");
+      this.$router.push("/battle");
+      console.log('PAIRE ZEBI')
     });
   }
 }
