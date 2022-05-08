@@ -1,6 +1,6 @@
 <template>
   <section class="battle--mobile">
-    <Choice :content="battlePunchRound1"></Choice>
+    <Choice :multiple-choice="true" :content="battlePunchRound1"></Choice>
   </section>
 </template>
 

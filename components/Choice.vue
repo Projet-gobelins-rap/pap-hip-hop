@@ -1,7 +1,7 @@
 <template>
   <div class="choices">
 
-    <div v-for="(item, i) in content"  class="choices__item">
+    <div v-for="(item, i) in content" @click="selectItem(i,item)"  class="choices__item">
       <span>{{item.content[0].text}}</span>
     </div>
 
@@ -20,24 +20,59 @@ import chatStore from "~/store/chatStore";
 })
 export default class Choice extends Vue {
   @Prop({ required: true }) readonly content!: any;
+  @Prop({ required: true }) readonly multipleChoice!: boolean = true;
   // public chatStore = getModule(chatStore, this.$store);
+  public choiceArray: [{
+    id:number
+    scoreValue:number,
+    text:string
+  }] = []
 
   mounted() {
     console.log(this.content,'<-- content choice')
     this.content.forEach((element)=>{
       console.log(element,'chouces')
     })
-    // console.log(this.content,'<---');
+  }
 
-    // // TODO : check if empty
-    // // for (const item of this.content.items) {
+  selectItem(index:number,item:object) {
+    console.log(index,'<-- selected index')
+    console.log(item.content[0].text,'<-- selected item')
+
+
+    // if (!this.choiceArray.includes(item.content[0].text)){
+
+    this.choiceArray.push({
+      id: index,
+      scoreValue: item.score,
+      text: item.content[0].text
+    })
+
+
+    // this.choiceArray.forEach((element)=>{
+    //   let exists = Object.values(element).includes(index);
+    //   if (exists){
+    //     console.log(exists,'OKOKOKOKOK')
+    //   }
     //
-    // // }
-    //
-    // // TODO : handle click on text if no choices buttons
-    // document.querySelector(".chat-text")?.addEventListener("click", (e) => {
-    //   this.chatStore.setChatStep("next");
-    // });
+    // })
+
+    // for (let key in this.choiceArray.) {
+      //
+      //   console.log(key,'keyyyyy')
+      //   // if (this.choiceArray[key] == "SEARCH") {
+      //   //   hasVal = true; break;
+      //   // }
+      // }
+
+
+
+    // }
+
+
+
+
+    console.log(this.choiceArray,':::  choice array')
   }
 
 }
