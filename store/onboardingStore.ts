@@ -7,9 +7,7 @@ import { Module, Mutation, VuexModule } from "vuex-module-decorators";
 })
 export default class onboardingStore extends VuexModule {
   private _onboardingStep: string | null = ''
-  // TODO :: penser a changer cette valeur en false quand on l'implementera
-  private _isOnboardingDisplay: boolean = true
-
+  private _isOnboardingDisplay: boolean = false
 
   // Mutations
   @Mutation

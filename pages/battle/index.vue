@@ -2,6 +2,7 @@
   <section class="battle">
     <h1>BATTLE DESKTOP</h1>
     <ChatComponent v-if="this.chatElementState && currentChat" :content="currentChat" />
+    <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
@@ -12,26 +13,30 @@ import CustomButton from "~/components/buttons/button.vue";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import chatStore from "~/store/chatStore";
 import battleStore from "../../store/battleStore";
-
+import Onboarding from '../../components/contentOverlays/onboarding'
+import onboardingStore from "../../store/onboardingStore";
 @Component({
   components: {
     CustomButton,
-    ChatComponent
+    ChatComponent,
+    Onboarding
   },
   async asyncData({ $prismic, error }) {
     try {
-      const battleContent = (await $prismic.api.getSingle("battle"))
-        .data;
+      const battleContent = (await $prismic.api.getSingle("battle")).data;
+
       const battleChat = battleContent?.slices1;
       const battleOnboarding = battleContent?.slices2;
 
       const currentChat = battleChat[0];
-      // const conversation = battleContent?.slices1;
+      const currentOnboarding = battleOnboarding[0];
+
 
       return {
         battleChat,
         battleOnboarding,
-        currentChat
+        currentChat,
+        currentOnboarding
       };
     } catch (e) {
       // Returns error page
@@ -40,31 +45,35 @@ import battleStore from "../../store/battleStore";
   },
 })
 export default class battle extends Vue {
-  public codeValue:number | null = null
-
   public stepStore = getModule(stepStore,this.$store)
   public battleStore = getModule(battleStore,this.$store)
   public chatStore = getModule(chatStore, this.$store)
+  public onboardingStore = getModule(onboardingStore, this.$store)
   public battleChat:any
   public battleOnboarding:any
   public currentChat: object;
+  public currentOnboarding: object;
   public chatCounter:number = 0
   mounted() {
     console.log('BATTLE')
     console.log(this.battleChat,'<--- dialog battle')
-    console.log(this.battleOnboarding,'<--- onboarding battle')
+    console.log(this.currentOnboarding,'<--- onboarding battle')
 
     console.log(this.currentChat,':::: current chat')
 
   }
 
-  setCurrentChat() {
-
+  closeChat() {
+    this.battleStore.setIsChatDisplay(false)
   }
 
   setNextChat() {
     this.chatCounter++
     this.currentChat = this.battleChat[this.chatCounter]
+  }
+
+  displayOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(true)
   }
 
   // watch dialogStep change in chatStore store
@@ -82,6 +91,8 @@ export default class battle extends Vue {
           break;
 
         case "selectPunch":
+          this.closeChat()
+          this.displayOnboarding()
           this.chatStore.setChatStep("reading");
           break
       }
