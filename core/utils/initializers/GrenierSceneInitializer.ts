@@ -161,10 +161,11 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     papy.rotateY(Math.PI / 2)
     this._scene.add(papy)
 
+    // TODO : move globally
     const loadedCollection = new Outfitloader()
+    const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
 
-    console.log (AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE))
-    new Character(papy, 'papy', loadedCollection)
+    new Character(papy, 'papy', loadedCollection, texture)
 
     console.log(grenierScene);
 

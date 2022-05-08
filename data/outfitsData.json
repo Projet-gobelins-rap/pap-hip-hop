@@ -2,9 +2,13 @@
     "pnj": [
         {
             "name": "papy",
-            "head": "hair-afro",
-            "color": "green"
-
+            "head": {
+                "model": "hair-afro",
+                "color": "green"
+            },
+            "body": {
+                "color": "purple"
+            }
         },
         {
             "name": "afrojack",
