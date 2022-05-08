@@ -9,7 +9,7 @@ import GrenierSceneHelper from "../core/config/grenier-scene/GrenierSceneHelper"
 })
 export default class battleStore extends VuexModule {
 
-  private _isChatDisplay: boolean = false
+  private _isChatDisplay: boolean = true
 
 
   @Mutation

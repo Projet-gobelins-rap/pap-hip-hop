@@ -1,12 +1,12 @@
 <template>
   <section class="battle">
     <h1>BATTLE DESKTOP</h1>
-    <ChatComponent v-if="this.chatElementState" :content="currentChat" />
+    <ChatComponent v-if="this.chatElementState && currentChat" :content="currentChat" />
   </section>
 </template>
 
 <script lang="ts">
-import { Vue, Component, getModule } from "nuxt-property-decorator";
+import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
@@ -22,13 +22,16 @@ import battleStore from "../../store/battleStore";
     try {
       const battleContent = (await $prismic.api.getSingle("battle"))
         .data;
-      const battleDialog = battleContent?.slices1;
+      const battleChat = battleContent?.slices1;
       const battleOnboarding = battleContent?.slices2;
+
+      const currentChat = battleChat[0];
       // const conversation = battleContent?.slices1;
 
       return {
-        battleDialog,
+        battleChat,
         battleOnboarding,
+        currentChat
       };
     } catch (e) {
       // Returns error page
@@ -42,14 +45,52 @@ export default class battle extends Vue {
   public stepStore = getModule(stepStore,this.$store)
   public battleStore = getModule(battleStore,this.$store)
   public chatStore = getModule(chatStore, this.$store)
-  public battleDialog:any
+  public battleChat:any
   public battleOnboarding:any
-  public currentChat:any
-
+  public currentChat: object;
+  public chatCounter:number = 0
   mounted() {
     console.log('BATTLE')
-    console.log(this.battleDialog,'<--- dialog battle')
+    console.log(this.battleChat,'<--- dialog battle')
     console.log(this.battleOnboarding,'<--- onboarding battle')
+
+    console.log(this.currentChat,':::: current chat')
+
+  }
+
+  setCurrentChat() {
+
+  }
+
+  setNextChat() {
+    this.chatCounter++
+    this.currentChat = this.battleChat[this.chatCounter]
+  }
+
+  // watch dialogStep change in chatStore store
+  @Watch("chatStep", { immediate: true, deep: true })
+  setChatStep(val: string) {
+    if (val) {
+      console.log(val);
+
+      switch (val) {
+        case "reading":
+          break;
+        case "next":
+          this.setNextChat();
+          this.chatStore.setChatStep("reading");
+          break;
+
+        case "selectPunch":
+          this.chatStore.setChatStep("reading");
+          break
+      }
+    }
+  }
+
+  // get chatStep from store
+  get chatStep() {
+    return this.chatStore.chatStep;
   }
 
   get chatElementState() {
