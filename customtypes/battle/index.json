@@ -38,6 +38,20 @@
           }
         }
       }
-    }
+    },
+    "round 1": {
+      "slices3": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round 2": {}
   }
 }
