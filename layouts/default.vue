@@ -61,6 +61,8 @@ export default class Default extends Vue {
         }
         else if (el.mediaType === 'FBX') {
           mediaType = 4
+        } else if (el.mediaType === 'TEXTURE') {
+          mediaType = 5
         }
 
         this.desktopMediasURL.push({
@@ -86,6 +88,8 @@ export default class Default extends Vue {
         }
         else if (el.mediaType === 'AUDIO') {
           mediaType = 3
+        } else if (el.mediaType === 'TEXTURE') {
+          mediaType = 4
         }
 
         this.mobileMediasURL.push({
@@ -109,6 +113,8 @@ export default class Default extends Vue {
           AssetsManager._registerSource(el.name,el.type,el.url,null)
         })
       }else {
+        console.log(this.desktopMediasURL);
+        
         this.desktopMediasURL.forEach(el=>{
           AssetsManager._registerSource(el.name,el.type,el.url,null)
         })

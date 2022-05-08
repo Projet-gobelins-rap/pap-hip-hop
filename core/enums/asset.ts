@@ -2,13 +2,13 @@
  * Type of asset
  */
 export enum ASSET_TYPE {
-  GLTF,
-  IMAGE,
-  VIDEO,
-  AUDIO,
-  TEXTURE,
-  FBX
-} 
+  GLTF, // 0
+  IMAGE, // 1
+  VIDEO, // 2
+  AUDIO, // 3
+  FBX, // 4
+  TEXTURE, // 5
+}
 
 /**
  * Name given to gltf asset in order to retrieve it through AssetManager
@@ -17,7 +17,7 @@ export enum GLTF_ASSET {
   GLOBAL_SCENE = 'globalScene',
   GRENIER = 'GRENIER',
   HUMANOIDE = 'HUMANOIDE',
-  BOB = 'BOB', 
+  BOB = 'BOB',
   AFRO = 'AFRO',
 }
 

@@ -114,6 +114,15 @@ class AssetsManager {
   /**
    * Register new image asset source
    */
+  public registerTexture(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.TEXTURE, url, localUrl)
+
+    return this
+  }
+
+  /**
+   * Register new image asset source
+   */
   public registerFbx(name: string, url: string, localUrl: string | null = null) {
     this._registerSource(name, ASSET_TYPE.FBX, url, localUrl)
 
@@ -133,6 +142,8 @@ class AssetsManager {
    * Retrieve gltf asset loaded
    */
   public getGltf(name: string): GltfAsset {
+
+    console.log("----> : " + this._gltfAssets);
     const gltf = this._gltfAssets.find(gltf => gltf.source.name === name)
     if (!gltf) throw new Error(`Gltf asset ${name} is not founded`)
     // let obj = Object.create(gltf)
@@ -174,7 +185,7 @@ class AssetsManager {
    */
   public getTexture(name: string): TextureAsset {
 
-    console.log("----> : " + name);
+    console.log("----> : " + this._textureAssets);
     const texture = this._textureAssets.find(object => object.source.name === name) || null
     if (!texture) throw new Error(`texture asset ${name} is not founded`)
     return texture
@@ -218,7 +229,7 @@ class AssetsManager {
           await this._loadVideoAsset(source)
           break
         case ASSET_TYPE.TEXTURE:
-          await this._textureAsset(source)
+          await this._loadTextureAsset(source)
           break
         case ASSET_TYPE.FBX:
           await this._loadFbx(source)
@@ -260,12 +271,10 @@ class AssetsManager {
   /**
    * Image loader handler
    */
-  private async _textureAsset(source: AssetSource): Promise<void> {
+  private async _loadTextureAsset(source: AssetSource): Promise<void> {
     return new Promise<void>(resolve => {
       this._textureLoader.load(source.url, texture => {
-        
         this._textureAssets.push({source, data: texture})
-        
         resolve()
       })
     })

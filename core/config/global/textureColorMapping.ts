@@ -1,5 +1,5 @@
 import { Vector2 } from 'three'
-import { TEXTURE_COLOR } from "../../enums";
+import { TEXTURE_COLOR } from "../../enums/asset";
 
 interface TextureColorsSpec {
     offset: Vector2,
