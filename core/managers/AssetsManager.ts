@@ -3,6 +3,7 @@ import {ASSET_TYPE} from "~/core/enums/asset";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
 import {TextureLoader} from "three";
+import { Outfitloader } from "./OutfitLoader"
 
 /**
  * @description
@@ -27,6 +28,7 @@ class AssetsManager {
   private _fbxAssets: Array<FbxAsset>
   private _textureAssets: Array<TextureAsset>
   private _audioAssets: Array<AudioAsset>
+  private _loadedCollection: Outfitloader
   private _isLocalMode: boolean = false
 
   // -- Loaders
@@ -36,7 +38,7 @@ class AssetsManager {
 
   // -- Events
   private _onProgressCallback: ProgressCallback
-  private _onSuccessCallback: () => void
+  // private _onSuccessCallback: () => void
   private _onErrorCallback: () => void
 
   constructor() {
@@ -53,7 +55,7 @@ class AssetsManager {
     this._textureLoader = new TextureLoader()
 
     this._onProgressCallback = function () {}
-    this._onSuccessCallback = function () {}
+    // this._onSuccessCallback = function () {}
     this._onErrorCallback = function () {}
   }
 
@@ -82,6 +84,10 @@ class AssetsManager {
     this._isLocalMode = true
 
     return this
+  }
+
+  private _onSuccessCallback() {
+    this._loadedCollection = new Outfitloader()
   }
 
   /**
@@ -197,6 +203,13 @@ class AssetsManager {
     if (!audio) throw new Error(`Audio asset ${name} is not founded`)
 
     return audio
+  }
+
+  /**
+   * Retrieve loaded outfit collection
+   */
+  public getLoadedCollection(): Outfitloader {
+    return this._loadedCollection
   }
 
   /**

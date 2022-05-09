@@ -51,7 +51,7 @@ export default class Default extends Vue {
         if (el.mediaType === 'GLTF'){
           mediaType = 0
         }else if (el.mediaType === 'IMAGE') {
-          mediaType = 1
+          mediaType = 1 
         }
         else if (el.mediaType === 'VIDEO') {
           mediaType = 2

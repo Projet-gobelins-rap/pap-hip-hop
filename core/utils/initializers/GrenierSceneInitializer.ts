@@ -31,12 +31,12 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     console.log(["1 ----> ", this._data]);
     this._addSceneElements()
- 
-    console.log(["3 ----> ", this._data]);
+
+    console.log(["1 ----> ", this._data]);
     // this._addLights(true)
     this._registerPresetPositions()
 
-    console.log(["4 ----> ", this._data]);
+    console.log(["1 ----> ", this._data]);
     // this._optimizeScene()
     //this._configGUI()
 
@@ -173,10 +173,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     this._scene.add(papy)
 
     // TODO : move globally
-    const loadedCollection = new Outfitloader()
-    const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
+    // const loadedCollection = new Outfitloader()
+    // const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
 
-    new Character(papy, 'papy', loadedCollection, texture)
+    new Character(papy, 'papy')
 
     // this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {
