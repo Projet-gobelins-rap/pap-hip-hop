@@ -9,16 +9,6 @@
             "body": {
                 "color": "purple"
             }
-        },
-        {
-            "name": "afrojack",
-            "head": "hair-afro",
-            "color": "purple",
-            "position": {
-                "x": 2,
-                "y": 0,
-                "z": 0
-            }
         }
     ]
 }

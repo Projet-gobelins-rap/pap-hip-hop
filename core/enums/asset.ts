@@ -2,7 +2,7 @@
  * Type of asset
  */
 export enum ASSET_TYPE {
-  GLTF, // 0
+  GLTF,
   IMAGE, // 1
   VIDEO, // 2
   AUDIO, // 3

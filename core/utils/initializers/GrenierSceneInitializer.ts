@@ -25,14 +25,23 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   public cameraInitialPosition: Vector3
   private _scene: Scene
   init(): void {
+
+    console.log(["1 ----> ", this._data]);
     GrenierScene.setSceneContext(this._createSceneContext())
+
+    console.log(["1 ----> ", this._data]);
     this._addSceneElements()
+ 
+    console.log(["3 ----> ", this._data]);
     // this._addLights(true)
     this._registerPresetPositions()
+
+    console.log(["4 ----> ", this._data]);
     // this._optimizeScene()
     //this._configGUI()
 
     GrenierScene.context.start()
+    console.log(["5 ----> ", this._data]);
   }
 
   /**
@@ -40,10 +49,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
    */
   private _createSceneContext() {
     // Set canvas dimensions
-    this._data.canvas.width = window.innerWidth
-    this._data.canvas.height = window.innerHeight
-    // this._data.canvas.width = Helpers.getWindowSizes().width
-    // this._data.canvas.height = Helpers.getWindowSizes().height
+    // this._data.canvas.width = window.innerWidth
+    // this._data.canvas.height = window.innerHeight
+    this._data.canvas.width = Helpers.getWindowSizes().width
+    this._data.canvas.height = Helpers.getWindowSizes().height
 
     // Create camera
     const camera = this._createCamera()
@@ -106,6 +115,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       1,
       1000
     )
+
+    // TODO : use initial cam position
     camera.position.set(50, 30, -50)
     this.cameraInitialPosition = new Vector3(50, 30, -50)
     camera.rotateX(degToRad(90))
@@ -166,8 +177,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
 
     new Character(papy, 'papy', loadedCollection, texture)
-
-    console.log(grenierScene);
 
     // this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {

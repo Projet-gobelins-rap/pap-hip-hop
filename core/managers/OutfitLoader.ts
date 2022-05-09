@@ -3,17 +3,14 @@ import { GLTF_ASSET } from "../enums";
 import AssetsManager from "./AssetsManager";
 
 export class Outfitloader {
-    public outfitList: any
-    public outfitCollection: any
+    public outfitList: string[]
+    public outfitCollection: Map<string, object>
 
     constructor() {
         this.outfitList = [
             GLTF_ASSET.BOB,
             GLTF_ASSET.AFRO,
-            GLTF_ASSET.HUMANOIDE,
         ]
-        console.log(this.outfitList);
-        
         this.outfitCollection = new Map()
         this.loadOutfits()
     }

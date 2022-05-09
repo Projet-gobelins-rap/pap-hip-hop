@@ -395,7 +395,7 @@ export default class SceneManager{
   private _initRenderer() {
     this._renderer.setSize(this._canvas.width, this._canvas.height)
     this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, this._defaultRatio))
-    this._renderer.toneMapping = LinearToneMapping;
+    // this._renderer.toneMapping = LinearToneMapping;
   }
 
   /**

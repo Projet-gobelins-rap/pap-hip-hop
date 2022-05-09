@@ -184,8 +184,6 @@ class AssetsManager {
    * Retrieve fbx asset loaded
    */
   public getTexture(name: string): TextureAsset {
-
-    console.log("----> : " + this._textureAssets);
     const texture = this._textureAssets.find(object => object.source.name === name) || null
     if (!texture) throw new Error(`texture asset ${name} is not founded`)
     return texture

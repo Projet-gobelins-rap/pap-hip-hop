@@ -35,34 +35,22 @@ export class Character {
         // this.currentAction = currentAction
         this.material = null
 
-        this.setParamsByName()
+        this._setParamsByName()
         // this.display()
-        this.loadMaterial()
         this.loadOutfit()
     }
 
-    public loadMaterial() {
-    }
     public loadOutfit() {
-
         this.model.traverse(child => {
-            // "mixamorigHeadTop_End"
-
             if (child.name === "mixamorigHeadTop_End") {
                 child.add(this.loadedCollection.outfitCollection.get(this.outfitParams.head.model))
                 let group = child.children[0]
                 group.position.y = -110
                 group.position.z = -30
-
-            }
+            } 
 
             if (child.name === 'sleeves' || child.name === 'body') {
-
-
-                
-
                 child.material = new THREE.MeshMatcapMaterial({ map: this.texture })
-
                 child.material.map.magFilter = THREE.NearestFilter
                 child.material.map.offset = this.outfitParams.body.colorMap.offset;
                 child.material.map.repeat = this.outfitParams.body.colorMap.repeat;
@@ -83,22 +71,16 @@ export class Character {
     //     )
     // }
 
-    private setParamsByName() {
+    private _setParamsByName() {
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
-                console.log(this.name);
                 this.outfitParams = outfitsData.pnj[key]
 
                 Helpers.traverse(this.outfitParams, (key, value) => {
                     if (typeof value == "object") {
-
-                        if (value.color) value.colorMap = getTextureColorSpec(value.color)
-
-                     
-                        
+                        if (value.color) value.colorMap = getTextureColorSpec(value.color)   
                     }
                 })
-                console.log(this.outfitParams);
             }
         }
     }
