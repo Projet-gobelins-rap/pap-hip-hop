@@ -7,5 +7,14 @@
     background: white;
     border-radius: 10px;
     cursor: pointer;
+    &--selected {
+      background: green;
+      span {
+        color: white;
+      }
+    }
+    span {
+      pointer-events: none;
+    }
   }
 }

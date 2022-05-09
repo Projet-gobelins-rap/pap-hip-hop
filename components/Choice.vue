@@ -1,10 +1,11 @@
 <template>
   <div class="choices">
 
-    <div v-for="(item, i) in content" @click="selectItem(i,item)"  class="choices__item">
+    <div v-for="(item, i) in content" @click="selectItem(i,item,$event)"  class="choices__item">
       <span>{{item.content[0].text}}</span>
     </div>
 
+    <button>VALIDER</button>
   </div>
 </template>
 
@@ -28,51 +29,37 @@ export default class Choice extends Vue {
     text:string
   }] = []
 
+  public savedIds: number[] = []
+
   mounted() {
     console.log(this.content,'<-- content choice')
-    this.content.forEach((element)=>{
-      console.log(element,'chouces')
-    })
   }
 
-  selectItem(index:number,item:object) {
-    console.log(index,'<-- selected index')
-    console.log(item.content[0].text,'<-- selected item')
+  selectItem(index:number,item:object,event:PointerEvent) {
+    let elem:HTMLElement = event.target as HTMLElement
 
+    if (elem.classList.contains('choices__item--selected')){
+      elem.classList.remove('choices__item--selected')
+    }
 
-    // if (!this.choiceArray.includes(item.content[0].text)){
+    if (this.savedIds.length <= 3){
+      elem.classList.toggle('choices__item--selected')
+    }
 
-    this.choiceArray.push({
-      id: index,
-      scoreValue: item.score,
-      text: item.content[0].text
-    })
+    this.toggleElement(this.savedIds,index)
+    
+  }
 
+  toggleElement(array, value) {
+    let index = array.indexOf(value);
 
-    // this.choiceArray.forEach((element)=>{
-    //   let exists = Object.values(element).includes(index);
-    //   if (exists){
-    //     console.log(exists,'OKOKOKOKOK')
-    //   }
-    //
-    // })
-
-    // for (let key in this.choiceArray.) {
-      //
-      //   console.log(key,'keyyyyy')
-      //   // if (this.choiceArray[key] == "SEARCH") {
-      //   //   hasVal = true; break;
-      //   // }
-      // }
-
-
-
-    // }
-
-
-
-
-    console.log(this.choiceArray,':::  choice array')
+    if (index === -1) {
+      if (array.length <= 3){
+        array.push(value);
+      }
+    } else {
+      array.splice(index, 1);
+    }
   }
 
 }
