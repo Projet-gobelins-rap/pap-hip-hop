@@ -7,6 +7,7 @@
     background: white;
     border-radius: 10px;
     cursor: pointer;
+    margin-top: 15px;
     &--selected {
       background: green;
       span {
@@ -16,5 +17,10 @@
     span {
       pointer-events: none;
     }
+  }
+  &__validate {
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
   }
 }

@@ -15,6 +15,7 @@ import chatStore from "~/store/chatStore";
 import battleStore from "../../store/battleStore";
 import Onboarding from '../../components/contentOverlays/onboarding'
 import onboardingStore from "../../store/onboardingStore";
+import $socket from "~/plugins/socket.io";
 @Component({
   components: {
     CustomButton,
@@ -60,6 +61,10 @@ export default class battle extends Vue {
     console.log(this.currentOnboarding,'<--- onboarding battle')
 
     console.log(this.currentChat,':::: current chat')
+
+    $socket.io.on('battle::response',(ids)=>{
+      console.log(ids,'<----- battle response')
+    })
 
   }
 

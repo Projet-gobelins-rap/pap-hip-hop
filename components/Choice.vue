@@ -5,7 +5,7 @@
       <span>{{item.content[0].text}}</span>
     </div>
 
-    <button :disabled="!isActive">VALIDER</button>
+    <button class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER</button>
   </div>
 </template>
 
@@ -13,6 +13,7 @@
 import { Vue, Component, getModule, Prop } from "nuxt-property-decorator";
 import CustomButton from "~/components/buttons/button.vue";
 import chatStore from "~/store/chatStore";
+import $socket from "~/plugins/socket.io";
 
 @Component({
   components: {
@@ -22,7 +23,7 @@ import chatStore from "~/store/chatStore";
 export default class Choice extends Vue {
   @Prop({ required: true }) readonly content!: any;
   @Prop({ required: true }) readonly multipleChoice!: boolean = true;
-  // public chatStore = getModule(chatStore, this.$store);
+
   public choiceArray: [{
     id:number
     scoreValue:number,
@@ -67,6 +68,12 @@ export default class Choice extends Vue {
     }
 
     console.log(this.savedIds)
+  }
+
+  validateSelection() {
+    console.log('VALIDE AVEC VALIDATION')
+
+    $socket.io.emit('battle::response',this.savedIds)
   }
 
 
