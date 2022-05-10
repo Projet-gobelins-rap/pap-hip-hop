@@ -19,6 +19,8 @@ export enum GLTF_ASSET {
   HUMANOIDE = 'HUMANOIDE',
   BOB = 'BOB',
   AFRO = 'AFRO',
+  SLOT_TEST = 'SLOT_TEST',
+  TREE = 'TREE',
 }
 
 export enum VIDEO_ASSET {
