@@ -2,7 +2,7 @@
   <div v-if="this.onboardingDisplay" class="onboardingWrapper">
 
     <swiper
-      v-if="!content.items[0].isFullscreen"
+      v-if="!content.isFullscreen"
       :slides-per-view="1"
       :loop="false"
       navigation
@@ -14,7 +14,7 @@
       <button @click="hideOnboarding" class="swiper__close">CLOSE</button>
 
       <swiper-slide
-        v-for="(item, i) in content.items"
+        v-for="(item, i) in content"
         :key="`slice-item-${i}`"
         class="swiper__itemWrapper"
         :class="{test_2: true}"
@@ -31,8 +31,9 @@
     </swiper>
 
     <div class="onboarding" v-else>
-      <img :src="content.items[0].icon.url" alt="">
-      <PrismicRichText :field="content.items[0].description" />
+<!--      {{content}}-->
+      <img :src="content.icon.url" alt="">
+      <PrismicRichText :field="content.description" />
     </div>
 
   </div>
@@ -60,10 +61,11 @@ SwiperCore.use([Navigation, Pagination])
 export default class Onboarding extends Vue{
   @Prop({ required: true }) readonly content!: any;
   public isFullscreen:boolean = false
-  public displayNavigation:string = this.content.items.length <= 1 ? '' : 'navigation'
+  // public displayNavigation:string = this.content.items.length <= 1 ? '' : 'navigation'
   public onboardingStore = getModule(onboardingStore,this.$store)
   mounted(){
     console.log('Onboarding component')
+    console.log(this.content,'::: ppp')
 
   }
 

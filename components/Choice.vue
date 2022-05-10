@@ -73,7 +73,12 @@ export default class Choice extends Vue {
   validateSelection() {
     console.log('VALIDE AVEC VALIDATION')
 
+    console.log(this.$parent,'PARENT')
+
+    this.$parent.$emit('choice::updateState')
+
     $socket.io.emit('battle::response',this.savedIds)
+
   }
 
 

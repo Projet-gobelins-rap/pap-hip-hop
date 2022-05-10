@@ -27,7 +27,7 @@ import $socket from "~/plugins/socket.io";
       const battleContent = (await $prismic.api.getSingle("battle")).data;
 
       const battleChat = battleContent?.slices1;
-      const battleOnboarding = battleContent?.slices2;
+      const battleOnboarding = battleContent?.slices2[0].items;
 
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
