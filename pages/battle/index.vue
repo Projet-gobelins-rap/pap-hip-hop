@@ -28,16 +28,20 @@ import $socket from "~/plugins/socket.io";
 
       const battleChat = battleContent?.slices1;
       const battleOnboarding = battleContent?.slices2[0].items;
+      const battlePunchRound1 = battleContent?.slices3[0].items;
 
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
+      const currentPunchline = battlePunchRound1
+
 
 
       return {
         battleChat,
         battleOnboarding,
         currentChat,
-        currentOnboarding
+        currentOnboarding,
+        currentPunchline
       };
     } catch (e) {
       // Returns error page
@@ -54,7 +58,9 @@ export default class battle extends Vue {
   public battleOnboarding:any
   public currentChat: object;
   public currentOnboarding: object;
+  public currentPunchline: object;
   public chatCounter:number = 0
+  public punchlineArray: string[]= []
   mounted() {
     console.log('BATTLE')
     console.log(this.battleChat,'<--- dialog battle')
@@ -63,7 +69,10 @@ export default class battle extends Vue {
     console.log(this.currentChat,':::: current chat')
 
     $socket.io.on('battle::response',(ids)=>{
-      console.log(ids,'<----- battle response')
+      ids.forEach((id)=>{
+        this.punchlineArray.push(this.currentPunchline[id].content[0].text)
+        console.log(this.currentPunchline[id].content[0].text)
+      })
     })
 
   }
