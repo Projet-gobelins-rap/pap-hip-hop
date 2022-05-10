@@ -37,9 +37,8 @@ export class Character {
         this.material = null
 
         this.init()
-        this._setParamsByName()
+        this.setParamsByName()
         // this.display()
-        this.loadOutfit()
     }
 
     public init() {
@@ -70,7 +69,9 @@ export class Character {
     // public display() {
     // }
 
-    private _setParamsByName() {
+    public setParamsByName() {
+
+        console.log("parent");
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
                 this.outfitParams = outfitsData.pnj[key]
@@ -83,6 +84,7 @@ export class Character {
             }
         }
         console.log(this.outfitParams);
+        this.loadOutfit()
 
     }
 

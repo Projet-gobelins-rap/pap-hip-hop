@@ -2,16 +2,19 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { BoxGeometry, Camera, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { Player } from "../../models/player";
 
 export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
 
   private _scene: Scene
   private _controls: OrbitControls
+  private _camera: Camera
+  
   init(): void {
     HoodScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
@@ -103,15 +106,15 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
    * Create perspective camera
    */
   private _createCamera() {
-    const camera = new PerspectiveCamera(
+    this._camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
       1000
     )
-    camera.position.set(0, 0, 5)
+    this._camera.position.set(0, 0, 5)
 
-    return camera
+    return this._camera
   }
 
   /**
@@ -153,10 +156,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   addCube() {
 
-    const player = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data.scene
+    const playerModel = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data.scene
     const test = AssetsManager.getGltf(GLTF_ASSET.SLOT_TEST).data.scene
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
-    this._scene.add(player);
+    this._scene.add(playerModel);
     this._scene.add(test);
     test.scale.set(0.25, 0.25, 0.25)
 
@@ -170,7 +173,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(otherSlots, cube)
 
-    console.log(this.controls);
+    const player = new Player(playerModel, 'player', this._camera, this._controls)
     
   }
 }

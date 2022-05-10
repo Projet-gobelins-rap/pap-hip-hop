@@ -3,6 +3,10 @@ import { A, D, DIRECTIONS, S, W } from '../utils/KeyDisplay'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Camera, Mesh, Object3D, Quaternion, Raycaster, Vector3 } from "three";
 
+import * as outfitsData from '../../data/outfitsData.json';
+import Helpers from "../utils/Helpers";
+import { getTextureColorSpec } from "../config/global/textureColorMapping";
+
 export class Player extends Character {
 
     // properties
@@ -28,10 +32,23 @@ export class Player extends Character {
     runVelocity = 5
     walkVelocity = 2
 
-    constructor(model: Object3D, name: string, camera: Camera) {
-       super(model, name)
+    constructor(model: Object3D, name: string, camera: Camera, control: OrbitControls) {
+        super(model, name)
 
-       this.camera = camera
-        this.orbitControl = new OrbitControls(this.camera, )
+        this.camera = camera
+        this.orbitControl = control
+
+        // this.setParamsByName()
+    }
+
+    public setParamsByName() {
+        // super.setParamsByName()
+        console.log("enfant");
+
+        Helpers.traverse(outfitsData.player, (key, value) => {
+            if (typeof value == "object") {
+                if (value.color) value.colorMap = getTextureColorSpec(value.color)
+            }
+        })
     }
 }
