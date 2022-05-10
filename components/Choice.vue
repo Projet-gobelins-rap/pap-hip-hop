@@ -5,7 +5,7 @@
       <span>{{item.content[0].text}}</span>
     </div>
 
-    <button>VALIDER</button>
+    <button :disabled="!isActive">VALIDER</button>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default class Choice extends Vue {
     scoreValue:number,
     text:string
   }] = []
-
+  public isActive:boolean = false
   public savedIds: number[] = []
 
   mounted() {
@@ -38,29 +38,37 @@ export default class Choice extends Vue {
   selectItem(index:number,item:object,event:PointerEvent) {
     let elem:HTMLElement = event.target as HTMLElement
 
-    if (elem.classList.contains('choices__item--selected')){
-      elem.classList.remove('choices__item--selected')
-    }
 
-    if (this.savedIds.length <= 3){
+    if(this.savedIds.length == 0){
+      this.savedIds.push(index)
       elem.classList.toggle('choices__item--selected')
+      this.isActive = false
+
     }
+    else {
+      if (this.savedIds.includes(index)){
 
-    this.toggleElement(this.savedIds,index)
-    
-  }
+        let indexPosition = this.savedIds.indexOf(index)
+        this.savedIds.splice(indexPosition,1)
+        elem.classList.toggle('choices__item--selected')
+        this.isActive = false
 
-  toggleElement(array, value) {
-    let index = array.indexOf(value);
+      }else {
+        if (this.savedIds.length <=3){
+          this.savedIds.push(index)
+          elem.classList.toggle('choices__item--selected')
+          this.isActive = false
+        }
 
-    if (index === -1) {
-      if (array.length <= 3){
-        array.push(value);
+        if (this.savedIds.length == 4){
+          this.isActive = true
+        }
       }
-    } else {
-      array.splice(index, 1);
     }
+
+    console.log(this.savedIds)
   }
+
 
 }
 </script>
