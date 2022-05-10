@@ -83,7 +83,7 @@ export default class SceneManager{
     this._composer = null
     this._scene = options.scene
     this._rayCaster = new Raycaster()
-    this._controls = null
+    this._controls = options.controls
     this._deltaTime = 0
     this._previousTime = 0
     // this._gui = new GUI()
@@ -124,7 +124,6 @@ export default class SceneManager{
     this._init()
   }
 
-
   // PUBLIC METHODS
   /**
    * Destroy the scene
@@ -152,6 +151,8 @@ export default class SceneManager{
    */
   public start() {
     this._isPlaying = true
+    console.log(this._controls);
+    
     this._onStartCallback(this)
     this._tick()
   }
@@ -403,8 +404,9 @@ export default class SceneManager{
    */
   private _initControls() {
     if (this._isOrbitControlActivated) {
-      this._controls = new OrbitControls(this._camera, this._canvas)
       this._controls.enableDamping = true
+    } else {
+      this._controls.enableDamping = null
     }
   }
 
@@ -488,6 +490,10 @@ export default class SceneManager{
 
   get scene(): Scene {
     return this._scene
+  }
+
+  get controls(): any {
+    return '666'
   }
 
   get currentIntersect(): any {
