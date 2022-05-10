@@ -14,6 +14,8 @@ import Helpers from '../utils/Helpers'
 import * as outfitsData from '../../data/outfitsData.json';
 
 export class Character {
+
+    // properties
     public model: THREE.Group
     public name: string
     public texture: THREE.Texture
@@ -23,7 +25,6 @@ export class Character {
     public outfitParams: any
     public material: any
     public loadedCollection: any
-
 
     constructor(model: THREE.Object3D, name: string /*, loadedCollection: any, texture: any , mixer: THREE.AnimationMixer, animationsMap: Map<string, THREE.AnimationAction>, currentAction: string*/) {
         //@ts-ignore
