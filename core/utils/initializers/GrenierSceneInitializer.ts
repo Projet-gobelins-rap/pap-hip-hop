@@ -69,7 +69,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
@@ -116,10 +116,13 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       1000
     )
 
-    // TODO : use initial cam position
-    camera.position.set(50, 30, -50)
-    this.cameraInitialPosition = new Vector3(50, 30, -50)
-    camera.rotateX(degToRad(90))
+
+    // console.log(GrenierSceneConfig.cameraPositions[0].coords().cameraPos);
+
+    camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().cameraPos)
+    camera.lookAt(GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition)
+
+    this.cameraInitialPosition = camera.position
 
     return camera
   }
@@ -168,10 +171,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     grenierScene.rotateY(Math.PI / 2)
 
     papy.position.set(-50, -10, -20)
-    papy.scale.set(4, 4, 4)
-    papy.rotateY(Math.PI / 2)
-    this._scene.add(papy)
-
+    
+    // papy.rotateY(Math.PI / 2)
+    grenierScene.getObjectByName("papy").add(papy)
+    papy.scale.set(15, 15, 15)
     // TODO : move globally
     // const loadedCollection = new Outfitloader()
     // const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
@@ -190,6 +193,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     this._scene.add(light);
 
     this._scene.add(grenierScene)
-  }
 
+    console.log("---> scene ", grenierScene);
+  }
 }

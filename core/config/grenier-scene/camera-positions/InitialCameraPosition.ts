@@ -5,9 +5,9 @@ const InitialCameraPosition: CameraPosition = {
   name: 'initial',
 
   coords: () => {
-    const lookAtPosition = new Vector3(10, 30, -30)
+    const lookAtPosition = new Vector3(-50, 20, 20)
 
-    const cameraPos = lookAtPosition.clone()
+    const cameraPos = new Vector3(30, 20, -30)
 
 
     return { cameraPos, lookAtPosition }

@@ -40,7 +40,6 @@ export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
 }
 
-
 /**
  * Name given to texture assets in order to retrieve it through AssetManager
  */
