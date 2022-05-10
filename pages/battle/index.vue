@@ -1,6 +1,6 @@
 <template>
   <section class="battle">
-    <h1>BATTLE DESKTOP</h1>
+    <h1 ref="title">BATTLE DESKTOP</h1>
     <ChatComponent v-if="this.chatElementState && currentChat" :content="currentChat" />
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
@@ -61,7 +61,16 @@ export default class battle extends Vue {
   public currentPunchline: object;
   public chatCounter:number = 0
   public punchlineArray: string[]= []
+  public title:HTMLElement
+
+  created() {
+
+  }
+
   mounted() {
+    this.title = this.$refs.title as HTMLElement
+    console.log(this.title," zebiiii")
+
     console.log('BATTLE')
     console.log(this.battleChat,'<--- dialog battle')
     console.log(this.currentOnboarding,'<--- onboarding battle')
@@ -69,12 +78,23 @@ export default class battle extends Vue {
     console.log(this.currentChat,':::: current chat')
 
     $socket.io.on('battle::response',(ids)=>{
+      this.hideOnboarding()
       ids.forEach((id)=>{
         this.punchlineArray.push(this.currentPunchline[id].content[0].text)
-        console.log(this.currentPunchline[id].content[0].text)
       })
+
+      this.displayUserPunchline()
+
     })
 
+  }
+
+  displayUserPunchline() {
+    this.punchlineArray.forEach((punch,i)=>{
+      setTimeout(()=>{
+        this.title.innerText = punch
+      },8000 * i)
+    })
   }
 
   closeChat() {
@@ -84,6 +104,10 @@ export default class battle extends Vue {
   setNextChat() {
     this.chatCounter++
     this.currentChat = this.battleChat[this.chatCounter]
+  }
+
+  hideOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(false)
   }
 
   displayOnboarding() {
