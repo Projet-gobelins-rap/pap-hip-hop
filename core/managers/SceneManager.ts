@@ -10,7 +10,8 @@ import {
   Scene,
   Vector2,
   Vector3,
-  WebGLRenderer
+  WebGLRenderer, 
+  LinearToneMapping
 } from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
@@ -394,6 +395,7 @@ export default class SceneManager{
   private _initRenderer() {
     this._renderer.setSize(this._canvas.width, this._canvas.height)
     this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, this._defaultRatio))
+    // this._renderer.toneMapping = LinearToneMapping;
   }
 
   /**
