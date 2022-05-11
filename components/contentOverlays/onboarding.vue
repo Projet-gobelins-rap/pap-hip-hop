@@ -19,13 +19,14 @@
         class="swiper__itemWrapper"
         :class="{test_2: true}"
       >
+        {{item[i]}}
         <div class="swiper__item">
           <img :src="item.icon.url" alt="">
-          <PrismicRichText :field="item.description" />
+          <span>{{item.description[0].text}}</span>
         </div>
-        <div v-if="item.icon2.url && item.description2" class="swiper__item">
+        <div v-if="item.icon2.url && item.description2[0].text" class="swiper__item">
           <img :src="item.icon2.url" alt="">
-          <PrismicRichText :field="item.description2" />
+          <span>{{item.description2[0].text}}</span>
         </div>
       </swiper-slide>
     </swiper>

@@ -129,6 +129,10 @@ export default class battle extends Vue {
     this.onboardingStore.setOnboardingDisplay(true)
   }
 
+  goToRound2(){
+    $socket.io.emit('battle::round2')
+  }
+
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
@@ -146,6 +150,12 @@ export default class battle extends Vue {
         case "selectPunch":
           this.closeChat()
           this.displayOnboarding()
+          this.chatStore.setChatStep("reading");
+          break
+        case "nextRound":
+          this.closeChat()
+          this.displayOnboarding()
+          this.goToRound2()
           this.chatStore.setChatStep("reading");
           break
       }

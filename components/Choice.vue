@@ -5,7 +5,7 @@
       <span>{{item.content[0].text}}</span>
     </div>
 
-    <button class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER</button>
+    <button class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER !</button>
   </div>
 </template>
 

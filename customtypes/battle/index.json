@@ -52,6 +52,70 @@
         }
       }
     },
-    "round 2": {}
+    "onboarding round2": {
+      "slices5": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round 2 #1": {
+      "slices6": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round2 #2": {
+      "slices7": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round2 #3": {
+      "slices8": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round 2 #4": {
+      "slices9": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
   }
 }

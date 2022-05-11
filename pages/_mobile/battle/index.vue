@@ -1,12 +1,12 @@
 <template>
   <section class="battle--mobile">
-    <Choice v-if="this.displayChoice" :multiple-choice="true"  :content="battlePunchRound1"></Choice>
+    <Choice v-if="displayChoice" :multiple-choice="multipleChoice"  :content="battlePunchline"></Choice>
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
 <script lang="ts">
-import { Vue, Component, getModule } from "nuxt-property-decorator";
+import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import CustomButton from "~/components/buttons/button.vue";
 import $socket from "~/plugins/socket.io";
 import battleStore from "../../../store/battleStore";
@@ -23,15 +23,19 @@ import onboardingStore from "../../../store/onboardingStore";
     try {
       const battleContent = (await $prismic.api.getSingle("battle")).data;
 
+      console.log(battleContent,'content du bbattlle')
       const battleOnboarding = battleContent?.slices2[0].items;
       const battlePunchRound1 = battleContent?.slices3[0].items;
-
+      const battleOnboardingRound2 = battleContent?.slices5[0].items;
+      const battlePunchline = battlePunchRound1
       // const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[1];
 
       return {
         battlePunchRound1,
-        currentOnboarding
+        battleOnboardingRound2,
+        currentOnboarding,
+        battlePunchline
       };
     } catch (e) {
       // Returns error page
@@ -46,8 +50,13 @@ export default class battleMobile extends Vue {
   public battlePunchRound1: object;
   public currentOnboarding: object
   public displayChoice:boolean = true
+  public multipleChoice:boolean = true
+  public onboardingCounter:number = 1
+  public battleOnboardingRound2:object
+  public battlePunchline:object
   mounted() {
-
+    // this.battlePunchline = this.battlePunchRound1
+    //
     console.log(this.currentOnboarding,'<--- current onboarrding mobile')
 
     console.log(this.battlePunchRound1,'<-- punch round 1')
@@ -56,22 +65,50 @@ export default class battleMobile extends Vue {
     //   this.$router.push('/')
     // });
     this.ekipzebi()
+    this.round2()
 
   }
+
 
   displayOnboarding() {
     this.onboardingStore.setOnboardingDisplay(true)
   }
 
+
+  displayRound2Onboarding() {
+    this.currentOnboarding = this.battleOnboardingRound2
+    this.displayOnboarding()
+  }
+
+  // TODO :: rename nom de la methode
   ekipzebi() {
 
     this.$on('choice::updateState',()=>{
       this.displayChoice = false
-      this.displayOnboarding()
+      this.onboardingStore.setOnboardingDisplay(true)
+      // this.displayOnboarding()
+
     })
   }
 
-  // v-on="ekipzebi"
+  @Watch("onboardingStep", { immediate: true, deep: true })
+  setOnboardingStep(val: string) {
+    if (val) {
+      console.log(val);
+
+    }
+  }
+
+  get onboardingStep() {
+    return this.onboardingStore.onboardingStep;
+  }
+  round2(){
+    $socket.io.on('battle::round2',()=>{
+      this.displayRound2Onboarding()
+      this.multipleChoice = false
+      console.log("ROUND 2222")
+    })
+  }
 
 }
 </script>
