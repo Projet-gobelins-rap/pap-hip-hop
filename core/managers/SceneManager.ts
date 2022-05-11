@@ -25,6 +25,10 @@ import {
 import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
 import { gsap } from 'gsap'
 import Helpers from "../utils/Helpers";
+import {Stats} from 'stats.ts'
+
+
+
 export default class SceneManager {
 
   // - PROPERTIES
@@ -39,7 +43,7 @@ export default class SceneManager {
   private _scene: Scene
   // private _gui: GUI
   private _rayCaster: Raycaster
-  // private _stats: Stats | null
+  private _stats: Stats | null
   private _defaultRatio: number
   private _currentIntersect: null
   private _keysPressed: Object
@@ -90,7 +94,7 @@ export default class SceneManager {
     this._deltaTime = 0
     this._previousTime = 0
     // this._gui = new GUI()
-    // this._stats = null
+    this._stats = null
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
@@ -293,6 +297,7 @@ export default class SceneManager {
     return this
   }
 
+  
   /**
    * Enable parallax camera on mouse move
    */
@@ -389,9 +394,8 @@ export default class SceneManager {
     this._initRenderer()
     this._initControls()
     this._keyboardHandler()
-
+    this._configStats()
     this._bindEvents()
-
     this._checkConfig()
   }
 
@@ -443,15 +447,23 @@ export default class SceneManager {
     }
   }
 
+  private _configStats() {
+    this._stats = new Stats();
+    this._isStatsActive = true
+    this._stats.showPanel(0);
+    document.body.appendChild(this._stats.dom);
+  }
+
+
   /**
    * Update loop of the scene
    */
   private _tick() {
     if (!this._isPlaying) return
-
-    // if (this._isStatsActive && this._stats) this._stats.begin()
+    
+    if (this._isStatsActive && this._stats) this._stats.begin()
     this._render()
-    // if (this._isStatsActive && this._stats) this._stats.end()
+    if (this._isStatsActive && this._stats) this._stats.end()
 
     this._requestId = requestAnimationFrame(this._tick.bind(this))
   }
