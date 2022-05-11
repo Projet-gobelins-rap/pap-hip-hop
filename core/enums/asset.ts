@@ -21,6 +21,7 @@ export enum GLTF_ASSET {
   AFRO = 'AFRO',
   SLOT_TEST = 'SLOT_TEST',
   TREE = 'TREE',
+  CITY = 'CITY',
 }
 
 export enum VIDEO_ASSET {

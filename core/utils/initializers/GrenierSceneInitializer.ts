@@ -116,7 +116,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       1000
     )
 
-
     // console.log(GrenierSceneConfig.cameraPositions[0].coords().cameraPos);
 
     camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().cameraPos)
@@ -164,36 +163,21 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
   private _addGltfGrenierScene() {
     const grenierScene = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data.scene
-    const papy = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data.scene
+    const papyGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
 
     grenierScene.position.set(-40, -10, 20)
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
 
-    papy.position.set(-50, -10, -20)
-    
-    // papy.rotateY(Math.PI / 2)
-    grenierScene.getObjectByName("papy").add(papy)
-    papy.scale.set(15, 15, 15)
-    // TODO : move globally
-    // const loadedCollection = new Outfitloader()
-    // const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
- 
-    new Character(papy, 'papy', 'tpose')
+    const papy = new Character(papyGltf, 'papy', 'tpose')
 
-    // this._scene.add(grenierSceneFbx)
-    // GrenierScene.context.scene.traverse( child => {
-    //
-    //   if (child.name ==='socle'){
-    //     child.receiveShadow = true
-    //   }
-    //
-    // } );
+    grenierScene.getObjectByName("papy").add(papy.model)
+    papy.model.scale.set(15, 15, 15)
+    papy.model.position.set(-50, -10, -20)
+
     const light = new AmbientLight(0xdddddd); // soft white light
     this._scene.add(light);
 
     this._scene.add(grenierScene)
-
-    console.log("---> scene ", grenierScene);
   }
 }

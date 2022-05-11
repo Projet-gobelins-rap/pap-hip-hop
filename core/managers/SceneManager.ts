@@ -410,8 +410,6 @@ export default class SceneManager {
   private _initControls() {
     if (this._isOrbitControlActivated) {
       this._controls.enableDamping = true
-    } else {
-      this._controls.enableDamping = null
     }
   }
 

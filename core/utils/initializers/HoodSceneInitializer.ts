@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { BoxGeometry, Camera, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, BoxGeometry, Camera, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -157,9 +157,12 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const test = AssetsManager.getGltf(GLTF_ASSET.SLOT_TEST).data.scene
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
+    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     
     this._scene.add(test);
-    test.scale.set(0.25, 0.25, 0.25)
+    this._scene.add(city);
+    test.scale.set(0.05, 0.05, 0.05)
+    city.scale.set(0.05, 0.05, 0.05)
 
     const g = new BoxGeometry(10, 10, 10)
     const m = new MeshBasicMaterial({ color: 'red' })
@@ -173,5 +176,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
     this._scene.add(this.player.model);
+
+
+    const light = new AmbientLight(0xdddddd); // soft white light
+    this._scene.add(light);
   }
 }

@@ -15,7 +15,7 @@ export class Player extends Character {
     camera: Camera
 
     // state
-    toggleRun: boolean = true
+    toggleRun: boolean = false
     emote: boolean = false
     currentAction: string
     raycaster: Raycaster
@@ -27,12 +27,13 @@ export class Player extends Character {
     rotateQuarternion: Quaternion = new Quaternion()
     cameraTarget = new Vector3()
     blocked: Boolean = false
+    walkTimeOut: number = 0
     _keysPressed: Object
 
     // constants
     fadeDuration: number = 0.2
-    runVelocity = 5
-    walkVelocity = 2
+    runVelocity = 22
+    walkVelocity = 6
 
     constructor(playerGltf: Object3D, name: string, currentAction: string, camera: Camera, control: OrbitControls) {
         super(playerGltf, name, currentAction)
@@ -43,7 +44,6 @@ export class Player extends Character {
 
     public setParamsByName() {
         // super.setParamsByName()
-        console.log("enfant");
         this.outfitParams = outfitsData.player
 
         Helpers.traverse(this.outfitParams, (key, value) => {
@@ -65,9 +65,7 @@ export class Player extends Character {
     private _keypressedHandler() {
         const directionPressed = DIRECTIONS.some(key => this._keysPressed[key] == true)
 
-        // console.log(directionPressed);
-
-        // TODO : actions
+        // TODO : actions handle
         if (directionPressed && this.toggleRun) {
             this.animationPlayed = 'run'
         } else if (directionPressed) {
@@ -82,8 +80,8 @@ export class Player extends Character {
     private _displacements(delta) {
 
         if (this.currentAction == 'run' || this.currentAction == 'walk') {
-            this.emote = false
-
+            this.walkTimeOut += delta
+            
             // calculate towards camera direction
             var direction = this._directionOffset()
 
@@ -96,24 +94,27 @@ export class Player extends Character {
             // run/walk velocity
             const velocity = this.currentAction == 'run' ? this.runVelocity : this.walkVelocity
 
-            this.model.rotation.y += direction.orientation * delta * 5
+            this.model.rotation.y -= direction.orientation * delta * 5
 
             this.model.translateZ(direction.move * delta * velocity)
 
-
-            // this.model.position.x += velocity * 
             this.orbitControl.enableRotate = false
             this._updateCameraPosition()
+            if (this.walkTimeOut > 1.5 && !this.toggleRun) {
+                this.toggleRun = true
+            }
         } else {
             this.orbitControl.enableRotate = true
+            this.walkTimeOut = 0
+            this.toggleRun = false
         }
 
         this._updateCameraTarget()
     }
 
     private _updateCameraPosition() {
-        this.camera.position.x = Helpers.lerp(this.camera.position.x, this.model.position.x + Math.sin(this.model.rotation.y) * 25, 0.06)
-        this.camera.position.z = Helpers.lerp(this.camera.position.z, this.model.position.z + Math.cos(this.model.rotation.y) * 25, 0.06)
+        this.camera.position.x = Helpers.lerp(this.camera.position.x, this.model.position.x - Math.sin(this.model.rotation.y) * 25, 0.06)
+        this.camera.position.z = Helpers.lerp(this.camera.position.z, this.model.position.z - Math.cos(this.model.rotation.y) * 25, 0.06)
         this.camera.position.y = Helpers.lerp(this.camera.position.y, 15, 0.03)
     }
 
@@ -132,28 +133,26 @@ export class Player extends Character {
         }
 
         if (this._keysPressed[W]) {
-            direction.move = -1
-
-            if (this._keysPressed[A]) {
-                direction.orientation = Math.PI / 4 // w+a
-            } else if (this._keysPressed[D]) {
-                direction.orientation = - Math.PI / 4 // w+d
-            }
-        } else if (this._keysPressed[S]) {
             direction.move = 1
 
             if (this._keysPressed[A]) {
-                direction.orientation = Math.PI / 4 + Math.PI / 2 // s+a
+                direction.orientation = -Math.PI / 4 // w+a
             } else if (this._keysPressed[D]) {
-                direction.orientation = -Math.PI / 4 - Math.PI / 2 // s+d
+                direction.orientation =  Math.PI / 4 // w+d
+            }
+        } else if (this._keysPressed[S]) {
+            direction.move = -1
+
+            if (this._keysPressed[A]) {
+                direction.orientation = -Math.PI / 4 + Math.PI / 2 // s+a
+            } else if (this._keysPressed[D]) {
+                direction.orientation = Math.PI / 4 - Math.PI / 2 // s+d
             }
         } else if (this._keysPressed[A]) {
-            direction.orientation = Math.PI / 4 // a
+            direction.orientation = -Math.PI / 4 // a
         } else if (this._keysPressed[D]) {
-            direction.orientation = - Math.PI / 4 // d
+            direction.orientation = Math.PI / 4 // d
         }
-
         return direction
     }
-
 }
