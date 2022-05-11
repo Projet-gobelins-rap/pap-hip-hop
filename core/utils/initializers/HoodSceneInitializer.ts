@@ -161,8 +161,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     
     this._scene.add(test);
     this._scene.add(city);
-    test.scale.set(0.05, 0.05, 0.05)
-    city.scale.set(0.05, 0.05, 0.05)
+    test.scale.set(0.04, 0.04, 0.04)
+    city.scale.set(0.04, 0.04, 0.04)
 
     const g = new BoxGeometry(10, 10, 10)
     const m = new MeshBasicMaterial({ color: 'red' })
