@@ -157,20 +157,7 @@ export default class battle extends Vue {
   setOnboardingStep(val: string) {
     if (val) {
       console.log(val);
-      // switch (val) {
-      //   case "reading":
-      //     break;
-      //   case "next":
-      //     this.setNextChat();
-      //     this.chatStore.setChatStep("reading");
-      //     break;
-      //
-      //   case "selectPunch":
-      //     this.closeChat()
-      //     this.displayOnboarding()
-      //     this.chatStore.setChatStep("reading");
-      //     break
-      // }
+
     }
   }
 

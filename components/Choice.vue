@@ -36,36 +36,44 @@ export default class Choice extends Vue {
     console.log(this.content,'<-- content choice')
   }
 
+  // TODO :: REFACTO SUR CETTE METHODE
   selectItem(index:number,item:object,event:PointerEvent) {
     let elem:HTMLElement = event.target as HTMLElement
 
 
-    if(this.savedIds.length == 0){
-      this.savedIds.push(index)
-      elem.classList.toggle('choices__item--selected')
-      this.isActive = false
-
-    }
-    else {
-      if (this.savedIds.includes(index)){
-
-        let indexPosition = this.savedIds.indexOf(index)
-        this.savedIds.splice(indexPosition,1)
+    if (this.multipleChoice) {
+      if(this.savedIds.length == 0){
+        this.savedIds.push(index)
         elem.classList.toggle('choices__item--selected')
         this.isActive = false
 
-      }else {
-        if (this.savedIds.length <=3){
-          this.savedIds.push(index)
+      }
+      else {
+        if (this.savedIds.includes(index)){
+
+          let indexPosition = this.savedIds.indexOf(index)
+          this.savedIds.splice(indexPosition,1)
           elem.classList.toggle('choices__item--selected')
           this.isActive = false
-        }
 
-        if (this.savedIds.length == 4){
-          this.isActive = true
+        }else {
+          if (this.savedIds.length <=3){
+            this.savedIds.push(index)
+            elem.classList.toggle('choices__item--selected')
+            this.isActive = false
+          }
+
+          if (this.savedIds.length == 4){
+            this.isActive = true
+          }
         }
       }
+    } else {
+      elem.classList.add('choices__item--selected')
+      this.savedIds.push(index)
+      this.isActive = true
     }
+
 
     console.log(this.savedIds)
   }
@@ -78,6 +86,7 @@ export default class Choice extends Vue {
     this.$parent.$emit('choice::updateState')
 
     $socket.io.emit('battle::response',this.savedIds)
+
 
   }
 
