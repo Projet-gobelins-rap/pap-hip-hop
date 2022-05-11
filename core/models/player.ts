@@ -52,4 +52,26 @@ export class Player extends Character {
 
         this.loadOutfit()
     }
+
+    public updateControls(delta: number, keysPressed: any) {
+        this._displacements(keysPressed)
+        super.update(delta)
+    }
+
+    private _displacements(keysPressed) {
+        const directionPressed = DIRECTIONS.some(key => keysPressed[key] == true)
+
+        // console.log(directionPressed);
+        
+        // TODO : actions
+        if (directionPressed && this.toggleRun) {
+            this.animationPlayed = 'run'
+        } else if (directionPressed) {
+            this.animationPlayed = 'walk'
+        } else if (this.emote) {
+            this.animationPlayed = 'tpose'
+        } else {
+            this.animationPlayed = 'idle'
+        }
+    }
 }

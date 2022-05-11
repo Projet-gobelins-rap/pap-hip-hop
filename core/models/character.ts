@@ -26,6 +26,7 @@ export class Character {
     public outfitParams: any
     public material: any
     public loadedCollection: any
+    public animationPlayed:string = 'idle'
 
     constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
@@ -101,17 +102,17 @@ export class Character {
 
     // TODO : Setup mixer
     public update(delta: number) {
-        let play = '';
-        play = 'idle'
+        
+        
 
-        if (this.currentAction != play) {
-            const toPlay = this.animationsMap.get(play)
+        if (this.currentAction != this.animationPlayed) {
+            const toPlay = this.animationsMap.get(this.animationPlayed)
             const current = this.animationsMap.get(this.currentAction)
 
             current.fadeOut(this.fadeDuration)
             toPlay.reset().fadeIn(this.fadeDuration).play();
 
-            this.currentAction = play
+            this.currentAction = this.animationPlayed
         }
 
         this.mixer.update(delta)

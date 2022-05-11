@@ -15,6 +15,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _controls: OrbitControls
   private _camera: Camera
   public player: Player
+  // private _keysPressed: any
   
   init(): void {
     HoodScene.setSceneContext(this._createSceneContext())
@@ -56,24 +57,18 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       renderer: renderer,
       defaultRation: 2,
       activateOrbitControl: true,
+      activateKeyboard: true,
 
       onStart: (ctx) => {
         this._controls = ctx.controls
-        console.log(ctx.controls);
-        
-        setTimeout(() => {
-          console.log("oui");
-        }, 2000);
-        if (ctx.isOrbitControlActivated)
-          console.log("oui");
       },
 
       onRender: (ctx) => {
         // Add interactions points tracking
-        // console.log(ctx,'<-- Render')
-
+        // console.log(ctx,'<-- Render') 
+        
         if(this.player) {
-          this.player.update(ctx.deltaTime)
+          this.player.updateControls(ctx.deltaTime,ctx.keysPressed)
         }
       },
       onResume: (ctx) => {
@@ -82,8 +77,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       onWindowResize: (ctx) => {
         ctx.canvas.height = window.innerHeight
         ctx.canvas.width = window.innerWidth
-        console.log('edrftyguhijokp');
-        
 
         if (ctx.camera instanceof PerspectiveCamera) {
           ctx.camera.aspect = ctx.canvas.width / ctx.canvas.height
