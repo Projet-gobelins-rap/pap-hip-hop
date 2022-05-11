@@ -30,14 +30,11 @@ export class Character {
 
     constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
-        console.log(playerGltf);
-        
         this.model = playerGltf.scene
         this.gltfAnimations = playerGltf.animations;
         this.mixer = new THREE.AnimationMixer(this.model);
         this.currentAction = currentAction
   
-
         this.name = name
         this.material = null
 
@@ -49,13 +46,10 @@ export class Character {
         this.initAnimations()
         this.loadedCollection = AssetsManager.getLoadedCollection().outfitCollection
         this.texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data
-
         this.setParamsByName()
-
     }
 
     public initAnimations() {
-        console.log(this.gltfAnimations);
         this.gltfAnimations.forEach((a: THREE.AnimationClip) => {
             this.animationsMap.set(a.name, this.mixer.clipAction(a))
         })
@@ -84,7 +78,6 @@ export class Character {
     // }
 
     public setParamsByName() {
-        console.log("parent");
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
                 this.outfitParams = outfitsData.pnj[key]
@@ -96,15 +89,13 @@ export class Character {
                 })
             }
         }
-        console.log(this.outfitParams);
+        
         this.loadOutfit()
     }
 
     // TODO : Setup mixer
     public update(delta: number) {
         
-        
-
         if (this.currentAction != this.animationPlayed) {
             const toPlay = this.animationsMap.get(this.animationPlayed)
             const current = this.animationsMap.get(this.currentAction)
