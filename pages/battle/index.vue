@@ -1,7 +1,7 @@
 <template>
   <section class="battle">
     <h1 ref="title">BATTLE DESKTOP</h1>
-    <ChatComponent v-if="this.chatElementState && currentChat" :content="currentChat" />
+    <ChatComponent v-if="this.chatDisplay && currentChat" :content="currentChat" />
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
@@ -69,7 +69,6 @@ export default class battle extends Vue {
 
   mounted() {
     this.title = this.$refs.title as HTMLElement
-    console.log(this.title," zebiiii")
 
     console.log('BATTLE')
     console.log(this.battleChat,'<--- dialog battle')
@@ -93,10 +92,26 @@ export default class battle extends Vue {
     this.punchlineArray.forEach((punch,i)=>{
       setTimeout(()=>{
         this.title.innerText = punch
-      },8000 * i)
+
+        // ON DETECT L'APPARITION DU DERNIER ELEM DANS LE FOREACH: DANS LE FUTUR ON BOUGE ça
+        // ÇA SERA REMPLACER PAR UNE TWEEN AVEC UN ON COMPLETE
+        if (Object.is(this.punchlineArray.length -1,i)){
+          setTimeout(()=>{
+            this.title.innerText = ''
+            console.log("LAST CALLBACK")
+            this.setNextChat()
+            this.displayChat()
+          },2000)
+        }
+
+      },2000 * i)
     })
   }
 
+  displayChat() {
+    console.log('ZZZZ')
+    this.battleStore.setIsChatDisplay(true)
+  }
   closeChat() {
     this.battleStore.setIsChatDisplay(false)
   }
@@ -137,13 +152,39 @@ export default class battle extends Vue {
     }
   }
 
+  // watch dialogStep change in chatStore store
+  @Watch("onboardingStep", { immediate: true, deep: true })
+  setOnboardingStep(val: string) {
+    if (val) {
+      console.log(val);
+      // switch (val) {
+      //   case "reading":
+      //     break;
+      //   case "next":
+      //     this.setNextChat();
+      //     this.chatStore.setChatStep("reading");
+      //     break;
+      //
+      //   case "selectPunch":
+      //     this.closeChat()
+      //     this.displayOnboarding()
+      //     this.chatStore.setChatStep("reading");
+      //     break
+      // }
+    }
+  }
+
   // get chatStep from store
   get chatStep() {
     return this.chatStore.chatStep;
   }
 
-  get chatElementState() {
+  get chatDisplay() {
     return this.battleStore.isChatDisplay
+  }
+
+  get onboardingStep() {
+    return this.onboardingStore.onboardingStep;
   }
 
 }
