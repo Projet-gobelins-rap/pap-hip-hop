@@ -178,7 +178,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(otherSlots, cube)
 
-    this.player = new Player(playerGltf, 'player', 'idle', this._camera, this._controls)
+    this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
     this._scene.add(this.player.model);
   }
 }

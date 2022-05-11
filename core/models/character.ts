@@ -55,7 +55,7 @@ export class Character {
 
     public initAnimations() {
         console.log(this.gltfAnimations);
-        this.gltfAnimations.filter(a => a.name != 'tpose').forEach((a: THREE.AnimationClip) => {
+        this.gltfAnimations.forEach((a: THREE.AnimationClip) => {
             this.animationsMap.set(a.name, this.mixer.clipAction(a))
         })
     }
@@ -102,7 +102,7 @@ export class Character {
     // TODO : Setup mixer
     public update(delta: number) {
         let play = '';
-        play = 'walk'
+        play = 'idle'
 
         if (this.currentAction != play) {
             const toPlay = this.animationsMap.get(play)
