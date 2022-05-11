@@ -10,11 +10,11 @@ import {
   Scene,
   Vector2,
   Vector3,
-  WebGLRenderer, 
+  WebGLRenderer,
   LinearToneMapping
 } from "three";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import {
   AnimationMixerElement,
   DefaultSceneManagerCallback,
@@ -22,10 +22,10 @@ import {
   RayCasterIntersectCallBack, SceneManagerOptions,
   WindowResizeCallback
 } from "~/core/types/scene";
-import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
-import {gsap} from 'gsap'
+import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
+import { gsap } from 'gsap'
 import Helpers from "../utils/Helpers";
-export default class SceneManager{
+export default class SceneManager {
 
   // - PROPERTIES
   private _canvas: HTMLCanvasElement
@@ -42,6 +42,7 @@ export default class SceneManager{
   // private _stats: Stats | null
   private _defaultRatio: number
   private _currentIntersect: null
+  private _keysPressed: Object
 
   // Parallax
   private _globalSceneRotation: { x: number, y: number }
@@ -67,6 +68,7 @@ export default class SceneManager{
 
   // -- Configuration
   private _isOrbitControlActivated: boolean
+  private _isKeyboardActivated: boolean
   private _isPlaying: boolean
   private _isRayCasting: boolean
   private _isStatsActive: boolean
@@ -83,7 +85,8 @@ export default class SceneManager{
     this._composer = null
     this._scene = options.scene
     this._rayCaster = new Raycaster()
-    this._controls = null
+    this._controls = options.controls
+    this._keysPressed = options.controls
     this._deltaTime = 0
     this._previousTime = 0
     // this._gui = new GUI()
@@ -91,7 +94,7 @@ export default class SceneManager{
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
-    this._globalSceneRotation = {x: 0, y: 0}
+    this._globalSceneRotation = { x: 0, y: 0 }
 
     this._isPlaying = false
     this._isRayCasting = false
@@ -120,10 +123,10 @@ export default class SceneManager{
     }
 
     this._isOrbitControlActivated = options.activateOrbitControl
+    this._isKeyboardActivated = options.activateKeyboard
 
     this._init()
   }
-
 
   // PUBLIC METHODS
   /**
@@ -152,6 +155,8 @@ export default class SceneManager{
    */
   public start() {
     this._isPlaying = true
+    console.log(this._controls);
+
     this._onStartCallback(this)
     this._tick()
   }
@@ -383,6 +388,7 @@ export default class SceneManager{
   private _init() {
     this._initRenderer()
     this._initControls()
+    this._keyboardHandler()
 
     this._bindEvents()
 
@@ -403,9 +409,31 @@ export default class SceneManager{
    */
   private _initControls() {
     if (this._isOrbitControlActivated) {
-      this._controls = new OrbitControls(this._camera, this._canvas)
       this._controls.enableDamping = true
+    } else {
+      this._controls.enableDamping = null
     }
+  }
+
+  private _keyboardHandler() {
+    if (this._isKeyboardActivated) {
+      this._keysPressed = {}
+
+      document.addEventListener('keydown', (event) => {
+        if (event.code == 'Space') {
+          (this._keysPressed as any)[event.key.toLowerCase()] = true
+        }
+        if (event.shiftKey) {
+          (this._keysPressed as any)[event.key.toLowerCase()] = true
+        } else {
+          (this._keysPressed as any)[event.key.toLowerCase()] = true
+        }
+      }, false);
+      document.addEventListener('keyup', (event) => {
+        (this._keysPressed as any)[event.key.toLowerCase()] = false
+      }, false);
+    }
+
   }
 
   /**
@@ -456,16 +484,18 @@ export default class SceneManager{
       this._camera.updateProjectionMatrix()
     }
 
+
+    // TODO : remove
     this._animationMixers.forEach(mixer => {
       mixer.instance.update(this._deltaTime)
     })
 
-
-    if (this._composer){
+    if (this._composer) {
       this._composer.render(this._deltaTime)
     } else {
       this._renderer.render(this._scene, this._camera)
     }
+    // END TODO : remove
 
   }
 
@@ -488,6 +518,14 @@ export default class SceneManager{
 
   get scene(): Scene {
     return this._scene
+  }
+
+  get controls(): any {
+    return this._controls
+  }
+
+  get keysPressed(): any {
+    return this._keysPressed
   }
 
   get currentIntersect(): any {
@@ -526,5 +564,4 @@ export default class SceneManager{
   set currentIntersect(currentIntersect: any) {
     this._currentIntersect = currentIntersect
   }
-
 }

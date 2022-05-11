@@ -10,5 +10,14 @@
                 "color": "green"
             }
         }
-    ]
+    ],
+    "player": {
+        "name": "player",
+        "head": {
+            "model": "bob"
+        },
+        "body": {
+            "color": "orange"
+        }
+    }
 }

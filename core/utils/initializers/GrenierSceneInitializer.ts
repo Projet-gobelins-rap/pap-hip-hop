@@ -178,8 +178,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     // TODO : move globally
     // const loadedCollection = new Outfitloader()
     // const texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE)
-
-    new Character(papy, 'papy')
+ 
+    new Character(papy, 'papy', 'tpose')
 
     // this._scene.add(grenierSceneFbx)
     // GrenierScene.context.scene.traverse( child => {

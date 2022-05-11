@@ -1,16 +1,23 @@
-import {Initializers} from "~/core/defs";
+import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import {BoxGeometry, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
+import { BoxGeometry, Camera, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { Player } from "../../models/player";
 
 export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
 
-  private _scene:Scene
-  init():void {
+  private _scene: Scene
+  private _controls: OrbitControls
+  private _camera: Camera
+  public player: Player
+  // private _keysPressed: any
+  
+  init(): void {
     HoodScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     // this._addLights(true)
@@ -19,12 +26,13 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     //this._configGUI()
 
     HoodScene.context.start()
-  } 
- 
+  }
+
   /**
    * Create the shell to interact with global scene
    */
   private _createSceneContext() {
+    
     // Set canvas dimensions
     this._data.canvas.width = Helpers.getWindowSizes().width
     this._data.canvas.height = Helpers.getWindowSizes().height
@@ -38,16 +46,30 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     // Create renderer
     const renderer = this._createRender()
 
+    // Create controls
+    const controls = this._createControls(camera, this._data.canvas)
+
     return new SceneManager({
       canvas: this._data.canvas,
       camera: camera,
+      controls: controls,
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
       activateOrbitControl: true,
+      activateKeyboard: true,
+
+      onStart: (ctx) => {
+        this._controls = ctx.controls
+      },
+
       onRender: (ctx) => {
         // Add interactions points tracking
-        // console.log(ctx,'<-- Render')
+        // console.log(ctx,'<-- Render') 
+        
+        if(this.player) {
+          this.player.updateControls(ctx.deltaTime,ctx.keysPressed)
+        }
       },
       onResume: (ctx) => {
 
@@ -82,15 +104,15 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
    * Create perspective camera
    */
   private _createCamera() {
-    const camera = new PerspectiveCamera(
+    this._camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
       1,
       1000
     )
-    camera.position.set(0, 0, 5)
+    this._camera.position.set(0, 0, 5)
 
-    return camera
+    return this._camera
   }
 
   /**
@@ -99,6 +121,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _createScene() {
     this._scene = new Scene()
     return this._scene
+  }
+
+  /**
+   * Create scene
+   */
+  private _createControls(camera, canvas) {
+    this._controls = new OrbitControls(camera, canvas)
+    return this._controls
   }
 
   /**
@@ -113,27 +143,26 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       // powerPreference: 'high-performance'
     })
   }
- 
+
   private _addSceneElements() {
     console.log('add scene elements')
 
     document.addEventListener('click', () => {
       this.addCube()
-    }, {once: true})
-
+    }, { once: true })
   }
 
-  addCube(){
+  addCube() {
 
-    const player = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data.scene
+    const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const test = AssetsManager.getGltf(GLTF_ASSET.SLOT_TEST).data.scene
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
-    this._scene.add( player );
-    this._scene.add( test );
+    
+    this._scene.add(test);
     test.scale.set(0.25, 0.25, 0.25)
 
     const g = new BoxGeometry(10, 10, 10)
-    const m = new MeshBasicMaterial({color: 'red'})
+    const m = new MeshBasicMaterial({ color: 'red' })
     const cube = new Mesh(g, m)
 
     const treeSlots = test.getObjectByName('Cloner-tree').children
@@ -142,6 +171,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(otherSlots, cube)
 
-    console.log(this._scene);
+    this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
+    this._scene.add(this.player.model);
   }
 }

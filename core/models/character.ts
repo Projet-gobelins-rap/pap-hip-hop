@@ -14,37 +14,51 @@ import Helpers from '../utils/Helpers'
 import * as outfitsData from '../../data/outfitsData.json';
 
 export class Character {
+
+    // properties
     public model: THREE.Group
+    public gltfAnimations: THREE.AnimationClip[]
     public name: string
     public texture: THREE.Texture
     public mixer: THREE.AnimationMixer
     public animationsMap: Map<string, THREE.AnimationAction> = new Map() // Walk, Run, Idle
-    public currentAction: string
+    public currentAction: string = ''
     public outfitParams: any
     public material: any
     public loadedCollection: any
+    public animationPlayed:string = 'idle'
 
-
-    constructor(model: THREE.Object3D, name: string /*, loadedCollection: any, texture: any , mixer: THREE.AnimationMixer, animationsMap: Map<string, THREE.AnimationAction>, currentAction: string*/) {
+    constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
-        this.model = model.children[1]
-        this.name = name
+        console.log(playerGltf);
+        
+        this.model = playerGltf.scene
+        this.gltfAnimations = playerGltf.animations;
+        this.mixer = new THREE.AnimationMixer(this.model);
+        this.currentAction = currentAction
+  
 
-        // this.mixer = mixer
-        // this.animationsMap = animationsMap
-        // this.currentAction = currentAction
+        this.name = name
         this.material = null
 
         this.init()
-        this._setParamsByName()
         // this.display()
-        this.loadOutfit()
     }
 
     public init() {
+        this.initAnimations()
         this.loadedCollection = AssetsManager.getLoadedCollection().outfitCollection
         this.texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data
 
+        this.setParamsByName()
+
+    }
+
+    public initAnimations() {
+        console.log(this.gltfAnimations);
+        this.gltfAnimations.forEach((a: THREE.AnimationClip) => {
+            this.animationsMap.set(a.name, this.mixer.clipAction(a))
+        })
     }
 
     public loadOutfit() {
@@ -69,7 +83,8 @@ export class Character {
     // public display() {
     // }
 
-    private _setParamsByName() {
+    public setParamsByName() {
+        console.log("parent");
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
                 this.outfitParams = outfitsData.pnj[key]
@@ -82,22 +97,22 @@ export class Character {
             }
         }
         console.log(this.outfitParams);
-
+        this.loadOutfit()
     }
 
     // TODO : Setup mixer
     public update(delta: number) {
-        let play = '';
-        play = 'walk'
+        
+        
 
-        if (this.currentAction != play) {
-            const toPlay = this.animationsMap.get(play)
+        if (this.currentAction != this.animationPlayed) {
+            const toPlay = this.animationsMap.get(this.animationPlayed)
             const current = this.animationsMap.get(this.currentAction)
 
             current.fadeOut(this.fadeDuration)
             toPlay.reset().fadeIn(this.fadeDuration).play();
 
-            this.currentAction = play
+            this.currentAction = this.animationPlayed
         }
 
         this.mixer.update(delta)
