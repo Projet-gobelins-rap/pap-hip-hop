@@ -458,16 +458,18 @@ export default class SceneManager{
       this._camera.updateProjectionMatrix()
     }
 
+
+    // TODO : remove
     this._animationMixers.forEach(mixer => {
       mixer.instance.update(this._deltaTime)
     })
-
 
     if (this._composer){
       this._composer.render(this._deltaTime)
     } else {
       this._renderer.render(this._scene, this._camera)
     }
+    // END TODO : remove
 
   }
 

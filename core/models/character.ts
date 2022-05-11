@@ -17,34 +17,47 @@ export class Character {
 
     // properties
     public model: THREE.Group
+    public gltfAnimations: THREE.AnimationClip[]
     public name: string
     public texture: THREE.Texture
     public mixer: THREE.AnimationMixer
     public animationsMap: Map<string, THREE.AnimationAction> = new Map() // Walk, Run, Idle
-    public currentAction: string
+    public currentAction: string = ''
     public outfitParams: any
     public material: any
     public loadedCollection: any
 
-    constructor(model: THREE.Object3D, name: string /*, loadedCollection: any, texture: any , mixer: THREE.AnimationMixer, animationsMap: Map<string, THREE.AnimationAction>, currentAction: string*/) {
+    constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
-        this.model = model.children[1]
-        this.name = name
+        console.log(playerGltf);
+        
+        this.model = playerGltf.scene
+        this.gltfAnimations = playerGltf.animations;
+        this.mixer = new THREE.AnimationMixer(this.model);
+        this.currentAction = currentAction
+  
 
-        // this.mixer = mixer
-        // this.animationsMap = animationsMap
-        // this.currentAction = currentAction
+        this.name = name
         this.material = null
 
         this.init()
-        this.setParamsByName()
         // this.display()
     }
 
     public init() {
+        this.initAnimations()
         this.loadedCollection = AssetsManager.getLoadedCollection().outfitCollection
         this.texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data
 
+        this.setParamsByName()
+
+    }
+
+    public initAnimations() {
+        console.log(this.gltfAnimations);
+        this.gltfAnimations.filter(a => a.name != 'tpose').forEach((a: THREE.AnimationClip) => {
+            this.animationsMap.set(a.name, this.mixer.clipAction(a))
+        })
     }
 
     public loadOutfit() {
@@ -70,7 +83,6 @@ export class Character {
     // }
 
     public setParamsByName() {
-
         console.log("parent");
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
@@ -85,7 +97,6 @@ export class Character {
         }
         console.log(this.outfitParams);
         this.loadOutfit()
-
     }
 
     // TODO : Setup mixer

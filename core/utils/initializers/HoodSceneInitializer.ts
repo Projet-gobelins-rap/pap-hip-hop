@@ -14,6 +14,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _scene: Scene
   private _controls: OrbitControls
   private _camera: Camera
+  public player: Player
   
   init(): void {
     HoodScene.setSceneContext(this._createSceneContext())
@@ -70,6 +71,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
+
+        if(this.player) {
+          this.player.update(ctx.deltaTime)
+        }
       },
       onResume: (ctx) => {
 
@@ -156,10 +161,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   addCube() {
 
-    const playerModel = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data.scene
+    const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const test = AssetsManager.getGltf(GLTF_ASSET.SLOT_TEST).data.scene
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
-    this._scene.add(playerModel);
+    
     this._scene.add(test);
     test.scale.set(0.25, 0.25, 0.25)
 
@@ -173,7 +178,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(otherSlots, cube)
 
-    const player = new Player(playerModel, 'player', this._camera, this._controls)
-    
+    this.player = new Player(playerGltf, 'player', 'idle', this._camera, this._controls)
+    this._scene.add(this.player.model);
   }
 }

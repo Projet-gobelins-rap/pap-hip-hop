@@ -32,23 +32,24 @@ export class Player extends Character {
     runVelocity = 5
     walkVelocity = 2
 
-    constructor(model: Object3D, name: string, camera: Camera, control: OrbitControls) {
-        super(model, name)
+    constructor(playerGltf: Object3D, name: string, currentAction: string, camera: Camera, control: OrbitControls) {
+        super(playerGltf, name, currentAction)
 
         this.camera = camera
         this.orbitControl = control
-
-        // this.setParamsByName()
     }
 
     public setParamsByName() {
         // super.setParamsByName()
         console.log("enfant");
+        this.outfitParams = outfitsData.player
 
-        Helpers.traverse(outfitsData.player, (key, value) => {
+        Helpers.traverse(this.outfitParams, (key, value) => {
             if (typeof value == "object") {
                 if (value.color) value.colorMap = getTextureColorSpec(value.color)
             }
         })
+
+        this.loadOutfit()
     }
 }
