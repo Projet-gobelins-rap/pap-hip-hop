@@ -11,7 +11,7 @@
       @swiper="onSwiper"
       @slideChange="onSlideChange"
     >
-      <button @click="hideOnboarding" class="swiper__close">CLOSE</button>
+      <button @click="nextStep(content[0].action[0].text)" class="swiper__close">CLOSE</button>
 
       <swiper-slide
         v-for="(item, i) in content"
@@ -19,7 +19,6 @@
         class="swiper__itemWrapper"
         :class="{test_2: true}"
       >
-        {{item[i]}}
         <div class="swiper__item">
           <img :src="item.icon.url" alt="">
           <span>{{item.description[0].text}}</span>
@@ -81,6 +80,10 @@ export default class Onboarding extends Vue{
 
   onSlideChange () {
     console.log('slide change')
+  }
+
+  nextStep(action: string = 'close') {
+    this.onboardingStore.setOnboardingStep(action);
   }
 
   get onboardingDisplay() {
