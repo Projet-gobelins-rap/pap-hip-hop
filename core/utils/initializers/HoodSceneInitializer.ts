@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, BoxGeometry, Camera, Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, BoxGeometry, Camera, Mesh, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -155,21 +155,20 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   addCube() {
 
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
-    const test = AssetsManager.getGltf(GLTF_ASSET.SLOT_TEST).data.scene
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     
-    this._scene.add(test);
     this._scene.add(city);
-    test.scale.set(0.04, 0.04, 0.04)
     city.scale.set(0.04, 0.04, 0.04)
 
     const g = new BoxGeometry(10, 10, 10)
-    const m = new MeshBasicMaterial({ color: 'red' })
+    const m = new MeshMatcapMaterial({ color: 'red' })
     const cube = new Mesh(g, m)
 
-    const treeSlots = test.getObjectByName('Cloner-tree').children
-    const otherSlots = test.getObjectByName('Cloner-plot').children
+    console.log(city);
+
+    const treeSlots = city.getObjectByName('cloner_tree').children
+    const otherSlots = city.getObjectByName('cloner_bite').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(otherSlots, cube)
@@ -177,8 +176,18 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
     this._scene.add(this.player.model);
 
+   
+    this._scene.traverse(object => {
+      if (object.isMesh) {
+        let oldTexture = object.material.map
+        object.material = new MeshMatcapMaterial({color: 0xffffff})
+        object.material.map = oldTexture
+      }
+    })
 
-    const light = new AmbientLight(0xdddddd); // soft white light
-    this._scene.add(light);
+
+
+    // const light = new AmbientLight(0xdddddd); // soft white light
+    // this._scene.add(light);
   }
 }
