@@ -83,8 +83,8 @@ export default class GlobalSceneInitializer extends Initializers<{ canvas: HTMLC
     const camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
-      1,
-      1000
+      0.1,
+      100000
     )
     camera.position.set(0, 0, 5)
 

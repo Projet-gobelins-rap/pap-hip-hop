@@ -51,7 +51,7 @@ export default class Default extends Vue {
         if (el.mediaType === 'GLTF'){
           mediaType = 0
         }else if (el.mediaType === 'IMAGE') {
-          mediaType = 1
+          mediaType = 1 
         }
         else if (el.mediaType === 'VIDEO') {
           mediaType = 2
@@ -61,6 +61,8 @@ export default class Default extends Vue {
         }
         else if (el.mediaType === 'FBX') {
           mediaType = 4
+        } else if (el.mediaType === 'TEXTURE') {
+          mediaType = 5
         }
 
         this.desktopMediasURL.push({
@@ -86,6 +88,8 @@ export default class Default extends Vue {
         }
         else if (el.mediaType === 'AUDIO') {
           mediaType = 3
+        } else if (el.mediaType === 'TEXTURE') {
+          mediaType = 4
         }
 
         this.mobileMediasURL.push({
@@ -109,6 +113,8 @@ export default class Default extends Vue {
           AssetsManager._registerSource(el.name,el.type,el.url,null)
         })
       }else {
+        console.log(this.desktopMediasURL);
+        
         this.desktopMediasURL.forEach(el=>{
           AssetsManager._registerSource(el.name,el.type,el.url,null)
         })

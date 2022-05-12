@@ -1,7 +1,9 @@
-import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset} from "~/core/types/asset";
+import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset, TextureAsset} from "~/core/types/asset";
 import {ASSET_TYPE} from "~/core/enums/asset";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
+import {TextureLoader} from "three";
+import { Outfitloader } from "./OutfitLoader"
 
 /**
  * @description
@@ -24,31 +26,36 @@ class AssetsManager {
   private _videoAssets: Array<VideoAsset>
   private _gltfAssets: Array<GltfAsset>
   private _fbxAssets: Array<FbxAsset>
+  private _textureAssets: Array<TextureAsset>
   private _audioAssets: Array<AudioAsset>
+  private _loadedCollection: Outfitloader
   private _isLocalMode: boolean = false
 
   // -- Loaders
   private _gltfLoader: GLTFLoader
   private _fbxLoader: FBXLoader
+  private _textureLoader: TextureLoader
 
   // -- Events
   private _onProgressCallback: ProgressCallback
-  private _onSuccessCallback: () => void
+  // private _onSuccessCallback: () => void
   private _onErrorCallback: () => void
 
   constructor() {
     this._assetSource = []
     this._imageAssets = []
     this._videoAssets = []
+    this._textureAssets = []
     this._gltfAssets = []
     this._fbxAssets = []
     this._audioAssets = []
 
     this._gltfLoader = new GLTFLoader()
     this._fbxLoader = new FBXLoader()
+    this._textureLoader = new TextureLoader()
 
     this._onProgressCallback = function () {}
-    this._onSuccessCallback = function () {}
+    // this._onSuccessCallback = function () {}
     this._onErrorCallback = function () {}
   }
 
@@ -77,6 +84,10 @@ class AssetsManager {
     this._isLocalMode = true
 
     return this
+  }
+
+  private _onSuccessCallback() {
+    this._loadedCollection = new Outfitloader()
   }
 
   /**
@@ -109,6 +120,15 @@ class AssetsManager {
   /**
    * Register new image asset source
    */
+  public registerTexture(name: string, url: string, localUrl: string | null = null) {
+    this._registerSource(name, ASSET_TYPE.TEXTURE, url, localUrl)
+
+    return this
+  }
+
+  /**
+   * Register new image asset source
+   */
   public registerFbx(name: string, url: string, localUrl: string | null = null) {
     this._registerSource(name, ASSET_TYPE.FBX, url, localUrl)
 
@@ -128,6 +148,8 @@ class AssetsManager {
    * Retrieve gltf asset loaded
    */
   public getGltf(name: string): GltfAsset {
+
+    console.log("----> : " + this._gltfAssets);
     const gltf = this._gltfAssets.find(gltf => gltf.source.name === name)
     if (!gltf) throw new Error(`Gltf asset ${name} is not founded`)
     // let obj = Object.create(gltf)
@@ -165,6 +187,15 @@ class AssetsManager {
   }
 
   /**
+   * Retrieve fbx asset loaded
+   */
+  public getTexture(name: string): TextureAsset {
+    const texture = this._textureAssets.find(object => object.source.name === name) || null
+    if (!texture) throw new Error(`texture asset ${name} is not founded`)
+    return texture
+  }
+
+  /**
    * Retrieve audio asset loaded
    */
   public getAudio(name: string): AudioAsset {
@@ -172,6 +203,13 @@ class AssetsManager {
     if (!audio) throw new Error(`Audio asset ${name} is not founded`)
 
     return audio
+  }
+
+  /**
+   * Retrieve loaded outfit collection
+   */
+  public getLoadedCollection(): Outfitloader {
+    return this._loadedCollection
   }
 
   /**
@@ -200,6 +238,9 @@ class AssetsManager {
           break
         case ASSET_TYPE.VIDEO:
           await this._loadVideoAsset(source)
+          break
+        case ASSET_TYPE.TEXTURE:
+          await this._loadTextureAsset(source)
           break
         case ASSET_TYPE.FBX:
           await this._loadFbx(source)
@@ -235,6 +276,18 @@ class AssetsManager {
       image.src = source.url
       this._imageAssets.push({source, data: image})
       resolve()
+    })
+  }
+
+  /**
+   * Image loader handler
+   */
+  private async _loadTextureAsset(source: AssetSource): Promise<void> {
+    return new Promise<void>(resolve => {
+      this._textureLoader.load(source.url, texture => {
+        this._textureAssets.push({source, data: texture})
+        resolve()
+      })
     })
   }
 
