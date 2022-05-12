@@ -1,0 +1,157 @@
+<template>
+  <section class="battle--mobile">
+    <h1>ROUND 2</h1>
+<!--    <Choice v-if="displayChoice" :content="battlePunchline"></Choice>-->
+    <Onboarding :content="currentOnboarding"></Onboarding>
+  </section>
+</template>
+
+<script lang="ts">
+import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
+import CustomButton from "~/components/buttons/button.vue";
+import $socket from "~/plugins/socket.io";
+import battleStore from "../../../store/battleStore";
+import Choice from '~/components/Choice'
+import Onboarding from '../../../components/contentOverlays/onboarding'
+import onboardingStore from "../../../store/onboardingStore";
+import choiceStore from "~/store/choiceStore";
+@Component({
+  components: {
+    CustomButton,
+    Choice,
+    Onboarding
+  },
+  async asyncData({ $prismic, error }) {
+    try {
+      const battleContent = (await $prismic.api.getSingle("battle")).data;
+
+      console.log(battleContent,'content du bbattlle (mobile)')
+      const battleOnboarding = battleContent?.slices2[0].items;
+      const battlePunchRound1 = battleContent?.slices3[0].items;
+      const battleOnboardingRound2 = battleContent?.slices5[0].items;
+      const battleOnboardingRound2Action = battleContent?.slices5[0];
+      const battlePunchline = battlePunchRound1
+
+      const round2Step1 = battleContent?.slices6[0].items;
+      const round2Step2 = battleContent?.slices7[0].items;
+      const round2Step3 = battleContent?.slices8[0].items;
+      const round2Step4 = battleContent?.slices9[0].items;
+
+      // const currentChat = battleChat[0];
+      const currentOnboarding = battleOnboarding[1];
+
+      return {
+        battlePunchRound1,
+        battleOnboardingRound2,
+        battleOnboardingRound2Action,
+        currentOnboarding,
+        battlePunchline,
+        round2Step1,
+        round2Step2,
+        round2Step3,
+        round2Step4
+      };
+    } catch (e) {
+      // Returns error page
+      //   error({ statusCode: 404, message: 'Content not found' })
+    }
+  },
+})
+export default class round2Mobile extends Vue {
+  public codeValue:number | null = null
+  public battleStore = getModule(battleStore,this.$store)
+  public onboardingStore = getModule(onboardingStore, this.$store)
+  public battlePunchRound1: object;
+  public currentOnboarding: object
+  public displayChoice:boolean = true
+  public choiceStore = getModule(choiceStore,this.$store)
+  public onboardingCounter:number = 1
+  public battleOnboardingRound2:object
+  // public battleOnboardingRound2Action:object
+  public roundStep: number = 1
+  public battlePunchline:object
+  public round2Step1:object
+  public round2Step2:object
+  public round2Step3:object
+  public round2Step4:object
+
+  mounted() {
+    this.displayOnboarding()
+    // console.log(this.currentOnboarding,'<--- current onboarrding mobile')
+    //
+    // console.log(this.round2Step1,'<-- punch round 1')
+
+    // this.initRound2Datas()
+    // this.updateChoiceState()
+    this.initRound2()
+  }
+
+  initRound2(){
+    $socket.io.on('battle::round2',()=>{
+      this.displayRound2Onboarding()
+      this.choiceStore.setMultipleChoice(false)
+    })
+  }
+
+
+  displayOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(true)
+  }
+
+  hideOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(false)
+  }
+
+  displayRound2Onboarding() {
+    this.currentOnboarding = this.battleOnboardingRound2
+    console.log(this.currentOnboarding,'<--- OBR2')
+    this.displayOnboarding()
+  }
+
+  // updateChoiceState() {
+  //
+  //   this.$on('choice::updateState',()=>{
+  //     this.displayChoice = false
+  //     this.displayOnboarding()
+  //
+  //   })
+  // }
+
+  // @Watch("onboardingStep", { immediate: true, deep: true })
+  // setOnboardingStep(val: string) {
+  //   if (val) {
+  //     console.log(val);
+  //
+  //     switch (val) {
+  //       case "reading":
+  //         break;
+  //       case "startRound2":
+  //         this.hideOnboarding()
+  //         this.displayRound2Punch();
+  //         this.onboardingStore.setOnboardingStep("reading");
+  //         break;
+  //     }
+  //   }
+  // }
+  //
+  // displayRound2Punch(){
+  //   console.log("R2 PUNCH")
+  //   this.displayChoice = true
+  //   this.battlePunchline = this.round2Step1
+  // }
+
+  // initRound2Datas() {
+  //   this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
+  // }
+
+  // GETTERS
+  get onboardingStep() {
+    return this.onboardingStore.onboardingStep;
+  }
+
+}
+</script>
+
+<style lang="sass" scoped>
+
+</style>
