@@ -1,6 +1,6 @@
 <template>
   <section class="battle--mobile">
-    <Choice v-if="displayChoice" :multiple-choice="multipleChoiceState"  :content="battlePunchline"></Choice>
+    <Choice v-if="displayChoice" :content="battlePunchline"></Choice>
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
@@ -13,6 +13,7 @@ import battleStore from "../../../store/battleStore";
 import Choice from '~/components/Choice'
 import Onboarding from '../../../components/contentOverlays/onboarding'
 import onboardingStore from "../../../store/onboardingStore";
+import choiceStore from "~/store/choiceStore";
 @Component({
   components: {
     CustomButton,
@@ -23,12 +24,13 @@ import onboardingStore from "../../../store/onboardingStore";
     try {
       const battleContent = (await $prismic.api.getSingle("battle")).data;
 
-      console.log(battleContent,'content du bbattlle')
+      console.log(battleContent,'content du bbattlle (mobile)')
       const battleOnboarding = battleContent?.slices2[0].items;
       const battlePunchRound1 = battleContent?.slices3[0].items;
       const battleOnboardingRound2 = battleContent?.slices5[0].items;
       const battleOnboardingRound2Action = battleContent?.slices5[0];
       const battlePunchline = battlePunchRound1
+
       // const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[1];
 
@@ -52,26 +54,18 @@ export default class battleMobile extends Vue {
   public battlePunchRound1: object;
   public currentOnboarding: object
   public displayChoice:boolean = true
-  public multipleChoice:boolean = true
+  public choiceStore = getModule(choiceStore,this.$store)
   public onboardingCounter:number = 1
   public battleOnboardingRound2:object
   // public battleOnboardingRound2Action:object
   public battlePunchline:object
   mounted() {
-    // this.battlePunchline = this.battlePunchRound1
-    //
     console.log(this.currentOnboarding,'<--- current onboarrding mobile')
 
     console.log(this.battlePunchRound1,'<-- punch round 1')
 
-    // console.log(this.battleOnboardingRound2Action,'R222')
-    // $socket.on("phone_connected", (user) => {
-    //   alert("phone_connected");
-    //   this.$router.push('/')
-    // });
-    this.ekipzebi()
-    this.round2()
-
+    this.updateChoiceState()
+    this.initRound2()
   }
 
 
@@ -85,12 +79,11 @@ export default class battleMobile extends Vue {
 
   displayRound2Onboarding() {
     this.currentOnboarding = this.battleOnboardingRound2
-    console.log(this.currentOnboarding,'<--- =:=:=: RV')
+    console.log(this.currentOnboarding,'<--- OBR2')
     this.displayOnboarding()
   }
 
-  // TODO :: rename nom de la methode
-  ekipzebi() {
+  updateChoiceState() {
 
     this.$on('choice::updateState',()=>{
       this.displayChoice = false
@@ -121,19 +114,18 @@ export default class battleMobile extends Vue {
     console.log("R2 PUNCH")
     this.displayChoice = true
   }
-  get onboardingStep() {
-    return this.onboardingStore.onboardingStep;
-  }
-  round2(){
+
+  initRound2(){
     $socket.io.on('battle::round2',()=>{
       this.displayRound2Onboarding()
-      this.multipleChoice = false
+      this.choiceStore.setMultipleChoice(false)
       console.log("ROUND 2222")
     })
   }
 
-  get multipleChoiceState() {
-    return this.multipleChoice
+  // GETTERS
+  get onboardingStep() {
+    return this.onboardingStore.onboardingStep;
   }
 
 }

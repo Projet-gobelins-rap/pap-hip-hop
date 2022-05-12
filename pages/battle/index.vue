@@ -106,6 +106,7 @@ export default class battle extends Vue {
 
       },2000 * i)
     })
+    // this.punchlineArray = []
   }
 
   displayChat() {

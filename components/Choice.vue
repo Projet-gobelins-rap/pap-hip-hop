@@ -5,14 +5,14 @@
       <span>{{item.content[0].text}}</span>
     </div>
 
-    <button class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER !</button>
+    <button v-if="this.multipleChoice"  class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER !</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, getModule, Prop } from "nuxt-property-decorator";
+import {Vue, Component, getModule, Prop, Watch} from "nuxt-property-decorator";
 import CustomButton from "~/components/buttons/button.vue";
-import chatStore from "~/store/chatStore";
+import choiceStore from "~/store/choiceStore";
 import $socket from "~/plugins/socket.io";
 
 @Component({
@@ -22,7 +22,7 @@ import $socket from "~/plugins/socket.io";
 })
 export default class Choice extends Vue {
   @Prop({ required: true }) readonly content!: any;
-  @Prop({ required: true }) readonly multipleChoice!: boolean = true;
+  // @Prop({ required: true }) readonly multipleChoice!: boolean;
 
   public choiceArray: [{
     id:number
@@ -31,6 +31,7 @@ export default class Choice extends Vue {
   }] = []
   public isActive:boolean = false
   public savedIds: number[] = []
+  public choiceStore = getModule(choiceStore,this.$store)
 
   mounted() {
     console.log(this.content,'<-- content choice')
@@ -70,8 +71,10 @@ export default class Choice extends Vue {
       }
     } else {
       elem.classList.add('choices__item--selected')
+      console.log('SINGLE CHOICE')
       this.savedIds.push(index)
       this.isActive = true
+      this.validateSelection()
     }
 
 
@@ -86,10 +89,32 @@ export default class Choice extends Vue {
     this.$parent.$emit('choice::updateState')
 
     $socket.io.emit('battle::response',this.savedIds)
+    this.savedIds = []
 
 
   }
 
+
+  @Watch("multipleChoice", { immediate: true, deep: true })
+  setOnboardingStep(val: string) {
+    if (val) {
+      console.log(val,"==========");
+
+      // switch (val) {
+      //   case "reading":
+      //     break;
+      //   case "startRound2":
+      //     this.hideOnboarding()
+      //     this.displayRound2Punch();
+      //     this.onboardingStore.setOnboardingStep("reading");
+      //     break;
+      // }
+    }
+  }
+
+  get multipleChoice(){
+    return this.choiceStore.isMultipleChoice
+  }
 
 }
 </script>
