@@ -7,6 +7,12 @@
   left: 0;
   width: 100%;
 
+  @media screen and (max-width: 800px) {
+    & {
+      display: none;
+    }
+  }
+
   &__logo {
     margin-right: auto;
     a {
