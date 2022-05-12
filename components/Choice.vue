@@ -89,12 +89,13 @@ export default class Choice extends Vue {
     this.$parent.$emit('choice::updateState')
 
     $socket.io.emit('battle::response',this.savedIds)
-    this.savedIds = []
+    // this.savedIds = []
 
 
   }
 
 
+  // A REVOIR
   @Watch("multipleChoice", { immediate: true, deep: true })
   setOnboardingStep(val: string) {
     if (val) {

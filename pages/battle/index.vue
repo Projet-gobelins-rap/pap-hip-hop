@@ -77,6 +77,7 @@ export default class battle extends Vue {
     console.log(this.currentChat,':::: current chat')
 
     $socket.io.on('battle::response',(ids)=>{
+      console.log(ids,'OUUUUUUUI')
       this.hideOnboarding()
       ids.forEach((id)=>{
         this.punchlineArray.push(this.currentPunchline[id].content[0].text)
@@ -101,9 +102,9 @@ export default class battle extends Vue {
             console.log("LAST CALLBACK")
             this.setNextChat()
             this.displayChat()
+            this.punchlineArray.shift()
           },2000)
         }
-
       },2000 * i)
     })
     // this.punchlineArray = []

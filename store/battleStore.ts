@@ -14,6 +14,9 @@ export default class battleStore extends VuexModule {
 
   private _selectedPunchs:string[] = []
 
+  private _round2Step:number = 1
+  private _round2Datas:Array<object>
+
   @Mutation
   public setIsChatDisplay(isDisplay: boolean) {
     this._isChatDisplay = isDisplay
@@ -28,6 +31,13 @@ export default class battleStore extends VuexModule {
     return this
   }
 
+  @Mutation
+  public setRound2Datas(datas: Array<object>) {
+    this._round2Datas = datas
+
+    return this
+  }
+
   // Getters
   get isChatDisplay() {
     return this._isChatDisplay
@@ -38,4 +48,10 @@ export default class battleStore extends VuexModule {
     return this._selectedPunchs
   }
 
+  get round2Step(){
+    return this._round2Step
+  }
+  get round2Datas(){
+    return this._round2Datas
+  }
 }

@@ -31,6 +31,11 @@ import choiceStore from "~/store/choiceStore";
       const battleOnboardingRound2Action = battleContent?.slices5[0];
       const battlePunchline = battlePunchRound1
 
+      const round2Step1 = battleContent?.slices6[0].items;
+      const round2Step2 = battleContent?.slices7[0].items;
+      const round2Step3 = battleContent?.slices8[0].items;
+      const round2Step4 = battleContent?.slices9[0].items;
+
       // const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[1];
 
@@ -39,7 +44,11 @@ import choiceStore from "~/store/choiceStore";
         battleOnboardingRound2,
         battleOnboardingRound2Action,
         currentOnboarding,
-        battlePunchline
+        battlePunchline,
+        round2Step1,
+        round2Step2,
+        round2Step3,
+        round2Step4
       };
     } catch (e) {
       // Returns error page
@@ -58,12 +67,19 @@ export default class battleMobile extends Vue {
   public onboardingCounter:number = 1
   public battleOnboardingRound2:object
   // public battleOnboardingRound2Action:object
+  public roundStep: number = 1
   public battlePunchline:object
+  public round2Step1:object
+  public round2Step2:object
+  public round2Step3:object
+  public round2Step4:object
+
   mounted() {
     console.log(this.currentOnboarding,'<--- current onboarrding mobile')
 
-    console.log(this.battlePunchRound1,'<-- punch round 1')
+    console.log(this.round2Step1,'<-- punch round 1')
 
+    this.initRound2Datas()
     this.updateChoiceState()
     this.initRound2()
   }
@@ -87,7 +103,6 @@ export default class battleMobile extends Vue {
 
     this.$on('choice::updateState',()=>{
       this.displayChoice = false
-      // this.onboardingStore.setOnboardingDisplay(true)
       this.displayOnboarding()
 
     })
@@ -113,14 +128,18 @@ export default class battleMobile extends Vue {
   displayRound2Punch(){
     console.log("R2 PUNCH")
     this.displayChoice = true
+    this.battlePunchline = this.round2Step1
   }
 
   initRound2(){
     $socket.io.on('battle::round2',()=>{
       this.displayRound2Onboarding()
       this.choiceStore.setMultipleChoice(false)
-      console.log("ROUND 2222")
     })
+  }
+
+  initRound2Datas() {
+    this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
   }
 
   // GETTERS
