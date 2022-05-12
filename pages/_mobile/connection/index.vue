@@ -10,8 +10,8 @@ import { Vue, Component, getModule } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import $socket from "~/plugins/socket.io";
 import CustomButton from "~/components/buttons/button.vue";
-
 import permisions from "~/core/utils/Permisions";
+
 @Component({
   components: {
     CustomButton,
