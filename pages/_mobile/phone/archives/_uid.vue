@@ -1,6 +1,6 @@
 <template>
   <section class="archiveSingle">
-      <h1>archiveSingle</h1>
+    <h1>{{ archive.data.title }}</h1>
   </section>
 </template>
 
@@ -15,13 +15,19 @@ import permisions from "~/core/utils/Permisions";
   components: {
     CustomButton,
   },
+  async asyncData({ $prismic, params, error }) {
+    const archive = await $prismic.api.getByUID("archive", params.uid);
+    if (archive) {
+      return { archive };
+    } else {
+      error({ statusCode: 404, message: "Page not found" });
+    }
+  },
 })
 export default class archiveSingle extends Vue {
-
   public stepStore = getModule(stepStore, this.$store);
+  public archive: any;
 
-  mounted() {
-    
-  }
+  mounted() {}
 }
 </script>
