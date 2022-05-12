@@ -176,7 +176,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
     this._scene.add(this.player.model);
 
-   
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -184,10 +183,5 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
-
-
-
-    // const light = new AmbientLight(0xdddddd); // soft white light
-    // this._scene.add(light);
   }
 }

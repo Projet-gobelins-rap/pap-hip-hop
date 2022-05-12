@@ -16,7 +16,7 @@ import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import { degToRad } from "three/src/math/MathUtils";
 import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
-import { Character } from "../../models/character"
+import { Npc } from "../../models/npc"
 
 import { Outfitloader } from "../../managers/OutfitLoader"
 
@@ -169,7 +169,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
 
-    const papy = new Character(papyGltf, 'papy', 'tpose')
+    const papy = new Npc(papyGltf, 'papy', 'tpose')
 
     grenierScene.getObjectByName("papy").add(papy.model)
     papy.model.scale.set(15, 15, 15)

@@ -6,6 +6,7 @@ import { getTextureColorSpec } from '../config/global/textureColorMapping'
 import AssetsManager from '../managers/AssetsManager'
 import { TEXTURE_ASSET } from '../enums/asset'
 import Helpers from '../utils/Helpers'
+import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils'
 
 // import texture from '../../textures/texture.png'
 // import {getTextureColorSpec} from './texureMapEnum'
@@ -30,7 +31,7 @@ export class Character {
 
     constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
-        this.model = playerGltf.scene
+        this.model = SkeletonUtils.clone(playerGltf.scene)
         this.gltfAnimations = playerGltf.animations;
         this.mixer = new THREE.AnimationMixer(this.model);
         this.currentAction = currentAction
