@@ -32,7 +32,7 @@ export class Player extends Character {
 
     // constants
     fadeDuration: number = 0.2
-    runVelocity = 22
+    runVelocity = 18
     walkVelocity = 6
 
     constructor(playerGltf: Object3D, name: string, currentAction: string, camera: Camera, control: OrbitControls) {
@@ -121,7 +121,7 @@ export class Player extends Character {
     private _updateCameraTarget() {
         // update camera target
         this.cameraTarget.x = this.model.position.x
-        this.cameraTarget.y = this.model.position.y + 1
+        this.cameraTarget.y = this.model.position.y + 10
         this.cameraTarget.z = this.model.position.z
         this.orbitControl.target = this.cameraTarget
     }
