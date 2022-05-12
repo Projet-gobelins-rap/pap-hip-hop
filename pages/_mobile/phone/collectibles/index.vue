@@ -1,8 +1,11 @@
 <template>
   <section class="collectibles">
     <h1>Collectables</h1>
-
-
+    <ul>
+      <li v-for="collectible in collectibles.results" :key="collectible.id" @click="$router.push(`/_mobile/phone/collectibles/${collectible.uid}`)">
+        {{collectible.data.title}}
+      </li>
+    </ul>
   </section>
 </template>
 
@@ -19,8 +22,8 @@ import permisions from "~/core/utils/Permisions";
   },
   async asyncData({ $prismic, error }) {
     const collectibles = await $prismic.api.query(
-        $prismic.predicates.at('document.type', 'collectable')
-    )
+      $prismic.predicates.at("document.type", "collectable")
+    );
     if (collectibles) {
       return { collectibles };
     } else {
@@ -33,7 +36,7 @@ export default class collectibles extends Vue {
   public collectibles: any;
 
   mounted() {
-    console.log(this.collectibles); 
+    console.log(this.collectibles);
   }
 }
 </script>

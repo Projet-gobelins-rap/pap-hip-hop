@@ -1,6 +1,8 @@
 <template>
   <section class="collectibleSingle">
-      <h1>Collectable single</h1>
+    <h1>{{ collectible.data.title }}</h1>
+    <PrismicImage :field="collectible.data.image" />
+    <PrismicRichText :field="collectible.data.description" />
   </section>
 </template>
 
@@ -15,13 +17,21 @@ import permisions from "~/core/utils/Permisions";
   components: {
     CustomButton,
   },
+
+  async asyncData({ $prismic, params, error }) {
+    const collectible = await $prismic.api.getByUID("collectable", params.uid);
+    if (collectible) {
+      return { collectible };
+    } else {
+      error({ statusCode: 404, message: "Page not found" });
+    }
+  },
 })
 export default class collectibleSingle extends Vue {
-
   public stepStore = getModule(stepStore, this.$store);
-
+  public collectible: any;
   mounted() {
-    
+    console.log(this.collectible);
   }
 }
 </script>

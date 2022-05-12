@@ -5,10 +5,10 @@
   "status": true,
   "json": {
     "Main": {
-      "collectableid": {
-        "type": "Text",
+      "uid": {
+        "type": "UID",
         "config": {
-          "label": "Collectableid",
+          "label": "Uid",
           "placeholder": ""
         }
       },
