@@ -63,9 +63,6 @@ export default class battle extends Vue {
   public punchlineArray: string[]= []
   public title:HTMLElement
 
-  created() {
-
-  }
 
   mounted() {
     this.title = this.$refs.title as HTMLElement

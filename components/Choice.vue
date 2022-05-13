@@ -22,7 +22,7 @@ import $socket from "~/plugins/socket.io";
 })
 export default class Choice extends Vue {
   @Prop({ required: true }) readonly content!: any;
-  // @Prop({ required: true }) readonly multipleChoice!: boolean;
+  @Prop({ required: true }) readonly multipleChoice!: boolean;
 
   public choiceArray: [{
     id:number
@@ -91,31 +91,6 @@ export default class Choice extends Vue {
     $socket.io.emit('battle::response',this.savedIds)
 
     // this.savedIds = []
-
-
-  }
-
-
-  // A REVOIR
-  @Watch("multipleChoice", { immediate: true, deep: true })
-  setOnboardingStep(val: string) {
-    if (val) {
-      console.log(val,"==========");
-
-      // switch (val) {
-      //   case "reading":
-      //     break;
-      //   case "startRound2":
-      //     this.hideOnboarding()
-      //     this.displayRound2Punch();
-      //     this.onboardingStore.setOnboardingStep("reading");
-      //     break;
-      // }
-    }
-  }
-
-  get multipleChoice(){
-    return this.choiceStore.isMultipleChoice
   }
 
 }

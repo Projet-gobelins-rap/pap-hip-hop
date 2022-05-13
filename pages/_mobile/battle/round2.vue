@@ -1,7 +1,7 @@
 <template>
   <section class="battle--mobile">
     <h1>ROUND 2</h1>
-<!--    <Choice v-if="displayChoice" :content="battlePunchline"></Choice>-->
+    <Choice v-if="displayChoice" :multiple-choice="false" :content="battlePunchline"></Choice>
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
@@ -63,7 +63,7 @@ export default class round2Mobile extends Vue {
   public onboardingStore = getModule(onboardingStore, this.$store)
   public battlePunchRound1: object;
   public currentOnboarding: object
-  public displayChoice:boolean = true
+  public displayChoice:boolean = false
   public choiceStore = getModule(choiceStore,this.$store)
   public onboardingCounter:number = 1
   public battleOnboardingRound2:object
@@ -117,28 +117,28 @@ export default class round2Mobile extends Vue {
   //   })
   // }
 
-  // @Watch("onboardingStep", { immediate: true, deep: true })
-  // setOnboardingStep(val: string) {
-  //   if (val) {
-  //     console.log(val);
+  @Watch("onboardingStep", { immediate: true, deep: true })
+  setOnboardingStep(val: string) {
+    if (val) {
+      console.log(val);
+
+      switch (val) {
+        case "reading":
+          break;
+        case "startRound2":
+          this.hideOnboarding()
+          this.displayRound2Punch();
+          this.onboardingStore.setOnboardingStep("reading");
+          break;
+      }
+    }
+  }
   //
-  //     switch (val) {
-  //       case "reading":
-  //         break;
-  //       case "startRound2":
-  //         this.hideOnboarding()
-  //         this.displayRound2Punch();
-  //         this.onboardingStore.setOnboardingStep("reading");
-  //         break;
-  //     }
-  //   }
-  // }
-  //
-  // displayRound2Punch(){
-  //   console.log("R2 PUNCH")
-  //   this.displayChoice = true
-  //   this.battlePunchline = this.round2Step1
-  // }
+  displayRound2Punch(){
+    console.log("R2 PUNCH")
+    this.displayChoice = true
+    this.battlePunchline = this.round2Step1
+  }
 
   // initRound2Datas() {
   //   this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])

@@ -1,6 +1,6 @@
 <template>
   <section class="battle--mobile">
-    <Choice v-if="displayChoice" :content="battlePunchline"></Choice>
+    <Choice v-if="displayChoice" :multiple-choice="true" :content="battlePunchline"></Choice>
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
@@ -93,43 +93,11 @@ export default class round1Mobile extends Vue {
     })
   }
 
-  @Watch("onboardingStep", { immediate: true, deep: true })
-  setOnboardingStep(val: string) {
-    if (val) {
-      console.log(val);
-
-      switch (val) {
-        case "reading":
-          break;
-        case "startRound2":
-          this.hideOnboarding()
-          this.displayRound2Punch();
-          this.onboardingStore.setOnboardingStep("reading");
-          break;
-      }
-    }
-  }
-
-  displayRound2Punch(){
-    console.log("R2 PUNCH")
-    this.displayChoice = true
-    // this.battlePunchline = this.round2Step1
-  }
-
   initRound2(){
     $socket.io.on('battle::round2',()=>{
       this.displayRound2Onboarding()
       this.choiceStore.setMultipleChoice(false)
     })
-  }
-
-  // initRound2Datas() {
-  //   this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
-  // }
-
-  // GETTERS
-  get onboardingStep() {
-    return this.onboardingStore.onboardingStep;
   }
 
 }
