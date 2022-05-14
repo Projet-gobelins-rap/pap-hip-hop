@@ -8,6 +8,10 @@
       class="graffBomb-button"
       :text="'pssscht'"
     />
+    <CustomButton
+      class="graffBomb-button--calibrate"
+      :text="'Calibrate'"
+    />
   </section>
 </template>
 

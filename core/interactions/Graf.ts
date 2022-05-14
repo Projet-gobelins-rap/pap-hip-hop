@@ -1,41 +1,73 @@
-import {gsap} from 'gsap'
+import { gsap } from 'gsap'
+import $socket from "../../plugins/socket.io"
+import Helpers from '../utils/Helpers'
+
 export default class Graf {
 
-  public grafCanvas:HTMLCanvasElement
-  public ctx:CanvasRenderingContext2D
-  public display:HTMLElement
-  public img:HTMLImageElement
-  public grafImg:HTMLImageElement
-  public resetStepBtn:HTMLElement
+  public grafCanvas: HTMLCanvasElement
+  public ctx: CanvasRenderingContext2D
+  public display: HTMLElement
+  public cursor: HTMLElement
+  public img: HTMLImageElement
+  public revealImg: HTMLImageElement
+  public resetStepBtn: HTMLElement
   private size: {
-    width:number
-    height:number
+    width: number
+    height: number
   }
-  public erasedPercentage:number
+  public erasedPercentage: number
+  public position: {
+    x: number,
+    y: number,
+  }
+  public lastPosition: {
+    x: number,
+    y: number,
+  }
 
-  public radius:number
-  public imgUrl:string
-  public canvasUpdated:boolean
-  public gridBlocks:any[]
-  public dirtyBlocks:any[]
+  public radius: number
+  public imgUrl: string
+  public canvasUpdated: boolean
+  public isPushed: boolean
+  public gridBlocks: any[]
+  public dirtyBlocks: any[]
+  public layers: any[]
+
+  public layerCount: number = 0
 
   constructor(layerLister: any) {
-    console.log(layerLister);
-    
+    console.log("list ---> ", layerLister);
+
     this.display = document.querySelector('.graffDraw-display')!
     this.grafCanvas = document.querySelector('.graffDraw-canvas')!
-    this.imgUrl = '/images/wall-0.png'
-    this.ctx = this.grafCanvas.getContext('2d')!
-    this.grafImg = document.querySelector('.graffDraw-img')!
-    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
+    this.cursor = document.querySelector('.graffDraw-cursor')!
+    this.layers = layerLister
+
+    this.imgUrl = this.layers[0].layer.url
     this.img = new Image()
+    this.img.src = this.imgUrl
+    this.img.crossOrigin = "Anonymous";
+
+    this.ctx = this.grafCanvas.getContext('2d')!
+    this.revealImg = document.querySelector('.graffDraw-img')!
+    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
+
     this.erasedPercentage = 0
     this.canvasUpdated = false
-    this.img.src = this.imgUrl
+
     this.radius = 50
     this.size = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: this.grafCanvas.offsetWidth,
+      height: this.grafCanvas.offsetHeight,
+    }
+
+    this.position = {
+      x: 0,
+      y: 0,
+    }
+    this.lastPosition = {
+      x: 0,
+      y: 0,
     }
 
     this.init()
@@ -47,39 +79,64 @@ export default class Graf {
     this.grafCanvas.height = this.size.height
     this.setupCanvas()
     this.bindEvents()
+    this.nextLayer()
+    // this.renderLoop()
 
+    gsap.ticker.fps(30);
+    gsap.ticker.add(this.renderLoop.bind(this));
   }
 
   setupCanvas() {
     let self = this
     this.img.onload = () => {
-      // self.ctx.drawImage(self.img, 0, 0, self.size.width, self.size.height);
-
-      this.drawImageProp(this.ctx,self.img,0,0, self.size.width, self.size.height,0,0)
+      this.drawImageProp(this.ctx, self.img, 0, 0, self.size.width, self.size.height, 0, 0)
       self.ctx.globalCompositeOperation = "destination-out";
     }
   }
 
   bindEvents() {
     this.grafCanvas.addEventListener('mousemove', (evt) => {
-      this.erase(evt)
+      this.erase()
     })
-    this.resetStepBtn.addEventListener('click',()=>{
+    this.resetStepBtn.addEventListener('click', () => {
       this.updateCanvasBackground()
     })
+    $socket.io.on('graffValues', data => {
+      let params = data.split(":")
+      this.isPushed = (params[2] === 'true')
 
+      this.position = {
+        x: parseFloat(params[0]) * window.innerWidth,
+        y: parseFloat(params[1]) * window.innerHeight,
+      }
+    })
   }
 
-  erase(pos: MouseEvent) {
-
-    if (this.erasedPercentage <=90){
+  erase() {
+    if (this.erasedPercentage <= 90) {
       this.ctx.beginPath();
-      this.ctx.arc(pos.x, pos.y, this.radius, 0, 2 * Math.PI);
+      let nPos = {
+        x: Helpers.mapRange(
+          this.position.x,
+          (window.innerWidth - this.size.width) / 2,
+          window.innerWidth - (this.size.width / 2),
+          0,
+          window.innerWidth,
+        ) / 2,
+        y: Helpers.mapRange(
+          this.position.y,
+          (window.innerHeight - this.size.height) / 2,
+          window.innerHeight - (this.size.height / 2),
+          0,
+          window.innerHeight,
+        ) / 2,
+      }
+      this.ctx.arc(nPos.x, nPos.y, this.radius, 0, 2 * Math.PI);
       this.ctx.closePath();
       this.ctx.fill();
     }
     else {
-      if (!this.canvasUpdated){
+      if (!this.canvasUpdated) {
         this.displayFinalGraf()
       }
     }
@@ -88,19 +145,32 @@ export default class Graf {
   }
 
   displayFinalGraf() {
-    gsap.to(this.grafImg,{opacity:1})
+    // gsap.to(this.grafImg, { opacity: 1 })
+  }
+
+  nextLayer() {
+    this.canvasUpdated = true
+
+    if (this.layerCount < this.layers.length - 1) {
+      this.revealImg.src = this.layers[this.layerCount + 1].layer.url
+      this.imgUrl = this.layers[this.layerCount].layer.url
+      this.img.src = this.imgUrl
+    } else {
+      console.log('fin');
+      
+    }
   }
 
   updateCanvasBackground() {
-    this.canvasUpdated = true
-    this.grafCanvas.style.backgroundImage = "url('/images/wall-2.png')"
-    this.imgUrl = '/images/wall-1.png'
-    this.img.src = this.imgUrl
+
+    this.layerCount++
+    this.nextLayer()
     let self = this
-    gsap.to(this.grafImg,{opacity:0})
+    // gsap.to(this.revealImg, { opacity: 0 })
+
     this.img.onload = () => {
       this.ctx.globalCompositeOperation = "source-over";
-      this.drawImageProp(this.ctx,self.img,0,0, self.size.width, self.size.height,0,0)
+      this.drawImageProp(this.ctx, self.img, 0, 0, self.size.width, self.size.height, 0, 0)
       // self.ctx.drawImage(self.img, 0, 0, self.size.width, self.size.height);
       self.ctx.globalCompositeOperation = "destination-out";
     }
@@ -108,7 +178,7 @@ export default class Graf {
   }
 
   getErasedPercent() {
-    const imgData = this.ctx.getImageData(0,0,this.size.width,this.size.height)
+    const imgData = this.ctx.getImageData(0, 0, this.size.width, this.size.height)
     // console.log(imgData)
     const pixelCount = this.size.width * this.size.height;
     const arrayElemsCount = pixelCount * 4; // for components (rgba) per pixel.
@@ -118,19 +188,22 @@ export default class Graf {
     let threshold = 0;
     let transparentPixelCount = 0;
     // remember fourth (index = 3) byte is alpha
-    for (let i = 3; i < arrayElemsCount; i+= 4) {
+    for (let i = 3; i < arrayElemsCount; i += 4) {
       let alphaValue = dataArray[i];
       if (alphaValue <= threshold) {
         transparentPixelCount++;
       }
     }
-    this.erasedPercentage = Math.floor( (transparentPixelCount / pixelCount) * 100);
+    this.erasedPercentage = Math.floor((transparentPixelCount / pixelCount) * 100);
 
     this.display.innerText = this.erasedPercentage.toString()
 
+    if (this.erasedPercentage > 70) {
+      this.updateCanvasBackground()
+    }
   }
 
-  drawImageProp(ctx:any, img:any, x:number, y:number, w:number, h:number, offsetX:number, offsetY:number) {
+  drawImageProp(ctx: any, img: any, x: number, y: number, w: number, h: number, offsetX: number, offsetY: number) {
 
     if (arguments.length === 2) {
       x = y = 0;
@@ -175,12 +248,19 @@ export default class Graf {
     if (ch > ih) ch = ih;
 
     // fill image in dest. rectangle
-    ctx.drawImage(img, cx, cy, cw, ch,  x, y, w, h);
+    ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h);
   }
 
+  renderLoop() {
 
+    gsap.set(this.cursor, {
+      x: Helpers.lerp(this.position.x, this.lastPosition.x, 0.5),
+      y: Helpers.lerp(this.position.y, this.lastPosition.y, 0.5),
+    })
+    this.lastPosition = this.position
 
-  resize() {
-
+    if (this.isPushed) {
+      this.erase()
+    }
   }
 }

@@ -1,13 +1,21 @@
 import $socket from "../../plugins/socket.io"
 import Helpers from "../utils/Helpers"
+import gsap from "gsap/all"
+import Gimbal from "../utils/gimbal"
 
 export default class GraffBomb {
     public baseX: number
+    public baseAlpha: number
     public latestX: number
+    public latestAlpha: number
     public normalizePosition: { x: number, y: number }
     public rotation: any
     public button: any
+    public buttonCalibrate: any
     public buttonPressed: boolean
+    public gimbal: Gimbal
+
+    public MAX_X_ANGLE: number = 30
 
     public debugX: HTMLElement
     public debugY: HTMLElement
@@ -15,65 +23,71 @@ export default class GraffBomb {
     constructor() {
 
         this.button = document.querySelector('.graffBomb-button')
+        this.buttonCalibrate = document.querySelector('.graffBomb-button--calibrate')
         this.debugX = document.querySelector('.graffBomb-debug--x')
         this.debugY = document.querySelector('.graffBomb-debug--y')
         this.buttonPressed = false
         this.latestX = 0
+        this.latestAlpha = 0
+        this.gimbal = new Gimbal();
+        
+
+        this.rotation = {
+            yaw: 0,
+            pitch: 0,
+            roll: 0
+        }
 
         this.init()
     }
 
     init() {
         this.normalizePosition = { x: 0, y: 0 }
-        this.deviceOrientation()
+        // this.getDeviceOrientation()
         this.buttonHandler()
-        this.animationLoop()
+        // this.animationLoop()
+
+        this.gimbal.enable();
+
+        gsap.ticker.fps(30);
+        gsap.ticker.add(this.getDeviceOrientation.bind(this));
     }
 
     deviceOrientation() {
-        window.addEventListener('deviceorientation', (data: Event) => {
-            this.handleDeviceOrientation(data)
-        }, false)
+        // window.addEventListener('deviceorientation', (data: Event) => {
+        //     this.handleDeviceOrientation(data)
+        // }, false)
     }
 
     sendValues() {
-        $socket.io.emit('graffValues', this.normalizePosition.x + ':' + this.normalizePosition.y)
+      if(this.rotation.yaw >= -0.6 && this.rotation.yaw <= 0.6 && this.rotation.pitch >= -0.6 && this.rotation.pitch <= 0.6) {
+        $socket.io.emit('graffValues', 
+        Helpers.normalize(this.rotation.yaw, 0.6, -0.6).toFixed(2)
+        + ':' + 
+        Helpers.normalize(this.rotation.pitch, 0.6, -0.6).toFixed(2)
+        + ':' + 
+        this.buttonPressed)
+      }
     }
 
-    handleDeviceOrientation(data) {
-        let x,
-            y,
-            beta = data.beta,
-            gamma = (this.latestX = data.gamma)
-
-        if (this.baseX !== null) {
-            gamma = gamma - this.baseX
-            gamma += 0
-            gamma %= 180
+    getDeviceOrientation() {
+        this.gimbal.update();
+ 
+        this.rotation = {
+            yaw: this.gimbal.yaw,
+            pitch: this.gimbal.pitch,
+            roll: this.gimbal.roll
         }
 
-        x = Helpers.normalize(gamma, 30, -30);
-        y = Helpers.normalize(beta, 90, 50);
-
-        if (x <= 1 && x >= 0) {
-            this.normalizePosition.x = x * -1 + 1
-        }
-        if (y <= 1 && y >= 0) {
-            this.normalizePosition.y = y * -1 + 1
-        }
-
-        this.debugX.innerHTML = this.normalizePosition.x.toFixed(2)
-        this.debugY.innerHTML = this.normalizePosition.y.toFixed(2)
-    }
-
-    animationLoop() {
-        if (this.buttonPressed) {
-            this.sendValues()
-        }
-        requestAnimationFrame(this.animationLoop.bind(this))
+        this.debugX.innerHTML = this.rotation.yaw.toFixed(2) + " : " + this.rotation.pitch.toFixed(2) + " : " + this.rotation.roll.toFixed(2)
+        this.sendValues()
     }
 
     buttonHandler() {
+        this.buttonCalibrate.addEventListener('touchstart', () => {
+            this.gimbal.recalibrate();
+
+        })
         this.button.addEventListener('touchstart', () => {
             this.baseX = this.latestX
             this.buttonPressed = true
