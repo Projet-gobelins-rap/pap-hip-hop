@@ -168,6 +168,7 @@ export default class round2Mobile extends Vue {
     let timerInterval = setInterval(()=>{
       if (timeleft<=0){
         clearInterval(timerInterval)
+        this.currentOnboarding = this.battleOnboarding[1]
         this.displayOnboarding()
         this.displayChoice = false
       }
@@ -176,6 +177,13 @@ export default class round2Mobile extends Vue {
 
       timeleft -= 1;
     },1000)
+
+    // on clear le timer si on a cliquer sur un bouton
+    this.$on('choice::updateState',()=>{
+      clearInterval(timerInterval)
+      return
+    })
+
 
     this.roundStep++
 
