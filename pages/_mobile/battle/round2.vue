@@ -1,6 +1,6 @@
 <template>
   <section class="battle--mobile">
-    <h1>ROUND 2</h1>
+    <h1 ref="timer"></h1>
     <Choice v-if="displayChoice" :multiple-choice="false" :content="battlePunchline"></Choice>
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
@@ -78,8 +78,10 @@ export default class round2Mobile extends Vue {
   public round2Step2:object
   public round2Step3:object
   public round2Step4:object
+  public timer:HTMLElement
 
   mounted() {
+    this.timer = this.$refs.timer as HTMLElement
     this.displayOnboarding()
 
     this.initRound2Datas()
@@ -137,16 +139,6 @@ export default class round2Mobile extends Vue {
     }
   }
 
-  // TODO :: ON DOIT BOUCLER
-  displayRound2Punch(){
-    console.log("R2 PUNCH")
-    this.hideOnboarding()
-    this.displayChoice = true
-    this.battlePunchline = this.battleStore.round2Datas[this.roundStep]
-
-    this.roundStep++
-
-  }
 
   round2Sequence(){
     $socket.io.on('battle::round2Sequence',()=>{
@@ -164,6 +156,68 @@ export default class round2Mobile extends Vue {
   get onboardingStep() {
     return this.onboardingStore.onboardingStep;
   }
+
+  // TODO :: AJOUTER LE TIMER
+  displayRound2Punch(){
+    console.log("R2 PUNCH")
+    let timeleft = 10
+    this.battlePunchline = this.battleStore.round2Datas[this.roundStep]
+    this.hideOnboarding()
+    this.displayChoice = true
+
+    let timerInterval = setInterval(()=>{
+      if (timeleft<=0){
+        clearInterval(timerInterval)
+        this.displayOnboarding()
+        this.displayChoice = false
+      }
+      let currentTimerValue = 10 - timeleft
+      this.timer.innerText = currentTimerValue.toString();
+
+      timeleft -= 1;
+    },1000)
+
+    this.roundStep++
+
+  }
+
+
+  // var timeleft = 10;
+  // var downloadTimer = setInterval(function(){
+  //   if(timeleft <= 0){
+  //     clearInterval(downloadTimer);
+  //   }
+  //   document.getElementById("progressBar").value = 10 - timeleft;
+  //   timeleft -= 1;
+  // }, 1000);
+
+  // TIMER for round 2
+
+  // this.focusTimeOut = setTimeout(() => {
+  //   console.log('2');
+  //
+  //   gsap.set(place.icon, {
+  //     fill: "#00ff00"
+  //   })
+  //   if (!place.found) {
+  //     $socket.io.emit('scope-focus', place.slug)
+  //   }
+  //   place.found = true
+  //
+  // }, 1000);
+
+//   if (this.focusTarget) {
+//   this.focusTimeline.restart()
+//   this.focusTimeline.pause()
+//   clearTimeout(this.focusTimeOut)
+//   this.focusTimeOut = null
+//
+//   this.focusTarget = false
+// }
+
+
+
+
 
 }
 </script>

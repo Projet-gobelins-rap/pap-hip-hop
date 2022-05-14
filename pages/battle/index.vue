@@ -116,6 +116,7 @@ export default class battle extends Vue {
 
   }
 
+  // URGENT DE REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
     this.punchlineArray.forEach((punch,i)=>{
       setTimeout(()=>{
