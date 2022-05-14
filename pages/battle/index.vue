@@ -94,17 +94,21 @@ export default class battle extends Vue {
 
 
       this.hideOnboarding()
-      ids.forEach((id)=>{
-        if (this.isRound2){
-          console.log('💩💩💩💩💩')
-          this.punchlineArray = []
-          this.punchlineArray.push(this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text)
-          console.log(this.battleStore.round2Datas)
-        } else {
-          this.punchlineArray.push(this.currentPunchline[id].content[0].text)
-        }
+      if (ids=== null){
+        this.punchlineArray.push('....')
+      } else {
+        ids.forEach((id)=>{
+          if (this.isRound2){
+            console.log('💩💩💩💩💩')
+            this.punchlineArray = []
+            this.punchlineArray.push(this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text)
+            console.log(this.battleStore.round2Datas)
+          } else {
+            this.punchlineArray.push(this.currentPunchline[id].content[0].text)
+          }
+        })
+      }
 
-      })
 
       this.displayUserPunchline()
 

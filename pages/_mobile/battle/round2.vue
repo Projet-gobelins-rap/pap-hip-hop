@@ -171,6 +171,7 @@ export default class round2Mobile extends Vue {
         this.currentOnboarding = this.battleOnboarding[1]
         this.displayOnboarding()
         this.displayChoice = false
+        $socket.io.emit('battle::response',null)
       }
       let currentTimerValue = 10 - timeleft
       this.timer.innerText = currentTimerValue.toString();
