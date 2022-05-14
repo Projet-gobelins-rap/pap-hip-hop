@@ -185,6 +185,12 @@ export default class round2Mobile extends Vue {
       return
     })
 
+    console.log(this.roundStep,'STEP de chaque round')
+    if (this.roundStep >3){
+      console.log('FIN DE LINTERACTION')
+      clearInterval(timerInterval)
+      return
+    }
 
     this.roundStep++
 
