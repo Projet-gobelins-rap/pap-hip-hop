@@ -79,10 +79,8 @@ export default class GraffBomb {
             roll: this.gimbal.roll
         }
 
-
         this.debugX.innerHTML = this.rotation.yaw.toFixed(2) + " : " + this.rotation.pitch.toFixed(2) + " : " + this.rotation.roll.toFixed(2)
         this.sendValues()
-
     }
 
     buttonHandler() {

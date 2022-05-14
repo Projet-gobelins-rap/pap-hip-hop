@@ -150,15 +150,15 @@ export default class Graf {
 
   nextLayer() {
     this.canvasUpdated = true
-    console.log(this.layerCount, this.layers.length - 1);
 
     if (this.layerCount < this.layers.length - 1) {
       this.revealImg.src = this.layers[this.layerCount + 1].layer.url
+      this.imgUrl = this.layers[this.layerCount].layer.url
+      this.img.src = this.imgUrl
+    } else {
+      console.log('fin');
+      
     }
-    console.log(this.layers);
-
-    this.imgUrl = this.layers[this.layerCount].layer.url
-    this.img.src = this.imgUrl
   }
 
   updateCanvasBackground() {
@@ -198,6 +198,9 @@ export default class Graf {
 
     this.display.innerText = this.erasedPercentage.toString()
 
+    if (this.erasedPercentage > 70) {
+      this.updateCanvasBackground()
+    }
   }
 
   drawImageProp(ctx: any, img: any, x: number, y: number, w: number, h: number, offsetX: number, offsetY: number) {
@@ -250,14 +253,11 @@ export default class Graf {
 
   renderLoop() {
 
-
     gsap.set(this.cursor, {
       x: Helpers.lerp(this.position.x, this.lastPosition.x, 0.5),
       y: Helpers.lerp(this.position.y, this.lastPosition.y, 0.5),
     })
     this.lastPosition = this.position
-
-
 
     if (this.isPushed) {
       this.erase()
