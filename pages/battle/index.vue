@@ -16,6 +16,7 @@ import battleStore from "../../store/battleStore";
 import Onboarding from '../../components/contentOverlays/onboarding'
 import onboardingStore from "../../store/onboardingStore";
 import $socket from "~/plugins/socket.io";
+import {gsap} from 'gsap'
 @Component({
   components: {
     CustomButton,
@@ -97,7 +98,6 @@ export default class battle extends Vue {
         if (this.isRound2){
           console.log('💩💩💩💩💩')
           this.punchlineArray = []
-          // this.
           this.punchlineArray.push(this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text)
           console.log(this.battleStore.round2Datas)
         } else {
@@ -126,9 +126,18 @@ export default class battle extends Vue {
         if (Object.is(this.punchlineArray.length -1,i)){
           setTimeout(()=>{
             this.title.innerText = ''
+            if (this.round2StepCounter <= 0){
+              console.log('CA PAASSE ici zebi')
+              console.log(this.round2StepCounter,'<--- round2 counter')
+              this.setNextChat()
+              this.displayChat()
+            }else {
+              console.log("AHHHHH")
+              this.displayOnboarding()
+              $socket.io.emit('battle::round2Sequence')
+            }
             console.log("LAST CALLBACK")
-            this.setNextChat()
-            this.displayChat()
+
             this.punchlineArray.shift()
           },2000)
         }

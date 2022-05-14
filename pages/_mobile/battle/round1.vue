@@ -14,6 +14,7 @@ import Choice from '~/components/Choice'
 import Onboarding from '../../../components/contentOverlays/onboarding'
 import onboardingStore from "../../../store/onboardingStore";
 import choiceStore from "~/store/choiceStore";
+import {gsap} from 'gsap'
 @Component({
   components: {
     CustomButton,
@@ -69,6 +70,7 @@ export default class round1Mobile extends Vue {
   }
 
 
+
   displayOnboarding() {
     this.onboardingStore.setOnboardingDisplay(true)
   }
@@ -87,8 +89,10 @@ export default class round1Mobile extends Vue {
 
     this.$on('choice::updateState',()=>{
       this.displayChoice = false
+      console.log('ON CHANGE DE page ROUND 2 🚨!🚨!')
+      // this.$router.push()
       this.$router.push('/_mobile/battle/round2')
-      // this.displayOnboarding()
+      console.log(' ROUND 2 🚨!🚨!')
 
     })
   }

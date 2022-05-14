@@ -15,6 +15,8 @@ import Choice from '~/components/Choice'
 import Onboarding from '../../../components/contentOverlays/onboarding'
 import onboardingStore from "../../../store/onboardingStore";
 import choiceStore from "~/store/choiceStore";
+import {gsap} from 'gsap'
+
 @Component({
   components: {
     CustomButton,
@@ -69,7 +71,7 @@ export default class round2Mobile extends Vue {
   public onboardingCounter:number = 1
   public battleOnboardingRound2:object
   // public battleOnboardingRound2Action:object
-  public roundStep: number = 1
+  public roundStep: number = 0
   public battleOnboarding:object
   public battlePunchline:object
   public round2Step1:object
@@ -83,6 +85,7 @@ export default class round2Mobile extends Vue {
     this.initRound2Datas()
     this.updateChoiceState()
     this.initRound2()
+    this.round2Sequence()
   }
 
   initRound2(){
@@ -133,11 +136,24 @@ export default class round2Mobile extends Vue {
       }
     }
   }
-  //
+
+  // TODO :: ON DOIT BOUCLER
   displayRound2Punch(){
     console.log("R2 PUNCH")
+    this.hideOnboarding()
     this.displayChoice = true
-    this.battlePunchline = this.round2Step1
+    this.battlePunchline = this.battleStore.round2Datas[this.roundStep]
+
+    this.roundStep++
+
+  }
+
+  round2Sequence(){
+    $socket.io.on('battle::round2Sequence',()=>{
+      this.displayRound2Punch()
+    })
+
+
   }
 
   initRound2Datas() {

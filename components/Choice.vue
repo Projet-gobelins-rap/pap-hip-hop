@@ -93,5 +93,9 @@ export default class Choice extends Vue {
     this.savedIds = []
   }
 
+  validateR2Punch(){
+
+  }
+
 }
 </script>
