@@ -3,7 +3,7 @@
     <h1>graff</h1>
     <ul class="graffListing-list">
         <li class="graffListing-listing" @click="select(i)" v-for="(graff, i) in this.graffsList" :key="`graff-${i}`">
-            <PrismicImage class="graffListing-img" :field="graff.items[0].layer" />
+            <PrismicImage class="graffListing-img" :field="graff.items[graff.items.length - 1].layer" />
             <PrismicRichText class="graffListing-name" :field="graff.primary.title" />
             <PrismicRichText class="graffListing-desc" :field="graff.primary.description" />
         </li>

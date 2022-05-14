@@ -9,7 +9,7 @@ export default class Graf {
   public display: HTMLElement
   public cursor: HTMLElement
   public img: HTMLImageElement
-  public grafImg: HTMLImageElement
+  public revealImg: HTMLImageElement
   public resetStepBtn: HTMLElement
   private size: {
     width: number
@@ -31,22 +31,30 @@ export default class Graf {
   public isPushed: boolean
   public gridBlocks: any[]
   public dirtyBlocks: any[]
+  public layers: any[]
+
+  public layerCount: number = 0
 
   constructor(layerLister: any) {
-    console.log("list ---> ",layerLister);
+    console.log("list ---> ", layerLister);
 
     this.display = document.querySelector('.graffDraw-display')!
     this.grafCanvas = document.querySelector('.graffDraw-canvas')!
     this.cursor = document.querySelector('.graffDraw-cursor')!
+    this.layers = layerLister
 
-    this.imgUrl = '/images/wall-0.png'
-    this.ctx = this.grafCanvas.getContext('2d')!
-    this.grafImg = document.querySelector('.graffDraw-img')!
-    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
+    this.imgUrl = this.layers[0].layer.url
     this.img = new Image()
+    this.img.src = this.imgUrl
+    this.img.crossOrigin = "Anonymous";
+
+    this.ctx = this.grafCanvas.getContext('2d')!
+    this.revealImg = document.querySelector('.graffDraw-img')!
+    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
+
     this.erasedPercentage = 0
     this.canvasUpdated = false
-    this.img.src = this.imgUrl
+
     this.radius = 50
     this.size = {
       width: this.grafCanvas.offsetWidth,
@@ -71,6 +79,7 @@ export default class Graf {
     this.grafCanvas.height = this.size.height
     this.setupCanvas()
     this.bindEvents()
+    this.nextLayer()
     // this.renderLoop()
 
     gsap.ticker.fps(30);
@@ -106,7 +115,23 @@ export default class Graf {
   erase() {
     if (this.erasedPercentage <= 90) {
       this.ctx.beginPath();
-      this.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI);
+      let nPos = {
+        x: Helpers.mapRange(
+          this.position.x,
+          (window.innerWidth - this.size.width) / 2,
+          window.innerWidth - (this.size.width / 2),
+          0,
+          window.innerWidth,
+        ) / 2,
+        y: Helpers.mapRange(
+          this.position.y,
+          (window.innerHeight - this.size.height) / 2,
+          window.innerHeight - (this.size.height / 2),
+          0,
+          window.innerHeight,
+        ) / 2,
+      }
+      this.ctx.arc(nPos.x, nPos.y, this.radius, 0, 2 * Math.PI);
       this.ctx.closePath();
       this.ctx.fill();
     }
@@ -120,16 +145,28 @@ export default class Graf {
   }
 
   displayFinalGraf() {
-    gsap.to(this.grafImg, { opacity: 1 })
+    // gsap.to(this.grafImg, { opacity: 1 })
+  }
+
+  nextLayer() {
+    this.canvasUpdated = true
+    console.log(this.layerCount, this.layers.length - 1);
+
+    if (this.layerCount < this.layers.length - 1) {
+      this.revealImg.src = this.layers[this.layerCount + 1].layer.url
+    }
+    console.log(this.layers);
+
+    this.imgUrl = this.layers[this.layerCount].layer.url
+    this.img.src = this.imgUrl
   }
 
   updateCanvasBackground() {
-    this.canvasUpdated = true
-    this.grafCanvas.style.backgroundImage = "url('/images/wall-2.png')"
-    this.imgUrl = '/images/wall-1.png'
-    this.img.src = this.imgUrl
+
+    this.layerCount++
+    this.nextLayer()
     let self = this
-    gsap.to(this.grafImg, { opacity: 0 })
+    // gsap.to(this.revealImg, { opacity: 0 })
 
     this.img.onload = () => {
       this.ctx.globalCompositeOperation = "source-over";
@@ -215,11 +252,11 @@ export default class Graf {
 
 
     gsap.set(this.cursor, {
-      x: Helpers.lerp(this.position.x, this.lastPosition.x, 0.5) ,
-      y: Helpers.lerp(this.position.y, this.lastPosition.y, 0.5) ,
+      x: Helpers.lerp(this.position.x, this.lastPosition.x, 0.5),
+      y: Helpers.lerp(this.position.y, this.lastPosition.y, 0.5),
     })
     this.lastPosition = this.position
-    // console.log(this.position);
+
 
 
     if (this.isPushed) {

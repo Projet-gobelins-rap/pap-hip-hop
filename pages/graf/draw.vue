@@ -4,21 +4,24 @@
     <picture class="graffDraw-background">
       <img class="graffDraw-background--img" src="/images/wall-0.png" alt="" />
     </picture>
-    <div class="graffDraw-preview" v-if="!graffInstance">
-      <img class="graffDraw-preview--img" :src="activePreviewUrl" alt="" />
-      <CustomButton
-        class="graffDraw-preview--button"
-        v-if="activePreviewUrl"
-        @click.native="valideSelectedGraff"
-        :text="'choisir ce graff'"
-      />
+    <div class="graffDraw-preview" >
+      
+     
     </div>
     <div class="graffDraw-container">
       <p class="graffDraw-display display"></p>
-      <img class="graffDraw-img" src="/images/wall-1.png" alt="" />
+      <img class="graffDraw-img" src="" alt="" />
+      <!-- <img class="graffDraw-img--preview" v-if="!graffInstance" :src="activePreviewUrl" alt="" /> -->
       <canvas class="graffDraw-canvas"></canvas>
       <button class="graffDraw-reset">Passer à l'etape 2</button>
     </div>
+     <CustomButton
+        class="graffDraw-preview--button"
+        v-if="activePreviewUrl && !graffInstance"
+        @click.native="valideSelectedGraff"
+        :text="'choisir ce graff'"
+      />
+
   </section>
 </template>
 
@@ -72,7 +75,8 @@ export default class GraffActivity extends Vue {
       
       this.activePreview = this.graffSketchsList[idx];
       console.log(this.activePreview);
-      this.activePreviewUrl = this.activePreview[0].layer.url;
+      this.activePreviewUrl = this.activePreview[this.activePreview.length - 1].layer.url;
+      
     });
   }
 
@@ -80,6 +84,7 @@ export default class GraffActivity extends Vue {
     console.log(this.graffSketchsList);
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
     new Graf(this.activePreview);
+    
   }
 }
 </script>
