@@ -46,6 +46,7 @@ import choiceStore from "~/store/choiceStore";
         battleOnboardingRound2Action,
         currentOnboarding,
         battlePunchline,
+        battleOnboarding,
         round2Step1,
         round2Step2,
         round2Step3,
@@ -69,6 +70,7 @@ export default class round2Mobile extends Vue {
   public battleOnboardingRound2:object
   // public battleOnboardingRound2Action:object
   public roundStep: number = 1
+  public battleOnboarding:object
   public battlePunchline:object
   public round2Step1:object
   public round2Step2:object
@@ -77,12 +79,9 @@ export default class round2Mobile extends Vue {
 
   mounted() {
     this.displayOnboarding()
-    // console.log(this.currentOnboarding,'<--- current onboarrding mobile')
-    //
-    // console.log(this.round2Step1,'<-- punch round 1')
 
-    // this.initRound2Datas()
-    // this.updateChoiceState()
+    this.initRound2Datas()
+    this.updateChoiceState()
     this.initRound2()
   }
 
@@ -108,14 +107,15 @@ export default class round2Mobile extends Vue {
     this.displayOnboarding()
   }
 
-  // updateChoiceState() {
-  //
-  //   this.$on('choice::updateState',()=>{
-  //     this.displayChoice = false
-  //     this.displayOnboarding()
-  //
-  //   })
-  // }
+  updateChoiceState() {
+
+    this.$on('choice::updateState',()=>{
+      this.currentOnboarding = this.battleOnboarding[1]
+      this.displayChoice = false
+      this.displayOnboarding()
+
+    })
+  }
 
   @Watch("onboardingStep", { immediate: true, deep: true })
   setOnboardingStep(val: string) {
@@ -140,9 +140,9 @@ export default class round2Mobile extends Vue {
     this.battlePunchline = this.round2Step1
   }
 
-  // initRound2Datas() {
-  //   this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
-  // }
+  initRound2Datas() {
+    this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
+  }
 
   // GETTERS
   get onboardingStep() {

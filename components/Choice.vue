@@ -90,7 +90,7 @@ export default class Choice extends Vue {
 
     $socket.io.emit('battle::response',this.savedIds)
 
-    // this.savedIds = []
+    this.savedIds = []
   }
 
 }

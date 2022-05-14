@@ -30,6 +30,11 @@ import $socket from "~/plugins/socket.io";
       const battleOnboarding = battleContent?.slices2[0].items;
       const battlePunchRound1 = battleContent?.slices3[0].items;
 
+      const round2Step1 = battleContent?.slices6[0].items;
+      const round2Step2 = battleContent?.slices7[0].items;
+      const round2Step3 = battleContent?.slices8[0].items;
+      const round2Step4 = battleContent?.slices9[0].items;
+
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
       const currentPunchline = battlePunchRound1
@@ -41,7 +46,11 @@ import $socket from "~/plugins/socket.io";
         battleOnboarding,
         currentChat,
         currentOnboarding,
-        currentPunchline
+        currentPunchline,
+        round2Step1,
+        round2Step2,
+        round2Step3,
+        round2Step4
       };
     } catch (e) {
       // Returns error page
@@ -62,9 +71,15 @@ export default class battle extends Vue {
   public chatCounter:number = 0
   public punchlineArray: string[]= []
   public title:HTMLElement
-
+  public isRound2: boolean = false
+  public round2Step1:object
+  public round2Step2:object
+  public round2Step3:object
+  public round2Step4:object
+  public round2StepCounter:number = -1
 
   mounted() {
+    this.initRound2Datas()
     this.title = this.$refs.title as HTMLElement
 
     console.log('BATTLE')
@@ -75,13 +90,28 @@ export default class battle extends Vue {
 
     $socket.io.on('battle::response',(ids)=>{
       console.log(ids,'OUUUUUUUI')
+
+
       this.hideOnboarding()
       ids.forEach((id)=>{
-        this.punchlineArray.push(this.currentPunchline[id].content[0].text)
+        if (this.isRound2){
+          console.log('💩💩💩💩💩')
+          this.punchlineArray = []
+          // this.
+          this.punchlineArray.push(this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text)
+          console.log(this.battleStore.round2Datas)
+        } else {
+          this.punchlineArray.push(this.currentPunchline[id].content[0].text)
+        }
+
       })
 
       this.displayUserPunchline()
 
+      this.isRound2 = true
+      if (this.isRound2){
+        this.round2StepCounter++
+      }
     })
 
   }
@@ -170,6 +200,9 @@ export default class battle extends Vue {
     }
   }
 
+  initRound2Datas() {
+    this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
+  }
   // get chatStep from store
   get chatStep() {
     return this.chatStore.chatStep;
