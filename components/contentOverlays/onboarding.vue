@@ -31,7 +31,6 @@
     </swiper>
 
     <div class="onboarding" v-else>
-<!--      {{content}}-->
       <img :src="content.icon.url" alt="">
       <PrismicRichText :field="content.description" />
     </div>

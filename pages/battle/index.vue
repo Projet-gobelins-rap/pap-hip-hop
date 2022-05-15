@@ -49,8 +49,6 @@ import {gsap} from 'gsap'
       const currentOnboarding = battleOnboarding[0];
       const currentPunchline = battlePunchRound1
 
-
-
       return {
         battleChat,
         battleOnboarding,
@@ -160,8 +158,6 @@ export default class battle extends Vue {
         }
       })
     } else {
-      console.log(this.opponentRound2[this.round2StepCounter],'AAAA')
-      // console.log(this.opponentRound2[this.round2StepCounter].content[0].text,'step counter zebi !!')
       this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text
       gsap.to(this.opponent.children[this.round2StepCounter],{
         display:'block',
@@ -173,12 +169,10 @@ export default class battle extends Vue {
           this.displayUserPunchline()
         }
       })
-      // this.round2StepCounter
     }
-
   }
 
-  // URGENT DE REFACTO TOUTE CETTE METHODE
+  // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
     this.punchlineArray.forEach((punch,i)=>{
       setTimeout(()=>{
@@ -206,11 +200,9 @@ export default class battle extends Vue {
         }
       },2000 * i)
     })
-    // this.punchlineArray = []
   }
 
   displayChat() {
-    console.log('ZZZZ')
     this.battleStore.setIsChatDisplay(true)
   }
   closeChat() {
@@ -268,7 +260,6 @@ export default class battle extends Vue {
   setOnboardingStep(val: string) {
     if (val) {
       console.log(val);
-
     }
   }
 
