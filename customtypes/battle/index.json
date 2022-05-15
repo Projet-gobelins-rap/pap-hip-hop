@@ -116,6 +116,32 @@
           }
         }
       }
+    },
+    "opponent round 1": {
+      "slices10": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "opponent round 2": {
+      "slices11": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
     }
   }
 }
