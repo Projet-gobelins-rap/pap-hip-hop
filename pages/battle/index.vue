@@ -1,14 +1,14 @@
 <template>
   <section class="battle">
-<!--    <h1 ref="title">BATTLE DESKTOP</h1>-->
+    <h1 ref="title">BATTLE DESKTOP</h1>
     <div class="opponent" ref="opponent">
       <span></span>
       <span></span>
       <span></span>
       <span></span>
     </div>
-<!--    <ChatComponent v-if="this.chatDisplay && currentChat" :content="currentChat" />-->
-<!--    <Onboarding :content="currentOnboarding"></Onboarding>-->
+    <ChatComponent v-if="this.chatDisplay && currentChat" :content="currentChat" />
+    <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
@@ -101,7 +101,7 @@ export default class battle extends Vue {
 
     console.log(this.opponentRound1,'<--- OPPONENT ROUND 1 PUNCHHH')
 
-    this.displayOpponentPunchline()
+    // this.displayOpponentPunchline()
     console.log('BATTLE')
     console.log(this.battleChat,'<--- dialog battle')
     console.log(this.currentOnboarding,'<--- onboarding battle')
@@ -129,7 +129,7 @@ export default class battle extends Vue {
       }
 
 
-      this.displayUserPunchline()
+      this.displayOpponentPunchline()
 
       this.isRound2 = true
       if (this.isRound2){
@@ -142,20 +142,30 @@ export default class battle extends Vue {
   displayOpponentPunchline(){
     console.log(this.opponent)
     gsap.set('.opponent span',{display:'none',opacity:0})
-    this.opponentRound1.forEach((punch,index)=>{
-      console.log(punch)
-      this.opponent.children[index].innerText = punch.content[0].text
-    })
 
-    gsap.to('.opponent span',{
-      display:'block',
-      opacity:1,
-      duration:2,
-      stagger:2,
-      onComplete:()=>{
-        console.log('FINITO OPPONENT')
-      }
-    })
+    if (!this.isRound2) {
+      this.opponentRound1.forEach((punch,index)=>{
+        console.log(punch)
+        this.opponent.children[index].innerText = punch.content[0].text
+      })
+
+      gsap.to('.opponent span',{
+        display:'block',
+        opacity:1,
+        duration:2,
+        stagger:2,
+        onComplete:()=>{
+          gsap.set('.opponent span',{display:'none'})
+          this.displayUserPunchline()
+        }
+      })
+    } else {
+      console.log(this.opponentRound2[this.round2StepCounter],'AAAA')
+      console.log(this.round2StepCounter,'step counter zebi !!')
+      // this.opponent.children[this.round2StepCounter].innerText = ''
+      // this.round2StepCounter
+    }
+
   }
 
   // URGENT DE REFACTO TOUTE CETTE METHODE
