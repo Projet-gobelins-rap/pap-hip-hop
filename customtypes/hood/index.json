@@ -1,0 +1,22 @@
+{
+  "id": "hood",
+  "label": "Hood",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {},
+    "onboarding": {
+      "slices1": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
+  }
+}

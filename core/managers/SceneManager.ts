@@ -22,10 +22,11 @@ import {
   RayCasterIntersectCallBack, SceneManagerOptions,
   WindowResizeCallback
 } from "~/core/types/scene";
-import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
+// import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
 import { gsap } from 'gsap'
 import Helpers from "../utils/Helpers";
 import {Stats} from 'stats.ts'
+import {CameraPosition} from "../config/hood-scene/camera-positions/types";
 
 
 
@@ -77,6 +78,7 @@ export default class SceneManager {
   private _isRayCasting: boolean
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
+  public  _isStarted: boolean | undefined
 
   constructor(options: SceneManagerOptions) {
 
@@ -91,6 +93,7 @@ export default class SceneManager {
     this._rayCaster = new Raycaster()
     this._controls = options.controls
     this._keysPressed = options.controls
+    this._isStarted = options.isStarted
     this._deltaTime = 0
     this._previousTime = 0
     // this._gui = new GUI()
@@ -297,7 +300,7 @@ export default class SceneManager {
     return this
   }
 
-  
+
   /**
    * Enable parallax camera on mouse move
    */
@@ -413,7 +416,7 @@ export default class SceneManager {
    */
   private _initControls() {
     if (this._isOrbitControlActivated) {
-      this._controls.enableDamping = true
+      this._controls!.enableDamping = true
     }
   }
 
@@ -460,7 +463,7 @@ export default class SceneManager {
    */
   private _tick() {
     if (!this._isPlaying) return
-    
+
     if (this._isStatsActive && this._stats) this._stats.begin()
     this._render()
     if (this._isStatsActive && this._stats) this._stats.end()
