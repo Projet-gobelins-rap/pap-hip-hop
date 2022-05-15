@@ -137,7 +137,5 @@ export default class MobileScope extends Vue {
       }
     }
   }
-
-
 }
 </script>

@@ -13,6 +13,7 @@ export default class GraffBomb {
     public button: any
     public buttonCalibrate: any
     public buttonPressed: boolean
+    public started: boolean
     public gimbal: Gimbal
 
     public MAX_X_ANGLE: number = 30
@@ -30,7 +31,7 @@ export default class GraffBomb {
         this.latestX = 0
         this.latestAlpha = 0
         this.gimbal = new Gimbal();
-        
+        this.started = false
 
         this.rotation = {
             yaw: 0,
@@ -46,17 +47,12 @@ export default class GraffBomb {
         // this.getDeviceOrientation()
         this.buttonHandler()
         // this.animationLoop()
-
-        this.gimbal.enable();
-
-        gsap.ticker.fps(30);
-        gsap.ticker.add(this.getDeviceOrientation.bind(this));
     }
 
-    deviceOrientation() {
-        // window.addEventListener('deviceorientation', (data: Event) => {
-        //     this.handleDeviceOrientation(data)
-        // }, false)
+    startTicker() {
+        this.gimbal.enable();
+        gsap.ticker.fps(30);
+        gsap.ticker.add(this.getDeviceOrientation.bind(this));
     }
 
     sendValues() {
@@ -72,13 +68,11 @@ export default class GraffBomb {
 
     getDeviceOrientation() {
         this.gimbal.update();
- 
         this.rotation = {
             yaw: this.gimbal.yaw,
             pitch: this.gimbal.pitch,
             roll: this.gimbal.roll
-        }
-
+        } 
         this.debugX.innerHTML = this.rotation.yaw.toFixed(2) + " : " + this.rotation.pitch.toFixed(2) + " : " + this.rotation.roll.toFixed(2)
         this.sendValues()
     }
@@ -86,7 +80,6 @@ export default class GraffBomb {
     buttonHandler() {
         this.buttonCalibrate.addEventListener('touchstart', () => {
             this.gimbal.recalibrate();
-
         })
         this.button.addEventListener('touchstart', () => {
             this.baseX = this.latestX

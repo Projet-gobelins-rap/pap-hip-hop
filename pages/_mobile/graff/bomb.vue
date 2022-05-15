@@ -78,6 +78,7 @@ export default class Bomb extends Vue {
         case "closePopup":
           this.hideOnboarding();
           this.onboardingStore.setOnboardingStep("reading");
+          this.graffBombInstance.startTicker()
           break;
       }
     }
