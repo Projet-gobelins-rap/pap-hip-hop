@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -17,6 +17,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _controls: OrbitControls
   private _camera: Camera
   public player: Player
+  public collider: any
   // private _keysPressed: any
 
   init(): void {
@@ -71,6 +72,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
         if (this.player) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
+          this.handleCollision()
         }
       },
       onResume: (ctx) => {
@@ -162,7 +164,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
 
 
-    // this._scene.add(city);
+    this._scene.add(city);
     city.scale.set(0.04, 0.04, 0.04)
 
 
@@ -179,6 +181,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(plotSlots, plot)
 
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
+
     this._scene.add(this.player.model);
 
     this._scene.traverse(object => {
@@ -200,10 +203,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     const geometries: BoxBufferGeometry[] = [];
     env.updateMatrixWorld(true);
-    this._scene.add(env)
 
     env.traverse(object => {
-      console.log(object);
       if (object.type == "Mesh") {
 
         const box3 = new Box3();
@@ -229,13 +230,24 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
     const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries, true);
-    console.log(mergedGeometry);
+    mergedGeometry.boundsTree = new MeshBVH(mergedGeometry, { lazyGeneration: false });
 
-    const collider = new Mesh(mergedGeometry);
-    collider.material.wireframe = true;
-    collider.material.opacity = 0.5;
-    collider.material.transparent = true;
-    this._scene.add(collider);
+    this.collider = new Mesh(mergedGeometry);
+    this.collider.material.wireframe = true;
+    this.collider.material.opacity = 0.5;
+    this.collider.material.transparent = true;
+    this._scene.add(this.collider);
+  }
+
+  handleCollision() {
+
+    // const capsuleInfo = this.player.model.capsuleInfo;
+
+    // this.tempBox.makeEmpty();
+    // this.tempMat.copy(this.collider.matrixWorld).invert();
+    // this.tempSegment.copy(capsuleInfo.segment);
+    
+
 
   }
 }
