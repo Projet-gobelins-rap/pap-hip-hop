@@ -39,7 +39,6 @@ import {gsap} from 'gsap'
       const round2Step3 = battleContent?.slices8[0].items;
       const round2Step4 = battleContent?.slices9[0].items;
 
-      // const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[1];
 
       return {
@@ -70,7 +69,6 @@ export default class round2Mobile extends Vue {
   public choiceStore = getModule(choiceStore,this.$store)
   public onboardingCounter:number = 1
   public battleOnboardingRound2:object
-  // public battleOnboardingRound2Action:object
   public roundStep: number = 0
   public battleOnboarding:object
   public battlePunchline:object
@@ -125,7 +123,7 @@ export default class round2Mobile extends Vue {
   @Watch("onboardingStep", { immediate: true, deep: true })
   setOnboardingStep(val: string) {
     if (val) {
-      
+
       switch (val) {
         case "reading":
           break;
@@ -194,44 +192,6 @@ export default class round2Mobile extends Vue {
     this.roundStep++
 
   }
-
-
-  // var timeleft = 10;
-  // var downloadTimer = setInterval(function(){
-  //   if(timeleft <= 0){
-  //     clearInterval(downloadTimer);
-  //   }
-  //   document.getElementById("progressBar").value = 10 - timeleft;
-  //   timeleft -= 1;
-  // }, 1000);
-
-  // TIMER for round 2
-
-  // this.focusTimeOut = setTimeout(() => {
-  //   console.log('2');
-  //
-  //   gsap.set(place.icon, {
-  //     fill: "#00ff00"
-  //   })
-  //   if (!place.found) {
-  //     $socket.io.emit('scope-focus', place.slug)
-  //   }
-  //   place.found = true
-  //
-  // }, 1000);
-
-//   if (this.focusTarget) {
-//   this.focusTimeline.restart()
-//   this.focusTimeline.pause()
-//   clearTimeout(this.focusTimeOut)
-//   this.focusTimeOut = null
-//
-//   this.focusTarget = false
-// }
-
-
-
-
 
 }
 </script>

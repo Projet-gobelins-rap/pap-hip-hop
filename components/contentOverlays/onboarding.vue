@@ -61,7 +61,6 @@ SwiperCore.use([Navigation, Pagination])
 export default class Onboarding extends Vue{
   @Prop({ required: true }) readonly content!: any;
   public isFullscreen:boolean = false
-  // public displayNavigation:string = this.content.items.length <= 1 ? '' : 'navigation'
   public onboardingStore = getModule(onboardingStore,this.$store)
   mounted(){
     console.log('Onboarding component')
