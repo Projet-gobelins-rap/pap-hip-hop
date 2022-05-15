@@ -49,8 +49,6 @@ import {gsap} from 'gsap'
       const currentOnboarding = battleOnboarding[0];
       const currentPunchline = battlePunchRound1
 
-
-
       return {
         battleChat,
         battleOnboarding,
@@ -155,20 +153,26 @@ export default class battle extends Vue {
         duration:2,
         stagger:2,
         onComplete:()=>{
-          gsap.set('.opponent span',{display:'none'})
+          gsap.set('.opponent span',{display:'none',opacity:0})
           this.displayUserPunchline()
         }
       })
     } else {
-      console.log(this.opponentRound2[this.round2StepCounter],'AAAA')
-      console.log(this.round2StepCounter,'step counter zebi !!')
-      // this.opponent.children[this.round2StepCounter].innerText = ''
-      // this.round2StepCounter
+      this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text
+      gsap.to(this.opponent.children[this.round2StepCounter],{
+        display:'block',
+        opacity:1,
+        duration:2,
+        onComplete:()=>{
+          gsap.set(this.opponent.children[this.round2StepCounter],{display:'none',opacity:0})
+          console.log('EKIP OPONENT ZEBI')
+          this.displayUserPunchline()
+        }
+      })
     }
-
   }
 
-  // URGENT DE REFACTO TOUTE CETTE METHODE
+  // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
     this.punchlineArray.forEach((punch,i)=>{
       setTimeout(()=>{
@@ -196,11 +200,9 @@ export default class battle extends Vue {
         }
       },2000 * i)
     })
-    // this.punchlineArray = []
   }
 
   displayChat() {
-    console.log('ZZZZ')
     this.battleStore.setIsChatDisplay(true)
   }
   closeChat() {
@@ -258,7 +260,6 @@ export default class battle extends Vue {
   setOnboardingStep(val: string) {
     if (val) {
       console.log(val);
-
     }
   }
 
