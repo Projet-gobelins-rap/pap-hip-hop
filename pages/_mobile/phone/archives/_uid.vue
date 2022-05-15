@@ -1,0 +1,33 @@
+<template>
+  <section class="archiveSingle">
+    <h1>{{ archive.data.title }}</h1>
+  </section>
+</template>
+
+<script lang="ts">
+import { Vue, Component, getModule } from "nuxt-property-decorator";
+import stepStore from "~/store/stepStore";
+import $socket from "~/plugins/socket.io";
+import CustomButton from "~/components/buttons/button.vue";
+
+import permisions from "~/core/utils/Permisions";
+@Component({
+  components: {
+    CustomButton,
+  },
+  async asyncData({ $prismic, params, error }) {
+    const archive = await $prismic.api.getByUID("archive", params.uid);
+    if (archive) {
+      return { archive };
+    } else {
+      error({ statusCode: 404, message: "Page not found" });
+    }
+  },
+})
+export default class archiveSingle extends Vue {
+  public stepStore = getModule(stepStore, this.$store);
+  public archive: any;
+
+  mounted() {}
+}
+</script>

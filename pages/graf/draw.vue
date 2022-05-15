@@ -1,23 +1,27 @@
 <template>
   <section class="graffDraw">
+    <span class="graffDraw-cursor"></span>
     <picture class="graffDraw-background">
       <img class="graffDraw-background--img" src="/images/wall-0.png" alt="" />
     </picture>
-    <div class="graffDraw-preview" v-if="!graffInstance">
-      <img class="graffDraw-preview--img" :src="activePreviewUrl" alt="" />
-      <CustomButton
-        class="graffDraw-preview--button"
-        v-if="activePreviewUrl"
-        @click.native="valideSelectedGraff"
-        :text="'choisir ce graff'"
-      />
+    <div class="graffDraw-preview" >
+      
+     
     </div>
     <div class="graffDraw-container">
       <p class="graffDraw-display display"></p>
-      <img class="graffDraw-img" src="/images/wall-1.png" alt="" />
+      <img class="graffDraw-img" src="" alt="" />
+      <!-- <img class="graffDraw-img--preview" v-if="!graffInstance" :src="activePreviewUrl" alt="" /> -->
       <canvas class="graffDraw-canvas"></canvas>
       <button class="graffDraw-reset">Passer à l'etape 2</button>
     </div>
+     <CustomButton
+        class="graffDraw-preview--button"
+        v-if="activePreviewUrl && !graffInstance"
+        @click.native="valideSelectedGraff"
+        :text="'choisir ce graff'"
+      />
+
   </section>
 </template>
 
@@ -53,36 +57,33 @@ export default class GraffActivity extends Vue {
   public graffSketchsList: any;
   public activePreview: any | null = null;
   public activePreviewUrl: string = "";
-  public graffInstance: Graf | null = null
+  public graffInstance: Graf | null = null;
 
   mounted() {
     console.clear();
     console.log("mounted hook on HOME page");
+    console.log(this.graffSketchsList);
+    
 
     this.handleMobileSelection();
     console.log($socket, "socket from plugin");
-
-    this.getGraffValue()
   }
 
   handleMobileSelection() {
     $socket.io.on("graffSelected", (idx) => {
+      console.log(idx);
+      
       this.activePreview = this.graffSketchsList[idx];
-      this.activePreviewUrl = this.activePreview[0].layer.url;
+      console.log(this.activePreview);
+      this.activePreviewUrl = this.activePreview[this.activePreview.length - 1].layer.url;
+      
     });
   }
 
   valideSelectedGraff() {
     console.log(this.graffSketchsList);
-    new Graf(this.activePreview);
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
-  }
-  getGraffValue() {
-    $socket.io.on('graffValues', data => {
-      let dataSplitted = data.split(':')
-      console.log([dataSplitted[0], dataSplitted[1]]);
-      
-    })
+    new Graf(this.activePreview);
     
   }
 }
