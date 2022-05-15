@@ -2,12 +2,14 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, BoxGeometry, Camera, Mesh, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Player } from "../../models/player";
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh"
 
 export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
 
@@ -16,7 +18,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _camera: Camera
   public player: Player
   // private _keysPressed: any
-  
+
   init(): void {
     HoodScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
@@ -32,7 +34,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
    * Create the shell to interact with global scene
    */
   private _createSceneContext() {
-    
+
     // Set canvas dimensions
     this._data.canvas.width = Helpers.getWindowSizes().width
     this._data.canvas.height = Helpers.getWindowSizes().height
@@ -66,9 +68,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render') 
-        
-        if(this.player) {
-          this.player.updateControls(ctx.deltaTime,ctx.keysPressed)
+
+        if (this.player) {
+          this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
         }
       },
       onResume: (ctx) => {
@@ -156,10 +158,13 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
+    const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
-    
-    this._scene.add(city);
+
+
+    // this._scene.add(city);
     city.scale.set(0.04, 0.04, 0.04)
+
 
     const g = new BoxGeometry(10, 10, 10)
     const m = new MeshMatcapMaterial({ color: 'red' })
@@ -168,10 +173,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     console.log(city);
 
     const treeSlots = city.getObjectByName('cloner_tree').children
-    const otherSlots = city.getObjectByName('cloner_bite').children
+    const plotSlots = city.getObjectByName('cloner_bite').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
-    SlotsLoader.populateSlots(otherSlots, cube)
+    SlotsLoader.populateSlots(plotSlots, plot)
 
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
     this._scene.add(this.player.model);
@@ -179,9 +184,58 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
-        object.material = new MeshMatcapMaterial({color: 0xffffff})
+        object.material = new MeshMatcapMaterial({ color: 0xffffff })
         object.material.map = oldTexture
       }
     })
+    this.bvhCollider(city)
+  }
+
+  bvhCollider(env) {
+    const params = {
+      displayCollider: true,
+      displayBVH: true,
+      visualizeDepth: 10,
+    };
+
+    const geometries: BoxBufferGeometry[] = [];
+    env.updateMatrixWorld(true);
+    this._scene.add(env)
+
+    env.traverse(object => {
+      console.log(object);
+      if (object.type == "Mesh") {
+
+        const box3 = new Box3();
+        box3.setFromObject(object)
+
+        const dimensions = new Vector3().subVectors(box3.max, box3.min);
+        const boxGeometry = new BoxBufferGeometry(dimensions.x, dimensions.y, dimensions.z);
+
+        const matrix = new Matrix4().setPosition(dimensions.addVectors(box3.min, box3.max).multiplyScalar(0.5));
+        boxGeometry.applyMatrix4(matrix);
+
+        for (const key in boxGeometry.attributes) {
+          if (key !== 'position') {
+            boxGeometry.deleteAttribute(key);
+          }
+        }
+        geometries.push(boxGeometry)
+
+        // const mesh = new Mesh(boxGeometry, new MeshBasicMaterial({ wireframe: true }));
+        // this._scene.add(mesh)
+
+        // console.log(boxGeometry);
+      }
+    })
+    const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries, true);
+    console.log(mergedGeometry);
+
+    const collider = new Mesh(mergedGeometry);
+    collider.material.wireframe = true;
+    collider.material.opacity = 0.5;
+    collider.material.transparent = true;
+    this._scene.add(collider);
+
   }
 }
