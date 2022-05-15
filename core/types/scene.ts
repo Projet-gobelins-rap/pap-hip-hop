@@ -9,6 +9,7 @@ import {
   WebGLRenderer
 } from "three";
 import SceneManager from "~/core/managers/SceneManager";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 /**
  * Option to create SceneManager
@@ -21,6 +22,8 @@ export type SceneManagerOptions = {
   scene: Scene
   bindEvents?: DefaultSceneManagerCallback
   defaultRation?: number
+  controls:OrbitControls
+  activateKeyboard:boolean
 
   onStart?: DefaultSceneManagerCallback
   onResume?: DefaultSceneManagerCallback

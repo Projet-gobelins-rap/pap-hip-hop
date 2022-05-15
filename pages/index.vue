@@ -11,7 +11,7 @@ import globalSceneStore from "~/store/globalSceneStore";
   components: {},
 })
 export default class Home extends Vue {
-  
+
   mounted() {
   }
 }
