@@ -1,12 +1,8 @@
 <template>
   <section class="intro">
     <div class="dialogWrapper">
-<!--      <dialog >-->
-<!--        <userCard></userCard>-->
-<!--        <textCard></textCard>-->
-        <Onboarding :content="onboardingData"></Onboarding>
-        <CustomButton  @click.native="goToNextStep" text="Commencer"></CustomButton>
-<!--      </dialog>-->
+      <Onboarding :content="onboardingData"></Onboarding>
+      <CustomButton  @click.native="goToNextStep" text="Commencer"></CustomButton>
     </div>
 
   </section>

@@ -24,7 +24,7 @@ export default class mobileConnection extends Vue {
 
   mounted() {
     $socket.io.on("server:paired", (user) => {
-      this.$router.push("/_mobile/graff/scope");
+      this.$router.push("/_mobile/battle");
     })
   }
 

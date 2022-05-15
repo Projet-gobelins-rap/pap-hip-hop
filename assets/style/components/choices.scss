@@ -1,0 +1,26 @@
+.choices {
+  display: flex;
+  flex-direction: column;
+  &__item {
+    width: 300px;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+    &--selected {
+      background: green;
+      span {
+        color: white;
+      }
+    }
+    span {
+      pointer-events: none;
+    }
+  }
+  &__validate {
+    padding: 20px;
+    background: white;
+    margin-top: 20px;
+  }
+}

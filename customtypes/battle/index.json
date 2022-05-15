@@ -1,0 +1,147 @@
+{
+  "id": "battle",
+  "label": "battle",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "slices": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {}
+        }
+      }
+    },
+    "dialog state": {
+      "slices1": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "onboarding state": {
+      "slices2": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round 1": {
+      "slices3": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "onboarding round2": {
+      "slices5": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round 2 #1": {
+      "slices6": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round2 #2": {
+      "slices7": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round2 #3": {
+      "slices8": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "round 2 #4": {
+      "slices9": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "opponent round 1": {
+      "slices10": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "opponent round 2": {
+      "slices11": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "punchline": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
+  }
+}
