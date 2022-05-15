@@ -11,52 +11,105 @@
     </div>
 
     <div class="mobileScope-landscape">
-        <div class="mobileScope-wrapper">
-            <img class="mobileScope-img" src="/images/graf/city-rooftop.png" alt="">
-            <svg class="mobileScope-markers" width="3076" height="1829" viewBox="0 0 3076 1829" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <rect class="mobileScope-marker" x="685" y="549" width="120" height="120" fill="#ED6FD9" />
-                <rect class="mobileScope-marker" x="1538" y="794" width="120" height="120" fill="#ED6FD9" />
-                <rect class="mobileScope-marker" x="2010" y="429" width="120" height="120" fill="#ED6FD9" />
-            </svg>
-        </div>
+      <div class="mobileScope-wrapper">
+        <img
+          class="mobileScope-img"
+          src="/images/graf/city-rooftop.png"
+          alt=""
+        />
+        <svg
+          class="mobileScope-markers"
+          width="3076"
+          height="1829"
+          viewBox="0 0 3076 1829"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            class="mobileScope-marker"
+            x="685"
+            y="549"
+            width="120"
+            height="120"
+            fill="#ED6FD9"
+          />
+          <rect
+            class="mobileScope-marker"
+            x="1538"
+            y="794"
+            width="120"
+            height="120"
+            fill="#ED6FD9"
+          />
+          <rect
+            class="mobileScope-marker"
+            x="2010"
+            y="429"
+            width="120"
+            height="120"
+            fill="#ED6FD9"
+          />
+        </svg>
+      </div>
     </div>
+    <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
 <script lang="ts">
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
-import Scope from "~/core/interactions/Scope.ts"
+import Scope from "~/core/interactions/Scope.ts";
+import Onboarding from "~/components/contentOverlays/onboarding";
+import onboardingStore from "~/store/onboardingStore";
 
- 
 @Component({
-  components: {},
+  components: {
+    Onboarding,
+  },
+  async asyncData({ $prismic, error }) {
+    try {
+      const graffContent = (await $prismic.api.getSingle("interaction-graff"))
+        .data;
+
+      console.log(graffContent);
+
+      const rotateOnboarding = graffContent?.slices5[0].items;
+      const gameplayOnboarding = graffContent?.slices5[1].items;
+
+      // const currentChat = battleChat[0];
+      const currentOnboarding = rotateOnboarding[0];
+
+      return {
+        gameplayOnboarding,
+        currentOnboarding,
+      };
+    } catch (e) {
+      // Returns error page
+      //   error({ statusCode: 404, message: 'Content not found' })
+    }
+  },
 })
 export default class MobileScope extends Vue {
   public stepStore = getModule(stepStore, this.$store);
-  public gyroscope: any;
-  public sensor: any;
-  public rotation: any = {
-    x: 0,
-    y: 0,
-  };
-  public nomalizeTranslation: any = {
-    x: 0,
-    y: 0,
-  };
+  public onboardingStore = getModule(onboardingStore, this.$store);
+  public currentOnboarding: object;
+  public onboardingCounter: number = 1;
 
   mounted() {
-    
-    // console.clear();
+    console.clear();
+    console.log(this.currentOnboarding, "<--- current onboarrding mobile");
     console.log("scope");
-    const scopeInteraction = new Scope()
+    const scopeInteraction = new Scope();
+    this.displayOnboarding();
+  }
 
-    this.rotation = {
-        x: scopeInteraction.normalizePosition.x,
-        y: scopeInteraction.normalizePosition.y,
-    };
+  displayOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(true);
+  }
 
+  hideOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(false);
   }
 }
 </script>

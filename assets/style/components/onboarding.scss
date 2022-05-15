@@ -1,6 +1,7 @@
 .onboardingWrapper {
   width: 100vw;
   height: 100vh;
+  z-index: 100;
   .onboarding {
     width: 100%;
     height: 100%;
@@ -8,7 +9,7 @@
     display: flex;
     left: 0;
     top: 0;
-    background: rgba(255, 0, 0, 0.2);
+    background: rgba(255, 0, 0, 0.9);
     flex-direction: column;
     align-items: center;
     justify-content: center;
