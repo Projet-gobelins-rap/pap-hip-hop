@@ -125,8 +125,7 @@ export default class round2Mobile extends Vue {
   @Watch("onboardingStep", { immediate: true, deep: true })
   setOnboardingStep(val: string) {
     if (val) {
-      console.log(val);
-
+      
       switch (val) {
         case "reading":
           break;

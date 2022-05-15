@@ -155,14 +155,24 @@ export default class battle extends Vue {
         duration:2,
         stagger:2,
         onComplete:()=>{
-          gsap.set('.opponent span',{display:'none'})
+          gsap.set('.opponent span',{display:'none',opacity:0})
           this.displayUserPunchline()
         }
       })
     } else {
       console.log(this.opponentRound2[this.round2StepCounter],'AAAA')
-      console.log(this.round2StepCounter,'step counter zebi !!')
-      // this.opponent.children[this.round2StepCounter].innerText = ''
+      // console.log(this.opponentRound2[this.round2StepCounter].content[0].text,'step counter zebi !!')
+      this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text
+      gsap.to(this.opponent.children[this.round2StepCounter],{
+        display:'block',
+        opacity:1,
+        duration:2,
+        onComplete:()=>{
+          gsap.set(this.opponent.children[this.round2StepCounter],{display:'none',opacity:0})
+          console.log('EKIP OPONENT ZEBI')
+          this.displayUserPunchline()
+        }
+      })
       // this.round2StepCounter
     }
 
