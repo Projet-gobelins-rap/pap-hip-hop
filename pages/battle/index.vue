@@ -1,8 +1,14 @@
 <template>
   <section class="battle">
-    <h1 ref="title">BATTLE DESKTOP</h1>
-    <ChatComponent v-if="this.chatDisplay && currentChat" :content="currentChat" />
-    <Onboarding :content="currentOnboarding"></Onboarding>
+<!--    <h1 ref="title">BATTLE DESKTOP</h1>-->
+    <div class="opponent" ref="opponent">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+<!--    <ChatComponent v-if="this.chatDisplay && currentChat" :content="currentChat" />-->
+<!--    <Onboarding :content="currentOnboarding"></Onboarding>-->
   </section>
 </template>
 
@@ -36,6 +42,9 @@ import {gsap} from 'gsap'
       const round2Step3 = battleContent?.slices8[0].items;
       const round2Step4 = battleContent?.slices9[0].items;
 
+      const opponentRound1 = battleContent?.slices10[0].items;
+      const opponentRound2 = battleContent?.slices11[0].items;
+
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
       const currentPunchline = battlePunchRound1
@@ -51,7 +60,9 @@ import {gsap} from 'gsap'
         round2Step1,
         round2Step2,
         round2Step3,
-        round2Step4
+        round2Step4,
+        opponentRound1,
+        opponentRound2
       };
     } catch (e) {
       // Returns error page
@@ -72,17 +83,25 @@ export default class battle extends Vue {
   public chatCounter:number = 0
   public punchlineArray: string[]= []
   public title:HTMLElement
+  public opponent:HTMLElement
   public isRound2: boolean = false
   public round2Step1:object
   public round2Step2:object
   public round2Step3:object
   public round2Step4:object
   public round2StepCounter:number = -1
+  public opponentRound1:object
+  public opponentRound2:object
 
   mounted() {
     this.initRound2Datas()
     this.title = this.$refs.title as HTMLElement
+    this.opponent = this.$refs.opponent as HTMLElement
 
+
+    console.log(this.opponentRound1,'<--- OPPONENT ROUND 1 PUNCHHH')
+
+    this.displayOpponentPunchline()
     console.log('BATTLE')
     console.log(this.battleChat,'<--- dialog battle')
     console.log(this.currentOnboarding,'<--- onboarding battle')
@@ -118,6 +137,25 @@ export default class battle extends Vue {
       }
     })
 
+  }
+
+  displayOpponentPunchline(){
+    console.log(this.opponent)
+    gsap.set('.opponent span',{display:'none',opacity:0})
+    this.opponentRound1.forEach((punch,index)=>{
+      console.log(punch)
+      this.opponent.children[index].innerText = punch.content[0].text
+    })
+
+    gsap.to('.opponent span',{
+      display:'block',
+      opacity:1,
+      duration:2,
+      stagger:2,
+      onComplete:()=>{
+        console.log('FINITO OPPONENT')
+      }
+    })
   }
 
   // URGENT DE REFACTO TOUTE CETTE METHODE
