@@ -78,6 +78,7 @@ export default class SceneManager {
   private _isRayCasting: boolean
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
+  public  _isStarted: boolean | undefined
 
   constructor(options: SceneManagerOptions) {
 
@@ -92,6 +93,7 @@ export default class SceneManager {
     this._rayCaster = new Raycaster()
     this._controls = options.controls
     this._keysPressed = options.controls
+    this._isStarted = options.isStarted
     this._deltaTime = 0
     this._previousTime = 0
     // this._gui = new GUI()

@@ -24,6 +24,7 @@ export type SceneManagerOptions = {
   defaultRation?: number
   controls:OrbitControls
   activateKeyboard:boolean
+  isStarted?:boolean
 
   onStart?: DefaultSceneManagerCallback
   onResume?: DefaultSceneManagerCallback

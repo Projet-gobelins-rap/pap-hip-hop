@@ -64,8 +64,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
       onStart: (ctx) => {
         this._controls = ctx.controls
-
-        console.log('START HOOD')
+        ctx._isStarted = true
       },
 
       onRender: (ctx) => {
