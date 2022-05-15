@@ -94,6 +94,7 @@ export default class MobileScope extends Vue {
   public stepStore = getModule(stepStore, this.$store);
   public onboardingStore = getModule(onboardingStore, this.$store);
   public currentOnboarding: object;
+  public gameplayOnboarding: object;
   public onboardingCounter: number = 1;
 
   mounted() {
@@ -102,6 +103,16 @@ export default class MobileScope extends Vue {
     console.log("scope");
     const scopeInteraction = new Scope();
     this.displayOnboarding();
+    setTimeout(() => {
+      this.currentOnboarding = this.gameplayOnboarding
+      console.log(this.gameplayOnboarding);
+      
+    }, 1000)
+  }
+
+  // GETTERS
+  get onboardingStep() {
+    return this.onboardingStore.onboardingStep;
   }
 
   displayOnboarding() {
@@ -111,5 +122,22 @@ export default class MobileScope extends Vue {
   hideOnboarding() {
     this.onboardingStore.setOnboardingDisplay(false);
   }
+
+  @Watch("onboardingStep", { immediate: true, deep: true })
+  setOnboardingStep(val: string) {
+    if (val) {
+      console.log(val);
+      switch (val) {
+        case "reading":
+          break;
+        case "closePopup":
+          this.hideOnboarding()
+          this.onboardingStore.setOnboardingStep("reading");
+          break;
+      }
+    }
+  }
+
+
 }
 </script>
