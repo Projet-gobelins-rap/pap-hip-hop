@@ -2,7 +2,7 @@
   <section class="intro">
       <h1>PAP'HIP HOP</h1>
       <h2>LE MOUVEMENT OUBLIÉ</h2>
-      <CustomButton  @click.native="goToNextStep" text="Commencer"></CustomButton>
+      <CustomButton  @click.native="goToNextStep" text="Commencer l'expérience"></CustomButton>
   </section>
 </template>
 
