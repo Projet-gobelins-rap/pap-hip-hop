@@ -1,7 +1,14 @@
 <template>
   <div class="main">
+    <!-- NAVIGATION   -->
     <navigation/>
-    <Loader :load-progression="this.loadingProgressions"  v-if="!loaderStore.isAlreadyLoaded"></Loader>
+
+    <!-- LOADER   -->
+    <Loader
+      :load-progression="this.loadingProgressions"
+      v-if="!loaderStore.isAlreadyLoaded">
+    </Loader>
+
     <nuxt />
   </div>
 </template>
@@ -47,6 +54,7 @@ export default class Default extends Vue {
   public mobileMedias:any
   public mobileMediasURL:[{name:string,url:string,type:number}] = []
 
+  /** HOOKS **/
   mounted(){
 
     this.$nuxt.$on("loadDesktopMedia",(desktopMedia)=>{
@@ -108,10 +116,11 @@ export default class Default extends Vue {
 
   }
 
+  /** METHODS **/
+
   // TODO :: refacto pour eviter les bouts de code dupliqués
   public async initApp() {
     if (!this.globalStore.isAppInit) {
-      // new AssetManagerInitializer(null).init();
       /* We need to download all asset before init app */
       if (this.$device.isMobileOrTablet){
         this.mobileMediasURL.forEach(el=>{
@@ -135,10 +144,7 @@ export default class Default extends Vue {
     }
   }
 
-  get appState() {
-    return this.globalStore.isAppInit
-  }
-
+  /** WATCHERS **/
   @Watch('appState',{ immediate: true,deep:true })
   onMotionValueChanged(val:boolean) {
     if (val) {
@@ -147,6 +153,12 @@ export default class Default extends Vue {
         console.log(AssetsManager.getImage(IMAGE_ASSET.STICKER))
       }
     }
+  }
+
+  /** GETTERS **/
+
+  get appState() {
+    return this.globalStore.isAppInit
   }
 }
 
