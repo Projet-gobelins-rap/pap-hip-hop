@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <navigation/>
-    <Loader/>
+    <Loader :load-progression="this.loadingProgressions"  v-if="!loaderStore.isAlreadyLoaded"></Loader>
     <nuxt />
   </div>
 </template>
@@ -14,6 +14,7 @@ import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import {AssetsManager} from "../core/managers";
 import globalStore from "../store/globalStore";
 import {IMAGE_ASSET} from "../core/enums";
+import loaderStore from "../store/loaderStore";
 
 @Component({
   components: {
@@ -38,6 +39,7 @@ import {IMAGE_ASSET} from "../core/enums";
 export default class Default extends Vue {
 
   public globalStore = getModule(globalStore, this.$store);
+  public loaderStore = getModule(loaderStore, this.$store);
   public loadingProgressions: string = "0";
   public desktopMedias:any
   public desktopMediasURL:[{name:string,url:string,type:number}] = []
@@ -128,6 +130,7 @@ export default class Default extends Vue {
         console.log(this.loadingProgressions,' <---- LOADING')
       }).load();
 
+      this.loaderStore.setIsAlreadyLoaded(true)
       this.globalStore.setIsAppInit(true);
     }
   }
