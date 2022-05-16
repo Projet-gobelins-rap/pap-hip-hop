@@ -5,7 +5,10 @@
 
     <!-- LOADER   -->
     <transition
-      v-on:leave="leaveLoader">
+      v-on:enter="enterLoader"
+      v-on:leave="leaveLoader"
+      appear
+    >
       <Loader
         :load-progression="this.loadingProgressions"
         v-if="!loaderStore.isAlreadyLoaded">
@@ -147,9 +150,26 @@ export default class Default extends Vue {
     }
   }
 
+  enterLoader(el:HTMLElement,done:Function) {
+    console.log('ENTEEEEEER')
+    gsap.fromTo(el,{
+      opacity:0,
+      display:'none',
+    },
+      {
+        opacity:1,
+        display:'flex',
+        duration:1.5,
+        onComplete:()=>{
+          console.log('complete enter loader !!!!')
+          done()
+        }
+      }
+    )
+  }
+
   leaveLoader(el:HTMLElement,done:Function){
     console.log(el)
-
     gsap.to(el,{
       opacity:0,
       display:'none',
