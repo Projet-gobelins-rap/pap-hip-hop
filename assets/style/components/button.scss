@@ -1,6 +1,14 @@
 .btn {
-	padding: 10px;
-	border: 1px solid #000;
-	background: #fff;
+	padding: 1.6rem 3.2rem;
+	//border: 1px solid #000;
+  border-top: 2px solid;
+  border-right: 2px solid;
+  border-bottom: 4px solid;
+  border-left: 4px solid;
+  border-color: white;
+	background: $green;
+  border-radius: 4rem;
+  font-size: 2rem;
+  color: white;
 	cursor: pointer;
 }

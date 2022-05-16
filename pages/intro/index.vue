@@ -1,10 +1,8 @@
 <template>
   <section class="intro">
-    <div class="dialogWrapper">
-      <Onboarding :content="onboardingData"></Onboarding>
-      <CustomButton  @click.native="goToNextStep" text="Commencer"></CustomButton>
-    </div>
-
+      <h1>PAP'HIP HOP</h1>
+      <h2>LE MOUVEMENT OUBLIÉ</h2>
+      <CustomButton  @click.native="goToNextStep" text="Commencer l'expérience"></CustomButton>
   </section>
 </template>
 
@@ -14,32 +12,11 @@ import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
 import {AssetsManager} from "../../core/managers";
 import {IMAGE_ASSET} from "../../core/enums";
-import Onboarding from '../../components/contentOverlays/onboarding'
 import $storage from "../../core/utils/Storage";
 @Component({
   components: {
     CustomButton,
-    Onboarding
   },
-
-  //
-  async asyncData({ $prismic, error }) {
-
-    try{
-
-      const onboardingRequest = (await $prismic.api.getSingle('intro')).data
-
-      const onboardingData = onboardingRequest?.slices[0];
-
-      return {
-        onboardingData,
-      }
-    } catch (e) {
-      // Returns error page
-      error({ statusCode: 404, message: 'Page not found' })
-    }
-  },
-
 })
 export default class Intro extends Vue {
 
@@ -49,11 +26,9 @@ export default class Intro extends Vue {
   mounted() {
 
     console.log(this.onboardingData,'<- onboarding')
-    // console.log(AssetsManager.getImage(IMAGE_ASSET.BOOMBOX))
   }
 
   goToNextStep(){
-
     this.stepStore.setIntroState(true)
     this.$router.push('/connection')
   }
