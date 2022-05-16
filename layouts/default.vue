@@ -4,11 +4,13 @@
     <navigation/>
 
     <!-- LOADER   -->
-    <Loader
-      :load-progression="this.loadingProgressions"
-      v-if="!loaderStore.isAlreadyLoaded">
-    </Loader>
-
+    <transition
+      v-on:leave="leaveLoader">
+      <Loader
+        :load-progression="this.loadingProgressions"
+        v-if="!loaderStore.isAlreadyLoaded">
+      </Loader>
+    </transition>
     <nuxt />
   </div>
 </template>
@@ -22,6 +24,7 @@ import {AssetsManager} from "../core/managers";
 import globalStore from "../store/globalStore";
 import {IMAGE_ASSET} from "../core/enums";
 import loaderStore from "../store/loaderStore";
+import {gsap} from "gsap";
 
 @Component({
   components: {
@@ -144,6 +147,20 @@ export default class Default extends Vue {
     }
   }
 
+  leaveLoader(el:HTMLElement,done:Function){
+    console.log(el)
+
+    gsap.to(el,{
+      opacity:0,
+      display:'none',
+      duration:1.5,
+      onComplete:()=>{
+        console.log('complete loader !!!!')
+        done()
+      }
+    })
+  }
+
   /** WATCHERS **/
   @Watch('appState',{ immediate: true,deep:true })
   onMotionValueChanged(val:boolean) {
@@ -156,7 +173,6 @@ export default class Default extends Vue {
   }
 
   /** GETTERS **/
-
   get appState() {
     return this.globalStore.isAppInit
   }
