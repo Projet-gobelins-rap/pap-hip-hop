@@ -18,6 +18,7 @@
       @click.native="valideSelectedGraff"
       :text="'choisir ce graff'"
     />
+    <ChatComponent v-if="currentChat" :content="currentChat" />
   </section>
 </template>
 
@@ -25,11 +26,14 @@
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import Graf from "~/core/interactions/Graf";
 import $socket from "~/plugins/socket.io";
+import chatStore from "~/store/chatStore";
+import ChatComponent from "~/components/contentOverlays/chat.vue";
 import CustomButton from "~/components/buttons/button.vue";
 
 @Component({
   components: {
     CustomButton,
+    ChatComponent,
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -40,10 +44,12 @@ import CustomButton from "~/components/buttons/button.vue";
         (slice: any) => slice.items
       );
       const graffDialogues = prismicContent?.slices3;
+      const currentChat = graffDialogues[0];
 
       return {
         graffSketchsList,
         graffDialogues,
+        currentChat,
       };
     } catch (e) {
       // Returns error page
@@ -58,12 +64,12 @@ export default class GraffActivity extends Vue {
   public activePreview: any | null = null;
   public activePreviewUrl: string = "";
   public graffInstance: Graf | null = null;
-  // public chatStore = getModule(chatStore, this.$store);
+  public chatStore = getModule(chatStore, this.$store);
 
   // get chatStep from store
-  // get chatStep() {
-  //   return this.chatStore.chatStep;
-  // }
+  get chatStep() {
+    return this.chatStore.chatStep;
+  }
 
   mounted() {
     console.clear();
@@ -88,29 +94,40 @@ export default class GraffActivity extends Vue {
   valideSelectedGraff() {
     console.log(this.graffSketchsList);
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
-    new Graf(this.activePreview);
+
+    this.graffInstance = new Graf(this.graffSketchsList[0], (step: string) => {
+      console.log(step);
+      this.displayChat(step);
+    });
   }
 
-  // displayChat(id: string) {
-  //   for (const key in this.graffDialogues) {
-  //     const element = this.graffDialogues[key];
-  //     if (element.primary.Identifiant === id) {
-  //       this.currentChat = element;
-  //     }
-  //   }
-  // }
+  displayChat(step: string) {
+    for (const key in this.graffDialogues) {
+      const element = this.graffDialogues[key];
+      if (element.primary.Identifiant === step) {
+        this.currentChat = element;
+        console.log(this.currentChat);
+        console.log("yubhinjo,kl");
+      }
+    }
+  }
 
-  // @Watch("chatStep", { immediate: true, deep: true })
-  // setChatStep(val: string) {
-  //   if (val) {
-  //     switch (val) {
-  //       case "reading":
-  //         break;
-  //       default:
-  //         this.displayChat(val);
-  //         this.chatStore.setChatStep("reading");
-  //     }
-  //   }
-  // }
+  @Watch("chatStep", { immediate: true, deep: true })
+  setChatStep(val: string) {
+    if (val) {
+      switch (val) {
+        case "reading":
+          break;
+        case "startInteraction":
+          break;
+        case "nextBomb":
+          this.graffInstance?.nextLayer()
+          break;
+        default:
+          this.displayChat(val);
+          this.chatStore.setChatStep("reading");
+      }
+    }
+  }
 }
 </script>
