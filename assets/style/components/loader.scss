@@ -1,5 +1,5 @@
 .loader {
-	z-index: 50;
+	z-index: 101;
 	width: 100vw;
 	height: 100vh;
 	position: fixed;
@@ -7,21 +7,21 @@
 	display: flex;
 	align-items: center;
   justify-content: center;
-  
-  &__line {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 120px;
-    max-width: 150px;
-    height: 1px;
-    background: #000;
-  }
-  &__percentWrapper {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 60px;
-  }
-  
+
+  //&__line {
+  //  position: absolute;
+  //  top: 50%;
+  //  transform: translateY(-50%);
+  //  left: 120px;
+  //  max-width: 150px;
+  //  height: 1px;
+  //  background: #000;
+  //}
+  //&__percentWrapper {
+  //  position: absolute;
+  //  top: 50%;
+  //  transform: translateY(-50%);
+  //  left: 60px;
+  //}
+
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <navigation/>
+    <Loader/>
     <nuxt />
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script lang="ts">
 
 import Navigation from '~/components/navigation/Navigation.vue'
+import Loader from '~/components/loader.vue'
 import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import {AssetsManager} from "../core/managers";
 import globalStore from "../store/globalStore";
@@ -16,6 +18,7 @@ import {IMAGE_ASSET} from "../core/enums";
 @Component({
   components: {
     Navigation,
+    Loader
   },
 
   async fetch() {
@@ -33,7 +36,7 @@ import {IMAGE_ASSET} from "../core/enums";
 })
 
 export default class Default extends Vue {
- 
+
   public globalStore = getModule(globalStore, this.$store);
   public loadingProgressions: string = "0";
   public desktopMedias:any
@@ -51,7 +54,7 @@ export default class Default extends Vue {
         if (el.mediaType === 'GLTF'){
           mediaType = 0
         }else if (el.mediaType === 'IMAGE') {
-          mediaType = 1 
+          mediaType = 1
         }
         else if (el.mediaType === 'VIDEO') {
           mediaType = 2
@@ -114,7 +117,7 @@ export default class Default extends Vue {
         })
       }else {
         console.log(this.desktopMediasURL);
-        
+
         this.desktopMediasURL.forEach(el=>{
           AssetsManager._registerSource(el.name,el.type,el.url,null)
         })
