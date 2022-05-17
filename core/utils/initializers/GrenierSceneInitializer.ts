@@ -19,11 +19,13 @@ import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config"
 import { Npc } from "../../models/npc"
 
 import { Outfitloader } from "../../managers/OutfitLoader"
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
   public cameraInitialPosition: Vector3
   private _scene: Scene
+  private _controls: OrbitControls
   init(): void {
 
     console.log(["1 ----> ", this._data]);
@@ -34,7 +36,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     console.log(["1 ----> ", this._data]);
     // this._addLights(true)
-    this._registerPresetPositions()
+    // this._registerPresetPositions()
 
     console.log(["1 ----> ", this._data]);
     // this._optimizeScene()
@@ -63,16 +65,25 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     // Create renderer
     const renderer = this._createRender()
 
+    // Create controls
+    const controls = this._createControls(camera, this._data.canvas)
+
+
+
     return new SceneManager({
+      activateKeyboard: false,
+      controls: controls,
       canvas: this._data.canvas,
       camera: camera,
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: false,
+      activateOrbitControl: true,
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
+        // console.log(ctx.renderer.info.render,'<--- render info')
+        // console.log(camera.position)
         for (const point of this._data.grenierSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
           screenPosition.project(GrenierScene.context.camera)
@@ -135,6 +146,14 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   }
 
   /**
+   * Create controls
+   */
+  private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
+    this._controls = new OrbitControls(camera, canvas)
+    return this._controls
+  }
+
+  /**
    * Create renderer
    * @private
    */
@@ -165,15 +184,18 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     const grenierScene = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data.scene
     const papyGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
 
-    grenierScene.position.set(-40, -10, 20)
+    grenierScene.position.set(-20, -10, 40)
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
 
-    const papy = new Npc(papyGltf, 'papy', 'tpose')
 
-    grenierScene.getObjectByName("papy")!.add(papy.model)
-    papy.model.scale.set(15, 15, 15)
-    papy.model.position.set(-50, -10, -20)
+
+    // const papy = new Npc(papyGltf, 'papy', 'tpose')
+
+    // grenierScene.getObjectByName("papy")!.add(papy.model)
+    // papy.model.scale.set(15, 15, 15)
+
+    // papy.model.position.set(-50, -10, -20)
 
     const light = new AmbientLight(0xdddddd); // soft white light
     this._scene.add(light);
