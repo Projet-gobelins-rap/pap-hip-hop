@@ -25,6 +25,7 @@ import SprayInteractPoint from "../../core/config/grenier-scene/interact-points/
 import BoxInteractPoint from "../../core/config/grenier-scene/interact-points/objects/BoxInteractPoint";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
+import TvInteractPoint from "../../core/config/grenier-scene/interact-points/objects/TvInteractPoint";
 
 @Component({
   components: {
@@ -60,11 +61,13 @@ export default class GrenierScene extends Vue {
 
   addInteractionPoints() {
     this.grenierSceneStore.addInteractivePoint(PosterInteractPoint.name);
-    this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
-    this.grenierSceneStore.addInteractivePoint(BoxInteractPoint.name);
+    this.grenierSceneStore.addInteractivePoint(TvInteractPoint.name);
+    // this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
+    // this.grenierSceneStore.addInteractivePoint(BoxInteractPoint.name);
   }
 
   removeInteractionsPoints() {
+    this.grenierSceneStore.removeInteractivePoint(TvInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(PosterInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(SprayInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(BoxInteractPoint.name);
@@ -94,9 +97,8 @@ export default class GrenierScene extends Vue {
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
         grenierSceneStore: this.grenierSceneStore
       }).init()
-      // grenierScene.context.disableOrbitControl().enableParallax()
-
-      // this.addInteractionPoints()
+      grenierScene.context.disableOrbitControl()
+      this.addInteractionPoints()
     }
   }
 

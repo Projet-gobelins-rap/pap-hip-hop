@@ -36,7 +36,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     console.log(["1 ----> ", this._data]);
     // this._addLights(true)
-    // this._registerPresetPositions()
+    this._registerPresetPositions()
 
     console.log(["1 ----> ", this._data]);
     // this._optimizeScene()
@@ -78,7 +78,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       scene: scene,
       renderer: renderer,
       defaultRation: 2,
-      activateOrbitControl: true,
+      activateOrbitControl: false,
+      onStart:(ctx) =>{
+        console.log(this._scene,'<--- scene')
+      },
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')

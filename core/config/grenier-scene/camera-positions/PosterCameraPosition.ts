@@ -1,5 +1,5 @@
 import GrenierScene from "../../../scene/GrenierScene";
-import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types";
 import {Vector3} from "three";
 
 const PosterCameraPosition: CameraPosition = {

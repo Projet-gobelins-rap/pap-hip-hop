@@ -8,6 +8,8 @@ import BoxInteractPoint from "./interact-points/objects/BoxInteractPoint";
 import SprayCameraPosition from "./camera-positions/SprayCameraPosition";
 import BoxCameraPosition from "./camera-positions/BoxCameraPosition";
 import {InitialCameraPosition} from "./camera-positions";
+import TvInteractPoint from "./interact-points/objects/TvInteractPoint";
+import TvCameraPosition from "./camera-positions/TvCameraPosition";
 
 const GrenierSceneConfig = {
   // // ROOMS
@@ -37,6 +39,7 @@ const GrenierSceneConfig = {
     InitialCameraPosition,
     PosterCameraPosition,
     SprayCameraPosition,
+    TvCameraPosition,
     BoxCameraPosition
   ] as Array<CameraPosition>,
 
@@ -46,6 +49,7 @@ const GrenierSceneConfig = {
     PosterInteractPoint,
     SprayInteractPoint,
     BoxInteractPoint,
+    TvInteractPoint,
   ] as Array<InteractionPoint>,
 }
 
