@@ -18,7 +18,7 @@ import $socket from "~/plugins/socket.io";
 })
 export default class Connection extends Vue {
   public home: string = "Home 🚧";
-  public code: number = 0;
+  public code: string = '0';
 
   public globalStore = getModule(globalStore, this.$store);
 
@@ -26,14 +26,13 @@ export default class Connection extends Vue {
     console.log(this.globalStore, "global store");
 
     $socket.io.emit("server:join", "");
-    $socket.io.on("server:joined", (id) => {
-      console.log("joined : " + id);
+    $socket.io.on("server:joined", id => {
+      // console.log("joined : " + id);
       this.code = id
     });
 
     $socket.io.on("server:paired", (user) => {
-      this.$router.push("/battle");
-      console.log('PAIRE ZEBI')
+      this.$router.push("/grenier");
     });
   }
 }
