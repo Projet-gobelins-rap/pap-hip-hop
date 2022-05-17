@@ -1,5 +1,7 @@
 <template>
-  <button class="btn">{{ text }}</button>
+  <button class="btn">
+    <span class="btn-text">{{ text }}</span>
+  </button>
 </template>
 
 <script lang="ts">
@@ -9,14 +11,12 @@ import { Vue, Component, getModule, Prop } from "nuxt-property-decorator";
   components: {},
 })
 export default class CustomButton extends Vue {
+  @Prop({ type: String, required: true }) readonly text!: string;
 
-  @Prop({type: String, required: true}) readonly text!: string;
-
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 
 <style lang="sass" scoped>
-
 </style>
+ 
