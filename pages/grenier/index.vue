@@ -97,7 +97,7 @@ export default class GrenierScene extends Vue {
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
         grenierSceneStore: this.grenierSceneStore
       }).init()
-      grenierScene.context.disableOrbitControl()
+      // grenierScene.context.disableOrbitControl()
       this.addInteractionPoints()
     }
   }

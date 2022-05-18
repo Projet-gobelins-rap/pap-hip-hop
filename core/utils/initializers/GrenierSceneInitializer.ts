@@ -86,7 +86,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
         // console.log(ctx.renderer.info.render,'<--- render info')
-        // console.log(camera.position)
+        console.log(camera.position)
         for (const point of this._data.grenierSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
           screenPosition.project(GrenierScene.context.camera)
@@ -187,7 +187,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     const grenierScene = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data.scene
     const papyGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
 
-    grenierScene.position.set(-20, -10, 40)
+    grenierScene.position.set(-40, -10, 40)
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
 

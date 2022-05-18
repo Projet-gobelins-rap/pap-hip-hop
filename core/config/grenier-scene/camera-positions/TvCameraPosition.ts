@@ -5,20 +5,30 @@ import {Vector3} from "three";
 const TvCameraPosition: CameraPosition = {
   name: 'TV',
 
+  //--> look at initial
+  //x: -32.056095123291016
+  // y: 5.54551887512207
+  // z: 51.87923812866211
+
   coords: () => {
     const lookAtPosition = new Vector3()
     GrenierScene.context.scene.getObjectByName("tv")!.getWorldPosition(lookAtPosition);
-    // lookAtPosition.z = lookAtPosition.z * 3.1;
-    // lookAtPosition.z = lookAtPosition.x * 3.3;
-    // lookAtPosition.y = lookAtPosition.y * 2.15;
+    lookAtPosition.x = lookAtPosition.x * 3.1;
+    lookAtPosition.y = lookAtPosition.y * 2.15;
+    // lookAtPosition.z = lookAtPosition.z ;
+
+    // console.log(lookAtPosition,'ekippp')
 
     const cameraPos = lookAtPosition.clone()
     // cameraPos.x = cameraPos.x * 2.5
     // cameraPos.z = cameraPos.z * 1.2
     // cameraPos.x = -180
     // cameraPos.y = 35
-    cameraPos.z = -30
+    // cameraPos.x = 7.05
+    // cameraPos.y = 0.099
+    // cameraPos.z = -15.627
 
+    console.log(lookAtPosition,'ekippp 222')
     return { cameraPos, lookAtPosition }
   }
 }
