@@ -4,16 +4,17 @@
   "author": "Prismic",
   "scripts": {
     "dev": "nodemon server/index.js",
+    "production": "echo \"\\033[32mHello World\"",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "generate": "nuxt generate",
     "cert": "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./sslcert/selfsigned.key -out ./sslcert/selfsigned.crt",
     "slicemachine": "start-slicemachine"
   },
-  "engines": {
-    "npm": "6.14.16",
-    "node": "14.19.0"
-  },
+//  "engines": {
+//    "npm": "6.14.16",
+//    "node": "14.19.0"
+//  },
   "nodemonConfig": {
     "watch": [
       "server",
@@ -32,6 +33,7 @@
     "cross-env": "^5.2.1",
     "express": "^4.17.1",
     "gsap": "^3.8.0",
+    "heroku": "^7.60.2",
     "imagesloaded": "^4.1.4",
     "nanoid": "^3.3.4",
     "nuxt": "^2.15.3",
