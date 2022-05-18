@@ -5,9 +5,10 @@ const InitialCameraPosition: CameraPosition = {
   name: 'initial',
 
   coords: () => {
-    const lookAtPosition = new Vector3(79.26325992635307, 30.00643564857594, -88.74045076066439)//new Vector3(-50, 20, 20)
 
-    const cameraPos = new Vector3(79.26325992635307, 30.00643564857594, -88.74045076066439)
+    const lookAtPosition = new Vector3(64.26325992635307, 15.00643564857594, -54.74045076066439)//new Vector3(-50, 20, 20)
+
+    const cameraPos = new Vector3(64.26325992635307, 15.00643564857594, -54.74045076066439)
 
     return { cameraPos, lookAtPosition }
   }

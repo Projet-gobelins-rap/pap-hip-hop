@@ -12,23 +12,16 @@ const TvCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("tv")!.getWorldPosition(lookAtPosition);
-    lookAtPosition.x = lookAtPosition.x * 3.1;
-    lookAtPosition.y = lookAtPosition.y * 2.15;
-    // lookAtPosition.z = lookAtPosition.z ;
+    GrenierScene.context.scene.getObjectByName("tv")!.getWorldDirection(lookAtPosition);
+    // lookAtPosition.x = lookAtPosition.x * 3.1;
+    // lookAtPosition.y = lookAtPosition.y * 2.15;
 
     // console.log(lookAtPosition,'ekippp')
-
     const cameraPos = lookAtPosition.clone()
-    // cameraPos.x = cameraPos.x * 2.5
-    // cameraPos.z = cameraPos.z * 1.2
-    // cameraPos.x = -180
-    // cameraPos.y = 35
+
     // cameraPos.x = 7.05
     // cameraPos.y = 0.099
     // cameraPos.z = -15.627
-
-    console.log(lookAtPosition,'ekippp 222')
     return { cameraPos, lookAtPosition }
   }
 }
