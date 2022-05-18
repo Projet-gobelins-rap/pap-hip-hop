@@ -22,7 +22,7 @@ import stepStore from "~/store/stepStore";
 import PosterInteractPoint from "../../core/config/grenier-scene/interact-points/objects/PosterInteractPoint";
 import grenierScene from "~/core/scene/GrenierScene";
 import SprayInteractPoint from "../../core/config/grenier-scene/interact-points/objects/SprayInteractPoint";
-import BoxInteractPoint from "../../core/config/grenier-scene/interact-points/objects/BoxInteractPoint";
+import ModeInteractPoint from "../../core/config/grenier-scene/interact-points/objects/ModeInteractPoint";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import TvInteractPoint from "../../core/config/grenier-scene/interact-points/objects/TvInteractPoint";
@@ -63,14 +63,14 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.addInteractivePoint(PosterInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(TvInteractPoint.name);
     // this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
-    // this.grenierSceneStore.addInteractivePoint(BoxInteractPoint.name);
+    this.grenierSceneStore.addInteractivePoint(ModeInteractPoint.name);
   }
 
   removeInteractionsPoints() {
     this.grenierSceneStore.removeInteractivePoint(TvInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(PosterInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(SprayInteractPoint.name);
-    this.grenierSceneStore.removeInteractivePoint(BoxInteractPoint.name);
+    this.grenierSceneStore.removeInteractivePoint(ModeInteractPoint.name);
   }
 
   goToInteractionPoint(point) {

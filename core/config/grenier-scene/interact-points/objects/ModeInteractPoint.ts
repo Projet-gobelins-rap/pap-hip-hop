@@ -3,12 +3,12 @@ import grenierSceneStore from "~/store/grenierSceneStore";
 import { InteractionPoint } from "~/core/config/grenier-scene/interact-points/types";
 import GrenierScene from "../../../../scene/GrenierScene";
 
-const BoxInteractPoint: InteractionPoint = {
-  name: "box",
+const ModeInteractPoint: InteractionPoint = {
+  name: "Mode",
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("carton-3")!.getWorldPosition(position);
+    GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldPosition(position);
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;
@@ -28,4 +28,4 @@ const BoxInteractPoint: InteractionPoint = {
   transformY: 0
 };
 
-export default BoxInteractPoint;
+export default ModeInteractPoint;

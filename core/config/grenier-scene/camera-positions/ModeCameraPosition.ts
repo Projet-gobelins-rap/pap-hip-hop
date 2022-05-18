@@ -1,13 +1,13 @@
 import GrenierScene from "../../../scene/GrenierScene";
-import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types";
 import {Vector3} from "three";
 
-const BoxCameraPosition: CameraPosition = {
-  name: 'box',
+const ModeCameraPosition: CameraPosition = {
+  name: 'Mode',
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("carton-2")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldDirection(lookAtPosition)
 
     console.log(lookAtPosition,'lookAt')
     // global.
@@ -24,4 +24,4 @@ const BoxCameraPosition: CameraPosition = {
   }
 }
 
-export default BoxCameraPosition
+export default ModeCameraPosition

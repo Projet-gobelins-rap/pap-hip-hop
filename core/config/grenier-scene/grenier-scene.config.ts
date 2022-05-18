@@ -4,9 +4,9 @@ import {InteractionPoint} from "~/core/config/grenier-scene/interact-points/type
 import PosterInteractPoint from "./interact-points/objects/PosterInteractPoint";
 import PosterCameraPosition from "./camera-positions/PosterCameraPosition";
 import SprayInteractPoint from "./interact-points/objects/SprayInteractPoint";
-import BoxInteractPoint from "./interact-points/objects/BoxInteractPoint";
+import ModeInteractPoint from "./interact-points/objects/ModeInteractPoint";
 import SprayCameraPosition from "./camera-positions/SprayCameraPosition";
-import BoxCameraPosition from "./camera-positions/BoxCameraPosition";
+import ModeCameraPosition from "./camera-positions/ModeCameraPosition";
 import {InitialCameraPosition} from "./camera-positions";
 import TvInteractPoint from "./interact-points/objects/TvInteractPoint";
 import TvCameraPosition from "./camera-positions/TvCameraPosition";
@@ -40,7 +40,7 @@ const GrenierSceneConfig = {
     PosterCameraPosition,
     SprayCameraPosition,
     TvCameraPosition,
-    BoxCameraPosition
+    ModeCameraPosition
   ] as Array<CameraPosition>,
 
   // INTERACT POINTS
@@ -48,7 +48,7 @@ const GrenierSceneConfig = {
     /* Global */
     PosterInteractPoint,
     SprayInteractPoint,
-    BoxInteractPoint,
+    ModeInteractPoint,
     TvInteractPoint,
   ] as Array<InteractionPoint>,
 }
