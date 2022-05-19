@@ -26,6 +26,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   public cameraInitialPosition: Vector3
   private _scene: Scene
   private _controls: OrbitControls
+  private _papy: Npc
   init(): void {
 
     console.log(["1 ----> ", this._data]);
@@ -68,8 +69,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     // Create controls
     const controls = this._createControls(camera, this._data.canvas)
 
-
-
     return new SceneManager({
       activateKeyboard: false,
       controls: controls,
@@ -87,6 +86,10 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         // console.log(ctx,'<-- Render')
         // console.log(ctx.renderer.info.render,'<--- render info')
         // console.log(camera.position)
+        if (this._papy) {
+          this._papy.update(ctx.deltaTime)
+        }
+
         for (const point of this._data.grenierSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
           screenPosition.project(GrenierScene.context.camera)
@@ -146,7 +149,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _createScene() {
     this._scene = new Scene()
     return this._scene
-  }
+  } 
 
   /**
    * Create controls
@@ -161,7 +164,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
    * @private
    */
   private _createRender() {
-    return new WebGLRenderer({
+    return new WebGLRenderer({ 
       canvas: this._data.canvas,
       antialias: true,
       alpha: true,
@@ -191,14 +194,12 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
 
-
-
-    // const papy = new Npc(papyGltf, 'papy', 'tpose')
-
-    // grenierScene.getObjectByName("papy")!.add(papy.model)
-    // papy.model.scale.set(15, 15, 15)
-
-    // papy.model.position.set(-50, -10, -20)
+    this._papy = new Npc(papyGltf, 'papy', 'tpose')
+    console.log(grenierScene);
+    
+    grenierScene.getObjectByName("victor")!.add(this._papy.model)
+    this._papy.model.scale.set(15, 15, 15)
+    this._papy.model.position.set(-50, -10, -20)
 
     const light = new AmbientLight(0xdddddd); // soft white light
     this._scene.add(light);

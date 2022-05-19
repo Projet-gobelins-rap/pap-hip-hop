@@ -2,7 +2,8 @@
   <section class="grenier">
     <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
     <ChatComponent v-if="this.chatElementState" :content="currentChat" />
-    <InteractionPoints @click.native="goToInteractionPoint(point)"
+    <InteractionPoints
+      @click.native="goToInteractionPoint(point)"
       class="interactive-points"
       :data="point"
       v-for="(point, index) in grenierSceneStore.activeInteractionPoints"
@@ -30,12 +31,11 @@ import TvInteractPoint from "../../core/config/grenier-scene/interact-points/obj
 @Component({
   components: {
     IntroMotion,
-    ChatComponent
+    ChatComponent,
   },
   async asyncData({ $prismic, error }) {
     try {
-      const dialogContent = (await $prismic.api.getSingle("grenier"))
-        .data;
+      const dialogContent = (await $prismic.api.getSingle("grenier")).data;
       const conversation = dialogContent?.slices1;
 
       return {
@@ -47,16 +47,15 @@ import TvInteractPoint from "../../core/config/grenier-scene/interact-points/obj
     }
   },
 })
-
 export default class GrenierScene extends Vue {
-  public grenierSceneStore = getModule(grenierSceneStore,this.$store)
-  public stepStore = getModule(stepStore,this.$store)
+  public grenierSceneStore = getModule(grenierSceneStore, this.$store);
+  public stepStore = getModule(stepStore, this.$store);
   public chatStore = getModule(chatStore, this.$store);
   public conversation: any;
-  public currentChat:any
+  public currentChat: any;
 
   mounted() {
-    console.log(this.conversation,'conversation')
+    console.log(this.conversation, "conversation");
   }
 
   addInteractionPoints() {
@@ -74,31 +73,29 @@ export default class GrenierScene extends Vue {
   }
 
   goToInteractionPoint(point) {
-
-    this.conversation.forEach((element)=>{
+    this.conversation.forEach((element) => {
       if (element.primary.Identifiant === point.name) {
-        this.currentChat = element
-        return this.currentChat
+        this.currentChat = element;
+        return this.currentChat;
       }
-    })
-
-    this.removeInteractionsPoints()
-    grenierScene.context.goToPresetPosition(point.name, 2, () => {
-      this.grenierSceneStore.setIsCameraMoving(false);
-      this.grenierSceneStore.setIsChatDisplay(true)
     });
 
+    this.removeInteractionsPoints();
+    grenierScene.context.goToPresetPosition(point.name, 2, () => {
+      this.grenierSceneStore.setIsCameraMoving(false);
+      this.grenierSceneStore.setIsChatDisplay(true);
+    });
   }
 
-  @Watch('motion',{ immediate: true,deep:true })
-  onMotionValueChanged(val:boolean) {
+  @Watch("motion", { immediate: true, deep: true })
+  onMotionValueChanged(val: boolean) {
     if (val) {
       new GrenierSceneInitializer({
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
-        grenierSceneStore: this.grenierSceneStore
-      }).init()
-      grenierScene.context.disableOrbitControl()
-      this.addInteractionPoints()
+        grenierSceneStore: this.grenierSceneStore,
+      }).init();
+      grenierScene.context.disableOrbitControl();
+      this.addInteractionPoints();
     }
   }
 
@@ -111,22 +108,21 @@ export default class GrenierScene extends Vue {
   // }
 
   goBack() {
-
-    this.grenierSceneStore.setIsChatDisplay(false)
-    console.log(this.grenierSceneStore.isChatDisplay)
-    grenierScene.context.goToPresetPosition('initial',2,()=>{
-      console.log('INITIAL POSITION')
-      this.addInteractionPoints()
-    })
+    this.grenierSceneStore.setIsChatDisplay(false);
+    console.log(this.grenierSceneStore.isChatDisplay);
+    grenierScene.context.goToPresetPosition("initial", 2, () => {
+      console.log("INITIAL POSITION");
+      this.addInteractionPoints();
+    });
   }
 
   goToCity() {
-    console.log('GO TO CITY')
+    console.log("GO TO CITY");
+    this.$router.push({ path: "/hood", replace: true });
   }
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
-
     if (val) {
       switch (val) {
         case "reading":
@@ -147,12 +143,11 @@ export default class GrenierScene extends Vue {
   }
 
   get motion() {
-    return this.stepStore.introMotionState
+    return this.stepStore.introMotionState;
   }
 
   get chatElementState() {
-    return this.grenierSceneStore.isChatDisplay
+    return this.grenierSceneStore.isChatDisplay;
   }
-
 }
 </script>
