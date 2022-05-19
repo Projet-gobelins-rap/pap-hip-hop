@@ -3,7 +3,7 @@
     <div>
       Connecte toi à l'expérience sur ton mobile et saisie le code suivant :
     </div>
-    <span id="code">{{ this.code }}</span>
+    <div ref="qrcode"></div>
   </section>
 </template>
 
@@ -11,6 +11,7 @@
 import { Vue, Component, getModule } from "nuxt-property-decorator";
 import globalStore from "~/store/globalStore";
 import $socket from "~/plugins/socket.io";
+import QRCode from 'easyqrcodejs'   
 // import websocketManagerInstance from "~/core/managers/WebsocketManager"
 
 @Component({
@@ -18,23 +19,34 @@ import $socket from "~/plugins/socket.io";
 })
 export default class Connection extends Vue {
   public home: string = "Home 🚧";
-  public code: number = 0;
+  public room: string = "0";
 
   public globalStore = getModule(globalStore, this.$store);
 
   mounted() {
     console.log(this.globalStore, "global store");
+    console.log($socket.room);
 
-    $socket.io.emit("server:join", "");
+    $socket.io.emit("server:join", $socket.room);
     $socket.io.on("server:joined", (id) => {
-      console.log("joined : " + id);
-      this.code = id
+      // console.log("joined : " + id);
+      this.room = id;
+      this.generateQR()
     });
 
-    $socket.io.on("server:paired", (user) => {
-      this.$router.push("/battle");
-      console.log('PAIRE ZEBI')
-    });
+    // $socket.io.on("server:paired", (user) => {
+    //   this.$router.push("/grenier");
+    // });
+  }
+
+  // With async/await
+  generateQR() {
+    var options = {
+      text: "https://192.168.1.12:3001/_mobile/connection/?room="+this.room
+    }
+    
+    // Create new QRCode Object
+    new QRCode(this.$refs.qrcode, options);
   }
 }
 </script>
