@@ -8,7 +8,7 @@
     <div class="graffDraw-container">
       <p class="graffDraw-display display"></p>
       <img class="graffDraw-img" src="" alt="" />
-      <!-- <img class="graffDraw-img--preview" v-if="!graffInstance" :src="activePreviewUrl" alt="" /> -->
+      <img class="graffDraw-img--preview" v-if="!graffInstance" :src="activePreviewUrl" alt="" />
       <canvas class="graffDraw-canvas"></canvas>
       <button class="graffDraw-reset">Passer à l'etape 2</button>
     </div>
@@ -84,10 +84,11 @@ export default class GraffActivity extends Vue {
   handleMobileSelection() {
     $socket.io.on("graffSelected", (idx) => {
       this.activePreview = this.graffSketchsList[idx];
-      console.log(this.activePreview);
+     
       this.activePreviewUrl = this.activePreview[
         this.activePreview.length - 1
       ].layer.url;
+       console.log(this.activePreviewUrl);
     });
   }
 
