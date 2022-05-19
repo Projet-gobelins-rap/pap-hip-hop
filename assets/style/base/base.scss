@@ -4,6 +4,13 @@
 	margin: 0;
 	color: $darkGrey;
 }
+
+body,
+html {
+  font-size: 10px;
+  line-height: 1.2;
+}
+
 body {
 	// overflow: hidden;
 	background: #dcd3d0;

@@ -171,7 +171,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     const papy = new Npc(papyGltf, 'papy', 'tpose')
 
-    grenierScene.getObjectByName("papy").add(papy.model)
+    grenierScene.getObjectByName("papy")!.add(papy.model)
     papy.model.scale.set(15, 15, 15)
     papy.model.position.set(-50, -10, -20)
 

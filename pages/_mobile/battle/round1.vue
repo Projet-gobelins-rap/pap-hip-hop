@@ -25,15 +25,12 @@ import {gsap} from 'gsap'
     try {
       const battleContent = (await $prismic.api.getSingle("battle")).data;
 
-      console.log(battleContent,'content du bbattlle (mobile)')
       const battleOnboarding = battleContent?.slices2[0].items;
       const battlePunchRound1 = battleContent?.slices3[0].items;
       const battleOnboardingRound2 = battleContent?.slices5[0].items;
       const battleOnboardingRound2Action = battleContent?.slices5[0];
       const battlePunchline = battlePunchRound1
 
-
-      // const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[1];
 
       return {
@@ -59,7 +56,6 @@ export default class round1Mobile extends Vue {
   public choiceStore = getModule(choiceStore,this.$store)
   public onboardingCounter:number = 1
   public battleOnboardingRound2:object
-  // public battleOnboardingRound2Action:object
   public roundStep: number = 1
   public battlePunchline:object
 
@@ -68,8 +64,6 @@ export default class round1Mobile extends Vue {
     this.updateChoiceState()
     this.initRound2()
   }
-
-
 
   displayOnboarding() {
     this.onboardingStore.setOnboardingDisplay(true)

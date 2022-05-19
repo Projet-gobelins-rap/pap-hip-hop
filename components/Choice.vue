@@ -24,11 +24,6 @@ export default class Choice extends Vue {
   @Prop({ required: true }) readonly content!: any;
   @Prop({ required: true }) readonly multipleChoice!: boolean;
 
-  public choiceArray: [{
-    id:number
-    scoreValue:number,
-    text:string
-  }] = []
   public isActive:boolean = false
   public savedIds: number[] = []
   public choiceStore = getModule(choiceStore,this.$store)
@@ -82,19 +77,10 @@ export default class Choice extends Vue {
   }
 
   validateSelection() {
-    console.log('VALIDE AVEC VALIDATION')
-
     console.log(this.$parent,'PARENT')
-
     this.$parent.$emit('choice::updateState')
-
     $socket.io.emit('battle::response',this.savedIds)
-
     this.savedIds = []
-  }
-
-  validateR2Punch(){
-
   }
 
 }

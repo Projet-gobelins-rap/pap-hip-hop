@@ -1,6 +1,19 @@
 <template>
   <div class="main">
+    <!-- NAVIGATION   -->
     <navigation/>
+
+    <!-- LOADER   -->
+    <transition
+      v-on:enter="enterLoader"
+      v-on:leave="leaveLoader"
+      appear
+    >
+      <Loader
+        :load-progression="this.loadingProgressions"
+        v-if="!loaderStore.isAlreadyLoaded">
+      </Loader>
+    </transition>
     <nuxt />
   </div>
 </template>
@@ -8,14 +21,18 @@
 <script lang="ts">
 
 import Navigation from '~/components/navigation/Navigation.vue'
+import Loader from '~/components/loader.vue'
 import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import {AssetsManager} from "../core/managers";
 import globalStore from "../store/globalStore";
 import {IMAGE_ASSET} from "../core/enums";
+import loaderStore from "../store/loaderStore";
+import {gsap} from "gsap";
 
 @Component({
   components: {
     Navigation,
+    Loader
   },
 
   async fetch() {
@@ -33,8 +50,9 @@ import {IMAGE_ASSET} from "../core/enums";
 })
 
 export default class Default extends Vue {
- 
+
   public globalStore = getModule(globalStore, this.$store);
+  public loaderStore = getModule(loaderStore, this.$store);
   public loadingProgressions: string = "0";
   public desktopMedias:any
   public desktopMediasURL:[{name:string,url:string,type:number}] = []
@@ -42,6 +60,7 @@ export default class Default extends Vue {
   public mobileMedias:any
   public mobileMediasURL:[{name:string,url:string,type:number}] = []
 
+  /** HOOKS **/
   mounted(){
 
     this.$nuxt.$on("loadDesktopMedia",(desktopMedia)=>{
@@ -51,7 +70,7 @@ export default class Default extends Vue {
         if (el.mediaType === 'GLTF'){
           mediaType = 0
         }else if (el.mediaType === 'IMAGE') {
-          mediaType = 1 
+          mediaType = 1
         }
         else if (el.mediaType === 'VIDEO') {
           mediaType = 2
@@ -103,10 +122,11 @@ export default class Default extends Vue {
 
   }
 
+  /** METHODS **/
+
   // TODO :: refacto pour eviter les bouts de code dupliqués
   public async initApp() {
     if (!this.globalStore.isAppInit) {
-      // new AssetManagerInitializer(null).init();
       /* We need to download all asset before init app */
       if (this.$device.isMobileOrTablet){
         this.mobileMediasURL.forEach(el=>{
@@ -114,7 +134,7 @@ export default class Default extends Vue {
         })
       }else {
         console.log(this.desktopMediasURL);
-        
+
         this.desktopMediasURL.forEach(el=>{
           AssetsManager._registerSource(el.name,el.type,el.url,null)
         })
@@ -125,14 +145,43 @@ export default class Default extends Vue {
         console.log(this.loadingProgressions,' <---- LOADING')
       }).load();
 
+      this.loaderStore.setIsAlreadyLoaded(true)
       this.globalStore.setIsAppInit(true);
     }
   }
 
-  get appState() {
-    return this.globalStore.isAppInit
+  enterLoader(el:HTMLElement,done:Function) {
+    console.log('ENTEEEEEER')
+    gsap.fromTo(el,{
+      opacity:0,
+      display:'none',
+    },
+      {
+        opacity:1,
+        display:'flex',
+        duration:1.5,
+        onComplete:()=>{
+          console.log('complete enter loader !!!!')
+          done()
+        }
+      }
+    )
   }
 
+  leaveLoader(el:HTMLElement,done:Function){
+    console.log(el)
+    gsap.to(el,{
+      opacity:0,
+      display:'none',
+      duration:1.5,
+      onComplete:()=>{
+        console.log('complete loader !!!!')
+        done()
+      }
+    })
+  }
+
+  /** WATCHERS **/
   @Watch('appState',{ immediate: true,deep:true })
   onMotionValueChanged(val:boolean) {
     if (val) {
@@ -141,6 +190,11 @@ export default class Default extends Vue {
         console.log(AssetsManager.getImage(IMAGE_ASSET.STICKER))
       }
     }
+  }
+
+  /** GETTERS **/
+  get appState() {
+    return this.globalStore.isAppInit
   }
 }
 

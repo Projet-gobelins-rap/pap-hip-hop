@@ -15,7 +15,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   private _scene: Scene
   private _controls: OrbitControls
-  private _camera: Camera
+  private _camera: PerspectiveCamera
   public player: Player
   public collider: any
   // private _keysPressed: any
@@ -64,11 +64,12 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
       onStart: (ctx) => {
         this._controls = ctx.controls
+        ctx._isStarted = true
       },
 
       onRender: (ctx) => {
         // Add interactions points tracking
-        // console.log(ctx,'<-- Render') 
+        // console.log(ctx,'<-- Render')
 
         if (this.player) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
@@ -130,7 +131,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   /**
    * Create scene
    */
-  private _createControls(camera, canvas) {
+  private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
     return this._controls
   }
@@ -246,7 +247,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     // this.tempBox.makeEmpty();
     // this.tempMat.copy(this.collider.matrixWorld).invert();
     // this.tempSegment.copy(capsuleInfo.segment);
-    
+
 
 
   }

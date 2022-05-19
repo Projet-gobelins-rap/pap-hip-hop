@@ -1,12 +1,12 @@
 
-const {devPin} =  require('./generateId')
+const {generateId} =  require('./generateId')
 
 const handleSocket = (socket, io) => {
   let roomId = null
   socket.on('server:join', async (id) => {
     console.log(id);
     if (id === null || id === '') {
-      id = await devPin
+      id = await generateId()
     }
     roomId = id 
     socket.join(id.toString())
