@@ -105,9 +105,11 @@ export default class GraffActivity extends Vue {
         case "custom":
           console.log("custom 1");
           break;
-
-        case "custom2":
-          console.log("custom 2");
+        case "startInteraction":
+          $socket.io.emit("goTo", {
+            path: "/_mobile/graff/scope",
+            replace: true,
+          });
           break;
         case "nextStep":
           this.$router.push("/graf/draw");

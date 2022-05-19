@@ -43,7 +43,19 @@
         }
       }
     },
-    "dialog-graff": {},
+    "dialog-graff": {
+      "slices3": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
     "listing-graff": {
       "slices4": {
         "type": "Slices",
@@ -51,6 +63,32 @@
         "config": {
           "choices": {
             "graff_selection": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "onboarding-scope": {
+      "slices5": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "onboarding-graff": {
+      "slices6": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
               "type": "SharedSlice"
             }
           }
