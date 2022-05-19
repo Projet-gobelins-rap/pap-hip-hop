@@ -7,18 +7,27 @@ const ModeCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldDirection(lookAtPosition)
+    // GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldPosition(lookAtPosition)
+
+    lookAtPosition.setFromMatrixPosition(GrenierScene.context.scene.getObjectByName("clothes_group").matrixWorld)
 
     console.log(lookAtPosition,'lookAt')
     // global.
-    // lookAtPosition.x = lookAtPosition.x * 0.95
-    // lookAtPosition.z = lookAtPosition.z * 1.1
+    lookAtPosition.x = lookAtPosition.x * (1.5)
+
+    lookAtPosition.y = lookAtPosition.y * 1.25
+    lookAtPosition.z = lookAtPosition.z * (-1.98)
 
     const cameraPos = lookAtPosition.clone()
 
+     // console.log()
+
     // cameraPos.x = -15
-    // cameraPos.y = 23
-    // cameraPos.z = 13
+    // cameraPos.y = 13
+    // cameraPos.x = lookAtPosition.x * -0.5
+    cameraPos.y = lookAtPosition.y * 1.5
+    cameraPos.z = -lookAtPosition.z * (-1.08)
 
     return { cameraPos, lookAtPosition }
   }

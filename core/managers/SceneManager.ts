@@ -295,6 +295,7 @@ export default class SceneManager {
    */
   public enableAxesHelpers(size: number = 10) {
     const axesHelper = new AxesHelper(size)
+    // axesHelper.setColors(0xff0000,0x00ff00,0x0000ff)
     this._scene.add(axesHelper)
 
     return this
