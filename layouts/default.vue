@@ -28,7 +28,7 @@ import globalStore from "../store/globalStore";
 import {IMAGE_ASSET} from "../core/enums";
 import loaderStore from "../store/loaderStore";
 import {gsap} from "gsap";
-
+import $appState from "~/plugins/appState";
 @Component({
   components: {
     Navigation,
@@ -61,8 +61,15 @@ export default class Default extends Vue {
   public mobileMediasURL:[{name:string,url:string,type:number}] = []
 
   /** HOOKS **/
+
+  created(){
+    $appState.setAppState(this.$device.isMobileOrTablet)
+    $appState.getAppState()
+  }
+
   mounted(){
 
+    console.log(process.env.isMobile,'ismobile')
     this.$nuxt.$on("loadDesktopMedia",(desktopMedia)=>{
       this.desktopMedias = desktopMedia.desktopMedias.slices[0].items
       this.desktopMedias.forEach((el)=>{
