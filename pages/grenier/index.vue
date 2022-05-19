@@ -27,7 +27,10 @@ import ModeInteractPoint from "../../core/config/grenier-scene/interact-points/o
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import TvInteractPoint from "../../core/config/grenier-scene/interact-points/objects/TvInteractPoint";
+import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions/ModeCameraPosition";
+import GUI from 'lil-gui';
 
+import $socket from "~/plugins/socket.io";
 @Component({
   components: {
     IntroMotion,
@@ -53,9 +56,44 @@ export default class GrenierScene extends Vue {
   public chatStore = getModule(chatStore, this.$store);
   public conversation: any;
   public currentChat: any;
+  public gui = new GUI();
+
+
 
   mounted() {
     console.log(this.conversation, "conversation");
+
+
+  }
+
+  addGUI(){
+    let params= {
+      camPosX :ModeCameraPosition.coords().cameraPos.x,
+      camPosY :ModeCameraPosition.coords().cameraPos.y,
+      camPosZ :ModeCameraPosition.coords().cameraPos.z,
+      lookAtPosX :ModeCameraPosition.coords().lookAtPosition.x,
+      lookAtPosY :ModeCameraPosition.coords().lookAtPosition.y,
+      lookAtPosZ :ModeCameraPosition.coords().lookAtPosition.z,
+    }
+
+    const modeFolder = this.gui.addFolder('Mode');
+    modeFolder.add(params,'camPosX',-1000,1000,0.1).onChange((value:number)=>{
+      // ModeCameraPosition.coords().cameraPos.x = value
+      grenierScene.context.scene.getObjectByName("clothes_group")!.userData.camPosX = value
+      console.log(grenierScene.context.scene.getObjectByName("clothes_group")!)
+      $socket.io.emit('Mode::x',value)
+    })
+    modeFolder.add(params,'camPosY',-1000,1000,0.1).onChange((value:number)=>{
+      ModeCameraPosition.coords().cameraPos.y = value
+
+    })
+    modeFolder.add(params,'camPosZ',-1000,1000,0.1).onChange((value:number)=>{
+      ModeCameraPosition.coords().cameraPos.z = value
+
+    })
+
+
+
   }
 
   addInteractionPoints() {
@@ -63,6 +101,7 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.addInteractivePoint(TvInteractPoint.name);
     // this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(ModeInteractPoint.name);
+    // console.log(ModeCameraPosition.coords().,'---< coord mode')
   }
 
   removeInteractionsPoints() {
@@ -95,6 +134,7 @@ export default class GrenierScene extends Vue {
         grenierSceneStore: this.grenierSceneStore,
       }).init();
       grenierScene.context.disableOrbitControl();
+      this.addGUI()
       this.addInteractionPoints();
     }
   }
