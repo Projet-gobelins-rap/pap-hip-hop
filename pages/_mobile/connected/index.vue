@@ -1,8 +1,6 @@
 <template>
   <section class="mobileConnection">
-    <button class="mobileConnection-button" @click="connect">
-      Commencer l'aventure !
-    </button>
+    <CustomButton class="mobileConnection-button" @click.native="connect" :text="buttonText"/>
   </section>
 </template>
 
@@ -19,7 +17,7 @@ import permisions from "~/core/utils/Permisions";
   },
 })
 export default class mobileConnection extends Vue {
-
+  public buttonText: string = "Commencer l\'aventure !"
   public stepStore = getModule(stepStore, this.$store);
 
   mounted() {
