@@ -1,6 +1,8 @@
 <template>
   <section class="mobileConnection">
-    <div>ok</div>
+    <button class="mobileConnection-button" @click="connect">
+      Commencer l'aventure !
+    </button>
   </section>
 </template>
 
@@ -17,26 +19,17 @@ import permisions from "~/core/utils/Permisions";
   },
 })
 export default class mobileConnection extends Vue {
-  public roomID: string | null = null;
 
   public stepStore = getModule(stepStore, this.$store);
-  
 
   mounted() {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    this.roomID = urlParams.get('room')
-    alert(this.roomID )
-    this.connect()
-
-    $socket.io.on("server:paired", (user) => {
-      this.$router.push("/_mobile/connected");
-    })
+    
   }
 
   connect() {
-    // permisions.requestOrientation();
-    $socket.io.emit("server:join", this.roomID);
+    permisions.requestOrientation();
+    $socket.io.emit("goTo", "/grenier");
+    this.$router.push("/_mobile/off");
   }
 }
 </script>

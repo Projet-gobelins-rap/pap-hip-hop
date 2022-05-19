@@ -30,6 +30,7 @@
     "@types/imagesloaded": "^4.1.2",
     "cookies": "^0.8.0",
     "cross-env": "^5.2.1",
+    "easyqrcodejs": "^4.4.10",
     "express": "^4.17.1",
     "gsap": "^3.8.0",
     "imagesloaded": "^4.1.4",
