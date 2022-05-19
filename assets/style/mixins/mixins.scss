@@ -5,6 +5,18 @@
 	src: url("../../static/fonts/SofiaPro-Regular.woff") format("woff");
 }
 
+@font-face {
+	font-family: "DMSans";
+	src: url("../../static/fonts/dm-sans-v11-latin-regular.woff") format("woff"),
+	url("../../static/fonts/dm-sans-v11-latin-regular.woff2") format("woff2"),
+}
+
+@mixin text($size, $line_height: 1.2, $color: $black) {
+	font-family: "DMSans";
+	font-size: $size;
+	line-height: $line_height;
+	color: $color;
+}
 // desktop()
 //   @media (max-width: 1200px)
 //     {block}
