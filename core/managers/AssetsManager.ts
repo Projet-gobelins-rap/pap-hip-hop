@@ -4,7 +4,7 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
 import {TextureLoader} from "three";
 import { Outfitloader } from "./OutfitLoader"
-
+import $appState from "~/plugins/appState";
 /**
  * @description
  * This manager is responsible for download all assets need by the application and provide in any component
@@ -87,7 +87,9 @@ class AssetsManager {
   }
 
   private _onSuccessCallback() {
-    this._loadedCollection = new Outfitloader()
+    if (!$appState.getAppState()){
+      this._loadedCollection = new Outfitloader()
+    }
   }
 
   /**

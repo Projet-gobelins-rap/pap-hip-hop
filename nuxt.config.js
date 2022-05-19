@@ -30,7 +30,10 @@ export default {
     host: '0'
   },
 
-  plugins: ['~/plugins/socket.io.js'],
+  plugins: [
+    '~/plugins/socket.io.js',
+    '~/plugins/appState.js'
+  ],
 
   buildModules: [
     '@nuxt/typescript-build',
