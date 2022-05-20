@@ -10,7 +10,7 @@ import { getTextureColorSpec } from "../config/global/textureColorMapping";
 export class Player extends Character {
 
     // properties
-    colliders: Mesh[]
+    colliders: Mesh[] = []
     orbitControl: OrbitControls
     camera: Camera
 
@@ -40,6 +40,7 @@ export class Player extends Character {
 
         this.camera = camera
         this.orbitControl = control
+        this._initRaycast()
     }
 
     public setParamsByName() {
@@ -53,6 +54,14 @@ export class Player extends Character {
         })
 
         this.loadOutfit()
+    }
+
+    private _initRaycast() {
+        
+        this.raycaster = new Raycaster(
+            this.model.position,
+            this.walkDirection.negate()
+        )
     }
 
     public updateControls(delta: number, keysPressed: any) {
@@ -77,6 +86,11 @@ export class Player extends Character {
         }
     }
 
+    public initCollider(collider) {
+        this.colliders.push(collider)
+        
+    }
+
     private _displacements(delta) {
 
         if (this.currentAction == 'run' || this.currentAction == 'walk') {
@@ -96,7 +110,10 @@ export class Player extends Character {
 
             this.model.rotation.y -= direction.orientation * delta * 5
 
-            this.model.translateZ(direction.move * delta * velocity)
+            if(!this.blocked) {
+
+                this.model.translateZ(direction.move * delta * velocity)
+            }
 
             this.orbitControl.enableRotate = false
             this._updateCameraPosition()
@@ -110,6 +127,26 @@ export class Player extends Character {
         }
 
         this._updateCameraTarget()
+        this._updateRaycast()
+    }
+
+    private _updateRaycast() {
+        // this.walkDirection.y -=5
+        this.raycaster.ray.origin.y = 3
+        this.raycaster.ray.direction = this.walkDirection.negate()
+        
+        const intersect = this.raycaster.intersectObjects(this.colliders);
+        if (intersect.length > 0) {
+            if (intersect[0].distance < 0.8) {
+                this.blocked = true;
+                console.log('g');
+                
+            } else {
+                this.blocked = false;
+            }
+
+        }
+        
     }
 
     private _updateCameraPosition() {

@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -74,6 +74,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         if (this.player) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
           this.handleCollision()
+
+          let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
+          ctx.scene.add(arrow);
         }
       },
       onResume: (ctx) => {
@@ -131,7 +134,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   /**
    * Create scene
    */
-  private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
+  private _createControls(camera: PerspectiveCamera, canvas: HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
     return this._controls
   }
@@ -164,14 +167,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
 
-
     this._scene.add(city);
     city.scale.set(0.04, 0.04, 0.04)
-
-
-    const g = new BoxGeometry(10, 10, 10)
-    const m = new MeshMatcapMaterial({ color: 'red' })
-    const cube = new Mesh(g, m)
 
     console.log(city);
 
@@ -238,6 +235,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.collider.material.opacity = 0.5;
     this.collider.material.transparent = true;
     this._scene.add(this.collider);
+
+    this.player.initCollider(this.collider)
+
   }
 
   handleCollision() {
