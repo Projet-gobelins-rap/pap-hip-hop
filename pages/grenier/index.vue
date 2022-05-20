@@ -1,7 +1,7 @@
 <template>
   <section class="grenier">
     <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
-    <ChatComponent v-if="this.chatElementState" :content="currentChat" />
+    <ChatComponent v-if="this.chatElementState" :content="currentChat"/>
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
       class="interactive-points"
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
+import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierSceneInstance from "~/core/scene/GrenierScene";
 import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneInitializer";
@@ -31,12 +31,13 @@ import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions
 import GUI from 'lil-gui';
 
 import $socket from "~/plugins/socket.io";
+
 @Component({
   components: {
     IntroMotion,
     ChatComponent,
   },
-  async asyncData({ $prismic, error }) {
+  async asyncData({$prismic, error}) {
     try {
       const dialogContent = (await $prismic.api.getSingle("grenier")).data;
       const conversation = dialogContent?.slices1;
@@ -59,39 +60,59 @@ export default class GrenierScene extends Vue {
   public gui = new GUI();
 
 
-
   mounted() {
     console.log(this.conversation, "conversation");
 
 
   }
 
-  addGUI(){
-    let params= {
-      camPosX :ModeCameraPosition.coords().cameraPos.x,
-      camPosY :ModeCameraPosition.coords().cameraPos.y,
-      camPosZ :ModeCameraPosition.coords().cameraPos.z,
-      lookAtPosX :ModeCameraPosition.coords().lookAtPosition.x,
-      lookAtPosY :ModeCameraPosition.coords().lookAtPosition.y,
-      lookAtPosZ :ModeCameraPosition.coords().lookAtPosition.z,
+  addGUI() {
+    console.log(grenierScene.context.camera)
+    let params = {
+      camPosX: grenierScene.context.camera.position.x,
+      camPosY: grenierScene.context.camera.position.y,
+      camPosZ: grenierScene.context.camera.position.z,
+      lookAtPosX: ModeCameraPosition.coords().lookAtPosition.x,
+      lookAtPosY: ModeCameraPosition.coords().lookAtPosition.y,
+      lookAtPosZ: ModeCameraPosition.coords().lookAtPosition.z,
     }
 
-    const modeFolder = this.gui.addFolder('Mode');
-    modeFolder.add(params,'camPosX',-1000,1000,0.1).onChange((value:number)=>{
-      // ModeCameraPosition.coords().cameraPos.x = value
-      grenierScene.context.scene.getObjectByName("clothes_group")!.userData.camPosX = value
-      console.log(grenierScene.context.scene.getObjectByName("clothes_group")!)
-      $socket.io.emit('Mode::x',value)
+
+    // grenierScene.context._presetCameraPositions.forEach((camera)=>{
+    //   console.log(camera,'<---- camm')
+    //
+    //   const itemFolder = this.gui.addFolder(camera.name);
+    //
+    //   if (camera.name === "Mode") {
+    //     console.log(camera.coords(),'<-- test camera coords')
+    //     itemFolder.add(camera.coords().cameraPos,'x',-1000,1000,0.1).onChange((value:number)=>{
+    //       camera.coords().cameraPos.x = value
+    //       console.log(value,'AAAAA')
+    //
+    //     })
+    //   }
+    // })
+
+
+    // modeFolder.add(params,'camPosX',-1000,1000,0.1).onChange((value:number)=>{
+    //   ModeCameraPosition.coords().cameraPos.x = value
+    //   // grenierScene.context.scene.getObjectByName("clothes_group")!.userData.camPosX = value
+    //   // console.log(grenierScene.context.scene.getObjectByName("clothes_group")!)
+    //   // $socket.io.emit('Mode::x',value)
+    // })
+
+    const modeFolder = this.gui.addFolder("Mode");
+    modeFolder.add(params, 'camPosY', -1000, 1000, 0.1).onChange((value: number) => {
+      grenierScene.context.camera.position.y = value
     })
-    modeFolder.add(params,'camPosY',-1000,1000,0.1).onChange((value:number)=>{
-      ModeCameraPosition.coords().cameraPos.y = value
+    modeFolder.add(params, 'camPosZ', -1000, 1000, 0.1).onChange((value: number) => {
+      grenierScene.context.camera.position.z = value
 
     })
-    modeFolder.add(params,'camPosZ',-1000,1000,0.1).onChange((value:number)=>{
-      ModeCameraPosition.coords().cameraPos.z = value
+    modeFolder.add(params, 'camPosX', -1000, 1000, 0.1).onChange((value: number) => {
+      grenierScene.context.camera.position.x = value
 
     })
-
 
 
   }
@@ -126,7 +147,7 @@ export default class GrenierScene extends Vue {
     });
   }
 
-  @Watch("motion", { immediate: true, deep: true })
+  @Watch("motion", {immediate: true, deep: true})
   onMotionValueChanged(val: boolean) {
     if (val) {
       new GrenierSceneInitializer({
@@ -135,6 +156,14 @@ export default class GrenierScene extends Vue {
       }).init();
       grenierScene.context.disableOrbitControl();
       this.addGUI()
+
+      grenierScene.context._presetCameraPositions.forEach((camera) => {
+        console.log(camera, '<---- camm')
+        if (camera.name === "TV") {
+          console.log(camera.coords(), '<-- test camera coords')
+        }
+      })
+      // console.log(grenierScene.context._presetCameraPositions.,'<--- camera position grenier')
       this.addInteractionPoints();
     }
   }
@@ -158,10 +187,11 @@ export default class GrenierScene extends Vue {
 
   goToCity() {
     console.log("GO TO CITY");
-    this.$router.push({ path: "/hood", replace: true });
+    this.$router.push({path: "/hood", replace: true});
   }
+
   // watch dialogStep change in chatStore store
-  @Watch("chatStep", { immediate: true, deep: true })
+  @Watch("chatStep", {immediate: true, deep: true})
   setChatStep(val: string) {
     if (val) {
       switch (val) {

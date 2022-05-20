@@ -36,7 +36,7 @@ export default class SceneManager {
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
-  private _presetCameraPositions: Array<CameraPosition>
+  public _presetCameraPositions: Array<CameraPosition>
   private _renderer: WebGLRenderer
   private _composer: EffectComposer | null
   private _clock: Clock
@@ -219,8 +219,10 @@ export default class SceneManager {
     const originPosition = new Vector3().copy(this._camera.position);
     const originRotation = new Euler().copy(this._camera.rotation);
 
+    console.log(lookAtPosition)
+
     this._camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
-    this._camera.lookAt(lookAtPosition);
+    this._controls!.target = lookAtPosition
     const destinationRotation = new Euler().copy(this._camera.rotation)
 
     this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
