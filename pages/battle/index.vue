@@ -3,16 +3,16 @@
     <h1 ref="title">BATTLE DESKTOP</h1>
     <div class="battle-hud">
       <div class="battle-top">
-        <div class="healthbar player">
+        <div v-if="pp" class="healthbar player">
           <div class="healthbar-container">
-            <span class="healthbar-gauge"></span>
+            <span class="healthbar-gauge" ref="playerGauge"></span>
           </div>
-          <img v-if="pp" class="healthbar-img" :src="pp.src" alt="" />
+          <img  class="healthbar-img" :src="pp.src" alt="" />
         </div>
-        <div class="healthbar opponent">
-          <img v-if="pp" class="healthbar-img" :src="pp.src" alt="" />
+        <div v-if="pp" class="healthbar opponent">
+          <img class="healthbar-img" :src="pp.src" alt="" />
           <div class="healthbar-container">
-            <span class="healthbar-gauge"></span>
+            <span class="healthbar-gauge" ref="opponentGauge"></span>
           </div>
         </div>
       </div>
@@ -113,6 +113,7 @@ export default class battle extends Vue {
   public opponentRound1: object;
   public opponentRound2: object;
   public pp: HTMLImageElement | null = null;
+  public score: {player: number, opponent: number} = {player: 200, opponent:200}
 
   mounted() {
     this.initRound2Datas();
@@ -253,6 +254,19 @@ export default class battle extends Vue {
 
   goToRound2() {
     $socket.io.emit("battle::round2");
+  }
+
+  updateHealthGauges() {
+    this.score = {
+      player: 30,
+      opponent: 80
+    }
+    gsap.to( this.$refs.opponentGauge!, {
+      width: this.score.opponent / 200 * 100 + "%"
+    })
+    gsap.to( this.$refs.playerGauge!, {
+      width: this.score.opponent / 200 * 100 + "%"
+    })
   }
 
   // watch dialogStep change in chatStore store
