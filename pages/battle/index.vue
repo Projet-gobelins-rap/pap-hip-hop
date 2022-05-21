@@ -1,33 +1,55 @@
 <template>
   <section class="battle">
     <h1 ref="title">BATTLE DESKTOP</h1>
+    <div class="battle-hud">
+      <div class="battle-top">
+        <div class="healthbar player">
+          <div class="healthbar-container">
+            <span class="healthbar-gauge"></span>
+          </div>
+          <img v-if="pp" class="healthbar-img" :src="pp.src" alt="" />
+        </div>
+        <div class="healthbar opponent">
+          <img v-if="pp" class="healthbar-img" :src="pp.src" alt="" />
+          <div class="healthbar-container">
+            <span class="healthbar-gauge"></span>
+          </div>
+        </div>
+      </div>
+      <div class="battle-center"></div>
+    </div>
     <div class="opponent" ref="opponent">
       <span></span>
       <span></span>
       <span></span>
       <span></span>
     </div>
-    <ChatComponent v-if="this.chatDisplay && currentChat" :content="currentChat" />
+    <ChatComponent
+      v-if="this.chatDisplay && currentChat"
+      :content="currentChat"
+    />
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
 <script lang="ts">
-import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
+import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import chatStore from "~/store/chatStore";
 import battleStore from "../../store/battleStore";
-import Onboarding from '../../components/contentOverlays/onboarding'
+import Onboarding from "../../components/contentOverlays/onboarding";
 import onboardingStore from "../../store/onboardingStore";
 import $socket from "~/plugins/socket.io";
-import {gsap} from 'gsap'
+
+import { AssetsManager } from "~/core/managers";
+import { gsap } from "gsap";
 @Component({
   components: {
     CustomButton,
     ChatComponent,
-    Onboarding
+    Onboarding,
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -47,7 +69,7 @@ import {gsap} from 'gsap'
 
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
-      const currentPunchline = battlePunchRound1
+      const currentPunchline = battlePunchRound1;
 
       return {
         battleChat,
@@ -60,7 +82,7 @@ import {gsap} from 'gsap'
         round2Step3,
         round2Step4,
         opponentRound1,
-        opponentRound2
+        opponentRound2,
       };
     } catch (e) {
       // Returns error page
@@ -69,161 +91,168 @@ import {gsap} from 'gsap'
   },
 })
 export default class battle extends Vue {
-  public stepStore = getModule(stepStore,this.$store)
-  public battleStore = getModule(battleStore,this.$store)
-  public chatStore = getModule(chatStore, this.$store)
-  public onboardingStore = getModule(onboardingStore, this.$store)
-  public battleChat:any
-  public battleOnboarding:any
+  public stepStore = getModule(stepStore, this.$store);
+  public battleStore = getModule(battleStore, this.$store);
+  public chatStore = getModule(chatStore, this.$store);
+  public onboardingStore = getModule(onboardingStore, this.$store);
+  public battleChat: any;
+  public battleOnboarding: any;
   public currentChat: object;
   public currentOnboarding: object;
   public currentPunchline: object;
-  public chatCounter:number = 0
-  public punchlineArray: string[]= []
-  public title:HTMLElement
-  public opponent:HTMLElement
-  public isRound2: boolean = false
-  public round2Step1:object
-  public round2Step2:object
-  public round2Step3:object
-  public round2Step4:object
-  public round2StepCounter:number = -1
-  public opponentRound1:object
-  public opponentRound2:object
+  public chatCounter: number = 0;
+  public punchlineArray: string[] = [];
+  public title: HTMLElement;
+  public opponent: HTMLElement;
+  public isRound2: boolean = false;
+  public round2Step1: object;
+  public round2Step2: object;
+  public round2Step3: object;
+  public round2Step4: object;
+  public round2StepCounter: number = -1;
+  public opponentRound1: object;
+  public opponentRound2: object;
+  public pp: HTMLImageElement | null = null;
 
   mounted() {
-    this.initRound2Datas()
-    this.title = this.$refs.title as HTMLElement
-    this.opponent = this.$refs.opponent as HTMLElement
+    this.initRound2Datas();
+    this.title = this.$refs.title as HTMLElement;
+    this.opponent = this.$refs.opponent as HTMLElement;
 
-
-    console.log(this.opponentRound1,'<--- OPPONENT ROUND 1 PUNCHHH')
+    console.log(this.opponentRound1, "<--- OPPONENT ROUND 1 PUNCHHH");
 
     // this.displayOpponentPunchline()
-    console.log('BATTLE')
-    console.log(this.battleChat,'<--- dialog battle')
-    console.log(this.currentOnboarding,'<--- onboarding battle')
+    console.log("BATTLE");
+    console.log(this.battleChat, "<--- dialog battle");
+    console.log(this.currentOnboarding, "<--- onboarding battle");
 
-    console.log(this.currentChat,':::: current chat')
+    console.log(this.currentChat, ":::: current chat");
 
-    $socket.io.on('battle::response',(ids)=>{
-      console.log(ids,'OUUUUUUUI')
+    $socket.io.on("battle::response", (ids) => {
+      console.log(ids, "OUUUUUUUI");
+      this.pp = AssetsManager.getImage("PP").data;
+      console.log(this.pp);
 
-
-      this.hideOnboarding()
-      if (ids=== null){
-        this.punchlineArray.push('....')
+      this.hideOnboarding();
+      if (ids === null) {
+        this.punchlineArray.push("....");
       } else {
-        ids.forEach((id)=>{
-          if (this.isRound2){
-            console.log('💩💩💩💩💩')
-            this.punchlineArray = []
-            this.punchlineArray.push(this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text)
-            console.log(this.battleStore.round2Datas)
+        ids.forEach((id) => {
+          if (this.isRound2) {
+            console.log("💩💩💩💩💩");
+            this.punchlineArray = [];
+            this.punchlineArray.push(
+              this.battleStore.round2Datas[this.round2StepCounter][id]
+                .content[0].text
+            );
+            console.log(this.battleStore.round2Datas);
           } else {
-            this.punchlineArray.push(this.currentPunchline[id].content[0].text)
+            this.punchlineArray.push(this.currentPunchline[id].content[0].text);
           }
-        })
+        });
       }
 
+      this.displayOpponentPunchline();
 
-      this.displayOpponentPunchline()
-
-      this.isRound2 = true
-      if (this.isRound2){
-        this.round2StepCounter++
+      this.isRound2 = true;
+      if (this.isRound2) {
+        this.round2StepCounter++;
       }
-    })
-
+    });
   }
 
-  displayOpponentPunchline(){
-    console.log(this.opponent)
-    gsap.set('.opponent span',{display:'none',opacity:0})
+  displayOpponentPunchline() {
+    console.log(this.opponent);
+    gsap.set(".opponent span", { display: "none", opacity: 0 });
 
     if (!this.isRound2) {
-      this.opponentRound1.forEach((punch,index)=>{
-        console.log(punch)
-        this.opponent.children[index].innerText = punch.content[0].text
-      })
+      this.opponentRound1.forEach((punch, index) => {
+        console.log(punch);
+        this.opponent.children[index].innerText = punch.content[0].text;
+      });
 
-      gsap.to('.opponent span',{
-        display:'block',
-        opacity:1,
-        duration:2,
-        stagger:2,
-        onComplete:()=>{
-          gsap.set('.opponent span',{display:'none',opacity:0})
-          this.displayUserPunchline()
-        }
-      })
+      gsap.to(".opponent span", {
+        display: "block",
+        opacity: 1,
+        duration: 2,
+        stagger: 2,
+        onComplete: () => {
+          gsap.set(".opponent span", { display: "none", opacity: 0 });
+          this.displayUserPunchline();
+        },
+      });
     } else {
-      this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text
-      gsap.to(this.opponent.children[this.round2StepCounter],{
-        display:'block',
-        opacity:1,
-        duration:2,
-        onComplete:()=>{
-          gsap.set(this.opponent.children[this.round2StepCounter],{display:'none',opacity:0})
-          console.log('EKIP OPONENT ZEBI')
-          this.displayUserPunchline()
-        }
-      })
+      this.opponent.children[
+        this.round2StepCounter
+      ].innerText = this.opponentRound2[this.round2StepCounter].content[0].text;
+      gsap.to(this.opponent.children[this.round2StepCounter], {
+        display: "block",
+        opacity: 1,
+        duration: 2,
+        onComplete: () => {
+          gsap.set(this.opponent.children[this.round2StepCounter], {
+            display: "none",
+            opacity: 0,
+          });
+          console.log("EKIP OPONENT ZEBI");
+          this.displayUserPunchline();
+        },
+      });
     }
   }
 
   // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
-    this.punchlineArray.forEach((punch,i)=>{
-      setTimeout(()=>{
-        this.title.innerText = punch
+    this.punchlineArray.forEach((punch, i) => {
+      setTimeout(() => {
+        this.title.innerText = punch;
 
         // ON DETECT L'APPARITION DU DERNIER ELEM DANS LE FOREACH: DANS LE FUTUR ON BOUGE ça
         // ÇA SERA REMPLACER PAR UNE TWEEN AVEC UN ON COMPLETE
-        if (Object.is(this.punchlineArray.length -1,i)){
-          setTimeout(()=>{
-            this.title.innerText = ''
-            if (this.round2StepCounter <= 0){
-              console.log('CA PAASSE ici zebi')
-              console.log(this.round2StepCounter,'<--- round2 counter')
-              this.setNextChat()
-              this.displayChat()
-            }else {
-              console.log("AHHHHH")
-              this.displayOnboarding()
-              $socket.io.emit('battle::round2Sequence')
+        if (Object.is(this.punchlineArray.length - 1, i)) {
+          setTimeout(() => {
+            this.title.innerText = "";
+            if (this.round2StepCounter <= 0) {
+              console.log("CA PAASSE ici zebi");
+              console.log(this.round2StepCounter, "<--- round2 counter");
+              this.setNextChat();
+              this.displayChat();
+            } else {
+              console.log("AHHHHH");
+              this.displayOnboarding();
+              $socket.io.emit("battle::round2Sequence");
             }
-            console.log("LAST CALLBACK")
+            console.log("LAST CALLBACK");
 
-            this.punchlineArray.shift()
-          },2000)
+            this.punchlineArray.shift();
+          }, 2000);
         }
-      },2000 * i)
-    })
+      }, 2000 * i);
+    });
   }
 
   displayChat() {
-    this.battleStore.setIsChatDisplay(true)
+    this.battleStore.setIsChatDisplay(true);
   }
   closeChat() {
-    this.battleStore.setIsChatDisplay(false)
+    this.battleStore.setIsChatDisplay(false);
   }
 
   setNextChat() {
-    this.chatCounter++
-    this.currentChat = this.battleChat[this.chatCounter]
+    this.chatCounter++;
+    this.currentChat = this.battleChat[this.chatCounter];
   }
 
   hideOnboarding() {
-    this.onboardingStore.setOnboardingDisplay(false)
+    this.onboardingStore.setOnboardingDisplay(false);
   }
 
   displayOnboarding() {
-    this.onboardingStore.setOnboardingDisplay(true)
+    this.onboardingStore.setOnboardingDisplay(true);
   }
 
-  goToRound2(){
-    $socket.io.emit('battle::round2')
+  goToRound2() {
+    $socket.io.emit("battle::round2");
   }
 
   // watch dialogStep change in chatStore store
@@ -241,16 +270,16 @@ export default class battle extends Vue {
           break;
 
         case "selectPunch":
-          this.closeChat()
-          this.displayOnboarding()
+          this.closeChat();
+          this.displayOnboarding();
           this.chatStore.setChatStep("reading");
-          break
+          break;
         case "nextRound":
-          this.closeChat()
-          this.displayOnboarding()
-          this.goToRound2()
+          this.closeChat();
+          this.displayOnboarding();
+          this.goToRound2();
           this.chatStore.setChatStep("reading");
-          break
+          break;
       }
     }
   }
@@ -264,7 +293,12 @@ export default class battle extends Vue {
   }
 
   initRound2Datas() {
-    this.battleStore.setRound2Datas([this.round2Step1,this.round2Step2,this.round2Step3,this.round2Step4])
+    this.battleStore.setRound2Datas([
+      this.round2Step1,
+      this.round2Step2,
+      this.round2Step3,
+      this.round2Step4,
+    ]);
   }
   // get chatStep from store
   get chatStep() {
@@ -272,16 +306,14 @@ export default class battle extends Vue {
   }
 
   get chatDisplay() {
-    return this.battleStore.isChatDisplay
+    return this.battleStore.isChatDisplay;
   }
 
   get onboardingStep() {
     return this.onboardingStore.onboardingStep;
   }
-
 }
 </script>
 
 <style lang="sass" scoped>
-
 </style>
