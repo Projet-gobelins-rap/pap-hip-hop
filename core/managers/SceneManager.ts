@@ -25,8 +25,8 @@ import {
 // import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
 import { gsap } from 'gsap'
 import Helpers from "../utils/Helpers";
-import {Stats} from 'stats.ts'
-import {CameraPosition} from "../config/hood-scene/camera-positions/types";
+import { Stats } from 'stats.ts'
+import { CameraPosition } from "../config/hood-scene/camera-positions/types";
 
 
 
@@ -78,7 +78,7 @@ export default class SceneManager {
   private _isRayCasting: boolean
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
-  public  _isStarted: boolean | undefined
+  public _isStarted: boolean | undefined
 
   constructor(options: SceneManagerOptions) {
 
@@ -214,7 +214,7 @@ export default class SceneManager {
       return
     }
 
-    const {newCameraPosition: newCameraPosition , lookAtPosition: lookAtPosition } = presetCameraPosition.coords()
+    const { newCameraPosition: newCameraPosition, lookAtPosition: lookAtPosition } = presetCameraPosition.coords()
 
 
     gsap.to(this._controls!.target, {
@@ -380,6 +380,18 @@ export default class SceneManager {
     const mixer = this.getAnimationMixer(mixerName)
     return mixer.instance.clipAction(animationClip)
   }
+
+   /**
+   * Remove object from scene
+   */
+  public removeObject(name: string) {
+    let obj = this._scene.getObjectByName(name)
+    console.log(obj);
+    this._scene.remove(obj)
+    // obj.geometry.dispose();
+    // obj.material.dispose();
+   }
+
 
   // - PRIVATE
   /**

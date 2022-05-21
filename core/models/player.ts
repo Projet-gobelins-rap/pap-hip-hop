@@ -10,7 +10,7 @@ import { getTextureColorSpec } from "../config/global/textureColorMapping";
 export class Player extends Character {
 
     // properties
-    colliders: {env: Mesh[], collectibles: Mesh[]}
+    // colliders: {env: Mesh[], collectibles: Mesh[]}
     orbitControl: OrbitControls
     camera: Camera
 
@@ -86,11 +86,6 @@ export class Player extends Character {
         }
     }
 
-    public initCollider(collider) {
-        this.colliders = collider
-        
-    }
-
     private _displacements(delta) {
 
         if (this.currentAction == 'run' || this.currentAction == 'walk') {
@@ -134,31 +129,8 @@ export class Player extends Character {
         // this.walkDirection.y -=5
         this.raycaster.ray.origin.y = 3
         this.raycaster.ray.direction = this.walkDirection.negate()
-        
-        const intersectCollision = this.raycaster.intersectObjects(this.colliders.env);
-        if (intersectCollision.length > 0) {
-            if (intersectCollision[0].distance < 0.8) {
-                this.blocked = true;
-                console.log('g');
-                
-            } else {
-                this.blocked = false;
-            }
-
-        }
-        const intersect = this.raycaster.intersectObjects(this.colliders.collectibles);
-        if (intersect.length > 0) {
-            if (intersect[0].distance < 0.8) {
-                this.blocked = true;
-                console.log('colect');
-                
-            } else {
-                this.blocked = false;
-            }
-
-        }
-        
     }
+
 
     private _updateCameraPosition() {
         this.camera.position.x = Helpers.lerp(this.camera.position.x, this.model.position.x - Math.sin(this.model.rotation.y) * 25, 0.06)

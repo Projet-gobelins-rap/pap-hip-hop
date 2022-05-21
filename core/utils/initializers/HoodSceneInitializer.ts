@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -19,6 +19,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public player: Player
   public collider: any
   private _collectibles: Group = new Group()
+  private _collectibleCollection: {env: Mesh[], collectibles: Mesh[] | Object3D[]}
+
   // private _keysPressed: any
 
   init(): void {
@@ -31,6 +33,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     HoodScene.context.start()
   }
+
 
   /**
    * Create the shell to interact with global scene
@@ -78,6 +81,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
           let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           ctx.scene.add(arrow);
+
+
+
         }
       },
       onResume: (ctx) => {
@@ -172,7 +178,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._scene.add(city);
     this._collectibles.add(vinyle);
     this._scene.add(this._collectibles);
-    
+
     city.scale.set(0.04, 0.04, 0.04)
     vinyle.position.z = -10
     vinyle.position.y = 3
@@ -196,10 +202,21 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
-    this.bvhCollider(city, vinyle)
+    this.bvhCollider(city)
+    document.addEventListener('click', () => {
+      console.clear()
+      console.log(vinyle);
+      console.log(this.player.model);
+      
+      // vinyle.material.dispose()
+      // vinyle.geometry.dispose()
+      this._collectibles.remove(this._collectibles.getObjectByName('VINYLE'))
+      this._scene.remove(this.player.model)
+    })
+
   }
 
-  bvhCollider(env, vinyle) {
+  bvhCollider(env) {
     const params = {
       displayCollider: true,
       displayBVH: true,
@@ -243,21 +260,35 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.collider.material.transparent = true;
     this._scene.add(this.collider);
 
-    this.player.initCollider({
+    this._collectibleCollection = {
       env: [this.collider],
       collectibles: this._collectibles.children
-    })
+    }
+  }
+
+  lootCollectible(collectible: string) {
+    let obj = this._collectibles.getObjectByName(collectible)
+    this._collectibles.remove(obj)
+    HoodScene.onToastNotify(collectible)
   }
 
   handleCollision() {
-
-    // const capsuleInfo = this.player.model.capsuleInfo;
-
-    // this.tempBox.makeEmpty();
-    // this.tempMat.copy(this.collider.matrixWorld).invert();
-    // this.tempSegment.copy(capsuleInfo.segment);
-
-
-
+    if(this._collectibleCollection) {
+      const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
+      if (intersectCollision.length > 0) {
+        if (intersectCollision[0].distance < 0.8) {
+          this.player.blocked = true;
+          console.log('g');
+        } else {
+          this.player.blocked = false;
+        }
+      }
+      const intersect = this.player.raycaster.intersectObjects(this._collectibleCollection.collectibles);
+      if (intersect.length > 0) {
+        if (intersect[0].distance < 0.8) {
+          this.lootCollectible(intersect[0].object.name)
+        }
+      }
+    }
   }
 }

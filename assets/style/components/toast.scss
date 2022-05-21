@@ -1,0 +1,16 @@
+.toast {
+    z-index: 100;
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20px 24px;
+    background-color: $white;
+    border: solid 2px $yellow;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &-text {
+        @include text(20px);
+    }
+}
