@@ -2,7 +2,26 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
+import {
+  AmbientLight,
+  ArrowHelper,
+  Box3,
+  BoxBufferGeometry,
+  BoxGeometry,
+  Camera,
+  Group,
+  Line3,
+  Matrix4,
+  Mesh,
+  MeshBasicMaterial,
+  MeshMatcapMaterial,
+  Object3D,
+  PerspectiveCamera,
+  Raycaster,
+  Scene,
+  Vector3,
+  WebGLRenderer
+} from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -21,6 +40,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public collider: any
   private _collectibles: Group = new Group()
   private _mouss: Npc
+  private _city: Group
   // private _keysPressed: any
 
   init(): void {
@@ -168,21 +188,21 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
-    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
+    this._city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
 
-    this._scene.add(city);
+    this._scene.add(this._city);
     this._collectibles.add(vinyle);
     this._scene.add(this._collectibles);
 
-    city.scale.set(0.04, 0.04, 0.04)
+    this._city.scale.set(0.04, 0.04, 0.04)
     vinyle.position.z = -10
     vinyle.position.y = 3
 
     console.log(vinyle);
 
-    const treeSlots = city.getObjectByName('cloner_tree').children
-    const plotSlots = city.getObjectByName('cloner_bite').children
+    const treeSlots = this._city.getObjectByName('cloner_tree').children
+    const plotSlots = this._city.getObjectByName('cloner_bite').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
@@ -201,12 +221,28 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
-    console.log(city,'<--- HOOD CITY')
-    this.bvhCollider(city, vinyle)
+    console.log(this._city,'<--- HOOD CITY')
+    this.replaceCharacter()
+    this.bvhCollider(this._city, vinyle)
   }
 
   // REPLOAD OBJECT WITH SLOT
+  // TODO :: Rendre la methode generiquesss
   replaceCharacter() {
+    let breakGroup = this._city.getObjectByName('BREAK')!.children
+    let childrenEmpty = false
+    breakGroup.forEach((element)=>{
+      if (element.children.length>1){
+        element.children = []
+        childrenEmpty = true
+      }
+
+      if (childrenEmpty){
+        element.children.push(this._mouss.model)
+      }
+
+      console.log(element)
+    })
 
   }
 
