@@ -2,34 +2,27 @@ import GrenierScene from "../../../scene/GrenierScene";
 import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types";
 import {Vector3} from "three";
 
-const ModeCameraPosition: CameraPosition = {
+
+import $socket from "~/plugins/socket.io";
+import grenierScene from "../../../scene/GrenierScene";
+
+let ModeCameraPosition: CameraPosition = {
   name: 'Mode',
 
   coords: () => {
-    const lookAtPosition = new Vector3()
-    // GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldPosition(lookAtPosition)
+    const lookAtPosition =  new Vector3()
     GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldPosition(lookAtPosition)
+    // console.log(": ---->  ", lookAtPosition)
 
-    lookAtPosition.setFromMatrixPosition(GrenierScene.context.scene.getObjectByName("clothes_group").matrixWorld)
+    const newCameraPosition = new Vector3(
+      lookAtPosition.x + 10,
+      lookAtPosition.y,
+      lookAtPosition.z -10,
+    )
 
-    console.log(lookAtPosition,'lookAt')
-    // global.
-    lookAtPosition.x = lookAtPosition.x * (1.5)
+    // console.log(newCameraPosition,'<--- Mode ::: Camera position')
 
-    lookAtPosition.y = lookAtPosition.y * 1.25
-    lookAtPosition.z = lookAtPosition.z * (-1.98)
-
-    const cameraPos = lookAtPosition.clone()
-
-     // console.log()
-
-    // cameraPos.x = -15
-    // cameraPos.y = 13
-    // cameraPos.x = lookAtPosition.x * -0.5
-    cameraPos.y = lookAtPosition.y * 1.5
-    cameraPos.z = -lookAtPosition.z * (-1.08)
-
-    return { cameraPos, lookAtPosition }
+    return { newCameraPosition, lookAtPosition }
   }
 }
 
