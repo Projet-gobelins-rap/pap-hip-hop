@@ -20,7 +20,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public collider: any
   private _collectibles: Group = new Group()
   private _collectibleCollection: {env: Mesh[], collectibles: Mesh[] | Object3D[]}
-  private _onToastNotify: Function
+
   // private _keysPressed: any
 
   init(): void {
@@ -33,6 +33,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     HoodScene.context.start()
   }
+
 
   /**
    * Create the shell to interact with global scene
@@ -268,6 +269,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   lootCollectible(collectible: string) {
     let obj = this._collectibles.getObjectByName(collectible)
     this._collectibles.remove(obj)
+    HoodScene.onToastNotify(collectible)
   }
 
   handleCollision() {

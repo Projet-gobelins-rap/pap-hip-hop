@@ -16,7 +16,6 @@
 <script lang="ts">
 import {Vue, Component, getModule, Watch} from "nuxt-property-decorator";
 import grenierSceneStore from "~/store/grenierSceneStore";
-import GrenierSceneInstance from "~/core/scene/GrenierScene";
 import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneInitializer";
 import IntroMotion from "~/components/medias/IntroMotion.vue";
 import stepStore from "~/store/stepStore";
