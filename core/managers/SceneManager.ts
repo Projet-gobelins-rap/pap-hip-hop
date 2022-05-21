@@ -214,12 +214,12 @@ export default class SceneManager {
       return
     }
 
-    const { cameraPos: newCameraPosition, lookAtPosition } = presetCameraPosition.coords()
+    const {newCameraPosition: newCameraPosition , lookAtPosition: lookAtPosition } = presetCameraPosition.coords()
 
     const originPosition = new Vector3().copy(this._camera.position);
     const originRotation = new Euler().copy(this._camera.rotation);
 
-    console.log(lookAtPosition)
+    console.log("Manager : ", newCameraPosition,  lookAtPosition )
 
     this._camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
     this._controls!.target = lookAtPosition
@@ -228,6 +228,12 @@ export default class SceneManager {
     this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
     this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
 
+    gsap.to(this._controls!.target, {
+      x: lookAtPosition.x,
+      y: lookAtPosition.y,
+      z: lookAtPosition.z,
+      ease: "sine.inOut",
+    })
     gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
@@ -243,13 +249,13 @@ export default class SceneManager {
         // this.disableParallax()
       }
     });
-    gsap.to(this._camera.rotation, {
-      duration,
-      x: destinationRotation.x,
-      y: destinationRotation.y,
-      z: destinationRotation.z,
-      ease: "sine.inOut",
-    })
+    // gsap.to(this._camera.rotation, {
+    //   duration,
+    //   x: destinationRotation.x,
+    //   y: destinationRotation.y,
+    //   z: destinationRotation.z,
+    //   ease: "sine.inOut",
+    // })
   }
 
   /**

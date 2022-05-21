@@ -135,8 +135,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     // console.log(GrenierSceneConfig.cameraPositions[0].coords().cameraPos);
 
-    camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().cameraPos)
-    camera.lookAt(GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition)
+    camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().newCameraPosition)
+
 
     this.cameraInitialPosition = camera.position
 
@@ -149,13 +149,14 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _createScene() {
     this._scene = new Scene()
     return this._scene
-  } 
+  }
 
   /**
    * Create controls
    */
   private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
+    this._controls.target = GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition
     return this._controls
   }
 
@@ -164,7 +165,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
    * @private
    */
   private _createRender() {
-    return new WebGLRenderer({ 
+    return new WebGLRenderer({
       canvas: this._data.canvas,
       antialias: true,
       alpha: true,
@@ -196,7 +197,7 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     this._papy = new Npc(papyGltf, 'papy', 'tpose')
     console.log(grenierScene);
-    
+
     grenierScene.getObjectByName("victor")!.add(this._papy.model)
     this._papy.model.scale.set(15, 15, 15)
     this._papy.model.position.set(-50, -10, -20)

@@ -14,15 +14,15 @@ let ModeCameraPosition: CameraPosition = {
     GrenierScene.context.scene.getObjectByName("clothes_group")!.getWorldPosition(lookAtPosition)
     console.log(": ---->  ", lookAtPosition)
 
-    const cameraPos = new Vector3(
-      lookAtPosition.x,
+    const newCameraPosition = new Vector3(
+      lookAtPosition.x - 50,
       lookAtPosition.y,
-      lookAtPosition.z  ,
+      lookAtPosition.z + 50,
     )
 
-    console.log(cameraPos,'<--- Mode ::: Camera position')
+    console.log(newCameraPosition,'<--- Mode ::: Camera position')
 
-    return { cameraPos, lookAtPosition }
+    return { newCameraPosition, lookAtPosition }
   }
 }
 
