@@ -137,7 +137,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
 
     camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().newCameraPosition)
 
-
     this.cameraInitialPosition = camera.position
 
     return camera

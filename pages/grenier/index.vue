@@ -67,7 +67,7 @@ export default class GrenierScene extends Vue {
   }
 
   addGUI() {
-    console.log(grenierScene.context.camera)
+    // console.log(grenierScene.context.camera)
     let params = {
       camPosX: grenierScene.context.camera.position.x,
       camPosY: grenierScene.context.camera.position.y,
@@ -101,18 +101,18 @@ export default class GrenierScene extends Vue {
     //   // $socket.io.emit('Mode::x',value)
     // })
 
-    const modeFolder = this.gui.addFolder("Mode");
-    modeFolder.add(params, 'camPosY', -1000, 1000, 0.1).onChange((value: number) => {
-      grenierScene.context.camera.position.y = value
-    })
-    modeFolder.add(params, 'camPosZ', -1000, 1000, 0.1).onChange((value: number) => {
-      grenierScene.context.camera.position.z = value
-
-    })
-    modeFolder.add(params, 'camPosX', -1000, 1000, 0.1).onChange((value: number) => {
-      grenierScene.context.camera.position.x = value
-
-    })
+    // const modeFolder = this.gui.addFolder("Mode");
+    // modeFolder.add(params, 'camPosY', -1000, 1000, 0.1).onChange((value: number) => {
+    //   grenierScene.context.camera.position.y = value
+    // })
+    // modeFolder.add(params, 'camPosZ', -1000, 1000, 0.1).onChange((value: number) => {
+    //   grenierScene.context.camera.position.z = value
+    //
+    // })
+    // modeFolder.add(params, 'camPosX', -1000, 1000, 0.1).onChange((value: number) => {
+    //   grenierScene.context.camera.position.x = value
+    //
+    // })
 
 
   }
@@ -157,12 +157,12 @@ export default class GrenierScene extends Vue {
       grenierScene.context.disableOrbitControl();
       this.addGUI()
 
-      grenierScene.context._presetCameraPositions.forEach((camera) => {
-        console.log(camera, '<---- camm')
-        if (camera.name === "TV") {
-          console.log(camera.coords(), '<-- test camera coords')
-        }
-      })
+      // grenierScene.context._presetCameraPositions.forEach((camera) => {
+      //   console.log(camera, '<---- camm')
+      //   if (camera.name === "TV") {
+      //     console.log(camera.coords(), '<-- test camera coords')
+      //   }
+      // })
       // console.log(grenierScene.context._presetCameraPositions.,'<--- camera position grenier')
       this.addInteractionPoints();
     }
