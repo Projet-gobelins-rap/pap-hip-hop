@@ -9,7 +9,17 @@
             "body": {
                 "color": "green"
             }
+        },
+      {
+        "name": "mouss",
+        "head": {
+          "model": "bob",
+          "color": "green"
+        },
+        "body": {
+          "color": "purple"
         }
+      }
     ],
     "player": {
         "name": "player",

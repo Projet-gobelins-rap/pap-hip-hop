@@ -10,6 +10,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Player } from "../../models/player";
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh"
+import {Npc} from "../../models/npc";
 
 export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
 
@@ -19,6 +20,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public player: Player
   public collider: any
   private _collectibles: Group = new Group()
+  private _mouss: Npc
   // private _keysPressed: any
 
   init(): void {
@@ -172,7 +174,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._scene.add(city);
     this._collectibles.add(vinyle);
     this._scene.add(this._collectibles);
-    
+
     city.scale.set(0.04, 0.04, 0.04)
     vinyle.position.z = -10
     vinyle.position.y = 3
@@ -185,9 +187,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
 
+    this._mouss = new Npc(playerGltf, 'mouss', 'tpose')
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
+    this._scene.add(this._mouss.model);
 
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -196,7 +200,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
+
+    console.log(city,'<--- HOOD CITY')
     this.bvhCollider(city, vinyle)
+  }
+
+  // REPLOAD OBJECT WITH SLOT
+  replaceCharacter() {
+
   }
 
   bvhCollider(env, vinyle) {
