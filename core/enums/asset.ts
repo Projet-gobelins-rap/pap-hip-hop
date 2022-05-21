@@ -24,7 +24,7 @@ export enum GLTF_ASSET {
   BITE = 'BITE',
   CITY = 'CITY',
   VINYLE = 'VINYLE',
-}
+} 
 
 export enum VIDEO_ASSET {
   // TV_SCREEN = 'tvScreen'
@@ -36,6 +36,7 @@ export enum VIDEO_ASSET {
 export enum IMAGE_ASSET {
   STICKER = 'STICKER',
   BOOMBOX = 'BOOMBOX',
+  PP = 'PP',
 }
 
 /**
