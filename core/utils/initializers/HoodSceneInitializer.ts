@@ -18,6 +18,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _camera: PerspectiveCamera
   public player: Player
   public collider: any
+  private _collectibles: Group = new Group()
   // private _keysPressed: any
 
   init(): void {
@@ -166,11 +167,17 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
+    const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
 
     this._scene.add(city);
+    this._collectibles.add(vinyle);
+    this._scene.add(this._collectibles);
+    
     city.scale.set(0.04, 0.04, 0.04)
+    vinyle.position.z = -10
+    vinyle.position.y = 3
 
-    console.log(city);
+    console.log(vinyle);
 
     const treeSlots = city.getObjectByName('cloner_tree').children
     const plotSlots = city.getObjectByName('cloner_bite').children
@@ -189,10 +196,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
-    this.bvhCollider(city)
+    this.bvhCollider(city, vinyle)
   }
 
-  bvhCollider(env) {
+  bvhCollider(env, vinyle) {
     const params = {
       displayCollider: true,
       displayBVH: true,
@@ -236,8 +243,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.collider.material.transparent = true;
     this._scene.add(this.collider);
 
-    this.player.initCollider(this.collider)
-
+    this.player.initCollider({
+      env: [this.collider],
+      collectibles: this._collectibles.children
+    })
   }
 
   handleCollision() {

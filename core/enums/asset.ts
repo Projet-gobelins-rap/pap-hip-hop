@@ -23,6 +23,7 @@ export enum GLTF_ASSET {
   TREE = 'TREE',
   BITE = 'BITE',
   CITY = 'CITY',
+  VINYLE = 'VINYLE',
 }
 
 export enum VIDEO_ASSET {

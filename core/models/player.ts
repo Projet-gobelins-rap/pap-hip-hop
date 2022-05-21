@@ -10,7 +10,7 @@ import { getTextureColorSpec } from "../config/global/textureColorMapping";
 export class Player extends Character {
 
     // properties
-    colliders: Mesh[] = []
+    colliders: {env: Mesh[], collectibles: Mesh[]}
     orbitControl: OrbitControls
     camera: Camera
 
@@ -87,7 +87,7 @@ export class Player extends Character {
     }
 
     public initCollider(collider) {
-        this.colliders.push(collider)
+        this.colliders = collider
         
     }
 
@@ -110,10 +110,10 @@ export class Player extends Character {
 
             this.model.rotation.y -= direction.orientation * delta * 5
 
-            if(!this.blocked) {
+            // if(!this.blocked) {
 
                 this.model.translateZ(direction.move * delta * velocity)
-            }
+            // }
 
             this.orbitControl.enableRotate = false
             this._updateCameraPosition()
@@ -135,11 +135,22 @@ export class Player extends Character {
         this.raycaster.ray.origin.y = 3
         this.raycaster.ray.direction = this.walkDirection.negate()
         
-        const intersect = this.raycaster.intersectObjects(this.colliders);
+        const intersectCollision = this.raycaster.intersectObjects(this.colliders.env);
+        if (intersectCollision.length > 0) {
+            if (intersectCollision[0].distance < 0.8) {
+                this.blocked = true;
+                console.log('g');
+                
+            } else {
+                this.blocked = false;
+            }
+
+        }
+        const intersect = this.raycaster.intersectObjects(this.colliders.collectibles);
         if (intersect.length > 0) {
             if (intersect[0].distance < 0.8) {
                 this.blocked = true;
-                console.log('g');
+                console.log('colect');
                 
             } else {
                 this.blocked = false;
