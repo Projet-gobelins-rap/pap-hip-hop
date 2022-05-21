@@ -27,6 +27,7 @@ import { gsap } from 'gsap'
 import Helpers from "../utils/Helpers";
 import {Stats} from 'stats.ts'
 import {CameraPosition} from "../config/hood-scene/camera-positions/types";
+import {Npc} from "../models/npc";
 
 
 
@@ -79,6 +80,7 @@ export default class SceneManager {
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
   public  _isStarted: boolean | undefined
+  public  NpcArray:Array<Npc> = []
 
   constructor(options: SceneManagerOptions) {
 
@@ -516,6 +518,12 @@ export default class SceneManager {
   // get gui(): GUI {
   //   return this._gui
   // }
+
+  get NPCS() {
+
+    return this.NpcArray
+  }
+
 
   get renderer(): WebGLRenderer {
     return this._renderer

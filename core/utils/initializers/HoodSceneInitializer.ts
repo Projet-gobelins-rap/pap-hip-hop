@@ -41,9 +41,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _collectibles: Group = new Group()
   private _mouss: Npc
   private _city: Group
+  public NpcArray:Array<Npc> = []
   // private _keysPressed: any
 
   init(): void {
+    // this.NpcArray = []
     HoodScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
     // this._addLights(true)
@@ -88,6 +90,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       onStart: (ctx) => {
         this._controls = ctx.controls
         ctx._isStarted = true
+        this.NpcArray = ctx.NpcArray
       },
 
       onRender: (ctx) => {
@@ -207,7 +210,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
 
-    this._mouss = new Npc(playerGltf, 'mouss', 'tpose')
+    this._mouss = new Npc(playerGltf, 'mouss', 'tpose',this._camera)
+    // push npc Mouss
+    this.NpcArray.push(this._mouss)
     this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
 
     this._scene.add(this.player.model);

@@ -8,18 +8,20 @@
             },
             "body": {
                 "color": "green"
-            }
+            },
+            "clickable": false
         },
-      {
-        "name": "mouss",
-        "head": {
-          "model": "bob",
-          "color": "green"
-        },
-        "body": {
-          "color": "purple"
+        {
+          "name": "mouss",
+          "head": {
+            "model": "hair-afro",
+            "color": "green"
+          },
+          "body": {
+            "color": "green"
+          },
+          "clickable": true
         }
-      }
     ],
     "player": {
         "name": "player",
