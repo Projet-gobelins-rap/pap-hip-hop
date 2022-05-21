@@ -1,7 +1,9 @@
 import {SceneManager} from "~/core/managers";
+import {Npc} from "../models/npc";
 
 class HoodScene {
   private _context: SceneManager | null
+  public npcArray: Npc[];
 
   constructor() {
     this._context = null

@@ -37,6 +37,7 @@ import loaderStore from "../../store/loaderStore";
     }
   },
 })
+
 export default class HoodScenePage extends Vue {
   public loaderStore = getModule(loaderStore, this.$store);
   public hoodSceneStore = getModule(hoodSceneStore,this.$store)
@@ -63,7 +64,7 @@ export default class HoodScenePage extends Vue {
 
   filterNpc():void {
     console.log(HoodScene.context.NPCS,'<--- get all NPCS')
-    HoodScene.context.NPCS.forEach((npc:Npc)=>{
+    HoodScene.npcArray.forEach((npc:Npc)=>{
       if (npc.outfitParams.clickable){
         this.createNpcInteractPoint(npc)
       }
@@ -72,7 +73,12 @@ export default class HoodScenePage extends Vue {
 
   createNpcInteractPoint(npc:Npc):void {
     console.log(npc.camera.position,'<--- NPC Camera pos')
+    // Model pos
+
   }
+
+  // TODO : click
+  // moveCameraToTarget()
 
   @Watch("onboardingStep", { immediate: true, deep: true })
   setOnboardingStep(val: string) {

@@ -13,8 +13,8 @@ import {
   WebGLRenderer,
   LinearToneMapping
 } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 import {
   AnimationMixerElement,
   DefaultSceneManagerCallback,
@@ -23,12 +23,11 @@ import {
   WindowResizeCallback
 } from "~/core/types/scene";
 // import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
-import { gsap } from 'gsap'
+import {gsap} from 'gsap'
 import Helpers from "../utils/Helpers";
 import {Stats} from 'stats.ts'
 import {CameraPosition} from "../config/hood-scene/camera-positions/types";
 import {Npc} from "../models/npc";
-
 
 
 export default class SceneManager {
@@ -79,8 +78,8 @@ export default class SceneManager {
   private _isRayCasting: boolean
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
-  public  _isStarted: boolean | undefined
-  public  NpcArray:Array<Npc> = []
+  public _isStarted: boolean | undefined
+  public NpcArray: Array<Npc> = []
 
   constructor(options: SceneManagerOptions) {
 
@@ -103,7 +102,7 @@ export default class SceneManager {
     this._defaultRatio = options.defaultRation || 1
     this._currentIntersect = null
     this._animationMixers = []
-    this._globalSceneRotation = { x: 0, y: 0 }
+    this._globalSceneRotation = {x: 0, y: 0}
 
     this._isPlaying = false
     this._isRayCasting = false
@@ -216,9 +215,11 @@ export default class SceneManager {
       return
     }
 
-    const {newCameraPosition: newCameraPosition , lookAtPosition: lookAtPosition } = presetCameraPosition.coords()
+    const {newCameraPosition: newCameraPosition, lookAtPosition: lookAtPosition} = presetCameraPosition.coords()
+    this.moveCameraToTarget(newCameraPosition, lookAtPosition, duration)
+  }
 
-
+  public moveCameraToTarget(newCameraPosition: Vector3, lookAtPosition: Vector3, duration: number){
     gsap.to(this._controls!.target, {
       duration,
       x: lookAtPosition.x,
@@ -331,8 +332,8 @@ export default class SceneManager {
         this._globalSceneRotation.x = Helpers.lerp(this._globalSceneRotation.x, this._mousePositions.x, 0.3)
         this._globalSceneRotation.y = Helpers.lerp(this._globalSceneRotation.y, this._mousePositions.y, 0.3)
 
-        this._scene.rotation.x = - this._globalSceneRotation.y * 0.15
-        this._scene.rotation.y = - this._globalSceneRotation.x * 0.3
+        this._scene.rotation.x = -this._globalSceneRotation.y * 0.15
+        this._scene.rotation.y = -this._globalSceneRotation.x * 0.3
 
       }
     })
@@ -356,7 +357,7 @@ export default class SceneManager {
    */
   public createAnimationMixer(name: string, object: Object3D | AnimationObjectGroup) {
     const mixer = new AnimationMixer(object)
-    this._animationMixers.push({ name, instance: mixer })
+    this._animationMixers.push({name, instance: mixer})
   }
 
   /**
