@@ -12,7 +12,7 @@
         <nuxt-link to="/graf">Graf</nuxt-link>
       </div>
       <div class="navigation__items">
-        <nuxt-link to="/graf">Battle</nuxt-link>
+        <nuxt-link to="/battle">Battle</nuxt-link>
       </div>
       <div class="navigation__items">
         <nuxt-link to="/grenier">Grenier</nuxt-link>
