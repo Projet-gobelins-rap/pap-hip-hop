@@ -99,9 +99,9 @@ export default class Connection extends Vue {
   // With async/await
   generateQR() {
     var options = {
-      text: "https://192.168.1.12:3001/_mobile/connection/?room=" + this.room,
+      text: "https://192.168.1.16:3001/_mobile/connection/?room=" + this.room,
     };
-
+ 
     // Create new QRCode Object
     new QRCode(this.$refs.qrcode, options);
   }
