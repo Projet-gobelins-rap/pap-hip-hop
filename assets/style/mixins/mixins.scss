@@ -18,6 +18,13 @@
 	color: $color;
 	letter-spacing: 0.1em;
 }
+@mixin stickerFont($size, $line_height: 1.2, $color: $white) {
+    font-family: "Panchang-Semibold";
+	font-size: $size;
+	line-height: $line_height;
+	color: $color;
+	letter-spacing: 0.1em;
+}
 
 @mixin rotation($duration, $transform: '') {
 	animation: rotate $duration linear 0s infinite forwards;
