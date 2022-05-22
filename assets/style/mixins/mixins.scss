@@ -1,21 +1,42 @@
-@font-face {
-	font-family: "Kenoky";
-	src: url("../../static/fonts/KENOKY-Normal.woff2") format("woff2");
-	font-family: "SofiaPro";
-	src: url("../../static/fonts/SofiaPro-Regular.woff") format("woff");
-}
-
-@font-face {
-	font-family: "DMSans";
-	src: url("../../static/fonts/dm-sans-v11-latin-regular.woff") format("woff"),
-	url("../../static/fonts/dm-sans-v11-latin-regular.woff2") format("woff2"),
-}
 
 @mixin text($size, $line_height: 1.2, $color: $black) {
 	font-family: "DMSans";
 	font-size: $size;
 	line-height: $line_height;
 	color: $color;
+}
+@mixin title($size, $line_height: 1.2, $color: $white) {
+	font-family: "Panchang-Extrabold";
+	font-size: $size;
+	line-height: $line_height;
+	color: $color;
+}
+@mixin subtitle($size, $line_height: 1.2, $color: $white) {
+	font-family: "Gelica-medium";
+	font-size: $size;
+	line-height: $line_height;
+	color: $color;
+	letter-spacing: 0.1em;
+}
+@mixin stickerFont($size, $line_height: 1.2, $color: $white) {
+    font-family: "Panchang-Semibold";
+	font-size: $size;
+	line-height: $line_height;
+	color: $color;
+	letter-spacing: 0.1em;
+}
+
+@mixin rotation($duration, $transform: '') {
+	animation: rotate $duration linear 0s infinite forwards;
+
+	@keyframes rotate {
+		from {
+			transform: $transform rotate(0deg);
+		}
+		to {
+			transform: $transform rotate(360deg);
+		}
+	}
 }
 // desktop()
 //   @media (max-width: 1200px)
