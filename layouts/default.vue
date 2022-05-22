@@ -171,6 +171,10 @@ export default class Default extends Vue {
       scale: 0,
       duration: 0.6,
       ease: "elastic.in(1, 0.6)",
+      onStart: () => {
+        // TODO : Move to AssetManager successCallback
+        this.$router.push({ path: "/intro", replace: true });
+      },
     });
 
     tl.to(el, {

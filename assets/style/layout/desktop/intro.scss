@@ -13,12 +13,53 @@
 
   &-title {
     @include title(56px);
+    position: relative;
+    z-index: 20;
   }
   &-subtitle {
     @include subtitle(40px);
+    position: relative;
+    z-index: 20;
   }
 
   &-button {
     margin: 150px 0 0;
+  }
+
+  &-sticker {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+
+    &#STICKER_ART {
+      bottom: 0;
+      left: 0;
+    }
+    &#STICKER_VICTOR {
+      top: 10%;
+      right: 10%;
+    }
+    &#STICKER_BOOM {
+      top: 15%;
+      left: 10%;
+    }
+    &#STICKER_FACE {
+      bottom: 10%;
+      left: 5%;
+    }
+    &#STICKER_RADIO {
+      bottom: 9%;
+      right: 6%;
+      z-index: 5;
+    }
+    &#BOOMBOX {
+      bottom: 27%;
+      right: 3%;
+    }
+    &#STICKER {
+      bottom: 18%;
+      right: 10%;
+    }
   }
 }
