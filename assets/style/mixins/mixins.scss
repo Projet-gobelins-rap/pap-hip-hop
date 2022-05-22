@@ -5,6 +5,19 @@
 	line-height: $line_height;
 	color: $color;
 }
+
+@mixin rotation($duration, $transform: '') {
+	animation: rotate $duration linear 0s infinite forwards;
+
+	@keyframes rotate {
+		from {
+			transform: $transform rotate(0deg);
+		}
+		to {
+			transform: $transform rotate(360deg);
+		}
+	}
+}
 // desktop()
 //   @media (max-width: 1200px)
 //     {block}
