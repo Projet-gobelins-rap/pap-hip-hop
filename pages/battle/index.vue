@@ -3,7 +3,7 @@
     <h1 ref="title">BATTLE DESKTOP</h1>
     <div class="battle-hud">
       <div class="battle-top">
-        <div v-if="pp" class="healthbar player">
+        <div v-if="pp" class="healthbar  player">
           <div class="healthbar-container">
             <span class="healthbar-gauge" ref="playerGauge"></span>
           </div>
@@ -18,8 +18,8 @@
       </div>
       <div class="battle-center"></div>
     </div>
-    <div class="opponent" ref="opponent">
-      <span></span>
+    <div class="opponent battleResponse battleResponse--opponent" ref="opponent">
+      <span>ZZZZZZZ</span>
       <span></span>
       <span></span>
       <span></span>
