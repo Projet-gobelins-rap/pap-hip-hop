@@ -14,6 +14,7 @@ import {Vue, Component, getModule, Prop, Watch} from "nuxt-property-decorator";
 import CustomButton from "~/components/buttons/button.vue";
 import choiceStore from "~/store/choiceStore";
 import $socket from "~/plugins/socket.io";
+import {Punchline} from "../core/types/punchline";
 
 @Component({
   components: {
@@ -28,6 +29,8 @@ export default class Choice extends Vue {
   public savedIds: number[] = []
   public choiceStore = getModule(choiceStore,this.$store)
 
+  public punchlines: Array<Punchline> = []
+
   mounted() {
     console.log(this.content,'<-- content choice')
   }
@@ -36,10 +39,20 @@ export default class Choice extends Vue {
   selectItem(index:number,item:object,event:PointerEvent) {
     let elem:HTMLElement = event.target as HTMLElement
 
+    console.log(item,'<---- itemmm log')
 
     if (this.multipleChoice) {
       if(this.savedIds.length == 0){
         this.savedIds.push(index)
+        this.punchlines.push({
+          id: index,
+          text: item.content[0].text,
+          score: item.score,
+          status: item.status
+        })
+
+        console.log(this.punchlines,'<--- punchhh')
+
         elem.classList.toggle('choices__item--selected')
         this.isActive = false
 
@@ -53,13 +66,21 @@ export default class Choice extends Vue {
           this.isActive = false
 
         }else {
-          if (this.savedIds.length <=3){
+          if (this.punchlines.length <=3){
             this.savedIds.push(index)
+            this.punchlines.push({
+              id: index,
+              text: item.content[0].text,
+              score: item.score,
+              status: item.status
+            })
+            console.log(this.punchlines,'<--- punchhh')
+
             elem.classList.toggle('choices__item--selected')
             this.isActive = false
           }
 
-          if (this.savedIds.length == 4){
+          if (this.punchlines.length == 4){
             this.isActive = true
           }
         }
