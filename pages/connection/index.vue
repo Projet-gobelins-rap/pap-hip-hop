@@ -101,7 +101,7 @@ export default class Connection extends Vue {
     var options = {
       text: process.env.ip+"/_mobile/connection/?room=" + this.room,
     };
-
+ 
     // Create new QRCode Object
     new QRCode(this.$refs.qrcode, options);
   }
