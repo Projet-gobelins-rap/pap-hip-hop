@@ -8,13 +8,33 @@
   transition: box-shadow 0.2s ease;
   cursor: pointer;
 
+  &.small {
+    padding: 1rem 1.8rem;
+  }
+  &.medium {
+    padding: 1.2rem 2.4rem;
+  }
+  &.large {
+    padding: 1.6rem 3.2rem;
+  }
+
   &-text {
     color: $white;
     position: relative;
     z-index: 2;
     display: block;
     transition: transform 0.2s ease;
-    @include stickerFont(20px, 38px);
+    white-space: nowrap;
+    
+    .small &{
+      @include stickerFont(12px, 38px);
+    }
+    .medium &{
+      @include stickerFont(16px, 30px);
+    }
+    .large &{
+      @include stickerFont(20px, 38px);
+    }
   }
 
   &::before {

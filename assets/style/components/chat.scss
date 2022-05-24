@@ -54,8 +54,10 @@
     background-color: #fff;
     border-radius: 30px;
     p {
-      font-size: 22px;
-      line-height: 30px;
+      @include text(24px);
+    }
+    strong {
+      @include text(24px, 1.2, $darkGrey, 700);
     }
   }
   &-choices {
