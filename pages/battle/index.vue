@@ -26,6 +26,13 @@
       <span class="battleResponse"></span>
     </div>
 
+    <div class="player responseContainer responseContainer--player" ref="player">
+      <span class="battleResponse"></span>
+      <span class="battleResponse"></span>
+      <span class="battleResponse"></span>
+      <span class="battleResponse"></span>
+    </div>
+
     <ChatComponent
       v-if="this.chatDisplay && currentChat"
       :content="currentChat"
@@ -108,6 +115,7 @@ export default class battle extends Vue {
   public punchArray: Array<Punchline> = []
   public title: HTMLElement;
   public opponent: HTMLElement;
+  public player: HTMLElement;
   public isRound2: boolean = false;
   public round2Step1: object;
   public round2Step2: object;
@@ -123,6 +131,7 @@ export default class battle extends Vue {
 
     this.initRound2Datas();
     this.title = this.$refs.title as HTMLElement;
+    this.player = this.$refs.player as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
 
     console.log(this.opponentRound1, "<--- OPPONENT ROUND 1 PUNCHHH");
@@ -243,9 +252,17 @@ export default class battle extends Vue {
     console.log(this.punchlineArray,'punch array')
 
 
-    this.punchArray.forEach((punch)=>{
-
+    //TODO on doit calculer le score
+    // TODO on doit stocker les différents status de punchline
+    gsap.set(Array.from(this.player.children),{display:'none',opacity:0})
+    Array.from(this.player.children).forEach((el:HTMLElement,index:number)=>{
+      console.log(el,'ZEBIIIIIi')
+      el.innerText = this.punchArray[index].text
+      gsap.to(el,{display:'block',opacity:1,delay:index*2})
     })
+    // this.punchArray.forEach((punch)=>{
+    //   console.log(punch.score)
+    // })
 
 
 
