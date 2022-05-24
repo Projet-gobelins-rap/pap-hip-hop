@@ -61,8 +61,6 @@ export default class GrenierScene extends Vue {
 
   mounted() {
     console.log(this.conversation, "conversation");
-
-
   }
 
   addGUI() {
@@ -119,7 +117,7 @@ export default class GrenierScene extends Vue {
   addInteractionPoints() {
     this.grenierSceneStore.addInteractivePoint(PosterInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(TvInteractPoint.name);
-    // this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
+    this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(ModeInteractPoint.name);
     // console.log(ModeCameraPosition.coords().,'---< coord mode')
   }
