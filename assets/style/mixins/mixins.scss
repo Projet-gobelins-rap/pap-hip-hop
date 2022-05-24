@@ -1,9 +1,10 @@
 
-@mixin text($size, $line_height: 1.2, $color: $black) {
+@mixin text($size, $line_height: 1.2, $color: $black, $weight: 400) {
 	font-family: "DMSans";
 	font-size: $size;
 	line-height: $line_height;
 	color: $color;
+	font-weight: $weight;
 }
 @mixin title($size, $line_height: 1.2, $color: $white) {
 	font-family: "Panchang-Extrabold";

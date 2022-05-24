@@ -11,7 +11,7 @@
     />
 
     <CustomButton
-      class="intro-button"
+      class="intro-button large"
       @click.native="goToNextStep"
       text="Commencer l'expérience"
     ></CustomButton>

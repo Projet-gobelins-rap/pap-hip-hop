@@ -20,6 +20,7 @@
       >
         <CustomButton
           v-if="item.Choix"
+          class="chat-button medium"
           @click.native="nextStep(item.Choix.split('_')[0])"
           :text="item.Choix.split('_')[1]"
         />
