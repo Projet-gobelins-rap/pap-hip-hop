@@ -19,7 +19,7 @@ const PosterCameraPosition: CameraPosition = {
   coords: () => {
     const lookAtPosition = new Vector3()
     console.log(lookAtPosition,'<--- lookat 1')
-    GrenierScene.context.scene.getObjectByName("affiche")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("interaction_support")!.getWorldPosition(lookAtPosition)
     lookAtPosition.z = lookAtPosition.z * 0.7;
     lookAtPosition.y = lookAtPosition.y * 0.95;
 

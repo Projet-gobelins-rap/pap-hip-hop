@@ -46,6 +46,7 @@ import $socket from "~/plugins/socket.io";
 
 import { AssetsManager } from "~/core/managers";
 import { gsap } from "gsap";
+
 @Component({
   components: {
     CustomButton,

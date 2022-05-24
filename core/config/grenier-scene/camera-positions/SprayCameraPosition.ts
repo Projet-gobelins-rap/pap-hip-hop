@@ -7,7 +7,7 @@ const SprayCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("bombe-peinture-2")!.getWorldPosition(lookAtPosition)
+    GrenierScene.context.scene.getObjectByName("interaction_graf")!.getWorldPosition(lookAtPosition)
     const cameraPos = lookAtPosition.clone()
 
     cameraPos.x = 28
