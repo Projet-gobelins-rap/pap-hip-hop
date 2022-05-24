@@ -1,7 +1,7 @@
 <template>
   <section class="grenier">
     <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
-    <ChatComponent v-if="this.chatElementState" :content="currentChat"/>
+    <ChatComponent class="grenier-chat" v-if="this.chatElementState" :content="currentChat"/>
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
       class="interactive-points"
