@@ -167,7 +167,7 @@ export default class battle extends Vue {
             this.punchArray.push({
              id: id,
              text: this.currentPunchline[id].content[0].text,
-             score:  this.currentPunchline[id].score,
+             score: parseInt(this.currentPunchline[id].score),
              status:  this.currentPunchline[id].status,
             });
 
@@ -246,6 +246,13 @@ export default class battle extends Vue {
     }
   }
 
+  // On calcul le score avec cette methode
+  calculateScore(target:number,scoreVal:number){
+    console.log(scoreVal,'<-- score value')
+    target = target - scoreVal
+    console.log(target,'SCORE CALCULER')
+  }
+
   // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
 
@@ -256,8 +263,9 @@ export default class battle extends Vue {
     // TODO on doit stocker les différents status de punchline
     gsap.set(Array.from(this.player.children),{display:'none',opacity:0})
     Array.from(this.player.children).forEach((el:HTMLElement,index:number)=>{
-      console.log(el,'ZEBIIIIIi')
+
       el.innerText = this.punchArray[index].text
+      this.calculateScore(this.score.opponent,this.punchArray[index].score)
       gsap.to(el,{display:'block',opacity:1,delay:index*2})
     })
     // this.punchArray.forEach((punch)=>{
