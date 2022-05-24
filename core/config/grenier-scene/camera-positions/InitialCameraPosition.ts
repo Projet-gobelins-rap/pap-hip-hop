@@ -8,7 +8,7 @@ const InitialCameraPosition: CameraPosition = {
 
     const lookAtPosition = new Vector3(0, 0, 0)//new Vector3(-50, 20, 20)
 
-    const newCameraPosition = new Vector3(64.26325992635307, 15.00643564857594, -54.74045076066439)
+    const newCameraPosition = new Vector3(64.26325992635307, 20, -54.74045076066439)
 
     return { newCameraPosition, lookAtPosition }
   }

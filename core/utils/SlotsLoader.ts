@@ -5,15 +5,12 @@ export default class SlotsLoader {
     public slots: Map<string, object>
     // public populateSlots: () => void
 
-    public static findSlots(scene: any) {
-        // this._scene.traverse(child => {
-        //     if(child.name.includes('slot-') ) {
-        //         this.slots.set(child.name, child)
-        //     }
-        // })
+    public static populateSingleSlots(slot: Object3D, baseObject: Object3D | Group | Mesh): void {
+        slot.children = []
+        slot.add(baseObject)
     }
 
-    public static populateSlots(slots: Object3D[], baseObject: Object3D | Group | Mesh) {
+    public static populateSlots(slots: Object3D[], baseObject: Object3D | Group | Mesh): void  {
         slots.forEach(object => {
             // -Lead- : dispose ? remove ?
             object.children = []

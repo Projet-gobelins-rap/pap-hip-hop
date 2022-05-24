@@ -12,7 +12,7 @@ const TvCameraPosition: CameraPosition = {
 
   coords: () => {
     const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("tv")!.getWorldDirection(lookAtPosition);
+    GrenierScene.context.scene.getObjectByName("interaction_cinema")!.getWorldDirection(lookAtPosition);
     // lookAtPosition.x = lookAtPosition.x * 3.1;
     // lookAtPosition.y = lookAtPosition.y * 2.15;
 
