@@ -26,7 +26,7 @@
 
 .healthbar {
 
-  display: flex;  
+  display: flex;
   justify-content: center;
   align-items: center;
 
@@ -71,5 +71,29 @@
       background-color: $purple;
     }
   }
-  
+
+}
+
+.responseContainer{
+  display: flex;
+  flex-direction: column;
+  span {
+    border: 2px solid $purple;
+  }
+  &--opponent {
+    span {
+      border: 2px solid $yellow;
+    }
+  }
+
+}
+
+.battleResponse {
+  padding: 1.5rem;
+  background: white;
+  border-radius: 2rem;
+  font-size: 2rem;
+  span {
+    display: block;
+  }
 }

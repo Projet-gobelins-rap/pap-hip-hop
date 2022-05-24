@@ -49,6 +49,10 @@ export default {
   components: true,
   loading: false,
 
+  env: {
+    ip: 'https://192.168.8.101:3002'
+  },
+
   /*
    ** Global CSS
    */

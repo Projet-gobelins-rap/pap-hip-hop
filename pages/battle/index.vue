@@ -1,34 +1,35 @@
 <template>
-  <section class="battle">
+  <section class="battle"  @click="ResponseTween">
     <h1 ref="title">BATTLE DESKTOP</h1>
-    <div class="battle-hud">
-      <div class="battle-top">
-        <div v-if="pp" class="healthbar player">
-          <div class="healthbar-container">
-            <span class="healthbar-gauge" ref="playerGauge"></span>
-          </div>
-          <img  class="healthbar-img" :src="pp.src" alt="" />
-        </div>
-        <div v-if="pp" class="healthbar opponent">
-          <img class="healthbar-img" :src="pp.src" alt="" />
-          <div class="healthbar-container">
-            <span class="healthbar-gauge" ref="opponentGauge"></span>
-          </div>
-        </div>
-      </div>
-      <div class="battle-center"></div>
+<!--    <div class="battle-hud">-->
+<!--      <div class="battle-top">-->
+<!--        <div v-if="pp" class="healthbar  player">-->
+<!--          <div class="healthbar-container">-->
+<!--            <span class="healthbar-gauge" ref="playerGauge"></span>-->
+<!--          </div>-->
+<!--          <img  class="healthbar-img" :src="pp.src" alt="" />-->
+<!--        </div>-->
+<!--        <div v-if="pp" class="healthbar opponent">-->
+<!--          <img class="healthbar-img" :src="pp.src" alt="" />-->
+<!--          <div class="healthbar-container">-->
+<!--            <span class="healthbar-gauge" ref="opponentGauge"></span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="battle-center"></div>-->
+<!--    </div>-->
+    <div class="opponent responseContainer responseContainer--opponent" ref="opponent">
+      <span class="battleResponse">ZZZZZZZ</span>
+      <span class="battleResponse">AAAAA</span>
+      <span class="battleResponse">BBBBBB</span>
+      <span class="battleResponse">CCCCCCCC</span>
     </div>
-    <div class="opponent" ref="opponent">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <ChatComponent
-      v-if="this.chatDisplay && currentChat"
-      :content="currentChat"
-    />
-    <Onboarding :content="currentOnboarding"></Onboarding>
+
+<!--    <ChatComponent-->
+<!--      v-if="this.chatDisplay && currentChat"-->
+<!--      :content="currentChat"-->
+<!--    />-->
+<!--    <Onboarding :content="currentOnboarding"></Onboarding>-->
   </section>
 </template>
 
@@ -116,6 +117,7 @@ export default class battle extends Vue {
   public score: {player: number, opponent: number} = {player: 200, opponent:200}
 
   mounted() {
+
     this.initRound2Datas();
     this.title = this.$refs.title as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
@@ -162,6 +164,26 @@ export default class battle extends Vue {
     });
   }
 
+
+  ResponseTween() {
+    console.log("🚑️🚑️🚑️RESPONSE tween🚑️🚑️🚑️🚑️")
+    gsap.set(".opponent span", { display: "none", opacity: 0 });
+    gsap.to(".opponent span", {
+      display: "block",
+      delay:2,
+      opacity: 1,
+      duration: 2,
+      stagger: 2,
+      ease:"elastic.out(1, 0.3)",
+      onComplete: () => {
+        gsap.set(".opponent span", { display: "none", opacity: 0 });
+        // this.displayUserPunchline();
+      },
+    });
+  }
+
+
+
   displayOpponentPunchline() {
     console.log(this.opponent);
     gsap.set(".opponent span", { display: "none", opacity: 0 });
@@ -177,6 +199,7 @@ export default class battle extends Vue {
         opacity: 1,
         duration: 2,
         stagger: 2,
+        ease:"elastic.out(1, 0.3)",
         onComplete: () => {
           gsap.set(".opponent span", { display: "none", opacity: 0 });
           this.displayUserPunchline();
