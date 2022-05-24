@@ -39,19 +39,17 @@ export default class Choice extends Vue {
   selectItem(index:number,item:object,event:PointerEvent) {
     let elem:HTMLElement = event.target as HTMLElement
 
-    console.log(item,'<---- itemmm log')
-
     const found = this.punchlines.some(el => el.id === index);
 
     if (this.multipleChoice) {
       if(this.savedIds.length == 0){
         this.savedIds.push(index)
-        this.punchlines.push({
-          id: index,
-          text: item.content[0].text,
-          score: item.score,
-          status: item.status
-        })
+        // this.punchlines.push({
+        //   id: index,
+        //   text: item.content[0].text,
+        //   score: item.score,
+        //   status: item.status
+        // })
 
         console.log(this.punchlines,'<--- punchhh')
 
@@ -60,31 +58,31 @@ export default class Choice extends Vue {
 
       }
       else {
-        if (found){
+        if (this.savedIds.includes(index)){
           console.log('OUI ça trouve')
 
-          let indexPosition = this.punchlines.findIndex(el => el.id === index)//this.savedIds.indexOf(index)
+          let indexPosition = this.savedIds.indexOf(index) //this.punchlines.findIndex(el => el.id === index)//this.savedIds.indexOf(index)
           console.log(indexPosition,'zzzz')
-          this.punchlines.splice(indexPosition,1)
+          this.savedIds.splice(indexPosition,1)
           elem.classList.toggle('choices__item--selected')
           this.isActive = false
 
         }else {
-          if (this.punchlines.length <=3){
+          if (this.savedIds.length <=3){
             this.savedIds.push(index)
-            this.punchlines.push({
-              id: index,
-              text: item.content[0].text,
-              score: item.score,
-              status: item.status
-            })
+            // this.punchlines.push({
+            //   id: index,
+            //   text: item.content[0].text,
+            //   score: item.score,
+            //   status: item.status
+            // })
             console.log(this.punchlines,'<--- punchhh')
 
             elem.classList.toggle('choices__item--selected')
             this.isActive = false
           }
 
-          if (this.punchlines.length == 4){
+          if (this.savedIds.length == 4){
             this.isActive = true
           }
         }

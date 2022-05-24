@@ -1,5 +1,6 @@
 <template>
-  <section class="battle"  @click="ResponseTween">
+<!--   @click="ResponseTween"-->
+  <section class="battle" >
     <h1 ref="title">BATTLE DESKTOP</h1>
 <!--    <div class="battle-hud">-->
 <!--      <div class="battle-top">-->
@@ -19,17 +20,17 @@
 <!--      <div class="battle-center"></div>-->
 <!--    </div>-->
     <div class="opponent responseContainer responseContainer--opponent" ref="opponent">
-      <span class="battleResponse">ZZZZZZZ</span>
-      <span class="battleResponse">AAAAA</span>
-      <span class="battleResponse">BBBBBB</span>
-      <span class="battleResponse">CCCCCCCC</span>
+      <span class="battleResponse"></span>
+      <span class="battleResponse"></span>
+      <span class="battleResponse"></span>
+      <span class="battleResponse"></span>
     </div>
 
-<!--    <ChatComponent-->
-<!--      v-if="this.chatDisplay && currentChat"-->
-<!--      :content="currentChat"-->
-<!--    />-->
-<!--    <Onboarding :content="currentOnboarding"></Onboarding>-->
+    <ChatComponent
+      v-if="this.chatDisplay && currentChat"
+      :content="currentChat"
+    />
+    <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
@@ -46,6 +47,7 @@ import $socket from "~/plugins/socket.io";
 
 import { AssetsManager } from "~/core/managers";
 import { gsap } from "gsap";
+import {Punchline} from "../../core/types/punchline";
 @Component({
   components: {
     CustomButton,
@@ -103,6 +105,7 @@ export default class battle extends Vue {
   public currentPunchline: object;
   public chatCounter: number = 0;
   public punchlineArray: string[] = [];
+  public punchArray: Array<Punchline> = []
   public title: HTMLElement;
   public opponent: HTMLElement;
   public isRound2: boolean = false;
@@ -151,6 +154,15 @@ export default class battle extends Vue {
             console.log(this.battleStore.round2Datas);
           } else {
             this.punchlineArray.push(this.currentPunchline[id].content[0].text);
+
+            this.punchArray.push({
+             id: id,
+             text: this.currentPunchline[id].content[0].text,
+             score:  this.currentPunchline[id].score,
+             status:  this.currentPunchline[id].status,
+            });
+
+            console.log(this.punchArray,'🚨🚨🚨🚨🚨🚨')
           }
         });
       }
@@ -227,32 +239,43 @@ export default class battle extends Vue {
 
   // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
-    this.punchlineArray.forEach((punch, i) => {
-      setTimeout(() => {
-        this.title.innerText = punch;
 
-        // ON DETECT L'APPARITION DU DERNIER ELEM DANS LE FOREACH: DANS LE FUTUR ON BOUGE ça
-        // ÇA SERA REMPLACER PAR UNE TWEEN AVEC UN ON COMPLETE
-        if (Object.is(this.punchlineArray.length - 1, i)) {
-          setTimeout(() => {
-            this.title.innerText = "";
-            if (this.round2StepCounter <= 0) {
-              console.log("CA PAASSE ici zebi");
-              console.log(this.round2StepCounter, "<--- round2 counter");
-              this.setNextChat();
-              this.displayChat();
-            } else {
-              console.log("AHHHHH");
-              this.displayOnboarding();
-              $socket.io.emit("battle::round2Sequence");
-            }
-            console.log("LAST CALLBACK");
+    console.log(this.punchlineArray,'punch array')
 
-            this.punchlineArray.shift();
-          }, 2000);
-        }
-      }, 2000 * i);
-    });
+
+    this.punchArray.forEach((punch)=>{
+
+    })
+
+
+
+    // this.punchlineArray.forEach((punch, i) => {
+    //   setTimeout(() => {
+    //     this.title.innerText = punch;
+    //
+    //     // ON DETECT L'APPARITION DU DERNIER ELEM DANS LE FOREACH: DANS LE FUTUR ON BOUGE ça
+    //     // ÇA SERA REMPLACER PAR UNE TWEEN AVEC UN ON COMPLETE
+    //     if (Object.is(this.punchlineArray.length - 1, i)) {
+    //       setTimeout(() => {
+    //         this.title.innerText = "";
+    //         if (this.round2StepCounter <= 0) {
+    //           console.log("CA PAASSE ici zebi");
+    //           console.log(this.round2StepCounter, "<--- round2 counter");
+    //           this.setNextChat();
+    //           this.displayChat();
+    //         } else {
+    //           console.log("AHHHHH");
+    //           this.displayOnboarding();
+    //           $socket.io.emit("battle::round2Sequence");
+    //         }
+    //         console.log("LAST CALLBACK");
+    //
+    //         this.punchlineArray.shift();
+    //       }, 2000);
+    //     }
+    //   }, 2000 * i);
+    // });
+
   }
 
   displayChat() {
