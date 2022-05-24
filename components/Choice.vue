@@ -41,6 +41,8 @@ export default class Choice extends Vue {
 
     console.log(item,'<---- itemmm log')
 
+    const found = this.punchlines.some(el => el.id === index);
+
     if (this.multipleChoice) {
       if(this.savedIds.length == 0){
         this.savedIds.push(index)
@@ -58,10 +60,12 @@ export default class Choice extends Vue {
 
       }
       else {
-        if (this.savedIds.includes(index)){
+        if (found){
+          console.log('OUI ça trouve')
 
-          let indexPosition = this.savedIds.indexOf(index)
-          this.savedIds.splice(indexPosition,1)
+          let indexPosition = this.punchlines.findIndex(el => el.id === index)//this.savedIds.indexOf(index)
+          console.log(indexPosition,'zzzz')
+          this.punchlines.splice(indexPosition,1)
           elem.classList.toggle('choices__item--selected')
           this.isActive = false
 
