@@ -1,7 +1,6 @@
 .btn {
   padding: 1.6rem 3.2rem;
-  border: 3px solid $white;
-  border-color: $white;
+  border: 3px solid $black;
   box-shadow: 0px 0px 0px 2px transparent;
   border-radius: 4rem;
   position: relative;
@@ -25,15 +24,18 @@
     display: block;
     transition: transform 0.2s ease;
     white-space: nowrap;
-    
-    .small &{
+
+    .small & {
       @include stickerFont(12px, 38px);
     }
-    .medium &{
+    .medium & {
       @include stickerFont(16px, 30px);
     }
-    .large &{
+    .large & {
       @include stickerFont(20px, 38px);
+    }
+    .white & {
+      color: $black;
     }
   }
 
@@ -51,15 +53,21 @@
     transition: transform 0.2s ease;
   }
 
+  &.white {
+    &::before {
+      background-color: $white;
+    }
+  }
+
   &:hover {
-    box-shadow: -1px 1px 0px 2px $black;
+    box-shadow: -1px 1px 0px 2px $white;
     transition: box-shadow 0.2s ease;
     &::before,
     span {
       transform: translate(1px, -1px);
     }
   }
-  
+
   &:focus {
     outline: 0;
     box-shadow: 0px 0px 0px 2px transparent;
