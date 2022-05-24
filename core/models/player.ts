@@ -105,10 +105,10 @@ export class Player extends Character {
 
             this.model.rotation.y -= direction.orientation * delta * 5
 
-            // if(!this.blocked) {
+            if(!this.blocked) {
 
                 this.model.translateZ(direction.move * delta * velocity)
-            // }
+            }
 
             this.orbitControl.enableRotate = false
             this._updateCameraPosition()
