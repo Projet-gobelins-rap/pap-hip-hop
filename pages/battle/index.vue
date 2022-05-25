@@ -127,6 +127,8 @@ export default class battle extends Vue {
   public pp: HTMLImageElement | null = null;
   public score: {player: number, opponent: number} = {player: 200, opponent:200}
 
+  public arrayStatus:Array<String> = ['moyen','top','top','super']
+
   mounted() {
 
     this.initRound2Datas();
@@ -135,6 +137,8 @@ export default class battle extends Vue {
     this.opponent = this.$refs.opponent as HTMLElement;
 
     console.log(this.opponentRound1, "<--- OPPONENT ROUND 1 PUNCHHH");
+
+    this.detectCombo(this.arrayStatus)
 
     // this.displayOpponentPunchline()
     console.log("BATTLE");
@@ -239,7 +243,7 @@ export default class battle extends Vue {
             display: "none",
             opacity: 0,
           });
-          console.log("EKIP OPONENT ZEBI");
+          console.log("EKIP OPONENT");
           this.displayUserPunchline();
         },
       });
@@ -256,7 +260,21 @@ export default class battle extends Vue {
 
       gsap.to(this.$refs.opponentGauge,{width:`${target}px`,duration:1})
     }
+  }
 
+
+  public detectCombo(array:Array<string>) {
+
+    // console.log(detect,'====== DETECT')
+
+    let index = array.findIndex( el => el === 'top' )
+
+    console.log(index,'INDEXXX')
+    // array.forEach((el:string,index:number)=>{
+    //   if (el === 'top') {
+    //
+    //   }
+    // })
   }
 
   // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
