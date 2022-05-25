@@ -2,23 +2,23 @@
 <!--   @click="ResponseTween"-->
   <section class="battle" >
     <h1 ref="title">BATTLE DESKTOP</h1>
-<!--    <div class="battle-hud">-->
-<!--      <div class="battle-top">-->
-<!--        <div v-if="pp" class="healthbar  player">-->
-<!--          <div class="healthbar-container">-->
-<!--            <span class="healthbar-gauge" ref="playerGauge"></span>-->
-<!--          </div>-->
-<!--          <img  class="healthbar-img" :src="pp.src" alt="" />-->
-<!--        </div>-->
-<!--        <div v-if="pp" class="healthbar opponent">-->
-<!--          <img class="healthbar-img" :src="pp.src" alt="" />-->
-<!--          <div class="healthbar-container">-->
-<!--            <span class="healthbar-gauge" ref="opponentGauge"></span>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class="battle-center"></div>-->
-<!--    </div>-->
+    <div class="battle-hud">
+      <div class="battle-top">
+        <div v-if="pp" class="healthbar  player">
+          <div class="healthbar-container">
+            <span class="healthbar-gauge" ref="playerGauge"></span>
+          </div>
+          <img  class="healthbar-img" :src="pp.src" alt="" />
+        </div>
+        <div v-if="pp" class="healthbar opponent">
+          <img class="healthbar-img" :src="pp.src" alt="" />
+          <div class="healthbar-container">
+            <span class="healthbar-gauge" ref="opponentGauge"></span>
+          </div>
+        </div>
+      </div>
+      <div class="battle-center"></div>
+    </div>
     <div class="opponent responseContainer responseContainer--opponent" ref="opponent">
       <span class="battleResponse"></span>
       <span class="battleResponse"></span>
@@ -247,10 +247,16 @@ export default class battle extends Vue {
   }
 
   // On calcul le score avec cette methode
-  calculateScore(target:number,scoreVal:number){
-    console.log(scoreVal,'<-- score value')
-    target = target - scoreVal
-    console.log(target,'SCORE CALCULER')
+  calculateScore(target:number,scoreVal:number,isOpponent:boolean){
+    if (isOpponent) {
+      console.log(target,scoreVal,'<-- score value')
+      target = target - scoreVal
+      console.log(target)
+      this.score.opponent = target
+
+      gsap.to(this.$refs.opponentGauge,{width:`${target}px`,duration:1})
+    }
+
   }
 
   // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
@@ -265,8 +271,19 @@ export default class battle extends Vue {
     Array.from(this.player.children).forEach((el:HTMLElement,index:number)=>{
 
       el.innerText = this.punchArray[index].text
-      this.calculateScore(this.score.opponent,this.punchArray[index].score)
-      gsap.to(el,{display:'block',opacity:1,delay:index*2})
+
+      gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+          this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
+          if (index === 3) {
+            if (this.round2StepCounter <= 0) {
+              this.setNextChat();
+              this.displayChat();
+            }
+          //   this.displayOnboarding();
+          //   $socket.io.emit("battle::round2Sequence");
+          }
+          // this.punchArray.shift()
+        }})
     })
     // this.punchArray.forEach((punch)=>{
     //   console.log(punch.score)
