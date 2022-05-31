@@ -19,19 +19,8 @@
       </div>
       <div class="battle-center"></div>
     </div>
-    <div class="opponent responseContainer responseContainer--opponent" ref="opponent">
-      <span class="battleResponse"></span>
-      <span class="battleResponse"></span>
-      <span class="battleResponse"></span>
-      <span class="battleResponse"></span>
-    </div>
-
-    <div class="player responseContainer responseContainer--player" ref="player">
-      <span class="battleResponse"></span>
-      <span class="battleResponse"></span>
-      <span class="battleResponse"></span>
-      <span class="battleResponse"></span>
-    </div>
+    <BattleResponse class="opponent responseContainer--opponent" ref="opponent"></BattleResponse>
+    <BattleResponse class="player responseContainer--player" ref="player"></BattleResponse>
 
     <ChatComponent
       v-if="this.chatDisplay && currentChat"
@@ -45,6 +34,7 @@
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
+import BattleResponse from "~/components/battle/battleResponse.vue";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import chatStore from "~/store/chatStore";
 import battleStore from "../../store/battleStore";
@@ -60,6 +50,7 @@ import {Punchline} from "../../core/types/punchline";
     CustomButton,
     ChatComponent,
     Onboarding,
+    BattleResponse
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -135,6 +126,8 @@ export default class battle extends Vue {
     this.player = this.$refs.player as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
 
+
+    console.log(this.player,'PLAYERRRR')
     console.log(this.opponentRound1, "<--- OPPONENT ROUND 1 PUNCHHH");
 
 
@@ -215,7 +208,7 @@ export default class battle extends Vue {
     if (!this.isRound2) {
       this.opponentRound1.forEach((punch, index) => {
         console.log(punch);
-        this.opponent.children[index].innerText = punch.content[0].text;
+        this.opponent.$el.children[index].innerText = punch.content[0].text;
       });
 
       gsap.to(".opponent span", {
@@ -231,12 +224,12 @@ export default class battle extends Vue {
       });
     } else {
       this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text;
-      gsap.to(this.opponent.children[this.round2StepCounter], {
+      gsap.to(this.opponent.$el.children[this.round2StepCounter], {
         display: "block",
         opacity: 1,
         duration: 2,
         onComplete: () => {
-          gsap.set(this.opponent.children[this.round2StepCounter], {
+          gsap.set(this.opponent.$el.children[this.round2StepCounter], {
             display: "none",
             opacity: 0,
           });
@@ -272,16 +265,15 @@ export default class battle extends Vue {
 
   }
 
-  // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
+  // TODO :: REFACTO TOUTE CETTE METHODE
   displayUserPunchline() {
 
     console.log(this.punchlineArray,'punch array')
 
-
-    //TODO on doit calculer le score
+    // TODO on doit calculer le score
     // TODO on doit stocker les différents status de punchline
-    gsap.set(Array.from(this.player.children),{display:'none',opacity:0})
-    Array.from(this.player.children).forEach((el:HTMLElement,index:number)=>{
+    gsap.set(Array.from(this.player.$el.children),{display:'none',opacity:0})
+    Array.from(this.player.$el.children).forEach((el:HTMLElement,index:number)=>{
 
       el.innerText = this.punchArray[index].text
 
