@@ -5,6 +5,7 @@ import GrenierScene from "../../../../scene/GrenierScene";
 
 const SprayInteractPoint: InteractionPoint = {
   name: "spray",
+  type: "plus",
 
   canvasCoords: () => {
     const position = new Vector3();
@@ -20,11 +21,9 @@ const SprayInteractPoint: InteractionPoint = {
     return false;
   },
 
-
   url: () => '/',
 
   transformX: 0,
-
   transformY: 0
 };
 

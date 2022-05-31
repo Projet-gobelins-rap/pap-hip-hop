@@ -5,6 +5,7 @@ import GrenierScene from "../../../../scene/GrenierScene";
 
 const ModeInteractPoint: InteractionPoint = {
   name: "Mode",
+  type: "plus",
 
   canvasCoords: () => {
     const position = new Vector3();
@@ -20,11 +21,9 @@ const ModeInteractPoint: InteractionPoint = {
     return false;
   },
 
-
   url: () => '/',
 
   transformX: 0,
-
   transformY: 0
 };
 
