@@ -1,0 +1,41 @@
+.point {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 4px;
+    border: solid 2px $white;
+    border-radius: 26px;
+    background-color: rgba($white, 0.5);
+  
+    &.chat {
+
+    }
+
+    &.interaction {
+        
+    }
+
+    &:hover {
+        .point-text {
+            padding: 0 10px;
+            width: auto;
+            opacity: 1;
+            transition: width .3s ease, padding .3s ease, opacity .3s ease .1s;
+        }
+    }
+
+    &-text {
+        @include stickerFont(16px, 16px, $black);
+        padding: 0;
+        width: 0;
+        opacity: 0;
+        transition: width .3s ease, padding .3s ease;
+    }
+
+
+}
