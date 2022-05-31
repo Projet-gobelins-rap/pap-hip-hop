@@ -15,31 +15,17 @@ import {Vector3} from "three";
 // }
 const PosterCameraPosition: CameraPosition = {
   name: 'poster',
-
   coords: () => {
-    const lookAtPosition = new Vector3()
-    console.log(lookAtPosition,'<--- lookat 1')
+    const lookAtPosition =  new Vector3()
     GrenierScene.context.scene.getObjectByName("interaction_support")!.getWorldPosition(lookAtPosition)
-    lookAtPosition.z = lookAtPosition.z * 0.7;
-    lookAtPosition.y = lookAtPosition.y * 0.95;
 
-    const cameraPos = lookAtPosition.clone()
-    cameraPos.x = -180;
-    // cameraPos.x = cameraPos.x * -13.6
-    // cameraPos.y = cameraPos.y * 1.2
-    // cameraPos.z = cameraPos.y * 10
+    const newCameraPosition = new Vector3(
+      lookAtPosition.x + 10,
+      lookAtPosition.y,
+      lookAtPosition.z -10,
+    )
 
-
-    // camera.position.copy( mesh.position ).add( direction.multiplyScalar( 1 ) );
-    // camera.lookAt( mesh.position );
-
-    // cameraPos.add(lookAtPosition.multiplyScalar(0.2))
-
-    // cameraPos.x = 0
-    // cameraPos.y = 5
-    // cameraPos.z = -5
-
-    return { cameraPos, lookAtPosition }
+    return { newCameraPosition, lookAtPosition }
   }
 }
 

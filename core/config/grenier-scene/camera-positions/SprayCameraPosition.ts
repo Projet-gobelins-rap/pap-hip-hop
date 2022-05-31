@@ -6,15 +6,16 @@ const SprayCameraPosition: CameraPosition = {
   name: 'spray',
 
   coords: () => {
-    const lookAtPosition = new Vector3()
+    const lookAtPosition =  new Vector3()
     GrenierScene.context.scene.getObjectByName("interaction_graf")!.getWorldPosition(lookAtPosition)
-    const cameraPos = lookAtPosition.clone()
 
-    cameraPos.x = 28
-    cameraPos.y = 20
-    cameraPos.z = -12
+    const newCameraPosition = new Vector3(
+      lookAtPosition.x + 30,
+      lookAtPosition.y,
+      lookAtPosition.z ,
+    )
 
-    return { cameraPos, lookAtPosition }
+    return { newCameraPosition, lookAtPosition }
   }
 }
 

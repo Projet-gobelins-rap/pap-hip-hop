@@ -5,6 +5,7 @@ import GrenierScene from "../../../../scene/GrenierScene";
 
 const PosterInteractPoint: InteractionPoint = {
   name: "poster",
+  type: "plus",
 
   canvasCoords: () => {
     const position = new Vector3();
@@ -21,11 +22,9 @@ const PosterInteractPoint: InteractionPoint = {
     return false;
   },
 
-
   url: () => '/',
 
   transformX: 0,
-
   transformY: 0
 };
 

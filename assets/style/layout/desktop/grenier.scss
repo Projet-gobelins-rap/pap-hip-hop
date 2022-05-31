@@ -1,0 +1,12 @@
+.grenier {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &-chat {
+        align-self: flex-end;
+        margin: 0 0 70px;
+    }
+}

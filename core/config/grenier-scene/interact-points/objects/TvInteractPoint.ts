@@ -5,6 +5,7 @@ import GrenierScene from "../../../../scene/GrenierScene";
 
 const TvInteractPoint: InteractionPoint = {
   name: "TV",
+  type: "plus",
 
   canvasCoords: () => {
     const position = new Vector3();
@@ -15,16 +16,14 @@ const TvInteractPoint: InteractionPoint = {
 
     return position;
   },
-  // isVisible: true,
+  
   isCompleted: () => {
     return false;
   },
 
-
   url: () => '/',
 
   transformX: 0,
-
   transformY: 0
 };
 
