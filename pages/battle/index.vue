@@ -140,24 +140,37 @@ export default class battle extends Vue {
     console.log(this.currentChat, ":::: current chat");
 
     $socket.io.on("battle::response", (ids) => {
-      console.log(ids, "OUUUUUUUI");
       this.pp = AssetsManager.getImage("PP").data;
       console.log(this.pp);
 
       this.hideOnboarding();
       if (ids === null) {
+        // TODO :: REMOVE PUNCHLINE ARRAY
         this.punchlineArray.push("....");
       } else {
         ids.forEach((id) => {
           if (this.isRound2) {
             console.log("💩💩💩💩💩");
-            this.punchlineArray = [];
-            this.punchlineArray.push(
-              this.battleStore.round2Datas[this.round2StepCounter][id]
-                .content[0].text
-            );
+            // TODO :: REMOVE PUNCHLINE ARRAY
+            // this.punchlineArray = [];
+            // this.punchlineArray.push(
+            //   this.battleStore.round2Datas[this.round2StepCounter][id]
+            //     .content[0].text
+            // );
+            this.punchArray = [];
+
+            this.punchArray.push({
+              id: id,
+              text: this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text,
+              score: parseInt(this.battleStore.round2Datas[this.round2StepCounter][id].score),
+              status:  this.battleStore.round2Datas[this.round2StepCounter][id].score,
+            });
+
+
+            console.log(this.punchArray,"<------- PUNCH R2")
             console.log(this.battleStore.round2Datas);
           } else {
+            // TODO :: REMOVE PUNCHLINE ARRAY
             this.punchlineArray.push(this.currentPunchline[id].content[0].text);
 
             this.punchArray.push({
@@ -223,7 +236,7 @@ export default class battle extends Vue {
         },
       });
     } else {
-      this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text;
+      this.opponent.$el.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text;
       gsap.to(this.opponent.$el.children[this.round2StepCounter], {
         display: "block",
         opacity: 1,
@@ -253,8 +266,7 @@ export default class battle extends Vue {
   }
 
   public detectCombo(punchline:Punchline) {
-
-    if (punchline.status == "top") {
+    if (punchline.status === "top") {
       console.log("🚑️🚑️🚑️top🚑️🚑️🚑️")
       this.comboValue++
       console.log(this.comboValue,'<----- COMBOO')
@@ -262,7 +274,6 @@ export default class battle extends Vue {
       console.log("💩💩💩 NON 💩💩💩")
       this.comboValue = 0
     }
-
   }
 
   // TODO :: REFACTO TOUTE CETTE METHODE
@@ -278,25 +289,25 @@ export default class battle extends Vue {
       el.innerText = this.punchArray[index].text
 
       gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+          console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
           this.detectCombo(this.punchArray[index])
           this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
           if (index === 3) {
             if (this.round2StepCounter <= 0) {
               this.setNextChat();
               this.displayChat();
+            }else {
+              this.displayOnboarding();
+              $socket.io.emit("battle::round2Sequence");
             }
-          //   this.displayOnboarding();
-          //   $socket.io.emit("battle::round2Sequence");
+
           }
           // this.punchArray.shift()
+          console.log(this.punchArray,'<--- punch array shifted')
         }})
     })
-    // this.punchArray.forEach((punch)=>{
-    //   console.log(punch.score)
-    // })
 
-
-
+    
     // this.punchlineArray.forEach((punch, i) => {
     //   setTimeout(() => {
     //     this.title.innerText = punch;
