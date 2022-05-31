@@ -126,8 +126,7 @@ export default class battle extends Vue {
   public opponentRound2: object;
   public pp: HTMLImageElement | null = null;
   public score: {player: number, opponent: number} = {player: 200, opponent:200}
-
-  public arrayStatus:Array<String> = ['moyen','top','top','super']
+  public comboValue:number = 0
 
   mounted() {
 
@@ -138,7 +137,7 @@ export default class battle extends Vue {
 
     console.log(this.opponentRound1, "<--- OPPONENT ROUND 1 PUNCHHH");
 
-    this.detectCombo(this.arrayStatus)
+
 
     // this.displayOpponentPunchline()
     console.log("BATTLE");
@@ -231,9 +230,7 @@ export default class battle extends Vue {
         },
       });
     } else {
-      this.opponent.children[
-        this.round2StepCounter
-      ].innerText = this.opponentRound2[this.round2StepCounter].content[0].text;
+      this.opponent.children[this.round2StepCounter].innerText = this.opponentRound2[this.round2StepCounter].content[0].text;
       gsap.to(this.opponent.children[this.round2StepCounter], {
         display: "block",
         opacity: 1,
@@ -262,19 +259,17 @@ export default class battle extends Vue {
     }
   }
 
+  public detectCombo(punchline:Punchline) {
 
-  public detectCombo(array:Array<string>) {
+    if (punchline.status == "top") {
+      console.log("🚑️🚑️🚑️top🚑️🚑️🚑️")
+      this.comboValue++
+      console.log(this.comboValue,'<----- COMBOO')
+    }else {
+      console.log("💩💩💩 NON 💩💩💩")
+      this.comboValue = 0
+    }
 
-    // console.log(detect,'====== DETECT')
-
-    let index = array.findIndex( el => el === 'top' )
-
-    console.log(index,'INDEXXX')
-    // array.forEach((el:string,index:number)=>{
-    //   if (el === 'top') {
-    //
-    //   }
-    // })
   }
 
   // TODO :: URGENT DE REFACTO TOUTE CETTE METHODE
@@ -291,6 +286,7 @@ export default class battle extends Vue {
       el.innerText = this.punchArray[index].text
 
       gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+          this.detectCombo(this.punchArray[index])
           this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
           if (index === 3) {
             if (this.round2StepCounter <= 0) {
