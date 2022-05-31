@@ -207,6 +207,7 @@ export default class battle extends Vue {
 
 
   displayOpponentPunchline() {
+    // console.log('Migrate OPPONENT PUNCHLINE')
     console.log(this.opponent);
     gsap.set(".opponent span", { display: "none", opacity: 0 });
 

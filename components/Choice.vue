@@ -35,23 +35,12 @@ export default class Choice extends Vue {
     console.log(this.content,'<-- content choice')
   }
 
-  // TODO :: REFACTO SUR CETTE METHODE
   selectItem(index:number,item:object,event:PointerEvent) {
     let elem:HTMLElement = event.target as HTMLElement
-
-    const found = this.punchlines.some(el => el.id === index);
 
     if (this.multipleChoice) {
       if(this.savedIds.length == 0){
         this.savedIds.push(index)
-        // this.punchlines.push({
-        //   id: index,
-        //   text: item.content[0].text,
-        //   score: item.score,
-        //   status: item.status
-        // })
-
-        console.log(this.punchlines,'<--- punchhh')
 
         elem.classList.toggle('choices__item--selected')
         this.isActive = false
@@ -70,12 +59,7 @@ export default class Choice extends Vue {
         }else {
           if (this.savedIds.length <=3){
             this.savedIds.push(index)
-            // this.punchlines.push({
-            //   id: index,
-            //   text: item.content[0].text,
-            //   score: item.score,
-            //   status: item.status
-            // })
+
             console.log(this.punchlines,'<--- punchhh')
 
             elem.classList.toggle('choices__item--selected')
