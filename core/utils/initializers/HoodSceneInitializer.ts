@@ -77,13 +77,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
         if (this.player) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
-          this.handleCollision()
+          // this.handleCollision()
 
-          let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
-          ctx.scene.add(arrow);
-
-
-
+          // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
+          // ctx.scene.add(arrow);
         }
       },
       onResume: (ctx) => {
@@ -185,8 +182,12 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     console.log(vinyle);
 
-    const treeSlots = city.getObjectByName('cloner_tree').children
-    const plotSlots = city.getObjectByName('cloner_bite').children
+    console.log(city);
+    
+    const treeSlots = city.getObjectByName('group_tree').children
+    const plotSlots = city.getObjectByName('group_plot').children
+    // const treeSlots = city.getObjectByName('cloner_tree').children
+    // const plotSlots = city.getObjectByName('cloner_bite').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
@@ -256,6 +257,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this.collider = new Mesh(mergedGeometry);
     this.collider.material.wireframe = true;
+    this.collider.material.color.setHex(0x00ff00)
     this.collider.material.opacity = 0.5;
     this.collider.material.transparent = true;
     this._scene.add(this.collider);
@@ -278,11 +280,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       if (intersectCollision.length > 0) {
         if (intersectCollision[0].distance < 0.8) {
           this.player.blocked = true;
-          console.log('g');
         } else {
           this.player.blocked = false;
         }
       }
+
       const intersect = this.player.raycaster.intersectObjects(this._collectibleCollection.collectibles);
       if (intersect.length > 0) {
         if (intersect[0].distance < 0.8) {
