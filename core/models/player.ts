@@ -127,7 +127,7 @@ export class Player extends Character {
 
     private _updateRaycast() {
         // this.walkDirection.y -=5
-        this.raycaster.ray.origin.y = 3
+        // this.raycaster.ray.origin.y = 3
         this.raycaster.ray.direction = this.walkDirection.negate()
     }
 
@@ -159,14 +159,6 @@ export class Player extends Character {
                 direction.orientation = -Math.PI / 4 // w+a
             } else if (this._keysPressed[D]) {
                 direction.orientation =  Math.PI / 4 // w+d
-            }
-        } else if (this._keysPressed[S]) {
-            direction.move = -1
-
-            if (this._keysPressed[A]) {
-                direction.orientation = -Math.PI / 4 + Math.PI / 2 // s+a
-            } else if (this._keysPressed[D]) {
-                direction.orientation = Math.PI / 4 - Math.PI / 2 // s+d
             }
         } else if (this._keysPressed[A]) {
             direction.orientation = -Math.PI / 4 // a

@@ -77,7 +77,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
         if (this.player) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
-          this.handleCollision()
+          // this.handleCollision()
 
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
@@ -184,8 +184,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     console.log(city);
     
-    const treeSlots = city.getObjectByName('bites').children
-    const plotSlots = city.getObjectByName('trees').children
+    const treeSlots = city.getObjectByName('group_tree').children
+    const plotSlots = city.getObjectByName('group_plot').children
     // const treeSlots = city.getObjectByName('cloner_tree').children
     // const plotSlots = city.getObjectByName('cloner_bite').children
 
@@ -284,6 +284,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
           this.player.blocked = false;
         }
       }
+
       const intersect = this.player.raycaster.intersectObjects(this._collectibleCollection.collectibles);
       if (intersect.length > 0) {
         if (intersect[0].distance < 0.8) {
