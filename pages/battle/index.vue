@@ -1,7 +1,6 @@
 <template>
 <!--   @click="ResponseTween"-->
   <section class="battle" >
-    <h1 ref="title">BATTLE DESKTOP</h1>
     <div class="battle-hud">
       <div class="battle-top">
         <div v-if="pp" class="healthbar  player">
@@ -104,7 +103,6 @@ export default class battle extends Vue {
   public chatCounter: number = 0;
   public punchlineArray: string[] = [];
   public punchArray: Array<Punchline> = []
-  public title: HTMLElement;
   public opponent: HTMLElement;
   public player: HTMLElement;
   public isRound2: boolean = false;
@@ -122,7 +120,6 @@ export default class battle extends Vue {
   mounted() {
 
     this.initRound2Datas();
-    this.title = this.$refs.title as HTMLElement;
     this.player = this.$refs.player as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
 
@@ -139,6 +136,7 @@ export default class battle extends Vue {
 
     console.log(this.currentChat, ":::: current chat");
 
+    // GESTION DES DATAS DE REPONSE
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
       console.log(this.pp);
@@ -150,20 +148,14 @@ export default class battle extends Vue {
       } else {
         ids.forEach((id) => {
           if (this.isRound2) {
-            console.log("💩💩💩💩💩");
-            // TODO :: REMOVE PUNCHLINE ARRAY
-            // this.punchlineArray = [];
-            // this.punchlineArray.push(
-            //   this.battleStore.round2Datas[this.round2StepCounter][id]
-            //     .content[0].text
-            // );
+            console.log("ROUND 2💩💩");
             this.punchArray = [];
 
             this.punchArray.push({
               id: id,
               text: this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text,
               score: parseInt(this.battleStore.round2Datas[this.round2StepCounter][id].score),
-              status:  this.battleStore.round2Datas[this.round2StepCounter][id].score,
+              status:  this.battleStore.round2Datas[this.round2StepCounter][id].status,
             });
 
 
@@ -307,7 +299,7 @@ export default class battle extends Vue {
         }})
     })
 
-    
+
     // this.punchlineArray.forEach((punch, i) => {
     //   setTimeout(() => {
     //     this.title.innerText = punch;
