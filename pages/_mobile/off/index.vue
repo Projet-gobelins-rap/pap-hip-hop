@@ -1,6 +1,7 @@
 <template>
-  <section class="intro">
-    <h1>mobile off</h1>
+  <section class="phoneHome">
+    <span class="phoneHome-date">{{ this.timestamp }}</span>
+    <span class="phoneHome-date">OFF</span>
   </section>
 </template>
 
@@ -11,31 +12,28 @@ import CustomButton from "~/components/buttons/button.vue";
 import $socket from "~/plugins/socket.io";
 @Component({
   components: {
-    CustomButton
+    CustomButton,
   },
 })
 export default class mobileOff extends Vue {
-  public codeValue:number | null = null
+  public codeValue: number | null = null;
+  public timestamp: string = "";
 
-  public stepStore = getModule(stepStore,this.$store)
+  public stepStore = getModule(stepStore, this.$store);
 
   mounted() {
-    // $socket.on("phone_connected", (user) => {
-    //   alert("phone_connected");
-    //   this.$router.push('/')
-    // });
+    this.getNow();
+    setInterval(this.getNow, 60000);
   }
 
-  // goToNextStep(){
-  //
-  //   this.stepStore.setIntroState(true)
-  //   console.log(this.$nuxt)
-  //   this.$router.push('/about')
-  // }
-
+  getNow() {
+    const today = new Date();
+    const time = today.getHours() + ":" + today.getMinutes();
+    const dateTime = time;
+    this.timestamp = dateTime;
+  }
 }
 </script>
 
 <style lang="sass" scoped>
-
 </style>
