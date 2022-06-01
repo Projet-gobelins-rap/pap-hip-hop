@@ -1,23 +1,26 @@
 <template>
   <div class="chat">
-    <div class="chat-content">
+    <div class="chat-content" v-bind:class="{noChoice :content.items.length <= 0 }" ref="chatContent" @click="goToNextStep">
       <div class="chat-infos">
-<!--        <picture class="chat-infos&#45;&#45;pic">-->
+
           <PrismicImage
             class="chat-infos--img"
             :field="content.primary.Name"
           />
-<!--        </picture>-->
 
-<!--        <picture class="chat-infos&#45;&#45;pic">-->
           <PrismicImage
             class="chat-infos--img"
             :field="content.primary.Role"
           />
-<!--        </picture>-->
 
       </div>
       <PrismicRichText class="chat-text" :field="content.primary.Text" />
+
+      <svg class="chat-arrow" v-if="content.items.length <= 0" xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+
     </div>
     <div class="chat-choices" v-if="content.items.length > 0">
       <div
@@ -49,20 +52,19 @@ import chatStore from "~/store/chatStore";
 export default class ChatComponent extends Vue {
   @Prop({ required: true }) readonly content!: any;
   public chatStore = getModule(chatStore, this.$store);
+  public chatContent: HTMLElement;
+
 
   mounted() {
-    console.log(this.content);
-
-    // TODO : check if empty
-    // for (const item of this.content.items) {
-
-    // }
-
-    // TODO : handle click on text if no choices buttons
-    document.querySelector(".chat-text")?.addEventListener("click", (e) => {
-      this.chatStore.setChatStep("next");
-    });
+    this.chatContent = this.$refs.chatContent as HTMLElement;
   }
+
+  goToNextStep(){
+    if (this.chatContent.classList.contains('noChoice')) {
+      this.chatStore.setChatStep("next");
+    }
+  }
+  
 
   // update dialogStep value in chatStore
   nextStep(action: string) {
