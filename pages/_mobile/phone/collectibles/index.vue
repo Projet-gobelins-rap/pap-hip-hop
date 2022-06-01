@@ -1,9 +1,27 @@
 <template>
   <section class="collectibles">
-    <h1>Collectables</h1>
-    <ul>
-      <li v-for="collectible in collectibles.results" :key="collectible.id" @click="$router.push(`/_mobile/phone/collectibles/${collectible.uid}`)">
-        {{collectible.data.title}}
+    <div class="container">
+      <CustomButton
+        class="collectibles-button small"
+        @click.native="goToPrev"
+        text="Retour"
+      ></CustomButton>
+      <h1 class="collectibles-title">Collectables</h1>
+      <p class="collectibles-text">
+        C’est ici que tous les objets que tu trouves en ville sont rassemblés.
+        Ils sont accessible n’importe quand et pourront peut-être t’être utile
+        avec les personnes que tu rencontres !
+      </p>
+    </div>
+    <ul class="collectibles-list">
+      <li
+        v-for="collectible in collectibles.results"
+        :key="collectible.id"
+        :class="'collectibles-listing ' + collectible.data.color"
+        @click="$router.push(`/_mobile/phone/collectibles/${collectible.uid}`)"
+      >
+        <prismic-image :field="collectible.data.image" height="100" />
+        <span class="collectibles-libelle">{{ collectible.data.title }}</span>
       </li>
     </ul>
   </section>
@@ -37,6 +55,10 @@ export default class collectibles extends Vue {
 
   mounted() {
     console.log(this.collectibles);
+  }
+
+  goToPrev() {
+    this.$router.push({ path: "/_mobile/phone/", replace: true });
   }
 }
 </script>

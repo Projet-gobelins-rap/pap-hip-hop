@@ -8,13 +8,13 @@
   cursor: pointer;
 
   &.small {
-    padding: 1rem 1.8rem;
+    padding: 8px 10px;
   }
   &.medium {
-    padding: 1.2rem 2.4rem;
+    padding: 12px 24px;
   }
   &.large {
-    padding: 1.6rem 3.2rem;
+    padding: 16px 32px;
   }
 
   &-text {
@@ -26,13 +26,13 @@
     white-space: nowrap;
 
     .small & {
-      @include stickerFont(12px, 38px);
+      @include stickerFont(12px, 12px);
     }
     .medium & {
-      @include stickerFont(16px, 30px);
+      @include stickerFont(16px, 16px);
     }
     .large & {
-      @include stickerFont(20px, 38px);
+      @include stickerFont(20px, 20px);
     }
     .white & {
       color: $black;
