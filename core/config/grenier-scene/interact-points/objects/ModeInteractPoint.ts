@@ -7,6 +7,7 @@ const ModeInteractPoint: InteractionPoint = {
   name: "Mode",
   type: "plus",
 
+  // TODO : add camera pos ref
   canvasCoords: () => {
     const position = new Vector3();
     GrenierScene.context.scene.getObjectByName("interaction_mode")!.getWorldPosition(position);

@@ -26,8 +26,8 @@ export default class mobileConnection extends Vue {
 
   connect() {
     permisions.requestOrientation();
-    $socket.io.emit("goTo", "/battle");
-    this.$router.push("/_mobile/battle/round1");
+    $socket.io.emit("goTo", "/graf/scope");
+    this.$router.push("/_mobile/graff/scope");
   }
 }
 </script>

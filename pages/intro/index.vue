@@ -51,7 +51,7 @@ export default class Intro extends Vue {
 
   goToNextStep() {
     this.stepStore.setIntroState(true);
-    this.$router.push("/grenier");
+    this.$router.push("/connection");
   }
 
   getStickers() {

@@ -1,4 +1,4 @@
-import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types";
+// import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types";
 import {InteractionPoint} from "~/core/config/grenier-scene/interact-points/types";
 
 import PosterInteractPoint from "./interact-points/objects/PosterInteractPoint";
@@ -11,37 +11,21 @@ import {InitialCameraPosition} from "./camera-positions";
 import TvInteractPoint from "./interact-points/objects/TvInteractPoint";
 import TvCameraPosition from "./camera-positions/TvCameraPosition";
 
+import { Vector3 } from 'three';
+import CameraConfigurator from '../../defs/cameraConfigurator'
+import GrenierScene from "../../scene/GrenierScene";
+
+console.log(GrenierScene);
+
 const GrenierSceneConfig = {
-  // // ROOMS
-  // rooms: [
-  //   Bedroom,
-  //   Lounge,
-  //   Mezzanine
-  // ] as Array<Room>,
-  //
-  // // ROOM OBJECTS
-  // roomObjects: [
-  //   /* Bedroom */
-  //   SkateRoomObject,
-  //   PaperRoomObject,
-  //   /* Lounge */
-  //   VinylRoomObject,
-  //   NotebookRoomObject,
-  //   /* Mezzanine */
-  //   TelevisionRoomObject,
-  //   PhoneRoomObject
-  // ] as Array<RoomObject>,
-
   // CAMERA POSITIONS
-  cameraPositions: [
-    /* Global */
-
-    InitialCameraPosition,
-    PosterCameraPosition,
-    SprayCameraPosition,
-    TvCameraPosition,
-    ModeCameraPosition
-  ] as Array<CameraPosition>,
+  grenierCameras: { 
+    initial: new CameraConfigurator('initial', null , new Vector3(64, 20, -54)),
+    supports: new CameraConfigurator('Supports d\'écoute', GrenierScene.context.scene.getObjectByName("interaction_support"), new Vector3(30, 0, 0)),
+    graff: new CameraConfigurator('Graff', GrenierScene.context.scene.getObjectByName("interaction_graf"), new Vector3(30, 0, 0)),
+    mode: new CameraConfigurator('Mode', GrenierScene.context.scene.getObjectByName("interaction_mode"), new Vector3(10, 0, -10)),
+    audiovisuel: new CameraConfigurator('Audiovisuel', GrenierScene.context.scene.getObjectByName("interaction_cinema"), new Vector3(10, 0, -10)),
+  },
 
   // INTERACT POINTS
   interactPoints: [
@@ -52,5 +36,6 @@ const GrenierSceneConfig = {
     TvInteractPoint,
   ] as Array<InteractionPoint>,
 }
+console.log(GrenierSceneConfig);
 
 export default GrenierSceneConfig

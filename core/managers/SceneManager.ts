@@ -36,7 +36,7 @@ export default class SceneManager {
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
-  public _presetCameraPositions: Array<CameraPosition>
+  public _presetCameraPositions: any
   private _renderer: WebGLRenderer
   private _composer: EffectComposer | null
   private _clock: Clock
@@ -189,7 +189,7 @@ export default class SceneManager {
   /**
    * Register preset camera positions
    */
-  public registerPresetCameraPositions(position: CameraPosition): SceneManager {
+  public registerPresetCameraPositions(position: any): SceneManager {
     this._presetCameraPositions.push(position)
 
     return this
@@ -206,6 +206,8 @@ export default class SceneManager {
     errorCallBack: DefaultSceneManagerCallback = function () {
     }
   ) {
+    console.log(this._presetCameraPositions);
+    
     const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
 
     if (!presetCameraPosition) {

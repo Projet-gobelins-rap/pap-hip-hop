@@ -18,7 +18,7 @@ import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config"
 import { Npc } from "../../models/npc"
 
 import { Outfitloader } from "../../managers/OutfitLoader"
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import SlotsLoader from "../SlotsLoader";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
@@ -27,24 +27,12 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _scene: Scene
   private _controls: OrbitControls
   private _papy: Npc
+
   init(): void {
-
-    console.log(["1 ----> ", this._data]);
     GrenierScene.setSceneContext(this._createSceneContext())
-
-    console.log(["1 ----> ", this._data]);
     this._addSceneElements()
-
-    console.log(["1 ----> ", this._data]);
-    // this._addLights(true)
-    this._registerPresetPositions()
-
-    console.log(["1 ----> ", this._data]);
-    // this._optimizeScene()
-    //this._configGUI()
-
     GrenierScene.context.start()
-    console.log(["5 ----> ", this._data]);
+    this._registerPresetPositions()
   }
 
   /**
@@ -78,14 +66,14 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       renderer: renderer,
       defaultRation: 2,
       activateOrbitControl: false,
-      onStart:(ctx) =>{
-        console.log(this._scene,'<--- scene')
+
+      onStart: (ctx) => {
+        console.log(this._scene, '<--- scene')
       },
+
       onRender: (ctx) => {
+
         // Add interactions points tracking
-        // console.log(ctx,'<-- Render')
-        // console.log(ctx.renderer.info.render,'<--- render info')
-        // console.log(camera.position)
         if (this._papy) {
           this._papy.update(ctx.deltaTime)
         }
@@ -100,12 +88,12 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
           }
           this._data.grenierSceneStore.updatePositionsInteractivePoint(updateData)
         }
-
-        // console.log(camera.position)
       },
+
       onResume: (ctx) => {
 
       },
+
       onWindowResize: (ctx) => {
         ctx.canvas.height = window.innerHeight
         ctx.canvas.width = window.innerWidth
@@ -119,7 +107,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     })
-
   }
 
   /**
@@ -133,10 +120,9 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
       1000
     )
 
-    // console.log(GrenierSceneConfig.cameraPositions[0].coords().cameraPos);
-
-    camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().newCameraPosition)
-
+    console.log(GrenierSceneConfig);
+    
+    camera.position.copy(GrenierSceneConfig.grenierCameras.initial.newCameraPosition)
     this.cameraInitialPosition = camera.position
 
     return camera
@@ -153,9 +139,9 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   /**
    * Create controls
    */
-  private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
+  private _createControls(camera: PerspectiveCamera, canvas: HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
-    this._controls.target = GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition
+    this._controls.target = new Vector3(0, 0, 0)
     return this._controls
   }
 
@@ -176,13 +162,14 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
    * Register preset camera positions
    */
   private _registerPresetPositions() {
-    GrenierSceneConfig.cameraPositions.forEach(presetPosition => {
-      GrenierScene.context.registerPresetCameraPositions(presetPosition)
-    })
+    console.log(GrenierSceneConfig.grenierCameras);
+    
+    // for (const presetPosition in GrenierSceneConfig.grenierCameras) {
+    //   GrenierScene.context.registerPresetCameraPositions(presetPosition)
+    // }
   }
 
   private _addSceneElements() {
-    console.log('add scene elements')
     this._addGltfGrenierScene()
   }
 
@@ -196,19 +183,17 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     // grenierNormalMap.flipY = false
     grenierScene.getObjectByName("grenier").material.map = grenierTexture
     // grenierScene.getObjectByName("grenier").material.normalMap = grenierNormalMap
-    
+
     grenierScene.position.set(-40, -10, 40)
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
     this._scene.add(grenierScene)
-    console.log(grenierScene);
-    
-    
+
     this._papy = new Npc(papyGltf, 'papy', 'tpose')
     this._papy.model.scale.set(17, 17, 17)
     this._papy.model.position.set(-0, -0, -0)
     SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
-  
+
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
