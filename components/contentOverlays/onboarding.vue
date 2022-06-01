@@ -37,7 +37,7 @@
       </swiper>
        <CustomButton
           @click.native="nextStep(content[0].action[0].text)"
-          class="onboarding-button"
+          class="onboarding-button small"
           :text="'J\'ai capté !'"
         >
         </CustomButton>

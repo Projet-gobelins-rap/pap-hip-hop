@@ -11,7 +11,7 @@
     />
 
     <CustomButton
-      class="intro-button"
+      class="intro-button large"
       @click.native="goToNextStep"
       text="Commencer l'expérience"
     ></CustomButton>
@@ -51,7 +51,7 @@ export default class Intro extends Vue {
 
   goToNextStep() {
     this.stepStore.setIntroState(true);
-    this.$router.push("/connection");
+    this.$router.push("/grenier");
   }
 
   getStickers() {

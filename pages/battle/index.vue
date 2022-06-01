@@ -44,6 +44,7 @@ import $socket from "~/plugins/socket.io";
 import { AssetsManager } from "~/core/managers";
 import { gsap } from "gsap";
 import {Punchline} from "../../core/types/punchline";
+
 @Component({
   components: {
     CustomButton,

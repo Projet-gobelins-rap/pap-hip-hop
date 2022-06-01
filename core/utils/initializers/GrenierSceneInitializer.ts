@@ -3,7 +3,6 @@ import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierScene from "~/core/scene/GrenierScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
 import {
-  AmbientLight,
   BoxGeometry,
   Mesh,
   MeshBasicMaterial,
@@ -20,6 +19,7 @@ import { Npc } from "../../models/npc"
 
 import { Outfitloader } from "../../managers/OutfitLoader"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import SlotsLoader from "../SlotsLoader";
 
 export default class GrenierSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, grenierSceneStore: grenierSceneStore }, void> {
 
@@ -189,21 +189,32 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _addGltfGrenierScene() {
     const grenierScene = AssetsManager.getGltf(GLTF_ASSET.GRENIER).data.scene
     const papyGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
-
+    const grenierTexture = AssetsManager.getTexture(TEXTURE_ASSET.GRENIER_TEXTURE).data
+    // const grenierNormalMap = AssetsManager.getTexture(TEXTURE_ASSET.GRENIER_NORMAL).data
+    console.log(grenierScene);
+    grenierTexture.flipY = false
+    // grenierNormalMap.flipY = false
+    grenierScene.getObjectByName("grenier").material.map = grenierTexture
+    // grenierScene.getObjectByName("grenier").material.normalMap = grenierNormalMap
+    
     grenierScene.position.set(-40, -10, 40)
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
-
-    this._papy = new Npc(papyGltf, 'papy', 'tpose')
-    console.log(grenierScene);
-
-    grenierScene.getObjectByName("victor")!.add(this._papy.model)
-    this._papy.model.scale.set(15, 15, 15)
-    this._papy.model.position.set(-50, -10, -20)
-
-    const light = new AmbientLight(0xdddddd); // soft white light
-    this._scene.add(light);
-
     this._scene.add(grenierScene)
+    console.log(grenierScene);
+    
+    
+    this._papy = new Npc(papyGltf, 'papy', 'tpose')
+    this._papy.model.scale.set(17, 17, 17)
+    this._papy.model.position.set(-0, -0, -0)
+    SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
+  
+    this._scene.traverse(object => {
+      if (object.isMesh) {
+        let oldTexture = object.material.map
+        object.material = new MeshBasicMaterial({ color: 0xffffff })
+        object.material.map = oldTexture
+      }
+    })
   }
 }

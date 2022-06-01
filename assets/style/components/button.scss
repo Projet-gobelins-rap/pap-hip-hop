@@ -1,12 +1,21 @@
 .btn {
   padding: 1.6rem 3.2rem;
-  border: 3px solid $white;
-  border-color: $white;
+  border: 3px solid $black;
   box-shadow: 0px 0px 0px 2px transparent;
   border-radius: 4rem;
   position: relative;
   transition: box-shadow 0.2s ease;
   cursor: pointer;
+
+  &.small {
+    padding: 1rem 1.8rem;
+  }
+  &.medium {
+    padding: 1.2rem 2.4rem;
+  }
+  &.large {
+    padding: 1.6rem 3.2rem;
+  }
 
   &-text {
     color: $white;
@@ -14,7 +23,20 @@
     z-index: 2;
     display: block;
     transition: transform 0.2s ease;
-    @include stickerFont(20px, 38px);
+    white-space: nowrap;
+
+    .small & {
+      @include stickerFont(12px, 38px);
+    }
+    .medium & {
+      @include stickerFont(16px, 30px);
+    }
+    .large & {
+      @include stickerFont(20px, 38px);
+    }
+    .white & {
+      color: $black;
+    }
   }
 
   &::before {
@@ -31,15 +53,21 @@
     transition: transform 0.2s ease;
   }
 
+  &.white {
+    &::before {
+      background-color: $white;
+    }
+  }
+
   &:hover {
-    box-shadow: -1px 1px 0px 2px $black;
+    box-shadow: -1px 1px 0px 2px $white;
     transition: box-shadow 0.2s ease;
     &::before,
     span {
       transform: translate(1px, -1px);
     }
   }
-  
+
   &:focus {
     outline: 0;
     box-shadow: 0px 0px 0px 2px transparent;
