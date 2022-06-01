@@ -66,6 +66,7 @@
     position: absolute;
     right: 30px;
     bottom: 15px;
+    animation: move 1.5s ease infinite;
     polyline {
       stroke: $red;
     }
@@ -93,4 +94,48 @@
 .noChoice {
   width: 100%;
   cursor: pointer;
+}
+
+@keyframes move {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.triangle {
+  position: relative;
+  background-color: white;
+  text-align: left;
+}
+.triangle:before,
+.triangle:after {
+  content: '';
+  position: absolute;
+  background-color: inherit;
+}
+.triangle,
+.triangle:before,
+.triangle:after {
+  position: absolute;
+  width:  3em;
+  height: 3em;
+  border-top-right-radius: 30%;
+}
+
+.triangle {
+  transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
+  right: 60px;
+  top: -20px;
+}
+.triangle:before {
+  transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
+}
+.triangle:after {
+  transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
 }

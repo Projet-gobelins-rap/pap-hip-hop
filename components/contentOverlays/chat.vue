@@ -21,6 +21,8 @@
         <polyline points="6 9 12 15 18 9" />
       </svg>
 
+      <div class="triangle"></div>
+
     </div>
     <div class="chat-choices" v-if="content.items.length > 0">
       <div
@@ -64,7 +66,7 @@ export default class ChatComponent extends Vue {
       this.chatStore.setChatStep("next");
     }
   }
-  
+
 
   // update dialogStep value in chatStore
   nextStep(action: string) {
