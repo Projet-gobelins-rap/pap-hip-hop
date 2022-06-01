@@ -1,5 +1,4 @@
 <template>
-<!--   @click="ResponseTween"-->
   <section class="battle" >
     <div class="battle-hud">
       <div class="battle-top">
@@ -126,10 +125,6 @@ export default class battle extends Vue {
 
     // this.displayOpponentPunchline()
     console.log("BATTLE");
-    console.log(this.battleChat, "<--- dialog battle");
-    console.log(this.currentOnboarding, "<--- onboarding battle");
-
-    console.log(this.currentChat, ":::: current chat");
 
     // GESTION DES DATAS DE REPONSE
     $socket.io.on("battle::response", (ids) => {
@@ -183,25 +178,6 @@ export default class battle extends Vue {
       }
     });
   }
-
-
-  ResponseTween() {
-    console.log("🚑️🚑️🚑️RESPONSE tween🚑️🚑️🚑️🚑️")
-    gsap.set(".opponent span", { display: "none", opacity: 0 });
-    gsap.to(".opponent span", {
-      display: "block",
-      delay:2,
-      opacity: 1,
-      duration: 2,
-      stagger: 2,
-      ease:"elastic.out(1, 0.3)",
-      onComplete: () => {
-        gsap.set(".opponent span", { display: "none", opacity: 0 });
-        // this.displayUserPunchline();
-      },
-    });
-  }
-
 
 
   displayOpponentPunchline() {
@@ -266,34 +242,60 @@ export default class battle extends Vue {
       this.comboValue = 0
     }
   }
-  
+
   displayUserPunchline() {
 
-    console.log(this.punchlineArray,'punch array')
-
     gsap.set(Array.from(this.player.$el.children),{display:'none',opacity:0})
-    Array.from(this.player.$el.children).forEach((el:HTMLElement,index:number)=>{
+    console.log(this.round2StepCounter, '<---est ceque leround 2')
+    if (this.round2StepCounter == 0) {
+      Array.from(this.player.$el.children).forEach((el:HTMLElement,index:number)=>{
 
-      el.innerText = this.punchArray[index].text
+        // console.log(el,el.innerHTML)
+        el.innerHTML = this.punchArray[index].text
 
-      gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
-          console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
-          this.detectCombo(this.punchArray[index])
-          this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
-          if (index === 3) {
-            if (this.round2StepCounter <= 0) {
-              this.setNextChat();
-              this.displayChat();
-            }else {
-              this.displayOnboarding();
-              $socket.io.emit("battle::round2Sequence");
+        gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+            console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
+            this.detectCombo(this.punchArray[index])
+            this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
+            if (index === 3) {
+              if (this.round2StepCounter <= 0) {
+                this.setNextChat();
+                this.displayChat();
+              }else {
+                this.displayOnboarding();
+                $socket.io.emit("battle::round2Sequence");
+              }
+
             }
+            // this.punchArray.shift()
+            console.log(this.punchArray,'<--- punch array')
+          }})
+      })
 
-          }
-          // this.punchArray.shift()
-          console.log(this.punchArray,'<--- punch array shifted')
-        }})
-    })
+    }
+    else {
+
+      console.log(this.player.$el.children[this.round2StepCounter-1],'::::::::::')
+
+
+      console.log(this.punchArray,'----------')
+      this.player.$el.children[this.round2StepCounter-1].innerText = this.punchArray[0].text;
+      gsap.to(this.player.$el.children[this.round2StepCounter-1], {
+        display: "block",
+        opacity: 1,
+        duration: 2,
+        onComplete: () => {
+          this.detectCombo(this.punchArray[0])
+          this.calculateScore(this.score.opponent,this.punchArray[0].score,true)
+          gsap.set(this.player.$el.children[this.round2StepCounter-1], {
+            display: "none",
+            opacity: 0,
+          });
+          $socket.io.emit("battle::round2Sequence");
+        },
+      });
+    }
+
 
 
     // this.punchlineArray.forEach((punch, i) => {
