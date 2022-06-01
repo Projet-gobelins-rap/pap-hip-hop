@@ -1,6 +1,6 @@
 <template>
   <section class="phoneHome">
-    <span class="phoneHome-date">16:02</span>
+    <span class="phoneHome-date">{{this.timestamp}}</span>
     <ul class="phoneHome-apps">
       <li class="phoneHome-app">
         <nuxt-link class="phoneHome-link" to="/_mobile/phone/archives">
@@ -194,11 +194,21 @@ import permisions from "~/core/utils/Permisions";
 })
 export default class phoneHome extends Vue {
   public stepStore = getModule(stepStore, this.$store);
+  public timestamp: string = "";
 
-  mounted() {}
+  mounted() {
+    this.getNow()
+    setInterval(this.getNow, 60000)
+  }
 
   askPermisions() {
     permisions.requestOrientation();
+  }
+  getNow() {
+    const today = new Date();
+    const time = today.getHours() + ":" + today.getMinutes();
+    const dateTime = time;
+    this.timestamp = dateTime;
   }
 }
 </script>
