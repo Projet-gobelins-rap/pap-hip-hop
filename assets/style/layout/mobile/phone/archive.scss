@@ -1,0 +1,60 @@
+.archive {
+    min-height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: $black;
+    padding: 40px 0;
+
+    &-top {
+        @extend .container;
+        padding: 0 20px 18px;
+        border-bottom: solid 2px $darkGrey;
+    }
+
+    &-title {
+        @include stickerFont(20px, 26px);
+        margin: 24px 0 0;
+        position: relative;
+        z-index: 2;
+    } 
+
+    &-intro {
+      
+        margin: 8px 0 18px;
+        position: relative;
+        z-index: 2; 
+
+        p {
+            @include text(16px, 20px, $white, 500);
+            font-style: italic;
+        }
+    }
+
+    &-content {
+        @extend .container;
+        margin: 24px 0;
+    }
+
+    &-slice {
+        width: 100%;
+        margin: 0 0 40px;
+    }
+
+    &-text {
+        p {
+            @include text(14px, 18px, $white);
+        }
+    }
+    
+    &-image {
+        border: solid 4px $white;
+        border-radius: 8px;
+        transform: rotate(4deg);
+        object-fit: cover;
+        width: 340px;
+        height: 190px;
+        max-width: 100%;
+
+    }
+}

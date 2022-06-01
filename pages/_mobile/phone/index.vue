@@ -210,5 +210,10 @@ export default class phoneHome extends Vue {
     const dateTime = time;
     this.timestamp = dateTime;
   }
+
+  // TODO : add '0' before hours/minutes if <10
+  parseDateTime() {
+
+  }
 }
 </script>

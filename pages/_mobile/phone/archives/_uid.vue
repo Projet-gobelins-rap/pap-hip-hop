@@ -1,6 +1,25 @@
 <template>
-  <section class="archiveSingle">
-    <h1>{{ archive.data.title }}</h1>
+  <section class="archive">
+     <div class="archive-top">
+      <CustomButton
+        class="archive-button small"
+        @click.native="goToPrev"
+        text="Retour"
+      ></CustomButton>
+      <h1 class="archive-title">{{ archive.data.title }}</h1>
+      
+      <PrismicRichText
+        class="archive-intro"
+        :field="archive.data.text"
+      />
+    </div>
+    <div class="archive-content">
+      <div class="archive-slice" v-for="(slice, idx) in archive.data.slices" :key="'slice'+idx">
+        <PrismicImage class="archive-image" v-if="slice.slice_type == 'image'" :field="slice.primary.image" />
+        <PrismicRichText class="archive-text" v-if="slice.slice_type == 'text'"  :field="slice.primary.text" />
+      </div>
+    </div>
+    
   </section>
 </template>
 
