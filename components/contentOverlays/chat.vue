@@ -2,13 +2,20 @@
   <div class="chat">
     <div class="chat-content">
       <div class="chat-infos">
-        <picture class="chat-infos--pic">
+<!--        <picture class="chat-infos&#45;&#45;pic">-->
           <PrismicImage
             class="chat-infos--img"
-            :field="content.primary.Photo"
+            :field="content.primary.Name"
           />
-        </picture>
-        <p class="chat-infos--name">{{ content.primary.Nom }}</p>
+<!--        </picture>-->
+
+<!--        <picture class="chat-infos&#45;&#45;pic">-->
+          <PrismicImage
+            class="chat-infos--img"
+            :field="content.primary.Role"
+          />
+<!--        </picture>-->
+
       </div>
       <PrismicRichText class="chat-text" :field="content.primary.Text" />
     </div>
