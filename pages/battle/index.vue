@@ -123,12 +123,6 @@ export default class battle extends Vue {
     this.player = this.$refs.player as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
 
-
-    console.log(this.player,'PLAYERRRR')
-    console.log(this.opponentRound1, "<--- OPPONENT ROUND 1 PUNCHHH");
-
-
-
     // this.displayOpponentPunchline()
     console.log("BATTLE");
     console.log(this.battleChat, "<--- dialog battle");
@@ -143,8 +137,13 @@ export default class battle extends Vue {
 
       this.hideOnboarding();
       if (ids === null) {
-        // TODO :: REMOVE PUNCHLINE ARRAY
-        this.punchlineArray.push("....");
+        this.punchArray.push({
+          id: -1,
+          text: "...",
+          score: 0,
+          status:  "nul",
+        });
+
       } else {
         ids.forEach((id) => {
           if (this.isRound2) {
@@ -162,8 +161,6 @@ export default class battle extends Vue {
             console.log(this.punchArray,"<------- PUNCH R2")
             console.log(this.battleStore.round2Datas);
           } else {
-            // TODO :: REMOVE PUNCHLINE ARRAY
-            this.punchlineArray.push(this.currentPunchline[id].content[0].text);
 
             this.punchArray.push({
              id: id,
@@ -268,14 +265,11 @@ export default class battle extends Vue {
       this.comboValue = 0
     }
   }
-
-  // TODO :: REFACTO TOUTE CETTE METHODE
+  
   displayUserPunchline() {
 
     console.log(this.punchlineArray,'punch array')
 
-    // TODO on doit calculer le score
-    // TODO on doit stocker les différents status de punchline
     gsap.set(Array.from(this.player.$el.children),{display:'none',opacity:0})
     Array.from(this.player.$el.children).forEach((el:HTMLElement,index:number)=>{
 
