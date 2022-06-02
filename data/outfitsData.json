@@ -3,11 +3,13 @@
         {
             "name": "papy",
             "head": {
-                "model": "hair-afro",
+                "model": "Polygon2",
                 "color": "green"
             },
             "body": {
-                "color": "green"
+                "color": "green",
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
             }
         }
     ],

@@ -192,6 +192,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     const grenierTexture = AssetsManager.getTexture(TEXTURE_ASSET.GRENIER_TEXTURE).data
     // const grenierNormalMap = AssetsManager.getTexture(TEXTURE_ASSET.GRENIER_NORMAL).data
     console.log(grenierScene);
+    console.log(papyGltf);
+    
     grenierTexture.flipY = false
     // grenierNormalMap.flipY = false
     grenierScene.getObjectByName("grenier").material.map = grenierTexture
@@ -203,12 +205,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     this._scene.add(grenierScene)
     console.log(grenierScene);
     
-    
-    this._papy = new Npc(papyGltf, 'papy', 'tpose')
-    this._papy.model.scale.set(17, 17, 17)
-    this._papy.model.position.set(-0, -0, -0)
-    SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
-  
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -216,5 +212,12 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         object.material.map = oldTexture
       }
     })
+    
+    this._papy = new Npc(papyGltf, 'papy', 't-pose')
+    this._papy.model.scale.set(17, 17, 17)
+    this._papy.model.position.set(-0, -0, -0)
+    SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
+  
+  
   }
 }
