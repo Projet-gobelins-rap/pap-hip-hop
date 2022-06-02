@@ -5,6 +5,7 @@ export default class Scope {
     public sensor: any
     public grafCanvas: HTMLCanvasElement
     public landscape: HTMLElement
+    public pointer: HTMLElement
     public markers: any
     public baseX: number
     public latestX: number
@@ -19,6 +20,7 @@ export default class Scope {
     public focusTimeOut: any
     public focusTarget: boolean = false
     public focusTimeline: any 
+    public pointerTimeline: any 
 
     private MAX_Y_ANGLE: number = 50
     private MAX_X_ANGLE: number = 50
@@ -27,6 +29,7 @@ export default class Scope {
     constructor() {
 
         this.landscape = document.querySelector('.mobileScope-wrapper')
+        this.pointer = document.querySelector('.mobileScope-pointer')
         this.markers = [...document.querySelectorAll('.mobileScope-marker')]
         this.debugX = document.querySelector('.mobileScope-debug--x')
         this.debugY = document.querySelector('.mobileScope-debug--y')
@@ -45,6 +48,15 @@ export default class Scope {
             ease: 'none'
         })
         this.focusTimeline.pause()
+
+        this.pointerTimeline = gsap.timeline()
+        
+        this.pointerTimeline.to(this.pointer, {
+           scale: 2,
+           rotate: '45deg',
+           duration: 0.2
+        })
+        this.pointerTimeline.pause()
         
         this.init()
     }
@@ -52,6 +64,10 @@ export default class Scope {
     init() {
         // this.initSensor()
         this.normalizePosition = { x: 0, y: 0 }
+        
+    }
+
+    start() {
         this.initPlaces()
         this.deviceOrientation()
         this.animationLoop()
@@ -62,22 +78,22 @@ export default class Scope {
         this.places = [
             {
                 id: 1,
-                x: 0.07,
-                y: 0.07,
+                x: -0.05,
+                y: 0.0,
                 found: false,
                 icon: this.markers[1],
                 slug: "good"
             }, {
                 id: 2,
-                x: -0.85,
-                y: 0.40,
+                x: 0.63,
+                y: -0.39,
                 found: false,
                 icon: this.markers[0],
                 slug: "bad-1"
             }, {
                 id: 3,
-                x: 0.60,
-                y: 0.55,
+                x: 0.63,
+                y: -0.39,
                 found: false,
                 icon: this.markers[2],
                 slug: "bad-2"
@@ -112,8 +128,12 @@ export default class Scope {
 
             if (this.normalizePosition.y <= (place.y + this.colideRange) && this.normalizePosition.y > (place.y - this.colideRange)) {
                 if (this.normalizePosition.x <= (place.x + this.colideRange) && this.normalizePosition.x > (place.x - this.colideRange)) {
-                    if (!this.focusTarget && !this.focusTimeOut) {
+                    console.log('in 1');
+
+                    if (!this.focusTarget && !this.focusTimeOut && !place.found) {
                         this.focusTimeline.play()
+                        this.pointerTimeline.play()
+                        console.log('in 2');
 
                         this.focusTimeOut = setTimeout(() => {
                             console.log('2');
@@ -121,21 +141,23 @@ export default class Scope {
                             gsap.set(place.icon, {
                                 fill: "#00ff00"
                             })
-                            if (!place.found) {
-                                $socket.io.emit('scope-focus', place.slug)
-                            }
+                            $socket.io.emit('scope-focus', place.slug)
                             place.found = true
-                            
                         }, 1000);
                     }
                     this.focusTarget = true
                 } else {
+
+                    console.log('out 1');
                     if (this.focusTarget) {
+                        console.log('out 2');
+                        
                         this.focusTimeline.restart()
                         this.focusTimeline.pause()
+                        this.pointerTimeline.reverse()
+
                         clearTimeout(this.focusTimeOut)
                         this.focusTimeOut = null
-
                         this.focusTarget = false
                     }
                 }
