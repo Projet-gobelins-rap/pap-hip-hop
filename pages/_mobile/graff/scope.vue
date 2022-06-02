@@ -234,3 +234,11 @@ export default class MobileScope extends Vue {
   }
 }
 </script>
+
+<style>
+.mobileScope-debug span {
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: red;
+  }
+</style>
