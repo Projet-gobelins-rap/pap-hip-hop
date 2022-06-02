@@ -20,6 +20,9 @@
     <BattleResponse class="opponent responseContainer--opponent" ref="opponent"></BattleResponse>
     <BattleResponse class="player responseContainer--player" ref="player"></BattleResponse>
 
+    <BattleMultipleResponse ref="globalResponse"></BattleMultipleResponse>
+
+
     <ChatComponent
       v-if="this.chatDisplay && currentChat"
       :content="currentChat"
@@ -33,6 +36,7 @@ import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import CustomButton from "~/components/buttons/button.vue";
 import BattleResponse from "~/components/battle/battleResponse.vue";
+import BattleMultipleResponse from "~/components/battle/battleMultipleResponse.vue";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import chatStore from "~/store/chatStore";
 import battleStore from "../../store/battleStore";
@@ -49,7 +53,8 @@ import {Punchline} from "../../core/types/punchline";
     CustomButton,
     ChatComponent,
     Onboarding,
-    BattleResponse
+    BattleResponse,
+    BattleMultipleResponse
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -105,6 +110,7 @@ export default class battle extends Vue {
   public punchArray: Array<Punchline> = []
   public opponent: HTMLElement;
   public player: HTMLElement;
+  public globalResponse: HTMLElement;
   public isRound2: boolean = false;
   public round2Step1: object;
   public round2Step2: object;
@@ -122,6 +128,11 @@ export default class battle extends Vue {
     this.initRound2Datas();
     this.player = this.$refs.player as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
+    this.globalResponse = this.$refs.globalResponse as HTMLElement;
+    console.log(this.$refs.globalResponse,'TEST REF')
+    console.log(this.globalResponse,"GLOB")
+
+
 
     // this.displayOpponentPunchline()
     console.log("BATTLE");
@@ -286,7 +297,7 @@ export default class battle extends Vue {
 
 
       console.log(this.punchArray,'----------')
-      this.animatePunchline(this.player.$el.children,false,null,this.punchArray,false,this.round2StepCounter-1)
+      this.animatePunchline(this.globalResponse.$el.children,false,null,this.punchArray,false,this.round2StepCounter-1)
       // this.player.$el.children[this.round2StepCounter-1].innerText = this.punchArray[0].text;
       // gsap.to(this.player.$el.children[this.round2StepCounter-1], {
       //   display: "block",
@@ -343,11 +354,10 @@ export default class battle extends Vue {
        */
 
       console.log("AAAAAAAAAAAAAAAAA")
+      console.log(target,'XXXXXX')
       let currentElement = target[this.round2StepCounter-1] as HTMLElement
       currentElement.innerHTML = isOpponentTour ? opponentData[punchIndex].content[0].text : playerData[0].text
       console.log(currentElement.innerHTML,'<---- ELEMENT INNER HTML')
-      // el.innerHTML = isOpponentTour ? opponentData[index].content[0].text : playerData[!isOpponentTour&&!round1 ? punchIndex: index].text
-      //
       gsap.to(currentElement, {
         display: 'block', duration: 1, opacity: 1, delay: 2, onComplete: () => {
           // console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY")

@@ -85,7 +85,16 @@
       border: 2px solid $yellow;
     }
   }
-
+  &--global {
+    .battleResponse {
+      &--opponent {
+        border: 2px solid $yellow;
+      }
+      &--purple {
+        border: 2px solid $purple;
+      }
+    }
+  }
 }
 
 .battleResponse {
