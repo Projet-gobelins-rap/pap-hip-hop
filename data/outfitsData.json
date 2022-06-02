@@ -19,7 +19,9 @@
             "model": "bob"
         },
         "body": {
-            "color": "orange"
+            "color": "orange",
+            "textureBody": "VICTOR_BODY_TEXTURE",
+            "textureArms": "VICTOR_ARMS_TEXTURE"
         }
     }
 }
