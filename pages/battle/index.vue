@@ -206,9 +206,6 @@ export default class battle extends Vue {
       //   },
       // });
 
-      // Array.from(this.player.$el.opponent).forEach((el:HTMLElement,index:number)=>{
-      //
-      // })
 
 
 
@@ -228,6 +225,9 @@ export default class battle extends Vue {
           this.displayUserPunchline();
         },
       });
+
+      // this.animatePunchline(this.opponent.$el.children,false,this.opponentRound2,null,true)
+
     }
   }
 
@@ -259,75 +259,112 @@ export default class battle extends Vue {
     gsap.set(Array.from(this.player.$el.children),{display:'none',opacity:0})
     console.log(this.round2StepCounter, '<---est ceque leround 2')
     if (this.round2StepCounter == 0) {
-      Array.from(this.player.$el.children).forEach((el:HTMLElement,index:number)=>{
-
-        el.innerHTML = this.punchArray[index].text
-
-        gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
-            console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
-            this.detectCombo(this.punchArray[index])
-            this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
-            if (index === 3) {
-              if (this.round2StepCounter <= 0) {
-                this.setNextChat();
-                this.displayChat();
-              }else {
-                this.displayOnboarding();
-                $socket.io.emit("battle::round2Sequence");
-              }
-            }
-            console.log(this.punchArray,'<--- punch array')
-          }})
-      })
+      this.animatePunchline(this.player.$el.children,true,null,this.punchArray,false)
+      // Array.from(this.player.$el.children).forEach((el:HTMLElement,index:number)=>{
+      //
+      //   el.innerHTML = this.punchArray[index].text
+      //
+      //   gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+      //       console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
+      //       this.detectCombo(this.punchArray[index])
+      //       this.calculateScore(this.score.opponent,this.punchArray[index].score,true)
+      //       if (index === 3) {
+      //         if (this.round2StepCounter <= 0) {
+      //           this.setNextChat();
+      //           this.displayChat();
+      //         }else {
+      //           this.displayOnboarding();
+      //           $socket.io.emit("battle::round2Sequence");
+      //         }
+      //       }
+      //       console.log(this.punchArray,'<--- punch array')
+      //     }})
+      // })
 
     }
     else {
 
 
       console.log(this.punchArray,'----------')
-      this.player.$el.children[this.round2StepCounter-1].innerText = this.punchArray[0].text;
-      gsap.to(this.player.$el.children[this.round2StepCounter-1], {
-        display: "block",
-        opacity: 1,
-        duration: 2,
-        onComplete: () => {
-          this.detectCombo(this.punchArray[0])
-          this.calculateScore(this.score.opponent,this.punchArray[0].score,true)
-          gsap.set(this.player.$el.children[this.round2StepCounter-1], {
-            display: "none",
-            opacity: 0,
-          });
-          $socket.io.emit("battle::round2Sequence");
-        },
-      });
+      this.animatePunchline(this.player.$el.children,false,null,this.punchArray,false,this.round2StepCounter-1)
+      // this.player.$el.children[this.round2StepCounter-1].innerText = this.punchArray[0].text;
+      // gsap.to(this.player.$el.children[this.round2StepCounter-1], {
+      //   display: "block",
+      //   opacity: 1,
+      //   duration: 2,
+      //   onComplete: () => {
+      //     this.detectCombo(this.punchArray[0])
+      //     this.calculateScore(this.score.opponent,this.punchArray[0].score,true)
+      //     gsap.set(this.player.$el.children[this.round2StepCounter-1], {
+      //       display: "none",
+      //       opacity: 0,
+      //     });
+      //     $socket.io.emit("battle::round2Sequence");
+      //   },
+      // });
     }
   }
 
-  animatePunchline(target:NodeList,round1:boolean=true,opponentData?:object,playerData?:Punchline,isOpponentTour:boolean=true) {
+  animatePunchline(target:NodeList,round1:boolean=true,opponentData?:object,playerData?:Array<Punchline>,isOpponentTour:boolean=true,punchIndex?:number) {
 
-    Array.from(target).forEach((el:HTMLElement,index:number)=>{
 
-      el.innerHTML = isOpponentTour ? opponentData[index].content[0].text : playerData[index].text
 
-      gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
-          console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
-          if (!isOpponentTour){
-            this.detectCombo(playerData[index])
-            this.calculateScore(this.score.opponent,playerData[index].score,true)
-          }
+    if(round1){
+      Array.from(target).forEach((el:HTMLElement,index:number)=>{
 
-          if (index === 3) {
-            if (this.round2StepCounter <= 0) {
-              this.setNextChat();
-              this.displayChat();
+        el.innerHTML = isOpponentTour ? opponentData[index].content[0].text : playerData[!isOpponentTour&&!round1 ? punchIndex: index].text
+
+        gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+            console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
+            if (!isOpponentTour){
+              this.detectCombo(playerData[!isOpponentTour&&!round1 ? 0: index])
+              this.calculateScore(this.score.opponent,playerData[!isOpponentTour&&!round1 ? 0: index].score,true)
+
+              if (index === 3) {
+                if (this.round2StepCounter <= 0) {
+                  this.setNextChat();
+                  this.displayChat();
+                }else {
+                  this.displayOnboarding();
+                  $socket.io.emit("battle::round2Sequence");
+                }
+              }
             }else {
-              this.displayOnboarding();
-              $socket.io.emit("battle::round2Sequence");
+              if (index === 3) {
+                this.displayUserPunchline();
+              }
             }
           }
-          console.log(this.punchArray,'<--- punch array')
-        }})
-    })
+        })
+      })
+    } else {
+      /**
+       * 🚨🚨🚨 ROUND 2 🚨🚨🚨
+       */
+
+      console.log("AAAAAAAAAAAAAAAAA")
+      let currentElement = target[this.round2StepCounter-1] as HTMLElement
+      currentElement.innerHTML = isOpponentTour ? opponentData[punchIndex].content[0].text : playerData[0].text
+      console.log(currentElement.innerHTML,'<---- ELEMENT INNER HTML')
+      // el.innerHTML = isOpponentTour ? opponentData[index].content[0].text : playerData[!isOpponentTour&&!round1 ? punchIndex: index].text
+      //
+      gsap.to(currentElement, {
+        display: 'block', duration: 1, opacity: 1, delay: 2, onComplete: () => {
+          // console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY")
+          if (!isOpponentTour) {
+            this.detectCombo(playerData[!isOpponentTour && !round1 ? 0 : punchIndex])
+            this.calculateScore(this.score.opponent, playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score, true)
+
+          } else {
+            if (punchIndex === 3) {
+              this.displayUserPunchline();
+            }
+          }
+          $socket.io.emit("battle::round2Sequence");
+        }
+      })
+    }
+
 
   }
 
