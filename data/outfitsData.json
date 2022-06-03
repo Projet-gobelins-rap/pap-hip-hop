@@ -3,21 +3,25 @@
         {
             "name": "papy",
             "head": {
-                "model": "hair-afro",
+                "model": "victor_head",
                 "color": "green"
             },
             "body": {
-                "color": "green"
+                "color": "green", 
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
             }
         }
     ],
-    "player": {
+    "player": { 
         "name": "player",
         "head": {
-            "model": "bob"
+            "model": "hair-afro"
         },
         "body": {
-            "color": "orange"
+            "color": "orange",
+            "textureBody": "VICTOR_BODY_TEXTURE",
+            "textureArms": "VICTOR_ARMS_TEXTURE"
         }
     }
 }

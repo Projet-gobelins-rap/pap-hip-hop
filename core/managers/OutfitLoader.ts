@@ -11,6 +11,7 @@ export class Outfitloader {
         this.outfitList = [
             GLTF_ASSET.BOB,
             GLTF_ASSET.AFRO,
+            GLTF_ASSET.VICTOR_HAIR,
         ]
         this.outfitCollection = new Map()
         this.loadOutfits()
@@ -22,6 +23,8 @@ export class Outfitloader {
             const model = AssetsManager.getGltf(item).data.scene
             this.outfitCollection.set(model.children[0].name, model)
         });
+        console.log('collect ', this.outfitCollection);
+        
     }
 }
 

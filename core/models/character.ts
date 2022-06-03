@@ -27,7 +27,8 @@ export class Character {
     public outfitParams: any
     public material: any
     public loadedCollection: any
-    public animationPlayed:string = 'idle'
+    public animationPlayed: string = 'idle'
+    public textures: any;
 
     constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
@@ -35,7 +36,7 @@ export class Character {
         this.gltfAnimations = playerGltf.animations;
         this.mixer = new THREE.AnimationMixer(this.model);
         this.currentAction = currentAction
-  
+
         this.name = name
         this.material = null
 
@@ -47,6 +48,7 @@ export class Character {
         this.initAnimations()
         this.loadedCollection = AssetsManager.getLoadedCollection().outfitCollection
         this.texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data
+     
         this.setParamsByName()
     }
 
@@ -57,6 +59,13 @@ export class Character {
     }
 
     public loadOutfit() {
+        console.log("model ", this.model);
+
+        this.textures = {
+            arms: AssetsManager.getTexture(this.outfitParams.body.textureArms).data,
+            body: AssetsManager.getTexture(this.outfitParams.body.textureBody).data,
+        }
+
         this.model.traverse(child => {
             if (child.name === "mixamorigHeadTop_End") {
                 child.add(this.loadedCollection.get(this.outfitParams.head.model))
@@ -65,11 +74,13 @@ export class Character {
                 group.position.z = -30
             }
 
-            if (child.name === 'sleeves' || child.name === 'body') {
-                child.material = new THREE.MeshMatcapMaterial({ map: this.texture })
-                child.material.map.magFilter = THREE.NearestFilter
-                child.material.map.offset = this.outfitParams.body.colorMap.offset;
-                child.material.map.repeat = this.outfitParams.body.colorMap.repeat;
+            if (child.name === 'body') {
+                this.textures.body.flipY = false
+                child.material = new THREE.MeshMatcapMaterial({ map: this.textures.body })
+            }
+            if (child.name === 'arms') {
+                this.textures.arms.flipY = false
+                child.material = new THREE.MeshMatcapMaterial({ map: this.textures.arms })
             }
         })
     }
@@ -90,13 +101,13 @@ export class Character {
                 })
             }
         }
-        
+
         this.loadOutfit()
     }
 
     // TODO : Setup mixer
     public update(delta: number) {
-        
+
         if (this.currentAction != this.animationPlayed) {
             const toPlay = this.animationsMap.get(this.animationPlayed)
             const current = this.animationsMap.get(this.currentAction)
