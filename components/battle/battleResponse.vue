@@ -1,5 +1,5 @@
 <template>
-  <div class="responseContainer" >
+  <div class="responseContainer">
     <span class="battleResponse"></span>
     <span class="battleResponse"></span>
     <span class="battleResponse"></span>

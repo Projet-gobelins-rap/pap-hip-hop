@@ -316,10 +316,11 @@ export default class battle extends Vue {
     }
   }
 
-  animatePunchline(target:NodeList,round1:boolean=true,opponentData?:object,playerData?:Array<Punchline>,isOpponentTour:boolean=true,punchIndex?:number) {
+  animatePunchline(target:NodeList|HTMLCollection,round1:boolean=true,opponentData?:object,playerData?:Array<Punchline>,isOpponentTour:boolean=true,punchIndex?:number) {
 
-
-
+    /**
+     * 🚨🚨🚨 ROUND 1 🚨🚨🚨
+     */
     if(round1){
       Array.from(target).forEach((el:HTMLElement,index:number)=>{
 
@@ -354,13 +355,17 @@ export default class battle extends Vue {
        */
 
       console.log("AAAAAAAAAAAAAAAAA")
-      console.log(target,'XXXXXX')
-      let currentElement = target[this.round2StepCounter-1] as HTMLElement
+      console.log(target,'WWW')
+
+      const result = isOpponentTour ? [...target].filter(element => element.classList.contains('battleResponse--opponent')) : [...target].filter(element => element.classList.contains('battleResponse--player'))
+
+      console.log(result,"✅✅✅✅✅");
+      let currentElement = result[this.round2StepCounter-1] as HTMLElement
       currentElement.innerHTML = isOpponentTour ? opponentData[punchIndex].content[0].text : playerData[0].text
       console.log(currentElement.innerHTML,'<---- ELEMENT INNER HTML')
       gsap.to(currentElement, {
         display: 'block', duration: 1, opacity: 1, delay: 2, onComplete: () => {
-          // console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY")
+
           if (!isOpponentTour) {
             this.detectCombo(playerData[!isOpponentTour && !round1 ? 0 : punchIndex])
             this.calculateScore(this.score.opponent, playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score, true)
