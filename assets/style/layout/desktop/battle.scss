@@ -76,7 +76,7 @@
 
 .responseContainer{
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   span {
     border: 2px solid $purple;
   }
@@ -87,10 +87,11 @@
   }
   &--global {
     .battleResponse {
+      display: none;
       &--opponent {
         border: 2px solid $yellow;
       }
-      &--playr {
+      &--player {
         border: 2px solid $purple;
       }
     }

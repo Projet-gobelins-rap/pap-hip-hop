@@ -1,5 +1,5 @@
 <template>
-  <div class="responseContainer responseContainer--global" style="display: none;">
+  <div class="responseContainer responseContainer--global">
     <span class="battleResponse battleResponse--opponent">AAA</span>
     <span class="battleResponse battleResponse--player">BBB</span>
     <span class="battleResponse battleResponse--opponent">AAA</span>
