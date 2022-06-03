@@ -9,7 +9,9 @@ const PosterInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("interaction_support")!.getWorldPosition(position);
+    const target = GrenierScene.context.scene.getObjectByName("interaction_support")!
+    target.getWorldPosition(position);
+    target.children = []
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;

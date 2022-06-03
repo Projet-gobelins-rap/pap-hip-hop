@@ -78,16 +78,13 @@ export class Character {
                 this.textures.body.flipY = false
                 child.material = new THREE.MeshMatcapMaterial({ map: this.textures.body })
             }
+
             if (child.name === 'arms') {
                 this.textures.arms.flipY = false
                 child.material = new THREE.MeshMatcapMaterial({ map: this.textures.arms })
             }
         })
     }
-
-    // TODO : Update position methode
-    // public display() {
-    // }
 
     public setParamsByName() {
         for (const key in outfitsData.pnj) {

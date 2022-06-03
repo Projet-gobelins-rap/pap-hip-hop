@@ -61,6 +61,7 @@ export default class GrenierScene extends Vue {
   public conversation: any;
   public currentChat: any;
   public gui = new GUI();
+  public genierInstance: GrenierSceneInitializer;
 
   mounted() {
     console.log(this.conversation, "conversation");
@@ -71,7 +72,6 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.addInteractivePoint(TvInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(ModeInteractPoint.name);
-    // console.log(ModeCameraPosition.coords().,'---< coord mode')
   }
 
   removeInteractionsPoints() {
@@ -87,6 +87,9 @@ export default class GrenierScene extends Vue {
         this.currentChat = element;
         return this.currentChat;
       }
+      if (point.name == "TV") {
+        this.genierInstance.videoTV.muted = false
+      }
     });
 
     this.removeInteractionsPoints();
@@ -99,10 +102,11 @@ export default class GrenierScene extends Vue {
   @Watch("motion", { immediate: true, deep: true })
   onMotionValueChanged(val: boolean) {
     if (val) {
-      new GrenierSceneInitializer({
+      this.genierInstance = new GrenierSceneInitializer({
         canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
         grenierSceneStore: this.grenierSceneStore,
-      }).init();
+      });
+      this.genierInstance.init();
       grenierScene.context.disableOrbitControl();
 
       this.addInteractionPoints();
@@ -130,6 +134,7 @@ export default class GrenierScene extends Vue {
           break;
         case "back":
           this.goBack();
+          this.genierInstance.videoTV.muted = true
           this.chatStore.setChatStep("reading");
           break;
         case "goToCity":

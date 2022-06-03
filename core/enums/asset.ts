@@ -28,8 +28,8 @@ export enum GLTF_ASSET {
 } 
 
 export enum VIDEO_ASSET {
-  // TV_SCREEN = 'tvScreen'
-}
+  TV_VIDEO = 'TV_VIDEO'
+} 
 
 /**
  * Name given to image asset in order to retrieve it through AssetManager

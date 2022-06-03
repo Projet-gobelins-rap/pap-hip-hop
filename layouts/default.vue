@@ -21,7 +21,7 @@ import Loader from "~/components/loader.vue";
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import { AssetsManager } from "../core/managers";
 import globalStore from "../store/globalStore";
-import { IMAGE_ASSET } from "../core/enums";
+import { IMAGE_ASSET, VIDEO_ASSET, GLTF_ASSET } from "../core/enums";
 import loaderStore from "../store/loaderStore";
 import { gsap } from "gsap";
 import $appState from "~/plugins/appState";
@@ -66,6 +66,8 @@ export default class Default extends Vue {
     console.log(process.env.isMobile, "ismobile");
     this.$nuxt.$on("loadDesktopMedia", (desktopMedia) => {
       this.desktopMedias = desktopMedia.desktopMedias.slices[0].items;
+      console.log(this.desktopMedias);
+      
       this.desktopMedias.forEach((el) => {
         let mediaType;
         if (el.mediaType === "GLTF") {
@@ -74,6 +76,7 @@ export default class Default extends Vue {
           mediaType = 1;
         } else if (el.mediaType === "VIDEO") {
           mediaType = 2;
+          console.log("1 ------- "+el.mediaType);
         } else if (el.mediaType === "AUDIO") {
           mediaType = 3;
         } else if (el.mediaType === "FBX") {
