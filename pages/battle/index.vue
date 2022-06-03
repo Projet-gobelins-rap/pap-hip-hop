@@ -17,6 +17,11 @@
       </div>
       <div class="battle-center"></div>
     </div>
+
+    <div>
+      <span class="battle-damage" ref="damage"></span>
+    </div>
+
     <BattleResponse class="opponent responseContainer--opponent" ref="opponent"></BattleResponse>
     <BattleResponse class="player responseContainer--player" ref="player"></BattleResponse>
 
@@ -122,6 +127,8 @@ export default class battle extends Vue {
   public pp: HTMLImageElement | null = null;
   public score: {player: number, opponent: number} = {player: 200, opponent:200}
   public comboValue:number = 0
+  public damage:number
+  public damageElement:HTMLElement
 
   mounted() {
 
@@ -129,6 +136,7 @@ export default class battle extends Vue {
     this.player = this.$refs.player as HTMLElement;
     this.opponent = this.$refs.opponent as HTMLElement;
     this.globalResponse = this.$refs.globalResponse as HTMLElement;
+    this.damageElement = this.$refs.damage as HTMLElement;
     console.log(this.$refs.globalResponse,'TEST REF')
     console.log(this.globalResponse,"GLOB")
 
@@ -194,7 +202,7 @@ export default class battle extends Vue {
   displayOpponentPunchline() {
     // console.log('Migrate OPPONENT PUNCHLINE')
     console.log(this.opponent);
-    gsap.set(".opponent span", { display: "none", opacity: 0 });
+    // gsap.set(".opponent span", { display: "none", opacity: 0 });
 
     if (!this.isRound2) {
       this.animatePunchline(this.opponent.$el.children,true,this.opponentRound1,null,true)
@@ -207,10 +215,17 @@ export default class battle extends Vue {
   calculateScore(target:number,scoreVal:number,isOpponent:boolean){
     if (isOpponent) {
       console.log(target,scoreVal,'<-- score value')
+      this.damage = scoreVal
       target = target - scoreVal
       console.log(target)
       this.score.opponent = target
 
+      console.log(this.$refs.damage,'DAMAAAAAAAGE')
+
+      let tl = gsap.timeline()
+      this.$refs.damage.innerHTML = -scoreVal
+      tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,ease: "expo.out"})
+      tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,ease: "expo.out"})
       gsap.to(this.$refs.opponentGauge,{width:`${target}px`,duration:1})
     }
   }
@@ -258,6 +273,8 @@ export default class battle extends Vue {
                 if (this.round2StepCounter <= 0) {
                   this.setNextChat();
                   this.displayChat();
+                  gsap.to('.responseContainer--player span',{display:'none',opacity:0})
+                  console.log("WESHHHHHHHHHHHH")
                 }else {
                   this.displayOnboarding();
                   $socket.io.emit("battle::round2Sequence");
@@ -266,6 +283,7 @@ export default class battle extends Vue {
             }else {
               if (index === 3) {
                 this.displayUserPunchline();
+                gsap.to('.responseContainer--opponent span',{display:'none',opacity:0})
               }
             }
           }

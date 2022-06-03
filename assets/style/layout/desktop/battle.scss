@@ -22,6 +22,16 @@
     justify-content: center;
     align-items: center;
   }
+  &-damage {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    @include stickerFont(40px,1.2,$white);
+    text-shadow: 4px 4px 0 $purple_dark, 4px -4px 0 $purple_dark, -4px 4px 0 $purple_dark, -4px -4px 0 $purple_dark,
+    4px 0px 0 $purple_dark, 0px 4px 0 $purple_dark, -4px 0px 0 $purple_dark, 0px -4px 0 $purple_dark;
+    display: none;
+    opacity: 0;
+  }
 }
 
 .healthbar {
@@ -78,6 +88,7 @@
   display: flex;
   flex-direction: column-reverse;
   span {
+    display: none;
     border: 2px solid $purple;
   }
   &--opponent {
@@ -87,7 +98,6 @@
   }
   &--global {
     .battleResponse {
-      display: none;
       &--opponent {
         border: 2px solid $yellow;
       }
