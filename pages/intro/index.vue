@@ -64,7 +64,4 @@ export default class Intro extends Vue {
     });
   }
 }
-</script>
-
-<style lang="sass" scoped>
-</style>
+</script> 

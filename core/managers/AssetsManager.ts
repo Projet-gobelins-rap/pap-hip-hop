@@ -308,7 +308,7 @@ class AssetsManager {
    */
   private async _loadFbx(source: AssetSource) {
     return new Promise<void>(resolve => {
-      this._fbxLoader.load(source.url, object => {
+      this._fbxLoader.load(source.url.split("?")[0], object => {
         object.name = source.name
         this._fbxAssets.push({source, data: object})
         resolve()

@@ -59,8 +59,8 @@ export class Character {
     }
 
     public loadOutfit() {
-        console.clear()
         console.log("model ", this.model);
+
         this.textures = {
             arms: AssetsManager.getTexture(this.outfitParams.body.textureArms).data,
             body: AssetsManager.getTexture(this.outfitParams.body.textureBody).data,
@@ -74,11 +74,11 @@ export class Character {
                 group.position.z = -30
             }
 
-            if (child.name === 'body001') {
+            if (child.name === 'body') {
                 this.textures.body.flipY = false
                 child.material = new THREE.MeshMatcapMaterial({ map: this.textures.body })
             }
-            if (child.name === 'arms001') {
+            if (child.name === 'arms') {
                 this.textures.arms.flipY = false
                 child.material = new THREE.MeshMatcapMaterial({ map: this.textures.arms })
             }
