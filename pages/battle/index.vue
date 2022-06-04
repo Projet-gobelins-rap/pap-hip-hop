@@ -212,18 +212,18 @@ export default class battle extends Vue {
   }
 
   // On calcul le score avec cette methode
-  calculateScore(target:number,scoreVal:number,isOpponent:boolean){
+  calculateScore(target:number,damageVal:number,isOpponent:boolean){
     if (isOpponent) {
-      console.log(target,scoreVal,'<-- score value')
-      this.damage = scoreVal
-      target = target - scoreVal
+      console.log(target,damageVal,'<-- score value')
+      this.damage = damageVal
+      target = target - damageVal
       console.log(target)
       this.score.opponent = target
 
       console.log(this.$refs.damage,'DAMAAAAAAAGE')
 
       let tl = gsap.timeline()
-      this.$refs.damage.innerHTML = -scoreVal
+      this.$refs.damage.innerHTML = -damageVal
       tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,ease: "expo.out"})
       tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,ease: "expo.out"})
       gsap.to(this.$refs.opponentGauge,{width:`${target}px`,duration:1})
