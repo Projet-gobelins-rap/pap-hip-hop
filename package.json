@@ -5,6 +5,8 @@
   "scripts": {
     "start": "nodemon server/index.js",
     "build": "nuxt build",
+    "heroku-prebuild": "npm install",
+    "heroku-postbuild": "nodemon server/index.js",
     "generate": "nuxt generate",
     "cert": "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./sslcert/selfsigned.key -out ./sslcert/selfsigned.crt",
     "slicemachine": "start-slicemachine"
