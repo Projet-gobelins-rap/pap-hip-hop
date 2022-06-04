@@ -144,8 +144,8 @@ export default class battle extends Vue {
 
     // this.displayOpponentPunchline()
     console.log("BATTLE");
-
-    // GESTION DES DATAS DE REPONSE
+    
+    // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
       console.log(this.pp);
@@ -199,6 +199,7 @@ export default class battle extends Vue {
   }
 
 
+  // show opponent punchlines
   displayOpponentPunchline() {
     // console.log('Migrate OPPONENT PUNCHLINE')
     console.log(this.opponent);
@@ -211,7 +212,12 @@ export default class battle extends Vue {
     }
   }
 
-  // On calcul le score avec cette methode
+  /**
+   * Calculate Score
+   * @param target
+   * @param damageVal
+   * @param isOpponent
+   */
   calculateScore(target:number,damageVal:number,isOpponent:boolean){
     if (isOpponent) {
       console.log(target,damageVal,'<-- score value')
@@ -230,6 +236,8 @@ export default class battle extends Vue {
     }
   }
 
+  // A function that is called when a punchline is clicked. It checks if the punchline is a top punchline. If it is, it
+  // increments the comboValue by 1. If it is not, it sets the comboValue to 0.
   public detectCombo(punchline:Punchline) {
     if (punchline.status === "top") {
       console.log("🚑️🚑️🚑️top🚑️🚑️🚑️")
@@ -241,6 +249,7 @@ export default class battle extends Vue {
     }
   }
 
+  // Show user punchline
   displayUserPunchline() {
 
     gsap.set(Array.from(this.player.$el.children),{display:'none',opacity:0})
@@ -253,6 +262,16 @@ export default class battle extends Vue {
     }
   }
 
+  /**
+   *  Animate Punchline
+   *
+   * @param target
+   * @param round1
+   * @param opponentData
+   * @param playerData
+   * @param isOpponentTour
+   * @param punchIndex
+   */
   animatePunchline(target:NodeList|HTMLCollection,round1:boolean=true,opponentData?:object,playerData?:Array<Punchline>,isOpponentTour:boolean=true,punchIndex?:number) {
 
     /**
@@ -315,26 +334,33 @@ export default class battle extends Vue {
 
   }
 
+  // Setting the isChatDisplay property to true.
   displayChat() {
     this.battleStore.setIsChatDisplay(true);
   }
+
+  // Setting the value of the isChatDisplay property to false.
   closeChat() {
     this.battleStore.setIsChatDisplay(false);
   }
 
+  // Setting the next chat in the battleChat array to the currentChat variable.
   setNextChat() {
     this.chatCounter++;
     this.currentChat = this.battleChat[this.chatCounter];
   }
 
+  // Setting the onboardingDisplay to false.
   hideOnboarding() {
     this.onboardingStore.setOnboardingDisplay(false);
   }
 
+  // Setting the onboarding display to true.
   displayOnboarding() {
     this.onboardingStore.setOnboardingDisplay(true);
   }
 
+  // Emitting a socket event to the server.
   goToRound2() {
     $socket.io.emit("battle::round2");
   }
@@ -389,6 +415,7 @@ export default class battle extends Vue {
     }
   }
 
+  // Setting the round2Datas array in the battleStore to the array of round2Steps.
   initRound2Datas() {
     this.battleStore.setRound2Datas([
       this.round2Step1,
@@ -397,15 +424,18 @@ export default class battle extends Vue {
       this.round2Step4,
     ]);
   }
-  // get chatStep from store
+
+  // A getter function that returns the chatStep property of the chatStore object.
   get chatStep() {
     return this.chatStore.chatStep;
   }
 
+  // A getter function that returns the value of the isChatDisplay property of the battleStore object.
   get chatDisplay() {
     return this.battleStore.isChatDisplay;
   }
 
+  // A getter function that returns the onboardingStep property of the onboardingStore object.
   get onboardingStep() {
     return this.onboardingStore.onboardingStep;
   }
