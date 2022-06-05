@@ -20,11 +20,11 @@ export enum GLTF_ASSET {
   BOB = 'BOB',
   AFRO = 'AFRO',
   VICTOR_HAIR = 'VICTOR_HAIR',
-  SLOT_TEST = 'SLOT_TEST',
   TREE = 'TREE',
   BITE = 'BITE',
   CITY = 'CITY',
   VINYLE = 'VINYLE',
+  BUILDING_TYPE_1 = 'BUILDING_TYPE_1',
 } 
 
 export enum VIDEO_ASSET {

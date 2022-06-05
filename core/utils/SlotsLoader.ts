@@ -17,4 +17,22 @@ export default class SlotsLoader {
             object.add(baseObject.clone())
         });
     }
+    // public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void  {
+    public static generateBuilding(slots: Object3D[], buildingVariations: Object3D): void  {
+        slots.forEach(slot => {
+            const params = slot.name.split('_')
+            slot.children = []
+          
+            switch (params[3]) {
+                case "1":
+                    slot.add(buildingVariations.clone())
+                    break;
+            
+                default:
+                    break;
+            }
+            // -Lead- : dispose ? remove ?
+          
+        });
+    }
 }

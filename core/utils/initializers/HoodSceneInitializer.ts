@@ -171,6 +171,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
+    const building1 = AssetsManager.getGltf(GLTF_ASSET.BUILDING_TYPE_1).data.scene
 
     this._scene.add(city);
     this._collectibles.add(vinyle);
@@ -186,11 +187,13 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
+    const buildingSlots = city.getObjectByName('group_building').children
     // const treeSlots = city.getObjectByName('cloner_tree').children
     // const plotSlots = city.getObjectByName('cloner_bite').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
+    SlotsLoader.generateBuilding(buildingSlots, [building1])
 
     
 
