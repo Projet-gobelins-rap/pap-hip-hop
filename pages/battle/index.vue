@@ -144,7 +144,7 @@ export default class battle extends Vue {
 
     // this.displayOpponentPunchline()
     console.log("BATTLE");
-    
+
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
@@ -219,21 +219,21 @@ export default class battle extends Vue {
    * @param isOpponent
    */
   calculateScore(target:number,damageVal:number,isOpponent:boolean){
+    this.damage = damageVal
+    target = target - damageVal
     if (isOpponent) {
       console.log(target,damageVal,'<-- score value')
-      this.damage = damageVal
-      target = target - damageVal
       console.log(target)
       this.score.opponent = target
 
-      console.log(this.$refs.damage,'DAMAAAAAAAGE')
-
-      let tl = gsap.timeline()
-      this.$refs.damage.innerHTML = -damageVal
-      tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,ease: "expo.out"})
-      tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,ease: "expo.out"})
       gsap.to(this.$refs.opponentGauge,{width:`${target}px`,duration:1})
+    }else {
+      gsap.to(this.$refs.playerGauge,{width:`${target}px`,duration:1})
     }
+    let tl = gsap.timeline()
+    this.$refs.damage.innerHTML = -damageVal
+    tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,ease: "expo.out"})
+    tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,ease: "expo.out"})
   }
 
   // A function that is called when a punchline is clicked. It checks if the punchline is a top punchline. If it is, it
@@ -300,6 +300,7 @@ export default class battle extends Vue {
                 }
               }
             }else {
+              this.calculateScore(this.score.player,opponentData[index].score,false)
               if (index === 3) {
                 this.displayUserPunchline();
                 gsap.to('.responseContainer--opponent span',{display:'none',opacity:0})
@@ -325,6 +326,7 @@ export default class battle extends Vue {
             this.calculateScore(this.score.opponent, playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score, true)
             $socket.io.emit("battle::round2Sequence");
           } else {
+            this.calculateScore(this.score.player,opponentData[punchIndex].score,false)
             this.displayUserPunchline();
           }
         }
