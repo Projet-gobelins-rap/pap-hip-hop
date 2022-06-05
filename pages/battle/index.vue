@@ -1,5 +1,7 @@
 <template>
   <section class="battle" >
+<!-- TODO video lien dynamique -->
+    <video class="battle-video" autoplay loop muted src="https://pap-hip-hop.cdn.prismic.io/pap-hip-hop/774853fd-b591-4a78-8214-b273a18be0bb_Battle+Background+Loop-1.mp4"></video>
     <div class="battle-hud">
       <div class="battle-top">
         <div v-if="pp" class="healthbar  player">
@@ -52,6 +54,7 @@ import $socket from "~/plugins/socket.io";
 import { AssetsManager } from "~/core/managers";
 import { gsap } from "gsap";
 import {Punchline} from "../../core/types/punchline";
+import globalStore from "../../store/globalStore";
 
 @Component({
   components: {
@@ -129,6 +132,7 @@ export default class battle extends Vue {
   public comboValue:number = 0
   public damage:number
   public damageElement:HTMLElement
+  public bgVideo:string
 
   mounted() {
 
@@ -140,9 +144,10 @@ export default class battle extends Vue {
     console.log(this.$refs.globalResponse,'TEST REF')
     console.log(this.globalResponse,"GLOB")
 
+    // TODO UPDATE LA BG VIDEO ASSETS
+    // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
+    // console.log(this.bgVideo,'<---- bg video zebi')
 
-
-    // this.displayOpponentPunchline()
     console.log("BATTLE");
 
     // Listening for a battle response from the server.
@@ -178,10 +183,10 @@ export default class battle extends Vue {
           } else {
 
             this.punchArray.push({
-             id: id,
-             text: this.currentPunchline[id].content[0].text,
-             score: parseInt(this.currentPunchline[id].score),
-             status:  this.currentPunchline[id].status,
+              id: id,
+              text: this.currentPunchline[id].content[0].text,
+              score: parseInt(this.currentPunchline[id].score),
+              status:  this.currentPunchline[id].status,
             });
 
             console.log(this.punchArray,'🚨🚨🚨🚨🚨🚨')
@@ -197,7 +202,6 @@ export default class battle extends Vue {
       }
     });
   }
-
 
   // show opponent punchlines
   displayOpponentPunchline() {
@@ -225,15 +229,20 @@ export default class battle extends Vue {
       console.log(target,damageVal,'<-- score value')
       console.log(target)
       this.score.opponent = target
-
+      this.$refs.damage.classList.remove('battle-damageOpponent')
       gsap.to(this.$refs.opponentGauge,{width:`${target}px`,duration:1})
     }else {
+      this.$refs.damage.classList.add('battle-damageOpponent')
       gsap.to(this.$refs.playerGauge,{width:`${target}px`,duration:1})
     }
     let tl = gsap.timeline()
     this.$refs.damage.innerHTML = -damageVal
-    tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,ease: "expo.out"})
-    tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,ease: "expo.out"})
+    tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,duration:1,ease: "expo.out"})
+    tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,duration:1,ease: "expo.out",onComplete:()=>{
+      if (this.$refs.damage.classList.contains('battle-damageOpponent' && !isOpponent)){
+        this.$refs.damage.classList.remove('battle-damageOpponent')
+      }
+      }})
   }
 
   // A function that is called when a punchline is clicked. It checks if the punchline is a top punchline. If it is, it
@@ -282,7 +291,7 @@ export default class battle extends Vue {
 
         el.innerHTML = isOpponentTour ? opponentData[index].content[0].text : playerData[!isOpponentTour&&!round1 ? punchIndex: index].text
 
-        gsap.to(el,{display:'block',duration:1,opacity:1,delay:index*2,onComplete:()=>{
+        gsap.to(el,{display:'block',duration:1,opacity:1,ease: "expo.out",delay:index*2,onComplete:()=>{
             console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
             if (!isOpponentTour){
               this.detectCombo(playerData[!isOpponentTour&&!round1 ? 0: index])
@@ -320,7 +329,7 @@ export default class battle extends Vue {
       let currentElement = result[punchIndex] as HTMLElement
       currentElement.innerHTML = isOpponentTour ? opponentData[punchIndex].content[0].text : playerData[0].text
       gsap.to(currentElement, {
-        display: 'block', duration: 1, opacity: 1, delay: 2, onComplete: () => {
+        display: 'block', duration: 1, opacity: 1,ease: "expo.out", delay: 2, onComplete: () => {
           if (!isOpponentTour) {
             this.detectCombo(playerData[!isOpponentTour && !round1 ? 0 : punchIndex])
             this.calculateScore(this.score.opponent, playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score, true)

@@ -4,7 +4,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
+  &-video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   &-hud {
     position: absolute;
     top: 0;
@@ -31,6 +40,10 @@
     4px 0px 0 $purple_dark, 0px 4px 0 $purple_dark, -4px 0px 0 $purple_dark, 0px -4px 0 $purple_dark;
     display: none;
     opacity: 0;
+  }
+  &-damageOpponent {
+    text-shadow: 4px 4px 0 $yellow, 4px -4px 0 $yellow, -4px 4px 0 $yellow, -4px -4px 0 $yellow,
+    4px 0px 0 $yellow, 0px 4px 0 $yellow, -4px 0px 0 $yellow, 0px -4px 0 $yellow;
   }
 }
 
@@ -75,10 +88,10 @@
     border-radius: 5px;
 
     .player & {
-      background-color: $yellow;
+      background-color: $purple;//$yellow;
     }
     .opponent & {
-      background-color: $purple;
+      background-color:  $yellow;//$purple;
     }
   }
 
@@ -89,7 +102,20 @@
   flex-direction: column-reverse;
   span {
     display: none;
+    opacity: 0;
     border: 2px solid $purple;
+    &:nth-child(1) {
+      transform: rotate(2deg);
+    }
+    &:nth-child(2) {
+      transform: rotate(-1deg);
+    }
+    &:nth-child(3) {
+      transform: rotate(1deg);
+    }
+    &:nth-child(4) {
+      transform: rotate(-1deg);
+    }
   }
   &--opponent {
     span {
@@ -113,7 +139,9 @@
   background: white;
   border-radius: 2rem;
   font-size: 2rem;
-  span {
-    display: block;
-  }
+  z-index: 1;
+  max-width: 500px;
+  //span {
+  //  display: block;
+  //}
 }

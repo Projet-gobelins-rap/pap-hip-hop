@@ -24,10 +24,10 @@ export enum GLTF_ASSET {
   BITE = 'BITE',
   CITY = 'CITY',
   VINYLE = 'VINYLE',
-} 
+}
 
 export enum VIDEO_ASSET {
-  // TV_SCREEN = 'tvScreen'
+  BATTLE_VIDEO_BACKGROUND = 'BATTLE_VIDEO_BACKGROUND'
 }
 
 /**
