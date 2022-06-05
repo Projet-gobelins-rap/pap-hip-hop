@@ -20,8 +20,8 @@
         },
         "body": {
             "color": "orange",
-            "textureBody": "VICTOR_BODY_TEXTURE",
-            "textureArms": "VICTOR_ARMS_TEXTURE"
+            "textureBody": "OPPONENT_BODY_TEXTURE",
+            "textureArms": "OPPONENT_ARMS_TEXUTURE"
         }
     }
 }

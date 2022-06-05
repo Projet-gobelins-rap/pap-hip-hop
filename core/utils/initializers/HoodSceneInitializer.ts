@@ -10,6 +10,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Player } from "../../models/player";
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh"
+import { Npc } from "../../models/npc";
 
 export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
 
@@ -171,7 +172,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
-    const building1 = AssetsManager.getGltf(GLTF_ASSET.BUILDING_TYPE_1).data.scene
+    const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
+    const building2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_2).data.scene
+    const building3 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_3).data.scene
+    const building4 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_4).data.scene
 
     this._scene.add(city);
     this._collectibles.add(vinyle);
@@ -180,10 +184,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     city.scale.set(0.04, 0.04, 0.04)
     vinyle.position.z = -10
     vinyle.position.y = 3
-
-    console.log(vinyle);
-
-    console.log(city);
     
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
@@ -193,10 +193,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
-    SlotsLoader.generateBuilding(buildingSlots, [building1])
+    SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
 
     
-
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -205,9 +204,18 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
+    const npc = new Npc(playerGltf, 'papy', 't-pose')
+    npc.model.scale.set(1, 1, 1)
+    npc.model.position.set(-0, -0, -0)
+    
+    SlotsLoader.populateSingleSlots(city.getObjectByName("Deenasty"), npc.model)
+
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
+ 
+    console.log(city);
+    
     this.bvhCollider(city)
    
 
