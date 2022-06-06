@@ -73,13 +73,13 @@ export default class HoodScenePage extends Vue {
 
     if (HoodScene.context._isStarted) {
       this.displayOnboarding();
-        this.addInteractionPoints();
+      this.addInteractionPoints();
       HoodScene.initCallback((toastID: string) => {
         console.log(toastID);
         this.displayToast(toastID);
       });
     }
-    // HoodScene.context.
+    
     console.log("Boyz in da hood");
   }
 

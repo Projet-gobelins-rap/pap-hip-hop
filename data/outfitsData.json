@@ -21,7 +21,7 @@
         "body": {
             "color": "orange",
             "textureBody": "OPPONENT_BODY_TEXTURE",
-            "textureArms": "OPPONENT_ARMS_TEXUTURE"
+            "textureArms": "OPPONENT_ARMS_TEXTURE"
         }
     }
 }

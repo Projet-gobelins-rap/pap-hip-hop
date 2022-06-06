@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, DirectionalLight, DoubleSide, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -20,7 +20,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public player: Player
   public collider: any
   private _collectibles: Group = new Group()
-  private _collectibleCollection: {env: Mesh[], collectibles: Mesh[] | Object3D[]}
+  private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
 
   // private _keysPressed: any
 
@@ -164,13 +164,15 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       this.addCube()
     }, { once: true })
   }
-
+ 
   addCube() {
 
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
+    const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
+    const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
     const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
     const building2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_2).data.scene
@@ -184,7 +186,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     city.scale.set(0.04, 0.04, 0.04)
     vinyle.position.z = -10
     vinyle.position.y = 3
-    
+
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
@@ -194,8 +196,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
-
-    
+  
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -204,20 +205,30 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
+    const floor = city.getObjectByName('floor')
+    floor.material.needsUpdate = true;
+    floorDM.flipY = false
+    floorNM.flipY = false
+    floor.material.displacementMap = floorDM
+    floor.material.normalMap = floorNM
+    floor.material.side = DoubleSide
+
     const npc = new Npc(playerGltf, 'papy', 't-pose')
     npc.model.scale.set(1, 1, 1)
     npc.model.position.set(-0, -0, -0)
-    
+
     SlotsLoader.populateSingleSlots(city.getObjectByName("Deenasty"), npc.model)
 
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
- 
+
     console.log(city);
-    
+
     this.bvhCollider(city)
-   
+
+    // const directionalLight = new DirectionalLight( 0xffffff, 1 );
+    // this._scene.add( directionalLight );
 
   }
 
@@ -279,7 +290,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   }
 
   handleCollision() {
-    if(this._collectibleCollection) {
+    if (this._collectibleCollection) {
       const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
       if (intersectCollision.length > 0) {
         if (intersectCollision[0].distance < 0.8) {
