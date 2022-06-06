@@ -41,6 +41,23 @@
     display: none;
     opacity: 0;
   }
+  &-combo {
+    position: absolute;
+    top: 10%;
+    left: 60%;
+    display: none;
+    opacity: 0;
+  }
+  &-comboMultiplicator{
+    position: absolute;
+    top: 15%;
+    left: 60%;
+    display: none;
+    opacity: 0;
+    @include stickerFont(40px,1.2,$white);
+    text-shadow: 4px 4px 0 $purple_dark, 4px -4px 0 $purple_dark, -4px 4px 0 $purple_dark, -4px -4px 0 $purple_dark,
+    4px 0px 0 $purple_dark, 0px 4px 0 $purple_dark, -4px 0px 0 $purple_dark, 0px -4px 0 $purple_dark;
+  }
   &-damageOpponent {
     text-shadow: 4px 4px 0 $yellow, 4px -4px 0 $yellow, -4px 4px 0 $yellow, -4px -4px 0 $yellow,
     4px 0px 0 $yellow, 0px 4px 0 $yellow, -4px 0px 0 $yellow, 0px -4px 0 $yellow;
