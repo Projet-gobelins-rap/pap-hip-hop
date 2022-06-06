@@ -112,6 +112,8 @@ import globalStore from "../../store/globalStore";
       const opponentRound1 = battleContent?.slices10[0].items;
       const opponentRound2 = battleContent?.slices11[0].items;
 
+      const resultBattle =  battleContent?.slices12[0].items;
+
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
       const currentPunchline = battlePunchRound1;
@@ -128,6 +130,7 @@ import globalStore from "../../store/globalStore";
         round2Step4,
         opponentRound1,
         opponentRound2,
+        resultBattle
       };
     } catch (e) {
       // Returns error page
@@ -159,6 +162,7 @@ export default class battle extends Vue {
   public round2StepCounter: number = -1;
   public opponentRound1: object;
   public opponentRound2: object;
+  public resultBattle: object;
   public pp: HTMLImageElement | null = null;
   public score: {player: number, opponent: number} = {player: 200, opponent:200}
   public comboValue:number = 0
@@ -177,6 +181,7 @@ export default class battle extends Vue {
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
     console.log(this.$refs.globalResponse,'TEST REF')
     console.log(this.globalResponse,"GLOB")
+
 
     // TODO UPDATE LA BG VIDEO ASSETS
     // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
@@ -293,7 +298,6 @@ export default class battle extends Vue {
       }
       console.log(this.comboValue,'<----- COMBOO')
     }else {
-      console.log("💩💩💩 NON 💩💩💩")
       gsap.to('.battle-combo',{display:'none',opacity:0})
       this.comboMultiplicator.innerHTML = `x${this.comboValue}`
       gsap.to('.battle-comboMultiplicator',{display:'none',opacity:0})
@@ -345,7 +349,6 @@ export default class battle extends Vue {
                   this.setNextChat();
                   this.displayChat();
                   gsap.to('.responseContainer--player span',{display:'none',opacity:0})
-                  console.log("WESHHHHHHHHHHHH")
                 }else {
                   this.displayOnboarding();
                   $socket.io.emit("battle::round2Sequence");
@@ -381,6 +384,10 @@ export default class battle extends Vue {
             if (punchIndex == 1){
               gsap.to('.battleResponse--group',{display:'none',opacity:0})
             }
+            if(punchIndex === 3) {
+              console.log("FINNNNNNNNNNN")
+              this.showWinner()
+            }
             $socket.io.emit("battle::round2Sequence");
           } else {
             this.calculateScore(this.score.player,opponentData[punchIndex].score,false)
@@ -389,8 +396,17 @@ export default class battle extends Vue {
         }
       })
     }
+  }
 
-
+  showWinner() {
+    // TODO : UPDATE LA METHODE DE LA DETECTION DU GAGNANT
+    this.currentOnboarding = this.resultBattle[0]
+    this.displayOnboarding()
+    if (this.score.player >= this.score.opponent) {
+      console.log('VICTOIRE')
+    }else {
+      console.log('DEFAITE')
+    }
   }
 
   // Setting the isChatDisplay property to true.
@@ -500,6 +516,3 @@ export default class battle extends Vue {
   }
 }
 </script>
-
-<style lang="sass" scoped>
-</style>
