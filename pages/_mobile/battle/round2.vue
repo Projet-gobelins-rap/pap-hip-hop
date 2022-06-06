@@ -154,7 +154,6 @@ export default class round2Mobile extends Vue {
     return this.onboardingStore.onboardingStep;
   }
 
-  // TODO :: AJOUTER LE TIMER
   displayRound2Punch(){
     console.log("R2 PUNCH")
     let timeleft = 10

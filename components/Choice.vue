@@ -48,24 +48,16 @@ export default class Choice extends Vue {
       }
       else {
         if (this.savedIds.includes(index)){
-          console.log('OUI ça trouve')
-
-          let indexPosition = this.savedIds.indexOf(index) //this.punchlines.findIndex(el => el.id === index)//this.savedIds.indexOf(index)
-          console.log(indexPosition,'zzzz')
+          let indexPosition = this.savedIds.indexOf(index)
           this.savedIds.splice(indexPosition,1)
           elem.classList.toggle('choices__item--selected')
           this.isActive = false
-
         }else {
           if (this.savedIds.length <=3){
             this.savedIds.push(index)
-
-            console.log(this.punchlines,'<--- punchhh')
-
             elem.classList.toggle('choices__item--selected')
             this.isActive = false
           }
-
           if (this.savedIds.length == 4){
             this.isActive = true
           }
@@ -84,7 +76,6 @@ export default class Choice extends Vue {
   }
 
   validateSelection() {
-    console.log(this.$parent,'PARENT')
     this.$parent.$emit('choice::updateState')
     $socket.io.emit('battle::response',this.savedIds)
     this.savedIds = []
