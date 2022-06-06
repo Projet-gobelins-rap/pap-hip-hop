@@ -205,9 +205,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
-
-    
-
     const floor = city.getObjectByName('floor')
     floor.material.needsUpdate = true;
     floorDM.flipY = false
@@ -216,11 +213,27 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     floor.material.normalMap = floorNM
     floor.material.side = DoubleSide
 
-    const npc = new Npc(playerGltf, 'papy', 't-pose')
-    npc.model.scale.set(1, 1, 1)
-    npc.model.position.set(-0, -0, -0)
+    
+    const eric = new Npc(playerGltf, 'eric', 't-pose')
+    eric.model.scale.set(25, 25, 25)
+    eric.model.position.set(-0, -100, -0)
 
-    SlotsLoader.populateSingleSlots(city.getObjectByName("Deenasty"), npc.model)
+    const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
+    npc_battle.model.scale.set(25, 25, 25)
+    npc_battle.model.position.set(-0, -100, -0)
+
+    const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
+    npc_ticaret.model.scale.set(25, 25, 25)
+    npc_ticaret.model.position.set(-0, -100, -0)
+
+    const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
+    npc_deenasty.model.scale.set(25, 25, 25)
+    npc_deenasty.model.position.set(-0, -100, -0)
+
+    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_eric"), eric.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_battle"), npc_battle.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_ticaret"), npc_ticaret.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_deenasty"), npc_deenasty.model)
 
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 

@@ -11,6 +11,54 @@
                 "textureBody": "VICTOR_BODY_TEXTURE",
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
+        },
+        {
+            "name": "battle",
+            "head": {
+                "model": "victor_head",
+                "color": "green"
+            },
+            "body": {
+                "color": "green", 
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
+        },
+        {
+            "name": "ticaret",
+            "head": {
+                "model": "victor_head",
+                "color": "green"
+            },
+            "body": {
+                "color": "green", 
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
+        },
+        {
+            "name": "eric",
+            "head": {
+                "model": "victor_head",
+                "color": "green"
+            },
+            "body": {
+                "color": "green", 
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
+        },
+        {
+            "name": "deenasty",
+            "head": {
+                "model": "victor_head",
+                "color": "green"
+            },
+            "body": {
+                "color": "green", 
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
         }
     ],
     "player": { 
