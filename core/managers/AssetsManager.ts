@@ -1,10 +1,10 @@
-import {AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset, TextureAsset} from "~/core/types/asset";
-import {ASSET_TYPE} from "~/core/enums/asset";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
-import {TextureLoader} from "three";
+import { AssetSource, AudioAsset, FbxAsset, GltfAsset, ImageAsset, ProgressCallback, VideoAsset, TextureAsset } from "~/core/types/asset";
+import { ASSET_TYPE } from "~/core/enums/asset";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { TextureLoader } from "three";
 import { Outfitloader } from "./OutfitLoader"
-
+import $appState from "~/plugins/appState";
 /**
  * @description
  * This manager is responsible for download all assets need by the application and provide in any component
@@ -54,9 +54,9 @@ class AssetsManager {
     this._fbxLoader = new FBXLoader()
     this._textureLoader = new TextureLoader()
 
-    this._onProgressCallback = function () {}
+    this._onProgressCallback = function () { }
     // this._onSuccessCallback = function () {}
-    this._onErrorCallback = function () {}
+    this._onErrorCallback = function () { }
   }
 
   /**
@@ -87,7 +87,9 @@ class AssetsManager {
   }
 
   private _onSuccessCallback() {
-    this._loadedCollection = new Outfitloader()
+    if (!$appState.getAppState()) {
+      this._loadedCollection = new Outfitloader()
+    }
   }
 
   /**
@@ -149,7 +151,6 @@ class AssetsManager {
    */
   public getGltf(name: string): GltfAsset {
 
-    console.log("----> : " + this._gltfAssets);
     const gltf = this._gltfAssets.find(gltf => gltf.source.name === name)
     if (!gltf) throw new Error(`Gltf asset ${name} is not founded`)
     // let obj = Object.create(gltf)
@@ -160,7 +161,7 @@ class AssetsManager {
    * Retrieve image asset loaded
    */
   public getImage(name: string): ImageAsset {
-    const image =  this._imageAssets.find(gltf => gltf.source.name === name) || null
+    const image = this._imageAssets.find(gltf => gltf.source.name === name) || null
     if (!image) throw new Error(`Image asset ${name} is not founded`)
 
     return image
@@ -170,6 +171,8 @@ class AssetsManager {
    * Retrieve video asset loaded
    */
   public getVideo(name: string): VideoAsset {
+    console.log(name);
+
     const video = this._videoAssets.find(video => video.source.name === name) || null
     if (!video) throw new Error(`Video asset ${name} is not founded`)
 
@@ -219,7 +222,7 @@ class AssetsManager {
     const source: AssetSource = {
       name: name,
       type: type,
-      url: (this._isLocalMode && localUrl) ? `/models/${localUrl}`  : url
+      url: (this._isLocalMode && localUrl) ? `/models/${localUrl}` : url
     }
     this._assetSource.push(source)
   }
@@ -237,6 +240,7 @@ class AssetsManager {
           await this._loadImageAsset(source)
           break
         case ASSET_TYPE.VIDEO:
+          console.log(source.type);
           await this._loadVideoAsset(source)
           break
         case ASSET_TYPE.TEXTURE:
@@ -261,7 +265,7 @@ class AssetsManager {
     return new Promise<void>(resolve => {
       this._gltfLoader.load(source.url, gltf => {
         gltf.scene.name = source.name
-        this._gltfAssets.push({source, data: gltf})
+        this._gltfAssets.push({ source, data: gltf })
         resolve()
       })
     })
@@ -274,7 +278,7 @@ class AssetsManager {
     return new Promise<void>(resolve => {
       const image = new Image()
       image.src = source.url
-      this._imageAssets.push({source, data: image})
+      this._imageAssets.push({ source, data: image })
       resolve()
     })
   }
@@ -285,7 +289,7 @@ class AssetsManager {
   private async _loadTextureAsset(source: AssetSource): Promise<void> {
     return new Promise<void>(resolve => {
       this._textureLoader.load(source.url, texture => {
-        this._textureAssets.push({source, data: texture})
+        this._textureAssets.push({ source, data: texture })
         resolve()
       })
     })
@@ -299,7 +303,12 @@ class AssetsManager {
     const video = document.createElement('video')
     const videoData = await response.blob()
     video.src = URL.createObjectURL(videoData)
-    this._videoAssets.push({source, data: video})
+    video.crossOrigin = 'anonymous'
+    video.preload = 'auto';
+    // video.autoload = true;
+    this._videoAssets.push({ source, data: video })
+    console.log({ source, data: video });
+
   }
 
   /**
@@ -307,9 +316,9 @@ class AssetsManager {
    */
   private async _loadFbx(source: AssetSource) {
     return new Promise<void>(resolve => {
-      this._fbxLoader.load(source.url, object => {
+      this._fbxLoader.load(source.url.split("?")[0], object => {
         object.name = source.name
-        this._fbxAssets.push({source, data: object})
+        this._fbxAssets.push({ source, data: object })
         resolve()
       })
     })
@@ -323,7 +332,7 @@ class AssetsManager {
     const audio = new Audio()
     const audioData = await response.blob()
     audio.src = URL.createObjectURL(audioData)
-    this._audioAssets.push({source, data: audio})
+    this._audioAssets.push({ source, data: audio })
   }
 
 }

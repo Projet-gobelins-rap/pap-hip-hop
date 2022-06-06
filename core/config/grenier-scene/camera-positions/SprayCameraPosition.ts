@@ -1,20 +1,21 @@
 import GrenierScene from "../../../scene/GrenierScene";
-import {CameraPosition} from "~/core/config/global-scene/camera-positions/types";
+import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types";
 import {Vector3} from "three";
 
 const SprayCameraPosition: CameraPosition = {
   name: 'spray',
 
   coords: () => {
-    const lookAtPosition = new Vector3()
-    GrenierScene.context.scene.getObjectByName("bombe-peinture-2")!.getWorldPosition(lookAtPosition)
-    const cameraPos = lookAtPosition.clone()
+    const lookAtPosition =  new Vector3()
+    GrenierScene.context.scene.getObjectByName("interaction_graf")!.getWorldPosition(lookAtPosition)
 
-    cameraPos.x = 28
-    cameraPos.y = 20
-    cameraPos.z = -12
+    const newCameraPosition = new Vector3(
+      lookAtPosition.x + 30,
+      lookAtPosition.y,
+      lookAtPosition.z ,
+    )
 
-    return { cameraPos, lookAtPosition }
+    return { newCameraPosition, lookAtPosition }
   }
 }
 

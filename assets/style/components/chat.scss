@@ -1,20 +1,28 @@
 .chat {
-  position: relative;
+  position: absolute;
   display: flex;
+  align-items: flex-end;
   z-index: 10;
   width: 100%;
   max-width: 1000px;
+  bottom: 70px;
 
   &-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding: 32px 35px;
+    background-color: #fff;
+    border-radius: 30px;
+    position: relative;
   }
   &-infos {
     display: flex;
     align-items: center;
-    position: relative;
-    left: -20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-20%, -65%);
 
     &--pic {
       width: 110px;
@@ -28,6 +36,11 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
+      z-index: 2;
+      &:last-of-type {
+        transform: translateX(-50%);
+        z-index: 1;
+      }
     }
     &--name {
       font-size: 30px;
@@ -47,20 +60,82 @@
       }
     }
 
-   
+
+  }
+  &-arrow {
+    position: absolute;
+    right: 30px;
+    bottom: 15px;
+    animation: move 1.5s ease infinite;
+    polyline {
+      stroke: $red;
+    }
   }
   &-text {
-    padding: 30px 35px;
-    background-color: #fff;
-    border-radius: 30px;
     p {
-      font-size: 22px;
-      line-height: 30px;
+      @include text(24px);
+    }
+    strong {
+      @include text(24px, 1.2, $darkGrey, 700);
     }
   }
   &-choices {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    margin: 0 0 0 24px;
   }
+
+  &-choice {
+    margin: 16px 0 0;
+  }
+}
+
+.noChoice {
+  width: 100%;
+  cursor: pointer;
+}
+
+@keyframes move {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.triangle {
+  position: relative;
+  background-color: white;
+  text-align: left;
+}
+.triangle:before,
+.triangle:after {
+  content: '';
+  position: absolute;
+  background-color: inherit;
+}
+.triangle,
+.triangle:before,
+.triangle:after {
+  position: absolute;
+  width:  3em;
+  height: 3em;
+  border-top-right-radius: 30%;
+}
+
+.triangle {
+  transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
+  right: 60px;
+  top: -20px;
+}
+.triangle:before {
+  transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
+}
+.triangle:after {
+  transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
 }

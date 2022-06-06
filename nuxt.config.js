@@ -30,7 +30,10 @@ export default {
     host: '0'
   },
 
-  plugins: ['~/plugins/socket.io.js'],
+  plugins: [
+    '~/plugins/socket.io.js',
+    '~/plugins/appState.js'
+  ],
 
   buildModules: [
     '@nuxt/typescript-build',
@@ -46,6 +49,10 @@ export default {
   components: true,
   loading: false,
 
+  env: {
+    ip: 'https://192.168.8.101:3002'
+  },
+
   /*
    ** Global CSS
    */
@@ -57,7 +64,8 @@ export default {
 
   prismic: {
     endpoint: apiEndpoint,
-    modern: true
+    modern: true,
+    preview: false
     /* see configuration for more */
   },
   /*

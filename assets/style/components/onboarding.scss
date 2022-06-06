@@ -1,28 +1,57 @@
-.onboardingWrapper {
+.onboarding {
   width: 100vw;
   height: 100vh;
+  z-index: 100;
   position: fixed;
-  z-index: 3;
-  .onboarding {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-full {
     width: 100%;
     height: 100%;
     display: flex;
     left: 0;
     top: 0;
-    background: rgba(255, 0, 0, 0.2);
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
+    position: relative;
   }
-  .swiper-container {
-    width: 400px;
-    height: 300px;
+
+  &-container {
+    background-color: $white;
+    border-radius: 16px;
+    padding: 70px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 60px);
+    max-width: 600px;
+    position: relative;
+
+ 
+  }
+
+  &-sticker {
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 50%;
-    transform: translate(-50%,-50%);
-    background: rgba(255, 0, 0, 0.2);
+    transform: translate(-50%, -50%);
+  }
+
+  &-icon {
+  }
+
+  &-text {
+    @include text(16px);
+    text-align: center;
+  }
+
+  .swiper-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
   .swiper__itemWrapper {
     display: flex;
@@ -43,7 +72,8 @@
   }
 
   // OVERRIDE COLORS
-  .swiper-button-prev, .swiper-button-next {
+  .swiper-button-prev,
+  .swiper-button-next {
     color: $darkGrey;
   }
   .swiper-pagination-bullet-active {

@@ -1,234 +1,86 @@
 <template>
-  <div
-      :style="style()"
-      class="point point-0"
-  >
-    <div :class="{ isCompleted: isCompleted() }" class="center">
-      <p class="point-name">{{ data.name }}</p>
-      <svg
-          width="23"
-          height="16"
-          viewBox="0 0 23 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M2 6.92308L8.82812 14L21 2"
-          stroke="white"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </div>
+  <div :class="'point point-0 ' + data.type" :style="style()">
+    <svg
+      v-if="data.type == 'chat'"
+      class="point-chat"
+      width="49"
+      height="54"
+      viewBox="0 0 49 54"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M47.7593 23.2331C47.7593 31.6284 42.5091 38.8858 34.8895 42.3316C33.5226 42.9498 32.0796 43.4452 30.5769 43.8026C29.1696 45.7932 24.8796 52.4286 24.8796 52.4286C24.8796 52.4286 20.5897 45.7932 19.1824 43.8026C17.6797 43.4452 16.2366 42.9498 14.8698 42.3316C7.2502 38.8858 2 31.6284 2 23.2331C2 11.5064 12.2436 2 24.8796 2C37.5157 2 47.7593 11.5064 47.7593 23.2331Z"
+        fill="#7C44ED"
+        stroke="#FEFEFE"
+        stroke-width="2.41821"
+        stroke-linejoin="round"
+      />
+      <ellipse
+        cx="15.0743"
+        cy="23.2748"
+        rx="3.26852"
+        ry="3.15179"
+        fill="#FEFEFE"
+      />
+      <ellipse
+        cx="24.8795"
+        cy="23.2748"
+        rx="3.26852"
+        ry="3.15179"
+        fill="#FEFEFE"
+      />
+      <ellipse
+        cx="34.6854"
+        cy="23.2748"
+        rx="3.26852"
+        ry="3.15179"
+        fill="#FEFEFE"
+      />
+    </svg>
+    <svg
+      v-else
+      class="point-plus"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="15.6" cy="15.6" r="15.6" fill="#ED6787" />
+      <path
+        d="M15.6015 10.7241L15.6015 20.4741M20.4765 15.5991L10.7265 15.5991"
+        stroke="#FEFEFE"
+        stroke-width="2.62737"
+        stroke-linecap="round"
+      />
+    </svg>
+    <p class="point-text">{{ data.name }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, getModule, Prop, Vue} from "nuxt-property-decorator";
-import {InteractionPoint as InteractionPointData} from "~/core/config/global-scene/interact-points/types";
+import { Component, getModule, Prop, Vue } from "nuxt-property-decorator";
+import { InteractionPoint as InteractionPointData } from "~/core/config/global-scene/interact-points/types";
 import grenierSceneStore from "../store/grenierSceneStore";
 
 @Component
 export default class InteractionPoints extends Vue {
-  @Prop({type: Object, required: true})
+  @Prop({ type: Object, required: true })
   readonly data!: InteractionPointData;
-  public grenierSceneStore: grenierSceneStore = getModule(grenierSceneStore, this.$store);
+  public grenierSceneStore: grenierSceneStore = getModule(
+    grenierSceneStore,
+    this.$store
+  );
 
-  mounted() {
-  }
+  mounted() {}
 
-  public style() {
-    return `
-    transform: translateX(${this.data.transformX}px) translateY(${this.data.transformY}px);
-    `;
+  style() {
+    return `transform: translateX(${this.data.transformX}px) translateY(${this.data.transformY}px)`;
   }
 
   public isCompleted() {
     return this.data.isCompleted(this.grenierSceneStore);
   }
-
 }
 </script>
-
-<style lang="scss" scoped>
-.point {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 9;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent !important;
-
-  &:hover {
-    .point-name {
-      opacity: 1;
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-    }
-
-    .center {
-      height: 116px;
-      width: 116px;
-      transform: translate(-15px, -15px);
-
-      svg {
-        display: none !important;
-      }
-
-      &:after {
-        // height: 116px;
-        // width: 116px;
-        border-width: 3px;
-      }
-    }
-  }
-
-  .point-name {
-    position: absolute;
-    color: white;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: 0.3s ease all;
-  }
-
-  .center {
-    height: 71px;
-    width: 71px;
-    background-color: rgba(255, 255, 255, 0.4);
-    // backdrop-filter: blur(5px);
-    border-radius: 50%;
-    border: 0.5px solid red;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.3s ease all;
-
-    &:after {
-      content: "";
-      height: 116px;
-      width: 116px;
-      position: absolute;
-      border-top: 2px solid red;
-      border-right: 2px solid red;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-      border-left: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      animation: rotate-center 5s linear infinite both;
-
-      transition: 0.3s ease all;
-    }
-
-    svg {
-      display: none;
-    }
-
-    &.isCompleted {
-      svg {
-        display: block;
-      }
-      &:after {
-        display: none;
-      }
-    }
-
-    &:hover {
-      &:before {
-        content: "";
-        height: 110px;
-        width: 110px;
-        background-color: rgba(255, 255, 255, 0.3);
-        position: absolute;
-        border-radius: 50%;
-        animation: ping 0.8s ease-in-out infinite both;
-      }
-    }
-  }
-}
-
-/* ----------------------------------------------
- * Generated by Animista on 2021-4-27 19:20:35
- * Licensed under FreeBSD License.
- * See http://animista.net/license for more info.
- * w: http://animista.net, t: @cssanimista
- * ---------------------------------------------- */
-
-/**
- * ----------------------------------------
- * animation rotate-center
- * ----------------------------------------
- */
-@-webkit-keyframes rotate-center {
-  0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotate-center {
-  0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-/* ----------------------------------------------
- * Generated by Animista on 2021-4-27 21:1:11
- * Licensed under FreeBSD License.
- * See http://animista.net/license for more info.
- * w: http://animista.net, t: @cssanimista
- * ---------------------------------------------- */
-
-/**
- * ----------------------------------------
- * animation ping
- * ----------------------------------------
- */
-@-webkit-keyframes ping {
-  0% {
-    -webkit-transform: scale(0.2);
-    transform: scale(0.2);
-    opacity: 0.8;
-  }
-  80% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: scale(2.2);
-    transform: scale(2.2);
-    opacity: 0;
-  }
-}
-@keyframes ping {
-  0% {
-    -webkit-transform: scale(0.2);
-    transform: scale(0.2);
-    opacity: 0.8;
-  }
-  80% {
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: scale(2.2);
-    transform: scale(2.2);
-    opacity: 0;
-  }
-}
-</style>

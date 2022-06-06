@@ -25,8 +25,8 @@ import {
 // import { CameraPosition } from "~/core/config/global-scene/camera-positions/types";
 import { gsap } from 'gsap'
 import Helpers from "../utils/Helpers";
-import {Stats} from 'stats.ts'
-import {CameraPosition} from "../config/hood-scene/camera-positions/types";
+import { Stats } from 'stats.ts'
+import { CameraPosition } from "../config/hood-scene/camera-positions/types";
 
 
 
@@ -36,7 +36,7 @@ export default class SceneManager {
   private _canvas: HTMLCanvasElement
   private _camera: Camera
   private _controls: OrbitControls | null
-  private _presetCameraPositions: Array<CameraPosition>
+  public _presetCameraPositions: Array<CameraPosition>
   private _renderer: WebGLRenderer
   private _composer: EffectComposer | null
   private _clock: Clock
@@ -78,7 +78,7 @@ export default class SceneManager {
   private _isRayCasting: boolean
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
-  public  _isStarted: boolean | undefined
+  public _isStarted: boolean | undefined
 
   constructor(options: SceneManagerOptions) {
 
@@ -214,18 +214,16 @@ export default class SceneManager {
       return
     }
 
-    const { cameraPos: newCameraPosition, lookAtPosition } = presetCameraPosition.coords()
+    const { newCameraPosition: newCameraPosition, lookAtPosition: lookAtPosition } = presetCameraPosition.coords()
 
-    const originPosition = new Vector3().copy(this._camera.position);
-    const originRotation = new Euler().copy(this._camera.rotation);
 
-    this._camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
-    this._camera.lookAt(lookAtPosition);
-    const destinationRotation = new Euler().copy(this._camera.rotation)
-
-    this._camera.position.set(originPosition.x, originPosition.y, originPosition.z);
-    this._camera.rotation.set(originRotation.x, originRotation.y, originRotation.z);
-
+    gsap.to(this._controls!.target, {
+      duration,
+      x: lookAtPosition.x,
+      y: lookAtPosition.y,
+      z: lookAtPosition.z,
+      ease: "sine.inOut",
+    })
     gsap.to(this._camera.position, {
       duration,
       x: newCameraPosition.x,
@@ -241,13 +239,6 @@ export default class SceneManager {
         // this.disableParallax()
       }
     });
-    gsap.to(this._camera.rotation, {
-      duration,
-      x: destinationRotation.x,
-      y: destinationRotation.y,
-      z: destinationRotation.z,
-      ease: "sine.inOut",
-    })
   }
 
   /**
@@ -295,6 +286,7 @@ export default class SceneManager {
    */
   public enableAxesHelpers(size: number = 10) {
     const axesHelper = new AxesHelper(size)
+    // axesHelper.setColors(0xff0000,0x00ff00,0x0000ff)
     this._scene.add(axesHelper)
 
     return this
@@ -388,6 +380,18 @@ export default class SceneManager {
     const mixer = this.getAnimationMixer(mixerName)
     return mixer.instance.clipAction(animationClip)
   }
+
+   /**
+   * Remove object from scene
+   */
+  public removeObject(name: string) {
+    let obj = this._scene.getObjectByName(name)
+    console.log(obj);
+    this._scene.remove(obj)
+    // obj.geometry.dispose();
+    // obj.material.dispose();
+   }
+
 
   // - PRIVATE
   /**

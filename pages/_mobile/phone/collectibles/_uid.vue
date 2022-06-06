@@ -1,8 +1,28 @@
 <template>
-  <section class="collectibleSingle">
-    <h1>{{ collectible.data.title }}</h1>
-    <PrismicImage :field="collectible.data.image" />
-    <PrismicRichText :field="collectible.data.description" />
+  <section class="collectible">
+    <div class="collectible-top">
+      <CustomButton
+        class="collectibles-button small"
+        @click.native="goToPrev"
+        text="Retour"
+      ></CustomButton>
+      <h1 class="collectible-title">{{ collectible.data.title }}</h1>
+      <PrismicImage
+        class="collectible-icon"
+        :field="collectible.data.image"
+        width="200"
+      />
+      <PrismicRichText
+        class="collectible-intro"
+        :field="collectible.data.description"
+      />
+    </div>
+    <div class="collectible-content">
+      <div class="collectible-slice" v-for="(slice, idx) in collectible.data.slices" :key="'slice'+idx">
+        <PrismicImage class="collectible-image" v-if="slice.slice_type == 'image'" :field="slice.primary.image" />
+        <PrismicRichText class="collectible-text" v-if="slice.slice_type == 'text'"  :field="slice.primary.text" />
+      </div>
+    </div>
   </section>
 </template>
 
@@ -32,6 +52,9 @@ export default class collectibleSingle extends Vue {
   public collectible: any;
   mounted() {
     console.log(this.collectible);
+  }
+  goToPrev() {
+    this.$router.push({ path: "/_mobile/phone/collectibles", replace: true });
   }
 }
 </script>

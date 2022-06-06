@@ -5,10 +5,13 @@ import GrenierScene from "../../../../scene/GrenierScene";
 
 const PosterInteractPoint: InteractionPoint = {
   name: "poster",
+  type: "plus",
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("affiche")!.getWorldPosition(position);
+    const target = GrenierScene.context.scene.getObjectByName("interaction_support")!
+    target.getWorldPosition(position);
+    target.children = []
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;
@@ -21,11 +24,9 @@ const PosterInteractPoint: InteractionPoint = {
     return false;
   },
 
-
   url: () => '/',
 
   transformX: 0,
-
   transformY: 0
 };
 

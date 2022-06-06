@@ -5,11 +5,14 @@ import GrenierScene from "../../../../scene/GrenierScene";
 
 const SprayInteractPoint: InteractionPoint = {
   name: "spray",
+  type: "plus",
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("bombe-peinture-2")!.getWorldPosition(position);
-
+    const target = GrenierScene.context.scene.getObjectByName("interaction_graf")!
+    target.getWorldPosition(position);
+    target.children = []
+    
     position.y = 1 + position.y;
     position.x = 1 + position.x;
 
@@ -20,11 +23,9 @@ const SprayInteractPoint: InteractionPoint = {
     return false;
   },
 
-
   url: () => '/',
 
   transformX: 0,
-
   transformY: 0
 };
 

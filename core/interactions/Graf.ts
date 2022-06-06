@@ -35,7 +35,9 @@ export default class Graf {
 
   public layerCount: number = 0
 
-  constructor(layerLister: any) {
+  private _onStepChangeCallback: Function
+
+  constructor(layerLister: any, stepChangeCallback: Function) {
     console.log("list ---> ", layerLister);
 
     this.display = document.querySelector('.graffDraw-display')!
@@ -70,6 +72,9 @@ export default class Graf {
       y: 0,
     }
 
+    this._onStepChangeCallback = stepChangeCallback || function () {
+    }
+
     this.init()
   }
 
@@ -80,6 +85,7 @@ export default class Graf {
     this.setupCanvas()
     this.bindEvents()
     this.nextLayer()
+    this._onStepChangeCallback('intro')
     // this.renderLoop()
 
     gsap.ticker.fps(30);
@@ -157,14 +163,14 @@ export default class Graf {
       this.img.src = this.imgUrl
     } else {
       console.log('fin');
-      
+      this._onStepChangeCallback('finish')
     }
   }
 
   updateCanvasBackground() {
 
     this.layerCount++
-    this.nextLayer()
+    this._onStepChangeCallback('nextLayer')
     let self = this
     // gsap.to(this.revealImg, { opacity: 0 })
 

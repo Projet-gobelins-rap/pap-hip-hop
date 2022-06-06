@@ -1,13 +1,29 @@
 <template>
   <section class="graffListing">
-    <h1>graff</h1>
-    <ul class="graffListing-list">
-        <li class="graffListing-listing" @click="select(i)" v-for="(graff, i) in this.graffsList" :key="`graff-${i}`">
-            <PrismicImage class="graffListing-img" :field="graff.items[graff.items.length - 1].layer" />
-            <PrismicRichText class="graffListing-name" :field="graff.primary.title" />
-            <PrismicRichText class="graffListing-desc" :field="graff.primary.description" />
+    <div class="graffListing-container">
+      <h1 class="graffListing-title">Choisi ton graff</h1>
+      <ul class="graffListing-list">
+        <li
+          class="graffListing-listing"
+          @click="select(i)"
+          v-for="(graff, i) in this.graffsList"
+          :key="`graff-${i}`"
+        >
+          <PrismicImage
+            class="graffListing-img"
+            :field="graff.items[graff.items.length - 1].layer"
+          />
+          <PrismicRichText
+            class="graffListing-name"
+            :field="graff.primary.title"
+          />
+          <PrismicRichText
+            class="graffListing-desc"
+            :field="graff.primary.description"
+          />
         </li>
-    </ul>
+      </ul>
+    </div>
   </section>
 </template>
 
@@ -21,8 +37,9 @@ import $socket from "~/plugins/socket.io";
   components: {},
   async asyncData({ $prismic, error }) {
     try {
-      const prismicContent = (await $prismic.api.getSingle("interaction-graff")).data;
-      const graffsList = prismicContent.slices4
+      const prismicContent = (await $prismic.api.getSingle("interaction-graff"))
+        .data;
+      const graffsList = prismicContent.slices4;
 
       return {
         graffsList,
@@ -40,7 +57,7 @@ export default class GraffListing extends Vue {
   }
 
   select(idx: number) {
-      $socket.io.emit('graffSelected', idx)
+    $socket.io.emit("graffSelected", idx);
   }
 }
 </script>

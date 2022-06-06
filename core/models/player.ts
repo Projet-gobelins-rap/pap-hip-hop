@@ -10,7 +10,7 @@ import { getTextureColorSpec } from "../config/global/textureColorMapping";
 export class Player extends Character {
 
     // properties
-    colliders: Mesh[]
+    // colliders: {env: Mesh[], collectibles: Mesh[]}
     orbitControl: OrbitControls
     camera: Camera
 
@@ -40,6 +40,7 @@ export class Player extends Character {
 
         this.camera = camera
         this.orbitControl = control
+        this._initRaycast()
     }
 
     public setParamsByName() {
@@ -53,6 +54,14 @@ export class Player extends Character {
         })
 
         this.loadOutfit()
+    }
+
+    private _initRaycast() {
+        
+        this.raycaster = new Raycaster(
+            this.model.position,
+            this.walkDirection.negate()
+        )
     }
 
     public updateControls(delta: number, keysPressed: any) {
@@ -96,7 +105,10 @@ export class Player extends Character {
 
             this.model.rotation.y -= direction.orientation * delta * 5
 
-            this.model.translateZ(direction.move * delta * velocity)
+            if(!this.blocked) {
+
+                this.model.translateZ(direction.move * delta * velocity)
+            }
 
             this.orbitControl.enableRotate = false
             this._updateCameraPosition()
@@ -110,7 +122,15 @@ export class Player extends Character {
         }
 
         this._updateCameraTarget()
+        this._updateRaycast()
     }
+
+    private _updateRaycast() {
+        // this.walkDirection.y -=5
+        // this.raycaster.ray.origin.y = 3
+        this.raycaster.ray.direction = this.walkDirection.negate()
+    }
+
 
     private _updateCameraPosition() {
         this.camera.position.x = Helpers.lerp(this.camera.position.x, this.model.position.x - Math.sin(this.model.rotation.y) * 25, 0.06)
@@ -139,14 +159,6 @@ export class Player extends Character {
                 direction.orientation = -Math.PI / 4 // w+a
             } else if (this._keysPressed[D]) {
                 direction.orientation =  Math.PI / 4 // w+d
-            }
-        } else if (this._keysPressed[S]) {
-            direction.move = -1
-
-            if (this._keysPressed[A]) {
-                direction.orientation = -Math.PI / 4 + Math.PI / 2 // s+a
-            } else if (this._keysPressed[D]) {
-                direction.orientation = Math.PI / 4 - Math.PI / 2 // s+d
             }
         } else if (this._keysPressed[A]) {
             direction.orientation = -Math.PI / 4 // a

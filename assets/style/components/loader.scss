@@ -1,27 +1,43 @@
 .loader {
-	z-index: 101;
-	width: 100vw;
-	height: 100vh;
-	position: fixed;
-	background: #2f3640;
-	display: flex;
-	align-items: center;
+  z-index: 10000;
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  background-image: url("/images/paper-textur.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-  //&__line {
-  //  position: absolute;
-  //  top: 50%;
-  //  transform: translateY(-50%);
-  //  left: 120px;
-  //  max-width: 150px;
-  //  height: 1px;
-  //  background: #000;
-  //}
-  //&__percentWrapper {
-  //  position: absolute;
-  //  top: 50%;
-  //  transform: translateY(-50%);
-  //  left: 60px;
-  //}
+  &-sticker {
+    background-color: $purple;
+    border-radius: 50%;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: block;
+  }
 
+  &-progress {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @include rotation(1s, translate(-50%, -50%))
+  }
+
+  &-counter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Panchang-Bold";
+    font-size: 30px;
+    line-height: 0;
+    text-shadow: 4px 4px 0 $purple_dark, 4px -4px 0 $purple_dark, -4px 4px 0 $purple_dark, -4px -4px 0 $purple_dark,
+      4px 0px 0 $purple_dark, 0px 4px 0 $purple_dark, -4px 0px 0 $purple_dark, 0px -4px 0 $purple_dark;
+    color: $white;
+  }
 }

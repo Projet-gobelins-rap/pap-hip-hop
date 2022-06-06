@@ -5,20 +5,22 @@ export default class Scope {
     public sensor: any
     public grafCanvas: HTMLCanvasElement
     public landscape: HTMLElement
+    public pointer: HTMLElement
     public markers: any
     public baseX: number
     public latestX: number
     public normalizePosition: { x: number, y: number }
     public rotation: any
     public size: { width: number; height: number; }
-    public clientSizes: { width: number; height: number; } = { height: 1440, width: 780 }
+    public clientSizes: { width: number; height: number; } = { height: 2320, width: 1294 }
     public mobileSizes: { width: number; height: number; } = { height: window.innerHeight, width: window.innerWidth }
     public places: any
     public debugX: HTMLElement
     public debugY: HTMLElement
     public focusTimeOut: any
     public focusTarget: boolean = false
-    public focusTimeline: any 
+    public focusTimeline: any
+    public pointerTimeline: any
 
     private MAX_Y_ANGLE: number = 50
     private MAX_X_ANGLE: number = 50
@@ -27,6 +29,7 @@ export default class Scope {
     constructor() {
 
         this.landscape = document.querySelector('.mobileScope-wrapper')
+        this.pointer = document.querySelector('.mobileScope-pointer')
         this.markers = [...document.querySelectorAll('.mobileScope-marker')]
         this.debugX = document.querySelector('.mobileScope-debug--x')
         this.debugY = document.querySelector('.mobileScope-debug--y')
@@ -45,13 +48,26 @@ export default class Scope {
             ease: 'none'
         })
         this.focusTimeline.pause()
-        
+
+        this.pointerTimeline = gsap.timeline()
+
+        this.pointerTimeline.to(this.pointer, {
+            scale: 2,
+            rotate: '45deg',
+            duration: 0.2
+        })
+        this.pointerTimeline.pause()
+
         this.init()
     }
 
     init() {
         // this.initSensor()
-        this.normalizePosition = { x: 0, y: 0 }
+        this.normalizePosition = { x: 0, y: 0.5 }
+
+    }
+
+    start() {
         this.initPlaces()
         this.deviceOrientation()
         this.animationLoop()
@@ -62,23 +78,26 @@ export default class Scope {
         this.places = [
             {
                 id: 1,
-                x: 0.07,
-                y: 0.07,
+                x: -0.05,
+                y: -0.02,
                 found: false,
+                isFocus: true,
                 icon: this.markers[1],
                 slug: "good"
             }, {
                 id: 2,
-                x: -0.85,
-                y: 0.40,
+                x: 0.63,
+                y: -0.39,
                 found: false,
+                isFocus: true,
                 icon: this.markers[0],
                 slug: "bad-1"
             }, {
                 id: 3,
-                x: 0.60,
-                y: 0.55,
+                x: 0.63,
+                y: 0.39,
                 found: false,
+                isFocus: true,
                 icon: this.markers[2],
                 slug: "bad-2"
             }
@@ -101,7 +120,7 @@ export default class Scope {
 
     moveScope() {
         gsap.set(this.landscape, {
-            y: -this.normalizePosition.x * (this.clientSizes.width / 2),
+            y: -this.normalizePosition.x * (this.clientSizes.width / 2 + this.mobileSizes.height ),
             x: -this.normalizePosition.y * (this.clientSizes.height / 2 - this.mobileSizes.width)
         })
     }
@@ -112,35 +131,48 @@ export default class Scope {
 
             if (this.normalizePosition.y <= (place.y + this.colideRange) && this.normalizePosition.y > (place.y - this.colideRange)) {
                 if (this.normalizePosition.x <= (place.x + this.colideRange) && this.normalizePosition.x > (place.x - this.colideRange)) {
-                    if (!this.focusTarget && !this.focusTimeOut) {
+                    
+                    if (!this.focusTarget && !this.focusTimeOut && !place.found) {
+
+                        console.log(place.slug);
                         this.focusTimeline.play()
+                        this.pointerTimeline.play()
+                        place.isFocus = true
 
                         this.focusTimeOut = setTimeout(() => {
-                            console.log('2');
-
                             gsap.set(place.icon, {
                                 fill: "#00ff00"
                             })
-                            if (!place.found) {
-                                $socket.io.emit('scope-focus', place.slug)
-                            }
+                            $socket.io.emit('scope-focus', place.slug)
                             place.found = true
-                            
                         }, 1000);
                     }
                     this.focusTarget = true
                 } else {
+                    place.isFocus = false
                     if (this.focusTarget) {
-                        this.focusTimeline.restart()
-                        this.focusTimeline.pause()
-                        clearTimeout(this.focusTimeOut)
-                        this.focusTimeOut = null
-
-                        this.focusTarget = false
+                        this.resetAnim()
                     }
                 }
+            } else {
+                place.isFocus = false
             }
         }
+    }
+
+    resetAnim() {
+        if (this.focusTarget) {
+            this.focusTimeline.restart()
+            this.focusTimeline.pause()
+            this.pointerTimeline.reverse()
+
+            clearTimeout(this.focusTimeOut)
+            this.focusTimeOut = null
+            this.focusTarget = false
+        }
+
+        // 
+
     }
 
     handleDeviceOrientation(data) {
@@ -174,11 +206,6 @@ export default class Scope {
             }
         }
 
-        // gamma += orientationCorrections.gamma
-
-        // gamma += 180
-        // gamma %= 180
-
         if ((gamma < 0 && gamma >= this.MAX_Y_ANGLE * -1)) {
             y = (100 / this.MAX_Y_ANGLE) * gamma * -1
         } else {
@@ -191,7 +218,6 @@ export default class Scope {
 
         this.normalizePosition.x = x * 0.01
         this.normalizePosition.y = (y * 0.01 - 0.5) * 2
-
 
         this.debugX.innerHTML = this.normalizePosition.x.toFixed(2)
         this.debugY.innerHTML = this.normalizePosition.y.toFixed(2)

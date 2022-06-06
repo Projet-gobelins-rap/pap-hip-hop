@@ -17,6 +17,7 @@ class WebsocketManager {
     $storage.setInLocalStorage('room',this.room)
 
     if ($storage.getInLocalStorage('room')) {
+      this.room = $storage.getInLocalStorage('room')
       console.log('ON PASSE')
       this.autoConnect()
     }
@@ -32,8 +33,7 @@ class WebsocketManager {
 
   setRoom(roomId) {
     this.room = roomId
-
-    $storage.setInLocalStorage('room',this.room)
+    $storage.setInLocalStorage('room', this.room)
   }
 }
 

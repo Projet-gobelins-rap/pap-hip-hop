@@ -2,7 +2,7 @@ import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
@@ -18,6 +18,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _camera: PerspectiveCamera
   public player: Player
   public collider: any
+  private _collectibles: Group = new Group()
+  private _collectibleCollection: {env: Mesh[], collectibles: Mesh[] | Object3D[]}
+
   // private _keysPressed: any
 
   init(): void {
@@ -30,6 +33,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     HoodScene.context.start()
   }
+
 
   /**
    * Create the shell to interact with global scene
@@ -73,7 +77,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
         if (this.player) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
-          this.handleCollision()
+          // this.handleCollision()
+
+          // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
+          // ctx.scene.add(arrow);
         }
       },
       onResume: (ctx) => {
@@ -131,7 +138,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   /**
    * Create scene
    */
-  private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
+  private _createControls(camera: PerspectiveCamera, canvas: HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
     return this._controls
   }
@@ -163,27 +170,29 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
-
+    const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
 
     this._scene.add(city);
+    this._collectibles.add(vinyle);
+    this._scene.add(this._collectibles);
+
     city.scale.set(0.04, 0.04, 0.04)
+    vinyle.position.z = -10
+    vinyle.position.y = 3
 
-
-    const g = new BoxGeometry(10, 10, 10)
-    const m = new MeshMatcapMaterial({ color: 'red' })
-    const cube = new Mesh(g, m)
+    console.log(vinyle);
 
     console.log(city);
-
-    const treeSlots = city.getObjectByName('cloner_tree').children
-    const plotSlots = city.getObjectByName('cloner_bite').children
+    
+    const treeSlots = city.getObjectByName('group_tree').children
+    const plotSlots = city.getObjectByName('group_plot').children
+    // const treeSlots = city.getObjectByName('cloner_tree').children
+    // const plotSlots = city.getObjectByName('cloner_bite').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
 
-    this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
-
-    this._scene.add(this.player.model);
+    
 
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -192,7 +201,13 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
+
+    this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
+
+    this._scene.add(this.player.model);
     this.bvhCollider(city)
+   
+
   }
 
   bvhCollider(env) {
@@ -235,20 +250,40 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this.collider = new Mesh(mergedGeometry);
     this.collider.material.wireframe = true;
+    this.collider.material.color.setHex(0x00ff00)
     this.collider.material.opacity = 0.5;
     this.collider.material.transparent = true;
     this._scene.add(this.collider);
+
+    this._collectibleCollection = {
+      env: [this.collider],
+      collectibles: this._collectibles.children
+    }
+  }
+
+  lootCollectible(collectible: string) {
+    let obj = this._collectibles.getObjectByName(collectible)
+    this._collectibles.remove(obj)
+    HoodScene.onToastNotify(collectible)
   }
 
   handleCollision() {
+    if(this._collectibleCollection) {
+      const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
+      if (intersectCollision.length > 0) {
+        if (intersectCollision[0].distance < 0.8) {
+          this.player.blocked = true;
+        } else {
+          this.player.blocked = false;
+        }
+      }
 
-    // const capsuleInfo = this.player.model.capsuleInfo;
-
-    // this.tempBox.makeEmpty();
-    // this.tempMat.copy(this.collider.matrixWorld).invert();
-    // this.tempSegment.copy(capsuleInfo.segment);
-
-
-
+      const intersect = this.player.raycaster.intersectObjects(this._collectibleCollection.collectibles);
+      if (intersect.length > 0) {
+        if (intersect[0].distance < 0.8) {
+          this.lootCollectible(intersect[0].object.name)
+        }
+      }
+    }
   }
 }
