@@ -1,13 +1,13 @@
 <template>
   <div class="responseContainer responseContainer--global">
-    <span class="battleResponse battleResponse--opponent">AAA</span>
-    <span class="battleResponse battleResponse--player">BBB</span>
-    <span class="battleResponse battleResponse--opponent">AAA</span>
-    <span class="battleResponse battleResponse--player">BBB</span>
-    <span class="battleResponse battleResponse--opponent">AAA</span>
-    <span class="battleResponse battleResponse--player">BBB</span>
-    <span class="battleResponse battleResponse--opponent">AAA</span>
-    <span class="battleResponse battleResponse--player">BBB</span>
+    <span class="battleResponse battleResponse--group battleResponse--opponent"></span>
+    <span class="battleResponse battleResponse--group battleResponse--player"></span>
+    <span class="battleResponse battleResponse--group battleResponse--opponent"></span>
+    <span class="battleResponse battleResponse--group battleResponse--player"></span>
+    <span class="battleResponse battleResponse--opponent"></span>
+    <span class="battleResponse battleResponse--player"></span>
+    <span class="battleResponse battleResponse--opponent"></span>
+    <span class="battleResponse battleResponse--player"></span>
   </div>
 </template>
 

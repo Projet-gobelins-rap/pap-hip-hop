@@ -237,8 +237,8 @@ export default class battle extends Vue {
     }
     let tl = gsap.timeline()
     this.$refs.damage.innerHTML = -damageVal
-    tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,duration:1,ease: "expo.out"})
-    tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,duration:1,ease: "expo.out",onComplete:()=>{
+    tl.to(this.$refs.damage,{display:'block',opacity:1,y:-5,duration:0.5,ease: "expo.out"})
+    tl.to(this.$refs.damage,{display:'none',opacity:0,y:0,duration:0.5,ease: "expo.out",onComplete:()=>{
       if (this.$refs.damage.classList.contains('battle-damageOpponent' && !isOpponent)){
         this.$refs.damage.classList.remove('battle-damageOpponent')
       }
@@ -306,6 +306,7 @@ export default class battle extends Vue {
                 }else {
                   this.displayOnboarding();
                   $socket.io.emit("battle::round2Sequence");
+                  this.comboValue = 0
                 }
               }
             }else {
@@ -330,9 +331,13 @@ export default class battle extends Vue {
       currentElement.innerHTML = isOpponentTour ? opponentData[punchIndex].content[0].text : playerData[0].text
       gsap.to(currentElement, {
         display: 'block', duration: 1, opacity: 1,ease: "expo.out", delay: 2, onComplete: () => {
+          gsap.to(currentElement,{opacity:0.5})
           if (!isOpponentTour) {
             this.detectCombo(playerData[!isOpponentTour && !round1 ? 0 : punchIndex])
             this.calculateScore(this.score.opponent, playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score, true)
+            if (punchIndex == 1){
+              gsap.to('.battleResponse--group',{display:'none',opacity:0})
+            }
             $socket.io.emit("battle::round2Sequence");
           } else {
             this.calculateScore(this.score.player,opponentData[punchIndex].score,false)
