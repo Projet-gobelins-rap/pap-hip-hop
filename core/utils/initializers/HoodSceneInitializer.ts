@@ -205,6 +205,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
+
+    
+
     const floor = city.getObjectByName('floor')
     floor.material.needsUpdate = true;
     floorDM.flipY = false

@@ -57,6 +57,18 @@
         }
       }
     },
-    "pnj-deenasty": {}
+    "pnj-deenasty": {
+      "slices5": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    }
   }
 }
