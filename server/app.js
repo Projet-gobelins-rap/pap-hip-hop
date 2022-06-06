@@ -1,13 +1,20 @@
 const fs = require('fs');
 const express = require('express')
 const app = express()
-
+const isDev = process.env.NODE_ENV !== 'production'
 const https = require('https')
-const privateKey = fs.readFileSync('sslcert/selfsigned.key', 'utf8');
-const certificate = fs.readFileSync('sslcert/selfsigned.crt', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+const http = require('http')
+let server
+if (isDev){
+  const privateKey = fs.readFileSync('sslcert/selfsigned.key', 'utf8');
+  const certificate = fs.readFileSync('sslcert/selfsigned.crt', 'utf8');
+  const credentials = { key: privateKey, cert: certificate };
 
-const server = https.createServer(credentials, app);
+   server = https.createServer(credentials, app);
+}else {
+   server = http.createServer(app);
+}
+
 
 const {handleSocket} = require('./socketHandler')
 

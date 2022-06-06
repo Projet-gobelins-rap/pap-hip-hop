@@ -192,9 +192,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
 
-    this.player = new Player(playerGltf, 'player', 'tpose', this._camera, this._controls)
-
-    this._scene.add(this.player.model);
+    
 
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -203,17 +201,12 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
+
+    this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
+
+    this._scene.add(this.player.model);
     this.bvhCollider(city)
-    document.addEventListener('click', () => {
-      console.clear()
-      console.log(vinyle);
-      console.log(this.player.model);
-      
-      // vinyle.material.dispose()
-      // vinyle.geometry.dispose()
-      this._collectibles.remove(this._collectibles.getObjectByName('VINYLE'))
-      this._scene.remove(this.player.model)
-    })
+   
 
   }
 

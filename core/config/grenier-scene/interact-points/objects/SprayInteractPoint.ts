@@ -9,8 +9,10 @@ const SprayInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    GrenierScene.context.scene.getObjectByName("interaction_graf")!.getWorldPosition(position);
-
+    const target = GrenierScene.context.scene.getObjectByName("interaction_graf")!
+    target.getWorldPosition(position);
+    target.children = []
+    
     position.y = 1 + position.y;
     position.x = 1 + position.x;
 

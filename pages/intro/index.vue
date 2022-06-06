@@ -2,13 +2,21 @@
   <section class="intro">
     <h1 class="intro-title">PAP'HIP HOP</h1>
     <h2 class="intro-subtitle">LE MOUVEMENT OUBLIÉ</h2>
-    <img
-      v-for="(sticker, idx) in stickerCollection"
-      class="intro-sticker"
-      :key="`sticker-${idx}`"
-      :id="`${sticker.name}`"
-      :src="sticker.src"
-    />
+
+    <transition-group
+      class="intro-stickers"
+      @before-enter="onBeforeEnter"
+      @enter="onEnter"
+      ref="stickers"
+    >
+      <img
+        v-for="(sticker, idx) in stickerCollection"
+        class="intro-sticker"
+        :key="`sticker-${idx}`"
+        :id="`${sticker.name}`"
+        :src="sticker.src"
+      />
+    </transition-group>
 
     <CustomButton
       class="intro-button large"
@@ -25,6 +33,7 @@ import CustomButton from "~/components/buttons/button.vue";
 import { AssetsManager } from "../../core/managers";
 import { IMAGE_ASSET } from "../../core/enums";
 import $storage from "../../core/utils/Storage";
+import gsap from "gsap/all";
 
 @Component({
   components: {
@@ -44,9 +53,12 @@ export default class Intro extends Vue {
     IMAGE_ASSET.BOOMBOX,
   ];
   public stickerCollection: Array<{ name: string; src: string }> = [];
+  public stickerElements: any = [];
+  public introTimeline: gsap.core.Timeline;
 
   mounted() {
     this.getStickers();
+    // setTimeout(this.setupTimeline, 1000);
   }
 
   goToNextStep() {
@@ -63,8 +75,29 @@ export default class Intro extends Vue {
       });
     });
   }
-}
-</script>
 
-<style lang="sass" scoped>
-</style>
+  onBeforeEnter(element: any) {
+    gsap.set(element, {
+      opacity: 0,
+      scale: 1.4,
+      onComplete: () => {
+        this.stickerElements.push(element);
+        this.stickerLoader();
+        console.log(this.stickerElements);
+      },
+    });
+  }
+  onEnter(element: any, done: any) {
+    console.log();
+  }
+
+  stickerLoader() {
+    if (this.stickerElements.length == this.stickerCollection.length) {
+      gsap.to(".intro-sticker", {
+        stagger: 0.2,
+        opacity: 1,
+        scale: 1,
+      });
+    }
+  }
+}

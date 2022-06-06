@@ -9,10 +9,11 @@ import {
   PerspectiveCamera,
   Scene,
   Vector3,
+  VideoTexture,
   WebGLRenderer
 } from "three";
 import Helpers from "~/core/utils/Helpers";
-import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
+import { GLTF_ASSET, TEXTURE_ASSET, VIDEO_ASSET } from "../../enums";
 import { degToRad } from "three/src/math/MathUtils";
 import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
 import { Npc } from "../../models/npc"
@@ -27,6 +28,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
   private _scene: Scene
   private _controls: OrbitControls
   private _papy: Npc
+  tvScreen: any;
+  videoTV: HTMLVideoElement;
   init(): void {
 
     console.log(["1 ----> ", this._data]);
@@ -192,23 +195,19 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
     const grenierTexture = AssetsManager.getTexture(TEXTURE_ASSET.GRENIER_TEXTURE).data
     // const grenierNormalMap = AssetsManager.getTexture(TEXTURE_ASSET.GRENIER_NORMAL).data
     console.log(grenierScene);
+    console.log(papyGltf);
+    
     grenierTexture.flipY = false
     // grenierNormalMap.flipY = false
     grenierScene.getObjectByName("grenier").material.map = grenierTexture
     // grenierScene.getObjectByName("grenier").material.normalMap = grenierNormalMap
-    
+    this.tvScreen = grenierScene.getObjectByName("tv_screen")
     grenierScene.position.set(-40, -10, 40)
     grenierScene.scale.set(0.25, 0.25, 0.25)
     grenierScene.rotateY(Math.PI / 2)
     this._scene.add(grenierScene)
     console.log(grenierScene);
     
-    
-    this._papy = new Npc(papyGltf, 'papy', 'tpose')
-    this._papy.model.scale.set(17, 17, 17)
-    this._papy.model.position.set(-0, -0, -0)
-    SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
-  
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -216,5 +215,25 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         object.material.map = oldTexture
       }
     })
+
+    this._startTvScreen() 
+    
+    this._papy = new Npc(papyGltf, 'papy', 't-pose')
+    this._papy.model.scale.set(17, 17, 17)
+    this._papy.model.position.set(-0, -0, -0)
+    SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
+  }
+
+  private _startTvScreen() {
+    this.videoTV = AssetsManager.getVideo(VIDEO_ASSET.TV_VIDEO).data
+    this.videoTV.play()
+    this.videoTV.loop = true
+    this.videoTV.muted = true
+
+    const videoTexture = new VideoTexture(this.videoTV)
+    
+    videoTexture.needsUpdate = true;
+    this.tvScreen.material.map = videoTexture
+    this.tvScreen.rotateY(-Math.PI /2)
   }
 }
