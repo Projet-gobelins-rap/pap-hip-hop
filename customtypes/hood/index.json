@@ -17,6 +17,46 @@
           }
         }
       }
-    }
+    },
+    "pnj-graff": {
+      "slices2": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "pnj-battle": {
+      "slices3": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "pnj-ticaret": {
+      "slices4": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "pnj-deenasty": {}
   }
 }
