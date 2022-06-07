@@ -12,30 +12,10 @@ import TvInteractPoint from "./interact-points/objects/TvInteractPoint";
 import TvCameraPosition from "./camera-positions/TvCameraPosition";
 
 const GrenierSceneConfig = {
-  // // ROOMS
-  // rooms: [
-  //   Bedroom,
-  //   Lounge,
-  //   Mezzanine
-  // ] as Array<Room>,
-  //
-  // // ROOM OBJECTS
-  // roomObjects: [
-  //   /* Bedroom */
-  //   SkateRoomObject,
-  //   PaperRoomObject,
-  //   /* Lounge */
-  //   VinylRoomObject,
-  //   NotebookRoomObject,
-  //   /* Mezzanine */
-  //   TelevisionRoomObject,
-  //   PhoneRoomObject
-  // ] as Array<RoomObject>,
 
   // CAMERA POSITIONS
   cameraPositions: [
     /* Global */
-
     InitialCameraPosition,
     PosterCameraPosition,
     SprayCameraPosition,

@@ -1,5 +1,6 @@
 <template>
   <section class="battle" >
+    <canvas id="canvasGlobalScene" ref="battleScene"></canvas>
 <!-- TODO video lien dynamique -->
     <video class="battle-video" autoplay loop muted src="https://pap-hip-hop.cdn.prismic.io/pap-hip-hop/774853fd-b591-4a78-8214-b273a18be0bb_Battle+Background+Loop-1.mp4"></video>
     <div class="battle-hud">
@@ -92,7 +93,7 @@ import $socket from "~/plugins/socket.io";
 import { AssetsManager } from "~/core/managers";
 import { gsap } from "gsap";
 import {Punchline} from "../../core/types/punchline";
-import globalStore from "../../store/globalStore";
+import BattleSceneInitializer from "../../core/utils/initializers/BattleSceneInitializer";
 
 @Component({
   components: {
@@ -189,6 +190,10 @@ export default class battle extends Vue {
     console.log(this.$refs.globalResponse,'TEST REF')
     console.log(this.globalResponse,"GLOB")
 
+    new BattleSceneInitializer({
+      canvas: this.$refs.battleScene as HTMLCanvasElement,
+      battleStore: this.battleStore,
+    }).init();
 
     // TODO UPDATE LA BG VIDEO ASSETS
     // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
