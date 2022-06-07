@@ -79,6 +79,8 @@ export default class SceneManager {
   private _isStatsActive: boolean
   private _isParallaxActive: boolean
   public _isStarted: boolean | undefined
+  private _cameraTimeline: gsap.core.Timeline;
+  private _prevCameraPosition: { newCameraPosition: Vector3, lookAtPosition: Vector3 };
 
   constructor(options: SceneManagerOptions) {
 
@@ -96,6 +98,8 @@ export default class SceneManager {
     this._isStarted = options.isStarted
     this._deltaTime = 0
     this._previousTime = 0
+    
+    
     // this._gui = new GUI()
     this._stats = null
     this._defaultRatio = options.defaultRation || 1
@@ -206,32 +210,50 @@ export default class SceneManager {
     errorCallBack: DefaultSceneManagerCallback = function () {
     }
   ) {
-    const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
 
-    if (!presetCameraPosition) {
+    // find camera preset by name
+    const presetCameraPosition = this._presetCameraPositions.find(camPos => camPos.name === name)
+    
+    // throw error if name not matching with preset or "reset" 
+    if (!presetCameraPosition && name !== "reset") {
       console.log('Camera preset position is not registered')
       errorCallBack(this)
       return
     }
 
-    const { newCameraPosition: newCameraPosition, lookAtPosition: lookAtPosition } = presetCameraPosition.coords()
-
-
+    // get camera position and target position values
+    // in case we going to interaction point, set new positions from preset values and set origin positions
+    // if we leave interaction point with "reset" keyword, set new positions from origin positions
+    let newCameraPosition, lookAtPosition
+    if(presetCameraPosition) {
+      newCameraPosition = presetCameraPosition.coords().newCameraPosition
+      lookAtPosition = presetCameraPosition.coords().lookAtPosition
+      this._prevCameraPosition = {
+        newCameraPosition: new Vector3().copy(this._camera.position), 
+        lookAtPosition: new Vector3().copy(this._controls!.target)
+      }
+    } else {
+      newCameraPosition = this._prevCameraPosition.newCameraPosition
+      lookAtPosition = this._prevCameraPosition.lookAtPosition
+    }
+    
+    // tween on target position
     gsap.to(this._controls!.target, {
-      duration,
+      duration: duration,
       x: lookAtPosition.x,
       y: lookAtPosition.y,
       z: lookAtPosition.z,
       ease: "sine.inOut",
     })
+
+    // tween on camera position
     gsap.to(this._camera.position, {
-      duration,
+      duration: duration,
       x: newCameraPosition.x,
       y: newCameraPosition.y,
       z: newCameraPosition.z,
       ease: "sine.inOut",
       onComplete: () => {
-        // this.enableParallax()
         successCallBack(this)
       },
       onStart: () => {

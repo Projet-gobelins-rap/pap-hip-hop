@@ -22,6 +22,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public collider: any
   private _collectibles: Group = new Group()
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
+  public cameraFollow: boolean = true;
 
   // private _keysPressed: any
 
@@ -74,7 +75,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
 
-        if (this.player) {
+        if (this.player && this.cameraFollow) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
           // this.handleCollision()
 
