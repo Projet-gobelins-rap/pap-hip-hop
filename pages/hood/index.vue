@@ -52,7 +52,12 @@ import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/Ticar
 
       const hoodOnboarding = hoodContent?.slices1[0].items;
       const currentOnboarding = hoodOnboarding;
-      const npcDialogues = [hoodContent?.slices2];
+      const npcDialogues = [
+        hoodContent?.slices2, 
+        hoodContent?.slices3, 
+        hoodContent?.slices4, 
+        hoodContent?.slices5, 
+        ];
 
       return {
         hoodOnboarding,
@@ -132,15 +137,12 @@ export default class HoodScenePage extends Vue {
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
-
         this.currentChat = element[0];
-
         return this.currentChat;
       }
     });
 
     this.removeInteractionsPoints();
-    this.hoodSceneStore.setIsChatDisplay(true);
     HoodScene.context.goToPresetPosition(point.slug, 2, () => {
       this.hoodSceneStore.setIsCameraMoving(false);
       this.hoodSceneStore.setIsChatDisplay(true);
@@ -203,9 +205,8 @@ export default class HoodScenePage extends Vue {
       switch (val) {
         case "reading":
           break;
-        case "back":
+        case "goBack":
           this.goBack();
-
           this.chatStore.setChatStep("reading");
           break;
       }
@@ -214,7 +215,8 @@ export default class HoodScenePage extends Vue {
 
   goBack() {
     this.hoodSceneStore.setIsChatDisplay(false);
-
+    this.addInteractionPoints();
+    
     // TODO : reset camera prosition
   }
 
