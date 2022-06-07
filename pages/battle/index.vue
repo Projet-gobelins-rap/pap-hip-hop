@@ -94,6 +94,8 @@ import { AssetsManager } from "~/core/managers";
 import { gsap } from "gsap";
 import {Punchline} from "../../core/types/punchline";
 import BattleSceneInitializer from "../../core/utils/initializers/BattleSceneInitializer";
+import grenierScene from "../../core/scene/GrenierScene";
+import BattleScene from "../../core/scene/BattleScene";
 
 @Component({
   components: {
@@ -194,6 +196,7 @@ export default class battle extends Vue {
       canvas: this.$refs.battleScene as HTMLCanvasElement,
       battleStore: this.battleStore,
     }).init();
+    BattleScene.context.disableOrbitControl();
 
     // TODO UPDATE LA BG VIDEO ASSETS
     // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src

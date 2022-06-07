@@ -5,7 +5,7 @@ import { AssetsManager, SceneManager } from "~/core/managers";
 import {
   BoxGeometry,
   Mesh,
-  MeshBasicMaterial,
+  MeshBasicMaterial, OrthographicCamera,
   PerspectiveCamera,
   Scene,
   Vector3,
@@ -22,6 +22,7 @@ import { Outfitloader } from "../../managers/OutfitLoader"
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import SlotsLoader from "../SlotsLoader";
 import battleStore from "../../../store/battleStore";
+import BattleScene from "../../scene/BattleScene";
 
 export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, battleStore: battleStore }, void> {
 
@@ -31,17 +32,13 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   private _papy: Npc
   init(): void {
 
-    GrenierScene.setSceneContext(this._createSceneContext())
+    BattleScene.setSceneContext(this._createSceneContext())
 
     this._addSceneElements()
 
-    // this._addLights(true)
-    this._registerPresetPositions()
-
     // this._optimizeScene()
     //this._configGUI()
-
-    GrenierScene.context.start()
+    BattleScene.context.start()
   }
 
   /**
@@ -78,6 +75,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       },
       onRender: (ctx) => {
         // Add interactions points tracking
+        // console.log(ctx.camera.position)
         if (this._papy) {
           this._papy.update(ctx.deltaTime)
         }
@@ -105,6 +103,8 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   /**
    * Create perspective camera
    */
+
+  // width / - 2, width / 2, height / 2, height / - 2, 1, 1000
   private _createCamera() {
     const camera = new PerspectiveCamera(
       70,
@@ -113,9 +113,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       1000
     )
 
-    camera.position.copy(GrenierSceneConfig.cameraPositions[0].coords().newCameraPosition)
-
-    this.cameraInitialPosition = camera.position
+    camera.position.z = -280
 
     return camera
   }
@@ -133,7 +131,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
-    this._controls.target = GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition
+    // this._controls.target = GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition
     return this._controls
   }
 
@@ -149,16 +147,6 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       // powerPreference: 'high-performance'
     })
   }
-
-  /**
-   * Register preset camera positions
-   */
-  private _registerPresetPositions() {
-    GrenierSceneConfig.cameraPositions.forEach(presetPosition => {
-      GrenierScene.context.registerPresetCameraPositions(presetPosition)
-    })
-  }
-
 
   private _addSceneElements():void {
     console.log('add scene elements')
@@ -180,8 +168,10 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     })
 
     this._papy = new Npc(papyGltf, 'papy', 't-pose')
-    this._papy.model.scale.set(17, 17, 17)
-    this._papy.model.position.set(-0, -0, -0)
+    this._papy.model.scale.set(50, 50, 50)
+    this._papy.model.position.set(20, -330, -0)
+    this._papy.model.rotateY(degToRad(180))
+    this._scene.add(this._papy.model)
     // SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
   }
 
