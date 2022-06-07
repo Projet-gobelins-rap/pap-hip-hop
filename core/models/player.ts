@@ -60,7 +60,7 @@ export class Player extends Character {
     private _initRaycast() {
         
         this.raycaster = new Raycaster(
-            this.model.position,
+            new Vector3().copy(this.model.position),
             this.walkDirection.negate()
         )
     }
@@ -128,7 +128,8 @@ export class Player extends Character {
 
     private _updateRaycast() {
         // this.walkDirection.y -=5
-        // this.raycaster.ray.origin.y = 3
+        this.raycaster.ray.origin.copy(this.model.position)
+        this.raycaster.ray.origin.y += 3
         this.raycaster.ray.direction = this.walkDirection.negate()
     }
 

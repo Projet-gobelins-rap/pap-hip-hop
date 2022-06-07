@@ -1,6 +1,7 @@
-import { Group, Object3D, Mesh, Texture } from "three"
+import { Group, Object3D, Mesh, Texture, MeshBasicMaterial } from "three"
 import { AssetsManager } from "../managers";
 import { TEXTURE_ASSET, GLTF_ASSET } from "../enums";
+import Helpers from "./Helpers";
 
 
 export default class SlotsLoader {
@@ -15,7 +16,7 @@ export default class SlotsLoader {
 
     public static populateSlots(slots: Object3D[], baseObject: Object3D | Group | Mesh, texture: Texture): void {
         texture.flipY = false
-        baseObject.children[0]?.material.map = texture
+        baseObject.children[0].material.map = texture
         slots.forEach(object => {
             // -Lead- : dispose ? remove ?
             object.children = []
@@ -43,7 +44,6 @@ export default class SlotsLoader {
                     slot.add(buildingVariations[1].clone())
                     break;
                 case "3":
-
                     texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data
                     texture.flipY = false
                     buildingVariations[2].children[0].material.map = texture
@@ -65,6 +65,7 @@ export default class SlotsLoader {
         slots.forEach(slot => {
             const params = slot.name.split('_')
             let model = null
+
             switch (params[1]) {
                 case "tape":
                     model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_WALKMAN).data.scene.clone()
@@ -80,29 +81,28 @@ export default class SlotsLoader {
                     model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_BOOMBOX).data.scene.clone()
                     slot.add(model)
                     model.position.y = 30
-
                     break;
                 case "spray":
                     model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_SPRAY).data.scene.clone()
                     slot.add(model)
                     model.position.y = 30
-
                     break;
                 case "note":
                     model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_NOTE).data.scene.clone()
                     slot.add(model)
                     model.position.y = 30
-
                     break;
                 case "vinyle":
                     model = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene.clone()
                     slot.add(model)
                     model.position.y = 30
-
                     break;
                 default:
                     break;
             }
+
+
+
         });
     }
 }
