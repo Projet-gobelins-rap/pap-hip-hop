@@ -38,6 +38,12 @@
       color: $black;
     }
   }
+  &-battle {
+    position: absolute;
+    bottom: 40px;
+    display: none;
+    opacity: 0;
+  }
 
   &::before {
     content: "";

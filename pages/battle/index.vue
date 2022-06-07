@@ -62,6 +62,12 @@
     <BattleMultipleResponse ref="globalResponse"></BattleMultipleResponse>
 
 
+    <CustomButton
+      class="chat-button medium btn-battle"
+      @click.native="nextPunchRound1()"
+      :text="'suivant'"
+    />
+
     <ChatComponent
       v-if="this.chatDisplay && currentChat"
       :content="currentChat"
@@ -149,6 +155,7 @@ export default class battle extends Vue {
   public currentOnboarding: object;
   public currentPunchline: object;
   public chatCounter: number = 0;
+  public opponentTourRound1:boolean = true;
   public punchlineArray: string[] = [];
   public punchArray: Array<Punchline> = []
   public opponent: HTMLElement;
@@ -244,10 +251,8 @@ export default class battle extends Vue {
 
   // show opponent punchlines
   displayOpponentPunchline() {
-    // console.log('Migrate OPPONENT PUNCHLINE')
-    console.log(this.opponent);
-    // gsap.set(".opponent span", { display: "none", opacity: 0 });
 
+    console.log(this.opponent);
     if (!this.isRound2) {
       this.animatePunchline(this.opponent.$el.children,true,this.opponentRound1,null,true)
     } else {
@@ -338,7 +343,7 @@ export default class battle extends Vue {
 
         el.innerHTML = isOpponentTour ? opponentData[index].content[0].text : playerData[!isOpponentTour&&!round1 ? punchIndex: index].text
 
-        gsap.to(el,{display:'block',duration:1,opacity:1,ease: "expo.out",delay:index*2,onComplete:()=>{
+        gsap.to(el,{display:'block',duration:2,opacity:1,ease: "expo.out",delay:index*2,onComplete:()=>{
             console.log(this.punchArray[index],"INDEX DU PUNCH ARRAY")
             if (!isOpponentTour){
               this.detectCombo(playerData[!isOpponentTour&&!round1 ? 0: index])
@@ -346,9 +351,11 @@ export default class battle extends Vue {
 
               if (index === 3) {
                 if (this.round2StepCounter <= 0) {
-                  this.setNextChat();
-                  this.displayChat();
-                  gsap.to('.responseContainer--player span',{display:'none',opacity:0})
+                  gsap.to('.btn-battle',{display:'block',opacity:1})
+                  // this.nextPunchRound1(false)
+                  // this.setNextChat();
+                  // this.displayChat();
+                  // gsap.to('.responseContainer--player span',{display:'none',opacity:0})
                 }else {
                   this.displayOnboarding();
                   $socket.io.emit("battle::round2Sequence");
@@ -358,8 +365,10 @@ export default class battle extends Vue {
             }else {
               this.calculateScore(this.score.player,opponentData[index].score,false)
               if (index === 3) {
-                this.displayUserPunchline();
-                gsap.to('.responseContainer--opponent span',{display:'none',opacity:0})
+                gsap.to('.btn-battle',{display:'block',opacity:1})
+                // this.nextPunchRound1(true)
+                // this.displayUserPunchline();
+                // gsap.to('.responseContainer--opponent span',{display:'none',opacity:0})
               }
             }
           }
@@ -376,7 +385,7 @@ export default class battle extends Vue {
       let currentElement = result[punchIndex] as HTMLElement
       currentElement.innerHTML = isOpponentTour ? opponentData[punchIndex].content[0].text : playerData[0].text
       gsap.to(currentElement, {
-        display: 'block', duration: 1, opacity: 1,ease: "expo.out", delay: 2, onComplete: () => {
+        display: 'block', duration: 2, opacity: 1,ease: "expo.out", delay: 2, onComplete: () => {
           gsap.to(currentElement,{opacity:0.5})
           if (!isOpponentTour) {
             this.detectCombo(playerData[!isOpponentTour && !round1 ? 0 : punchIndex])
@@ -396,6 +405,22 @@ export default class battle extends Vue {
         }
       })
     }
+  }
+
+  nextPunchRound1() {
+
+    if (this.opponentTourRound1) {
+      gsap.to('.responseContainer--opponent span',{display:'none',duration:1,opacity:0,onComplete:()=>{
+          this.displayUserPunchline();
+          this.opponentTourRound1 = false
+        }})
+    } else {
+      gsap.to('.responseContainer--player span',{display:'none',duration:1,opacity:0,onComplete:()=>{
+          this.setNextChat();
+          this.displayChat();
+        }})
+    }
+    gsap.to('.btn-battle',{display:'none',opacity:0})
   }
 
   showWinner() {
