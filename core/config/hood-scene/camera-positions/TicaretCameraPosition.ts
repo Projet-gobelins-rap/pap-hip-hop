@@ -1,28 +1,17 @@
 import HoodScene from "../../../scene/HoodScene";
 import {CameraPosition} from "./types";
 import {Vector3} from "three";
-// import GUI from 'lil-gui';
 
-// const gui = new GUI();
-//
-// const _params = {
-//   lookAtPosX: 0,
-//   lookAtPosY: 0,
-//   lookAtPosZ: 0,
-//   cameraPosX: 0,
-//   cameraPosY: 0,
-//   cameraPosZ: 0,
-// }
 const TicaretCameraPosition: CameraPosition = {
   name: 'npc_ticaret',
   coords: () => {
     const lookAtPosition =  new Vector3()
     HoodScene.context.scene.getObjectByName("npc_ticaret")!.getWorldPosition(lookAtPosition)
-
+    lookAtPosition.y += 8
     const newCameraPosition = new Vector3(
-      lookAtPosition.x + 10,
+      lookAtPosition.x,
       lookAtPosition.y,
-      lookAtPosition.z -10,
+      lookAtPosition.z - 20,
     )
 
     return { newCameraPosition, lookAtPosition }

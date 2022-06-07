@@ -14,8 +14,7 @@ const TicaretInteractPoint: InteractionPoint = {
     
     target.getWorldPosition(position);
 
-    position.y = 1 + position.y;
-    position.x = 1 + position.x;
+    position.y = 12 + position.y;
 
     return position;
   },
