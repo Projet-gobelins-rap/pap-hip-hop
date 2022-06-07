@@ -21,6 +21,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public player: Player
   public collider: any
   private _collectibles: Group = new Group()
+  private _collectibleColliders: Group = new Group()
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
 
@@ -77,7 +78,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
         if (this.player && this.cameraFollow) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
-          // this.handleCollision()
+          this.handleCollision()
 
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
@@ -201,16 +202,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const building3 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_3).data.scene
     const building4 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_4).data.scene
 
-    this._scene.add(city);
-    this._collectibles.add(vinyle);
-    this._scene.add(this._collectibles);
-
-    console.log(city);
-    
     city.scale.set(0.04, 0.04, 0.04)
-    vinyle.position.z = -10
-    vinyle.position.y = 3
+    console.log(city);
+    this._scene.add(city);
 
+    this._collectibles = city.getObjectByName('group_collec')
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
@@ -230,6 +226,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
+    SlotsLoader.generateCollectible(this._collectibles.children)
   
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -275,10 +272,24 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     console.log(city);
 
     this.bvhCollider(city)
+    this.collectiblesCollider()
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
     // this._scene.add( directionalLight );
 
+  }
+
+  collectiblesCollider() {
+    this._collectibles.children.forEach(object => {
+      const colliderGeometry = Helpers.generateBoxCollider(object)
+      
+      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, transparent: true, visible: false})
+      const collider = new Mesh(colliderGeometry, mat)
+      collider.name = object.name
+      this._collectibleColliders.add(collider)
+    
+    })
+    this._scene.add(this._collectibleColliders) 
   }
 
   bvhCollider(env) {
@@ -294,21 +305,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     env.traverse(object => {
       if (object.type == "Mesh") {
 
-        const box3 = new Box3();
-        box3.setFromObject(object)
-
-        const dimensions = new Vector3().subVectors(box3.max, box3.min);
-        const boxGeometry = new BoxBufferGeometry(dimensions.x, dimensions.y, dimensions.z);
-
-        const matrix = new Matrix4().setPosition(dimensions.addVectors(box3.min, box3.max).multiplyScalar(0.5));
-        boxGeometry.applyMatrix4(matrix);
-
-        for (const key in boxGeometry.attributes) {
-          if (key !== 'position') {
-            boxGeometry.deleteAttribute(key);
-          }
-        }
-        geometries.push(boxGeometry)
+        
+        geometries.push(Helpers.generateBoxCollider(object))
 
         // const mesh = new Mesh(boxGeometry, new MeshBasicMaterial({ wireframe: true }));
         // this._scene.add(mesh)
@@ -319,16 +317,16 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries, true);
     mergedGeometry.boundsTree = new MeshBVH(mergedGeometry, { lazyGeneration: false });
 
-    this.collider = new Mesh(mergedGeometry);
+    // this.collider = new Mesh(mergedGeometry);
     // this.collider.material.wireframe = true;
     // this.collider.material.color.setHex(0x00ff00)
     // this.collider.material.opacity = 0.5;
     // this.collider.material.transparent = true;
     // this._scene.add(this.collider);
-
-    this._collectibleCollection = {
+ 
+    this._collectibleCollection = { 
       env: [this.collider],
-      collectibles: this._collectibles.children
+      collectibles: this._collectibleColliders.children
     }
   }
 
@@ -340,18 +338,18 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   handleCollision() {
     if (this._collectibleCollection) {
-      const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
-      if (intersectCollision.length > 0) {
-        if (intersectCollision[0].distance < 0.8) {
-          this.player.blocked = true;
-        } else {
-          this.player.blocked = false;
-        }
-      }
+      // const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
+      // if (intersectCollision.length > 0) {
+      //   if (intersectCollision[0].distance < 0.8) {
+      //     this.player.blocked = true;
+      //   } else {
+      //     this.player.blocked = false;
+      //   }
+      // }
 
       const intersect = this.player.raycaster.intersectObjects(this._collectibleCollection.collectibles);
       if (intersect.length > 0) {
-        if (intersect[0].distance < 0.8) {
+        if (intersect[0].distance < 1) {
           this.lootCollectible(intersect[0].object.name)
         }
       }

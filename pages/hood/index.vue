@@ -136,7 +136,6 @@ export default class HoodScenePage extends Vue {
   goToInteractionPoint(point) {
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
-        console.log(element[0]);
         this.currentChat = element[0];
         return this.currentChat;
       }
