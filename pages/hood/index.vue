@@ -79,6 +79,10 @@ export default class HoodScenePage extends Vue {
   currentChat: object;
 
   mounted() {
+    this.displayOnboarding();
+  }
+
+  startScene() {
     this.hoodInstance = new HoodSceneInitializer({
       canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
       hoodSceneStore: this.hoodSceneStore,
@@ -86,7 +90,6 @@ export default class HoodScenePage extends Vue {
     this.hoodInstance.init();
 
     if (HoodScene.context._isStarted) {
-      this.displayOnboarding();
       this.addInteractionPoints();
 
       HoodScene.initCallback((toastID: string) => {
@@ -104,6 +107,7 @@ export default class HoodScenePage extends Vue {
           break;
         case "hide":
           this.hideOnboarding();
+          this.startScene();
           this.onboardingStore.setOnboardingStep("reading");
           break;
       }

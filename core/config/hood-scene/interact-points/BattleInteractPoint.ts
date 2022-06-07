@@ -10,10 +10,9 @@ const BattleInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    const target = HoodScene.context.scene.getObjectByName("pnj_battle")!
+    const target = HoodScene.context.scene.getObjectByName("npc_battle")!
     
     target.getWorldPosition(position);
-    target.children = []
 
     position.y = 1 + position.y;
     position.x = 1 + position.x;

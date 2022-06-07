@@ -14,10 +14,10 @@ import {Vector3} from "three";
 //   cameraPosZ: 0,
 // }
 const BattleCameraPosition: CameraPosition = {
-  name: 'poster',
+  name: 'npc_battle',
   coords: () => {
     const lookAtPosition =  new Vector3()
-    HoodScene.context.scene.getObjectByName("pnj_battle")!.getWorldPosition(lookAtPosition)
+    HoodScene.context.scene.getObjectByName("npc_battle")!.getWorldPosition(lookAtPosition)
 
     const newCameraPosition = new Vector3(
       lookAtPosition.x + 10,
