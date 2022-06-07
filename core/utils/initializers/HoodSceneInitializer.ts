@@ -1,6 +1,7 @@
 import { Initializers } from "~/core/defs";
 import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
+import HoodSceneConfig from "../../config/hood-scene/hood-scene.config";
 import { AssetsManager, SceneManager } from "~/core/managers";
 import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, DirectionalLight, DoubleSide, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
@@ -21,16 +22,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public collider: any
   private _collectibles: Group = new Group()
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
+  public cameraFollow: boolean = true;
 
   // private _keysPressed: any
 
   init(): void {
     HoodScene.setSceneContext(this._createSceneContext())
     this._addSceneElements()
-    // this._addLights(true)
-    // this._registerPresetPositions()
-    // this._optimizeScene()
-    //this._configGUI()
+    this._registerPresetPositions()
 
     HoodScene.context.start()
   }
@@ -76,13 +75,15 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         // Add interactions points tracking
         // console.log(ctx,'<-- Render')
 
-        if (this.player) {
+        if (this.player && this.cameraFollow) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
           // this.handleCollision()
 
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
-          for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
+        }
+
+        for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
             const screenPosition = point.canvasCoords().clone()
             screenPosition.project(HoodScene.context.camera)
             const updateData = {
@@ -92,7 +93,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
             }
             this._data.hoodSceneStore.updatePositionsInteractivePoint(updateData)
           }
-        }
       },
       onResume: (ctx) => {
 
@@ -110,7 +110,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     })
-
   }
 
   /**
@@ -155,6 +154,16 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   }
 
   /**
+  * Register preset camera positions
+  */
+  private _registerPresetPositions() {
+    HoodSceneConfig.cameraPositions.forEach(presetPosition => {   
+      HoodScene.context.registerPresetCameraPositions(presetPosition)
+        console.log(HoodScene.context);
+    })
+  }
+
+  /**
    * Create renderer
    * @private
    */
@@ -169,10 +178,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   private _addSceneElements() {
     console.log('add scene elements')
-
-    document.addEventListener('click', () => {
-      this.addCube()
-    }, { once: true })
+    this.addCube()
+   
   }
  
   addCube() {
@@ -180,9 +187,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
+    const fence = AssetsManager.getGltf(GLTF_ASSET.SLOT_FENCE).data.scene
+    const bush = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUSH).data.scene
+    const light = AssetsManager.getGltf(GLTF_ASSET.SLOT_PUBLIC_LIGHT).data.scene
+    const electricPlot = AssetsManager.getGltf(GLTF_ASSET.SLOT_ELECTRIC_PLOT).data.scene
+    const bench = AssetsManager.getGltf(GLTF_ASSET.SLOT_BENCH).data.scene
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
-    const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
-    const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
+    // const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
+    // const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
     const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
     const building2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_2).data.scene
@@ -193,6 +205,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._collectibles.add(vinyle);
     this._scene.add(this._collectibles);
 
+    console.log(city);
+    
     city.scale.set(0.04, 0.04, 0.04)
     vinyle.position.z = -10
     vinyle.position.y = 3
@@ -200,11 +214,21 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
-    // const treeSlots = city.getObjectByName('cloner_tree').children
-    // const plotSlots = city.getObjectByName('cloner_bite').children
+    const busSlots = city.getObjectByName('group_bus').children
+    const bushSlots = city.getObjectByName('group_bush').children
+    const benchSlots = city.getObjectByName('group_bench').children
+    const fenceSlots = city.getObjectByName('group_fence').children
+    const electricPlotSlots = city.getObjectByName('group_electric_light').children
+    const lightSlots = city.getObjectByName('group_public_light').children
 
     SlotsLoader.populateSlots(treeSlots, tree)
     SlotsLoader.populateSlots(plotSlots, plot)
+    SlotsLoader.populateSlots(busSlots, tree)
+    SlotsLoader.populateSlots(bushSlots, bush)
+    SlotsLoader.populateSlots(benchSlots, bench)
+    SlotsLoader.populateSlots(fenceSlots, fence)
+    SlotsLoader.populateSlots(electricPlotSlots, electricPlot)
+    SlotsLoader.populateSlots(lightSlots, light)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
   
     this._scene.traverse(object => {
@@ -215,35 +239,34 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
-    const floor = city.getObjectByName('floor')
-    floor.material.needsUpdate = true;
-    floorDM.flipY = false
-    floorNM.flipY = false
-    floor.material.displacementMap = floorDM
-    floor.material.normalMap = floorNM
-    floor.material.side = DoubleSide
+    // const floor = city.getObjectByName('floor')
+    // floor.material.needsUpdate = true;
+    // floorDM.flipY = false
+    // floorNM.flipY = false
+    // floor.material.displacementMap = floorDM
+    // floor.material.normalMap = floorNM
+    // floor.material.side = DoubleSide
 
-    
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
     eric.model.position.set(-0, -100, -0)
 
     const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
-    npc_battle.model.position.set(-0, -100, -0)
+    npc_battle.model.position.set(-0, -0, -0)
 
     const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
     npc_ticaret.model.scale.set(25, 25, 25)
-    npc_ticaret.model.position.set(-0, -100, -0)
+    npc_ticaret.model.position.set(-0, -0, -0)
 
     const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
     npc_deenasty.model.scale.set(25, 25, 25)
-    npc_deenasty.model.position.set(-0, -100, -0)
+    npc_deenasty.model.position.set(-0, -0, -0)
 
-    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_eric"), eric.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_battle"), npc_battle.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_ticaret"), npc_ticaret.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("pnj_deenasty"), npc_deenasty.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_deenasty"), npc_deenasty.model)
 
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
@@ -297,11 +320,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     mergedGeometry.boundsTree = new MeshBVH(mergedGeometry, { lazyGeneration: false });
 
     this.collider = new Mesh(mergedGeometry);
-    this.collider.material.wireframe = true;
-    this.collider.material.color.setHex(0x00ff00)
-    this.collider.material.opacity = 0.5;
-    this.collider.material.transparent = true;
-    this._scene.add(this.collider);
+    // this.collider.material.wireframe = true;
+    // this.collider.material.color.setHex(0x00ff00)
+    // this.collider.material.opacity = 0.5;
+    // this.collider.material.transparent = true;
+    // this._scene.add(this.collider);
 
     this._collectibleCollection = {
       env: [this.collider],

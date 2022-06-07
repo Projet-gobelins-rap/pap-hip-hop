@@ -17,7 +17,6 @@ class HoodScene {
     }
   }
 
-
   get context() {
     if (!this._context) {
       throw new Error(`You need to set a sceneContext for GlobalScene`)

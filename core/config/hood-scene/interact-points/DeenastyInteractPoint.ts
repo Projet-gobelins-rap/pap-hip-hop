@@ -10,13 +10,11 @@ const DeenastyInteractPoint: InteractionPoint = {
 
   canvasCoords: () => {
     const position = new Vector3();
-    const target = HoodScene.context.scene.getObjectByName("pnj_deenasty")!
+    const target = HoodScene.context.scene.getObjectByName("npc_deenasty")!
     
     target.getWorldPosition(position);
-    target.children = []
 
-    position.y = 1 + position.y;
-    position.x = 1 + position.x;
+    position.y = 12 + position.y;
 
     return position;
   },
