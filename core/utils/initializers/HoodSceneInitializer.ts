@@ -214,6 +214,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
+    const collectibleSlots = city.getObjectByName('group_collec').children
     const busSlots = city.getObjectByName('group_bus').children
     const bushSlots = city.getObjectByName('group_bush').children
     const benchSlots = city.getObjectByName('group_bench').children
@@ -230,6 +231,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
+    SlotsLoader.generateCollectible(collectibleSlots)
   
     this._scene.traverse(object => {
       if (object.isMesh) {
