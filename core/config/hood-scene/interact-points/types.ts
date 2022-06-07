@@ -2,6 +2,7 @@ import { Vector3 } from "three";
 import hoodSceneStore from "../../../../store/grenierSceneStore";
 
 export type InteractionPoint = {
+  slug: string,
   name: string;
   type: string;
   isCompleted: (hoodSceneStore: hoodSceneStore) => boolean;

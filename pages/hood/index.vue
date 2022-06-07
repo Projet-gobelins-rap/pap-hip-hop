@@ -13,6 +13,11 @@
       v-for="(point, index) in hoodSceneStore.activeInteractionPoints"
       :key="index"
     />
+    <ChatComponent
+      class="grenier-chat"
+      v-if="this.chatElementState"
+      :content="currentChat"
+    />
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
 </template>
@@ -23,6 +28,7 @@ import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodSceneInitializer from "~/core/utils/initializers/HoodSceneInitializer";
 import stepStore from "~/store/stepStore";
 import chatStore from "~/store/chatStore";
+import ChatComponent from "~/components/contentOverlays/chat.vue";
 import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
 import Toast from "../../components/contentOverlays/toast";
@@ -30,11 +36,15 @@ import HoodScene from "~/core/scene/HoodScene";
 import DeenastyInteractPoint from "~/core/config/hood-scene/interact-points/DeenastyInteractPoint";
 
 import $socket from "~/plugins/socket.io";
+import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
+import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
+import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
 
 @Component({
   components: {
     Onboarding,
     Toast,
+    ChatComponent,
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -42,10 +52,12 @@ import $socket from "~/plugins/socket.io";
 
       const hoodOnboarding = hoodContent?.slices1[0].items;
       const currentOnboarding = hoodOnboarding;
+      const npcDialogues = [hoodContent?.slices2];
 
       return {
         hoodOnboarding,
         currentOnboarding,
+        npcDialogues,
       };
     } catch (e) {
       // Returns error page
@@ -60,9 +72,11 @@ export default class HoodScenePage extends Vue {
   public onboardingStore = getModule(onboardingStore, this.$store);
   public hoodInstance: HoodSceneInitializer;
   public hoodOnboarding: object;
+  public npcDialogues: object[];
   public currentOnboarding: object;
   public toastText: string | null = null;
   public toastUID: string = "";
+  currentChat: object;
 
   mounted() {
     this.hoodInstance = new HoodSceneInitializer({
@@ -74,13 +88,12 @@ export default class HoodScenePage extends Vue {
     if (HoodScene.context._isStarted) {
       this.displayOnboarding();
       this.addInteractionPoints();
+
       HoodScene.initCallback((toastID: string) => {
         console.log(toastID);
         this.displayToast(toastID);
       });
     }
-    
-    console.log("Boyz in da hood");
   }
 
   @Watch("onboardingStep", { immediate: true, deep: true })
@@ -99,22 +112,32 @@ export default class HoodScenePage extends Vue {
 
   addInteractionPoints() {
     this.hoodSceneStore.addInteractivePoint(DeenastyInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
   }
 
   removeInteractionsPoints() {
     this.hoodSceneStore.removeInteractivePoint(DeenastyInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
-    this.conversation.forEach((element) => {
-      if (element.primary.Identifiant === point.name) {
-        this.currentChat = element;
+    this.npcDialogues.forEach((element) => {
+      if (element[0].primary.Identifiant === point.slug) {
+        console.log(element[0]);
+
+        this.currentChat = element[0];
+
         return this.currentChat;
       }
     });
 
     this.removeInteractionsPoints();
-    HoodScene.context.goToPresetPosition(point.name, 2, () => {
+    this.hoodSceneStore.setIsChatDisplay(true);
+    HoodScene.context.goToPresetPosition(point.slug, 2, () => {
       this.hoodSceneStore.setIsCameraMoving(false);
       this.hoodSceneStore.setIsChatDisplay(true);
     });
@@ -150,6 +173,24 @@ export default class HoodScenePage extends Vue {
       this.hideToast();
     }, 5000);
   }
+
+  // Set next message in conversation order
+  // setNextDialog() {
+  //   this.currentChatNum++;
+  //   this.currentChat = this.conversation[this.currentChatNum];
+  // }
+
+  // Set next linked chat by using identifier in current chat
+  // setDialogByID() {
+  //   for (const key in this.conversation) {
+  //     const element = this.conversation[key];
+
+  //     if (element.primary.Identifiant === this.chatDialogStep) {
+  //       this.currentChat = element;
+  //       this.currentChatNum = parseInt(key);
+  //     }
+  //   }
+  // }
 
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })

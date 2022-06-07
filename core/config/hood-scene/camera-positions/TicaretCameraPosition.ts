@@ -13,11 +13,11 @@ import {Vector3} from "three";
 //   cameraPosY: 0,
 //   cameraPosZ: 0,
 // }
-const DeenastyCameraPosition: CameraPosition = {
+const TicaretCameraPosition: CameraPosition = {
   name: 'poster',
   coords: () => {
     const lookAtPosition =  new Vector3()
-    HoodScene.context.scene.getObjectByName("pnj_deenasty")!.getWorldPosition(lookAtPosition)
+    HoodScene.context.scene.getObjectByName("pnj_ticaret")!.getWorldPosition(lookAtPosition)
 
     const newCameraPosition = new Vector3(
       lookAtPosition.x + 10,
@@ -29,4 +29,4 @@ const DeenastyCameraPosition: CameraPosition = {
   }
 }
 
-export default DeenastyCameraPosition
+export default TicaretCameraPosition

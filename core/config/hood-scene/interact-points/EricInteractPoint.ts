@@ -3,14 +3,14 @@ import hoodSceneStore from "~/store/hoodSceneStore";
 import { InteractionPoint } from "./types";
 import HoodScene from "../../../scene/HoodScene";
 
-const DeenastyInteractPoint: InteractionPoint = {
-  slug: "npc_deenasty",
-  name: "Deenasty",
+const EricInteractPoint: InteractionPoint = {
+  slug: "npc_eric",
+  name: "Eric",
   type: "npc",
 
   canvasCoords: () => {
     const position = new Vector3();
-    const target = HoodScene.context.scene.getObjectByName("pnj_deenasty")!
+    const target = HoodScene.context.scene.getObjectByName("pnj_eric")!
     
     target.getWorldPosition(position);
     target.children = []
@@ -32,4 +32,4 @@ const DeenastyInteractPoint: InteractionPoint = {
   transformY: 0
 };
 
-export default DeenastyInteractPoint;
+export default EricInteractPoint;

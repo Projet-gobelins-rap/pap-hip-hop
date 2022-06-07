@@ -82,6 +82,16 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
+          for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
+            const screenPosition = point.canvasCoords().clone()
+            screenPosition.project(HoodScene.context.camera)
+            const updateData = {
+              name: point.name,
+              transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
+              transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
+            }
+            this._data.hoodSceneStore.updatePositionsInteractivePoint(updateData)
+          }
         }
       },
       onResume: (ctx) => {
