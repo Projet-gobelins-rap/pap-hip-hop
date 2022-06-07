@@ -1,4 +1,4 @@
-import { Group, Object3D, Mesh } from "three"
+import { Group, Object3D, Mesh, Texture } from "three"
 import { AssetsManager } from "../managers";
 import {  TEXTURE_ASSET } from "../enums";
 
@@ -13,7 +13,9 @@ export default class SlotsLoader {
         slot.add(baseObject)
     }
 
-    public static populateSlots(slots: Object3D[], baseObject: Object3D | Group | Mesh): void  {
+    public static populateSlots(slots: Object3D[], baseObject: Object3D | Group | Mesh, texture: Texture): void  {
+        texture.flipY = false
+        baseObject.children[0]?.material.map = texture
         slots.forEach(object => {
             // -Lead- : dispose ? remove ?
             object.children = []
