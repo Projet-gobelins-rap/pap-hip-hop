@@ -221,14 +221,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const electricPlotSlots = city.getObjectByName('group_electric_light').children
     const lightSlots = city.getObjectByName('group_public_light').children
 
-    SlotsLoader.populateSlots(treeSlots, tree)
-    SlotsLoader.populateSlots(plotSlots, plot)
-    SlotsLoader.populateSlots(busSlots, tree)
-    SlotsLoader.populateSlots(bushSlots, bush)
-    SlotsLoader.populateSlots(benchSlots, bench)
-    SlotsLoader.populateSlots(fenceSlots, fence)
-    SlotsLoader.populateSlots(electricPlotSlots, electricPlot)
-    SlotsLoader.populateSlots(lightSlots, light)
+    // SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
+    SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
+    // SlotsLoader.populateSlots(busSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
+    SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
+    SlotsLoader.populateSlots(benchSlots, bench, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BENCH_TEXTURE).data)
+    SlotsLoader.populateSlots(fenceSlots, fence, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_FENCE_TEXTURE).data)
+    SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
+    SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
   
     this._scene.traverse(object => {
