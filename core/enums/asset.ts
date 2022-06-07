@@ -31,6 +31,7 @@ export enum GLTF_ASSET {
 } 
 
 export enum VIDEO_ASSET {
+  BATTLE_VIDEO_BACKGROUND = 'BATTLE_VIDEO_BACKGROUND',
   TV_VIDEO = 'TV_VIDEO'
 } 
 

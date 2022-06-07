@@ -142,6 +142,19 @@
           }
         }
       }
+    },
+    "result onboarding": {
+      "slices12": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "onboarding": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
     }
   }
 }
