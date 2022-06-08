@@ -20,6 +20,7 @@ export enum GLTF_ASSET {
   BOB = 'BOB',
   AFRO = 'AFRO',
   VICTOR_HAIR = 'VICTOR_HAIR',
+  NPC_COACH_HEAD= 'NPC_COACH_HEAD',
   TREE = 'TREE',
   BITE = 'BITE',
   SLOT_FENCE = 'SLOT_FENCE',
@@ -38,12 +39,12 @@ export enum GLTF_ASSET {
   COLLECTABLE_BOOMBOX = 'COLLECTABLE_BOOMBOX',
   COLLECTABLE_NOTE = 'COLLECTABLE_NOTE',
   COLLECTABLE_SPRAY = 'COLLECTABLE_SPRAY',
-} 
+}
 
 export enum VIDEO_ASSET {
   BATTLE_VIDEO_BACKGROUND = 'BATTLE_VIDEO_BACKGROUND',
   TV_VIDEO = 'TV_VIDEO'
-} 
+}
 
 /**
  * Name given to image asset in order to retrieve it through AssetManager

@@ -1,18 +1,30 @@
 {
     "pnj": [
 
-      {
-        "name": "coach",
-        "head": {
-          "model": "victor_head",
-          "color": "green"
+        {
+            "name": "coach",
+            "head": {
+              "model": "head_coach",
+              "color": "green"
+            },
+            "body": {
+              "color": "green",
+              "textureBody": "NPC_COACH_BODY_TEXTURE",
+              "textureArms": "NPC_COACH_ARMS_TEXTURE"
+            }
         },
-        "body": {
-          "color": "green",
-          "textureBody": "VICTOR_BODY_TEXTURE",
-          "textureArms": "VICTOR_ARMS_TEXTURE"
-        }
-      },
+        {
+            "name": "opponent",
+            "head": {
+              "model": "victor_head",
+              "color": "green"
+            },
+            "body": {
+              "color": "green",
+              "textureBody": "NPC_WUTANG_BODY_TEXTURE",
+              "textureArms": "NPC_WUTANG_ARMS_TEXTURE"
+            }
+        },
         {
             "name": "papy",
             "head": {

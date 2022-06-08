@@ -48,7 +48,7 @@ export class Character {
         this.initAnimations()
         this.loadedCollection = AssetsManager.getLoadedCollection().outfitCollection
         this.texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data
-     
+
         this.setParamsByName()
     }
 

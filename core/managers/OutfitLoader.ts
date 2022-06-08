@@ -12,6 +12,7 @@ export class Outfitloader {
             GLTF_ASSET.BOB,
             GLTF_ASSET.AFRO,
             GLTF_ASSET.VICTOR_HAIR,
+            GLTF_ASSET.NPC_COACH_HEAD,
         ]
         this.outfitCollection = new Map()
         this.loadOutfits()
@@ -24,7 +25,7 @@ export class Outfitloader {
             this.outfitCollection.set(model.children[0].name, model)
         });
         console.log('collect ', this.outfitCollection);
-        
+
     }
 }
 
