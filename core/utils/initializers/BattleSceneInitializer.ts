@@ -5,7 +5,7 @@ import { AssetsManager, SceneManager } from "~/core/managers";
 import {
   BoxGeometry,
   Mesh,
-  MeshBasicMaterial, OrthographicCamera,
+  MeshBasicMaterial, Object3D, OrthographicCamera,
   PerspectiveCamera,
   Scene,
   Vector3,
@@ -23,13 +23,17 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import SlotsLoader from "../SlotsLoader";
 import battleStore from "../../../store/battleStore";
 import BattleScene from "../../scene/BattleScene";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, battleStore: battleStore }, void> {
 
   public cameraInitialPosition: Vector3
   private _scene: Scene
   private _controls: OrbitControls
-  private _papy: Npc
+  private _humanoid:GLTF = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
+  private _coach: Npc
+  private _opponent: Npc
+  private _player: Npc
   init(): void {
 
     BattleScene.setSceneContext(this._createSceneContext())
@@ -76,8 +80,8 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx.camera.position)
-        if (this._papy) {
-          this._papy.update(ctx.deltaTime)
+        if (this._coach) {
+          this._coach.update(ctx.deltaTime)
         }
         // console.log(camera.position)
       },
@@ -131,7 +135,6 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
    */
   private _createControls(camera:PerspectiveCamera, canvas:HTMLCanvasElement) {
     this._controls = new OrbitControls(camera, canvas)
-    // this._controls.target = GrenierSceneConfig.cameraPositions[0].coords().lookAtPosition
     return this._controls
   }
 
@@ -150,29 +153,29 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addSceneElements():void {
     console.log('add scene elements')
-    this._addGltfGrenierScene()
+    this._addGltfCoach()
   }
 
-  private _addGltfGrenierScene() {
-    const papyGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
+  private _addGltfCoach() {
 
+    this._coach = new Npc(this._humanoid, 'coach', 't-pose')
+    this._coach.model.scale.set(50, 50, 50)
+    this._coach.model.position.set(20, -330, -0)
+    this._coach.model.rotateY(degToRad(180))
+    this._scene.add(this._coach.model)
+  }
 
-    console.log(papyGltf);
+  private _addGltfOpponent() {
 
-    this._scene.traverse(object => {
-      if (object.isMesh) {
-        let oldTexture = object.material.map
-        object.material = new MeshBasicMaterial({ color: 0xffffff })
-        object.material.map = oldTexture
-      }
-    })
+    this._coach = new Npc(this._humanoid, 'papy', 't-pose')
+    this._coach.model.scale.set(50, 50, 50)
+    this._coach.model.position.set(20, -330, -0)
+    this._coach.model.rotateY(degToRad(180))
+    this._scene.add(this._coach.model)
+  }
 
-    this._papy = new Npc(papyGltf, 'papy', 't-pose')
-    this._papy.model.scale.set(50, 50, 50)
-    this._papy.model.position.set(20, -330, -0)
-    this._papy.model.rotateY(degToRad(180))
-    this._scene.add(this._papy.model)
-    // SlotsLoader.populateSingleSlots(grenierScene.getObjectByName("npc_victor"), this._papy.model)
+  private disposeObject () {
+
   }
 
 }
