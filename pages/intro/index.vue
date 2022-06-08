@@ -101,3 +101,5 @@ export default class Intro extends Vue {
     }
   }
 }
+
+</script>
