@@ -200,9 +200,6 @@ export default class battle extends Vue {
     }).init();
     BattleScene.context.disableOrbitControl();
 
-    BattleScene.displayPnjCharacter()
-
-    emitter.emit('yoho')
     // TODO UPDATE LA BG VIDEO ASSETS
     // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
     // console.log(this.bgVideo,'<---- bg video zebi')
@@ -214,6 +211,7 @@ export default class battle extends Vue {
       this.pp = AssetsManager.getImage("PP").data;
       console.log(this.pp,"ZZZZZZZZZXXXXXXZZZZZZZ");
 
+      emitter.emit('yoho','coach')
 
       this.hideOnboarding();
       if (ids === null) {

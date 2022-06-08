@@ -35,15 +35,16 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   private _coach: Npc
   private _opponent: Npc
   private _player: Npc
+
+  public _npcArray:Array<Npc> = []
+
   init(): void {
 
     BattleScene.setSceneContext(this._createSceneContext())
 
     this._addSceneElements()
 
-    emitter.on('yoho',()=>{
-      console.log("EVENT EST PASSER !")
-    })
+    this.disposeObject()
     // this._optimizeScene()
     //this._configGUI()
     BattleScene.context.start()
@@ -157,13 +158,22 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
   private _addSceneElements():void {
     console.log('add scene elements')
+    this.registerNpcs()
     this._addGltfCoach()
     // this._addGltfPlayer()
   }
 
+  private registerNpcs() {
+    this._coach = new Npc(this._humanoid, 'coach', 't-pose')
+    this._player = new Npc(this._humanoid, 'player', 't-pose')
+    this._opponent = new Npc(this._humanoid, 'opponent', 't-pose')
+
+    this._npcArray.push(this._coach,this._player,this._opponent)
+    console.log(this._npcArray,'NPCs ARRAY')
+  }
+
   private _addGltfCoach() {
 
-    this._coach = new Npc(this._humanoid, 'coach', 't-pose')
     this._coach.model.scale.set(50, 50, 50)
     this._coach.model.position.set(20, -330, -0)
     this._coach.model.rotateY(degToRad(180))
@@ -172,7 +182,6 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
   public _addGltfPlayer() {
 
-    this._player = new Npc(this._humanoid, 'player', 't-pose')
     this._player.model.scale.set(50, 50, 50)
     this._player.model.position.set(20, -330, -0)
     this._player.model.rotateY(degToRad(180))
@@ -180,7 +189,18 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   public disposeObject () {
-    this._scene.remove(this._coach.model)
+
+    emitter.on('yoho',(modelName:string)=>{
+      console.log("EVENT EST PASSER !")
+      console.log(modelName,'<-- MODEL - NAME')
+      this._npcArray.forEach((el)=>{
+        if (modelName === el.name) {
+          this._scene.remove(el.model)
+          console.log('MODEL IS REMOVE')
+        }
+      })
+    })
+    // this._scene.remove(this._coach.model)
   }
 
 }

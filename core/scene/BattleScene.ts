@@ -12,14 +12,6 @@ class BattleScene {
     this._context = sceneContext
   }
 
-  public displayPnjCharacter() {
-    console.log('display pnj character')
-  }
-
-  removePnjCharacter() {
-
-  }
-
   get context() {
     if (!this._context) {
       throw new Error(`You need to set a sceneContext for GlobalScene`)
