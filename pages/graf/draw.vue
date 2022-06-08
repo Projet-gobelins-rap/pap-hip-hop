@@ -23,7 +23,7 @@
       @click.native="valideSelectedGraff"
       :text="'Choisir ce graff'"
     />
-    <ChatComponent v-if="currentChat" :content="currentChat" />
+    <ChatComponent class="graffDraw-button" v-if="currentChat" :content="currentChat" />
   </section>
 </template>
 
@@ -89,7 +89,6 @@ export default class GraffActivity extends Vue {
       this.wallTexture = AssetsManager.getImage(
         IMAGE_ASSET.WALL_TEXTURE_GRAFF
       ).data;
-
       console.log(this.wallTexture);
     });
   }
