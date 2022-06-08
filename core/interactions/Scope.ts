@@ -53,7 +53,7 @@ export default class Scope {
 
         this.pointerTimeline.to(this.pointer, {
             scale: 2,
-            rotate: '45deg',
+            // rotate: '45deg',
             duration: 0.2
         })
         this.pointerTimeline.pause()
