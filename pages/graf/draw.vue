@@ -23,7 +23,7 @@
       @click.native="valideSelectedGraff"
       :text="'Choisir ce graff'"
     />
-    <ChatComponent class="graffDraw-button" v-if="currentChat" :content="currentChat" />
+    <ChatComponent class="graffDraw-chat" v-if="currentChat" :content="currentChat" />
   </section>
 </template>
 
@@ -38,7 +38,7 @@ import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
 
 @Component({
-  components: {
+  components: { 
     CustomButton,
     ChatComponent,
   },
