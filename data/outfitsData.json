@@ -11,6 +11,8 @@
           "color": "green",
           "textureBody": "VICTOR_BODY_TEXTURE",
           "textureArms": "VICTOR_ARMS_TEXTURE"
+        }
+      },
         {
             "name": "papy",
             "head": {
@@ -18,7 +20,7 @@
                 "color": "green"
             },
             "body": {
-                "color": "green", 
+                "color": "green",
                 "textureBody": "VICTOR_BODY_TEXTURE",
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
@@ -30,7 +32,7 @@
                 "color": "green"
             },
             "body": {
-                "color": "green", 
+                "color": "green",
                 "textureBody": "VICTOR_BODY_TEXTURE",
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
@@ -42,7 +44,7 @@
                 "color": "green"
             },
             "body": {
-                "color": "green", 
+                "color": "green",
                 "textureBody": "VICTOR_BODY_TEXTURE",
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
@@ -54,7 +56,7 @@
                 "color": "green"
             },
             "body": {
-                "color": "green", 
+                "color": "green",
                 "textureBody": "VICTOR_BODY_TEXTURE",
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
@@ -66,12 +68,11 @@
                 "color": "green"
             },
             "body": {
-                "color": "green", 
+                "color": "green",
                 "textureBody": "VICTOR_BODY_TEXTURE",
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
         }
-      }
 
     ],
     "player": {
