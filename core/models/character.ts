@@ -68,9 +68,6 @@ export class Character {
         this.model.traverse(child => {
             if (child.name === "mixamorigHeadTop_End") {
                 child.add(this.loadedCollection.get(this.outfitParams.head.model))
-                let group = child.children[0]
-                group.position.y = -110
-                group.position.z = -30
             }
 
             if (child.name === 'body') {

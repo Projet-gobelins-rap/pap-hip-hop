@@ -96,7 +96,8 @@ import {Punchline} from "../../core/types/punchline";
 import BattleSceneInitializer from "../../core/utils/initializers/BattleSceneInitializer";
 import grenierScene from "../../core/scene/GrenierScene";
 import BattleScene from "../../core/scene/BattleScene";
-
+import HoodScene from "../../core/scene/HoodScene";
+import emitter from 'tiny-emitter/instance'
 @Component({
   components: {
     CustomButton,
@@ -192,12 +193,16 @@ export default class battle extends Vue {
     console.log(this.$refs.globalResponse,'TEST REF')
     console.log(this.globalResponse,"GLOB")
 
+
     new BattleSceneInitializer({
       canvas: this.$refs.battleScene as HTMLCanvasElement,
       battleStore: this.battleStore,
     }).init();
     BattleScene.context.disableOrbitControl();
 
+    BattleScene.displayPnjCharacter()
+
+    emitter.emit('yoho')
     // TODO UPDATE LA BG VIDEO ASSETS
     // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
     // console.log(this.bgVideo,'<---- bg video zebi')
@@ -207,7 +212,8 @@ export default class battle extends Vue {
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
-      console.log(this.pp);
+      console.log(this.pp,"ZZZZZZZZZXXXXXXZZZZZZZ");
+
 
       this.hideOnboarding();
       if (ids === null) {

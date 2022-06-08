@@ -24,6 +24,7 @@ import SlotsLoader from "../SlotsLoader";
 import battleStore from "../../../store/battleStore";
 import BattleScene from "../../scene/BattleScene";
 import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
+import emitter from 'tiny-emitter/instance'
 
 export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, battleStore: battleStore }, void> {
 
@@ -40,6 +41,9 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
     this._addSceneElements()
 
+    emitter.on('yoho',()=>{
+      console.log("EVENT EST PASSER !")
+    })
     // this._optimizeScene()
     //this._configGUI()
     BattleScene.context.start()
@@ -154,6 +158,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addSceneElements():void {
     console.log('add scene elements')
     this._addGltfCoach()
+    // this._addGltfPlayer()
   }
 
   private _addGltfCoach() {
@@ -165,17 +170,17 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     this._scene.add(this._coach.model)
   }
 
-  private _addGltfOpponent() {
+  public _addGltfPlayer() {
 
-    this._coach = new Npc(this._humanoid, 'papy', 't-pose')
-    this._coach.model.scale.set(50, 50, 50)
-    this._coach.model.position.set(20, -330, -0)
-    this._coach.model.rotateY(degToRad(180))
-    this._scene.add(this._coach.model)
+    this._player = new Npc(this._humanoid, 'player', 't-pose')
+    this._player.model.scale.set(50, 50, 50)
+    this._player.model.position.set(20, -330, -0)
+    this._player.model.rotateY(degToRad(180))
+    this._scene.add(this._player.model)
   }
 
-  private disposeObject () {
-
+  public disposeObject () {
+    this._scene.remove(this._coach.model)
   }
 
 }

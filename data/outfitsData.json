@@ -21,9 +21,21 @@
             },
             "body": {
               "color": "green",
-              "textureBody": "NPC_WUTANG_BODY_TEXTURE",
-              "textureArms": "NPC_WUTANG_ARMS_TEXTURE"
+              "textureBody": "OPPONENT_BODY_TEXTURE",
+              "textureArms": "OPPONENT_ARMS_TEXTURE"
             }
+        },
+        {
+          "name": "player",
+          "head": {
+            "model": "head_player",
+            "color": "green"
+          },
+          "body": {
+            "color": "green",
+            "textureBody": "NPC_WUTANG_BODY_TEXTURE",
+            "textureArms": "NPC_WUTANG_ARMS_TEXTURE"
+          }
         },
         {
             "name": "papy",

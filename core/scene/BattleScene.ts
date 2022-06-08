@@ -1,4 +1,5 @@
 import {SceneManager} from "~/core/managers";
+import BattleSceneInitializer from "../utils/initializers/BattleSceneInitializer";
 
 class BattleScene {
   private _context: SceneManager | null
@@ -9,6 +10,14 @@ class BattleScene {
 
   public setSceneContext(sceneContext: SceneManager) {
     this._context = sceneContext
+  }
+
+  public displayPnjCharacter() {
+    console.log('display pnj character')
+  }
+
+  removePnjCharacter() {
+
   }
 
   get context() {
