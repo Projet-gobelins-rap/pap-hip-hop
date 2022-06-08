@@ -1,5 +1,16 @@
 {
     "pnj": [
+
+      {
+        "name": "coach",
+        "head": {
+          "model": "victor_head",
+          "color": "green"
+        },
+        "body": {
+          "color": "green",
+          "textureBody": "VICTOR_BODY_TEXTURE",
+          "textureArms": "VICTOR_ARMS_TEXTURE"
         {
             "name": "papy",
             "head": {
@@ -60,8 +71,10 @@
                 "textureArms": "VICTOR_ARMS_TEXTURE"
             }
         }
+      }
+
     ],
-    "player": { 
+    "player": {
         "name": "player",
         "head": {
             "model": "hair-afro"

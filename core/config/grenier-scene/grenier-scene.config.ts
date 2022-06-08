@@ -18,7 +18,6 @@ const GrenierSceneConfig = {
   // CAMERA POSITIONS
   cameraPositions: [
     /* Global */
-
     InitialCameraPosition,
     PosterCameraPosition,
     SprayCameraPosition,
