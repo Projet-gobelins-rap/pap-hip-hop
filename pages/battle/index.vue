@@ -211,7 +211,8 @@ export default class battle extends Vue {
       this.pp = AssetsManager.getImage("PP").data;
       console.log(this.pp,"ZZZZZZZZZXXXXXXZZZZZZZ");
 
-      emitter.emit('yoho','coach')
+      emitter.emit('battle::disposeObject','coach')
+      emitter.emit('battle::addObject','player')
 
       this.hideOnboarding();
       if (ids === null) {

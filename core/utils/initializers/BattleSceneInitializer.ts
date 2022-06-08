@@ -44,6 +44,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
     this._addSceneElements()
 
+    this.addObjectToScene()
     this.disposeObject()
     // this._optimizeScene()
     //this._configGUI()
@@ -85,9 +86,18 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx.camera.position)
-        if (this._coach) {
-          this._coach.update(ctx.deltaTime)
-        }
+
+
+        this._npcArray.forEach((el)=>{
+          if (this._scene.getObjectByName(el.outfitParams.head.model)){
+            console.log(el.name,' :::: NAME')
+            el.update(ctx.deltaTime)
+          }
+        })
+
+        // if (this._coach) {
+        //   this._coach.update(ctx.deltaTime)
+        // }
         // console.log(camera.position)
       },
       onResume: (ctx) => {
@@ -159,8 +169,8 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   private _addSceneElements():void {
     console.log('add scene elements')
     this.registerNpcs()
-    this._addGltfCoach()
-    // this._addGltfPlayer()
+    this._registerGltfCoach()
+    this._registerGltfPlayer()
   }
 
   private registerNpcs() {
@@ -172,25 +182,39 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     console.log(this._npcArray,'NPCs ARRAY')
   }
 
-  private _addGltfCoach() {
+  private _registerGltfCoach() {
 
     this._coach.model.scale.set(50, 50, 50)
     this._coach.model.position.set(20, -330, -0)
     this._coach.model.rotateY(degToRad(180))
+    console.log(this._coach.model,'QQ')
+    console.log(this._coach.model.getObjectByName('head_coach'),'VVVVV')
     this._scene.add(this._coach.model)
   }
 
-  public _addGltfPlayer() {
+  private _registerGltfPlayer() {
 
     this._player.model.scale.set(50, 50, 50)
     this._player.model.position.set(20, -330, -0)
     this._player.model.rotateY(degToRad(180))
-    this._scene.add(this._player.model)
+    // this._scene.add(this._player.model)
+  }
+
+  public addObjectToScene() {
+    emitter.on('battle::addObject',(modelName:string)=>{
+      console.log(modelName,'XXXXXXXXXXXXXXXXXXXXCCC')
+      this._npcArray.forEach((el)=>{
+        if (modelName === el.name) {
+          console.log(el,'WXCVFDSFRE')
+          this._scene.add(el.model)
+        }
+      })
+    })
   }
 
   public disposeObject () {
 
-    emitter.on('yoho',(modelName:string)=>{
+    emitter.on('battle::disposeObject',(modelName:string)=>{
       console.log("EVENT EST PASSER !")
       console.log(modelName,'<-- MODEL - NAME')
       this._npcArray.forEach((el)=>{
