@@ -1,3 +1,5 @@
+import { Vector3, Box3, BoxBufferGeometry, Matrix4 } from "three";
+
 export default class Helpers {
 
   /**
@@ -40,6 +42,25 @@ export default class Helpers {
         this.traverse(o[i], fn);
       }
     }
+  }
+
+  public static generateBoxCollider(object) {
+    const box3 = new Box3();
+    box3.setFromObject(object)
+
+    const dimensions = new Vector3().subVectors(box3.max, box3.min);
+    const boxGeometry = new BoxBufferGeometry(dimensions.x, dimensions.y, dimensions.z);
+
+    const matrix = new Matrix4().setPosition(dimensions.addVectors(box3.min, box3.max).multiplyScalar(0.5));
+    boxGeometry.applyMatrix4(matrix);
+
+    for (const key in boxGeometry.attributes) {
+      if (key !== 'position') {
+        boxGeometry.deleteAttribute(key);
+      }
+    }
+
+    return boxGeometry
   }
   
 }

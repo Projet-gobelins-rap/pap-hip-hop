@@ -10,6 +10,8 @@ import ModeCameraPosition from "./camera-positions/ModeCameraPosition";
 import {InitialCameraPosition} from "./camera-positions";
 import TvInteractPoint from "./interact-points/objects/TvInteractPoint";
 import TvCameraPosition from "./camera-positions/TvCameraPosition";
+import PapyCameraPosition from "./camera-positions/PapyCameraPosition";
+import PapyInteractPoint from "./interact-points/objects/PapyInteractPoint";
 
 const GrenierSceneConfig = {
 
@@ -20,7 +22,8 @@ const GrenierSceneConfig = {
     PosterCameraPosition,
     SprayCameraPosition,
     TvCameraPosition,
-    ModeCameraPosition
+    ModeCameraPosition,
+    PapyCameraPosition,
   ] as Array<CameraPosition>,
 
   // INTERACT POINTS
@@ -30,6 +33,7 @@ const GrenierSceneConfig = {
     SprayInteractPoint,
     ModeInteractPoint,
     TvInteractPoint,
+    PapyInteractPoint,
   ] as Array<InteractionPoint>,
 }
 

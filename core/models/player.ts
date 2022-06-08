@@ -32,7 +32,8 @@ export class Player extends Character {
 
     // constants
     fadeDuration: number = 0.2
-    runVelocity = 18
+    // runVelocity = 18
+    runVelocity = 30
     walkVelocity = 6
 
     constructor(playerGltf: Object3D, name: string, currentAction: string, camera: Camera, control: OrbitControls) {
@@ -59,7 +60,7 @@ export class Player extends Character {
     private _initRaycast() {
         
         this.raycaster = new Raycaster(
-            this.model.position,
+            new Vector3().copy(this.model.position),
             this.walkDirection.negate()
         )
     }
@@ -127,7 +128,8 @@ export class Player extends Character {
 
     private _updateRaycast() {
         // this.walkDirection.y -=5
-        // this.raycaster.ray.origin.y = 3
+        this.raycaster.ray.origin.copy(this.model.position)
+        this.raycaster.ray.origin.y += 3
         this.raycaster.ray.direction = this.walkDirection.negate()
     }
 

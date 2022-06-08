@@ -88,7 +88,7 @@ export default class Intro extends Vue {
     });
   }
   onEnter(element: any, done: any) {
-    console.log();
+
   }
 
   stickerLoader() {
