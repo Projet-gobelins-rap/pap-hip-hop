@@ -1,8 +1,8 @@
 <template>
   <section class="battle" >
     <canvas id="canvasGlobalScene" ref="battleScene"></canvas>
-<!-- TODO video lien dynamique -->
-    <video class="battle-video" autoplay loop muted src="https://pap-hip-hop.cdn.prismic.io/pap-hip-hop/774853fd-b591-4a78-8214-b273a18be0bb_Battle+Background+Loop-1.mp4"></video>
+
+    <video class="battle-video" autoplay loop muted :src="bgVideo"></video>
     <div class="battle-hud">
       <div class="battle-top">
         <div v-if="pp" class="healthbar  player">
@@ -98,6 +98,7 @@ import grenierScene from "../../core/scene/GrenierScene";
 import BattleScene from "../../core/scene/BattleScene";
 import HoodScene from "../../core/scene/HoodScene";
 import emitter from 'tiny-emitter/instance'
+import {VIDEO_ASSET} from "../../core/enums";
 @Component({
   components: {
     CustomButton,
@@ -180,7 +181,6 @@ export default class battle extends Vue {
   public damage:number
   public damageElement:HTMLElement
   public comboMultiplicator:HTMLElement
-  public bgVideo:string
 
   mounted() {
 
@@ -540,6 +540,9 @@ export default class battle extends Vue {
     ]);
   }
 
+  get bgVideo():string {
+    return  AssetsManager.getVideo(VIDEO_ASSET.BATTLE_VIDEO_BACKGROUND).data.src
+  }
   // A getter function that returns the chatStep property of the chatStore object.
   get chatStep() {
     return this.chatStore.chatStep;
