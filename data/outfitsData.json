@@ -16,7 +16,7 @@
         {
             "name": "opponent",
             "head": {
-              "model": "victor_head",
+              "model": "oponent_head",
               "color": "green"
             },
             "body": {
