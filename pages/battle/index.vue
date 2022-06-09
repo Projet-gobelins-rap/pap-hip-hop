@@ -420,12 +420,14 @@ export default class battle extends Vue {
     }
   }
 
-  nextPunchRound1() {
+  nextPunchRound1():void {
 
     if (this.opponentTourRound1) {
       gsap.to('.responseContainer--opponent span',{display:'none',duration:1,opacity:0,onComplete:()=>{
           this.displayUserPunchline();
           this.opponentTourRound1 = false
+          emitter.emit('battle::disposeObject','opponent')
+          emitter.emit('battle::addObject','player')
         }})
     } else {
       gsap.to('.responseContainer--player span',{display:'none',duration:1,opacity:0,onComplete:()=>{

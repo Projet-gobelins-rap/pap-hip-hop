@@ -105,6 +105,13 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
             el.model.position.copy(this._cornerPoint).add(new Vector3(1, -430, -1));
           }
+          if (el.name === 'player' ){
+            this._corner.set(0.5, -0.5); // NDC of the bottom-left corner
+            this._raycaster.setFromCamera(this._corner, this._camera);
+            this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
+            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -430, -1));
+          }
+
         })
 
 
@@ -183,6 +190,9 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     this._registerGltfOpponent()
   }
 
+  /**
+   * This function creates three new Npc objects, and pushes them into the _npcArray
+   */
   private _registerNpcs():void {
     this._coach = new Npc(this._humanoid, 'coach', 't-pose')
     this._player = new Npc(this._humanoid, 'player', 't-pose')
@@ -204,9 +214,10 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _registerGltfPlayer():void {
-    this._player.model.scale.set(50, 50, 50)
+    this._player.model.scale.set(120, 120, 120)
     this._player.model.position.set(20, -330, -0)
-    this._player.model.rotateY(degToRad(180))
+    this._player.model.rotateY(degToRad(130))
+    this._player.animationPlayed = 'rap'
   }
 
   private _registerGltfOpponent():void {
@@ -217,6 +228,9 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
 
+  /**
+   * It adds an object to the scene.
+   */
   private _addObjectToScene():void {
     emitter.on('battle::addObject',(modelName:string)=>{
       this._npcArray.forEach((el)=>{
@@ -229,8 +243,10 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     })
   }
 
+  /**
+   * It's a function that listen to an event and when the event is triggered, it will remove the model from the scene.
+   */
   private _disposeObject():void {
-
     emitter.on('battle::disposeObject',(modelName:string)=>{
       console.log("EVENT EST PASSER !")
       console.log(modelName,'<-- MODEL - NAME')

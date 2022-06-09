@@ -28,7 +28,7 @@
         {
           "name": "player",
           "head": {
-            "model": "head_player",
+            "model": "player_head",
             "color": "green"
           },
           "body": {
