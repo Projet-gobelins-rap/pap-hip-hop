@@ -15,18 +15,19 @@ export default class GraffBomb {
     public buttonPressed: boolean
     public started: boolean
     public gimbal: Gimbal
+    public capTimeline: gsap.core.Timeline
 
     public MAX_X_ANGLE: number = 30
 
-    public debugX: HTMLElement
-    public debugY: HTMLElement
+    // public debugX: HTMLElement
+    // public debugY: HTMLElement
 
     constructor() {
 
         this.button = document.querySelector('.graffBomb-button')
         this.buttonCalibrate = document.querySelector('.graffBomb-button--calibrate')
-        this.debugX = document.querySelector('.graffBomb-debug--x')
-        this.debugY = document.querySelector('.graffBomb-debug--y')
+        // this.debugX = document.querySelector('.graffBomb-debug--x')
+        // this.debugY = document.querySelector('.graffBomb-debug--y')
         this.buttonPressed = false
         this.latestX = 0
         this.latestAlpha = 0
@@ -45,6 +46,7 @@ export default class GraffBomb {
     init() {
         this.normalizePosition = { x: 0, y: 0 }
         // this.getDeviceOrientation()
+        this.initBombCapAnimation()
         this.buttonHandler()
         // this.animationLoop()
     }
@@ -73,7 +75,7 @@ export default class GraffBomb {
             pitch: this.gimbal.pitch,
             roll: this.gimbal.roll
         } 
-        this.debugX.innerHTML = this.rotation.yaw.toFixed(2) + " : " + this.rotation.pitch.toFixed(2) + " : " + this.rotation.roll.toFixed(2)
+        // this.debugX.innerHTML = this.rotation.yaw.toFixed(2) + " : " + this.rotation.pitch.toFixed(2) + " : " + this.rotation.roll.toFixed(2)
         this.sendValues()
     }
 
@@ -84,9 +86,24 @@ export default class GraffBomb {
         this.button.addEventListener('touchstart', () => {
             this.baseX = this.latestX
             this.buttonPressed = true
+            this.capTimeline.play()
         })
         this.button.addEventListener('touchend', () => {
             this.buttonPressed = false
+            this.capTimeline.reverse()
         })
+    }
+
+    initBombCapAnimation() {
+        this.capTimeline = gsap.timeline()
+        this.capTimeline.to('.graffBomb-cap', {
+            y: 20,
+            duration: 0.1
+        })
+        this.capTimeline.to('.graffBomb-spray', {
+            opacity: 1,
+            duration: 0.3
+        })
+        this.capTimeline.pause()
     }
 }

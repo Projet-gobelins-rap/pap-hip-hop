@@ -20,7 +20,7 @@ export default class Scope {
     public focusTimeOut: any
     public focusTarget: boolean = false
     public focusTimeline: any
-    public pointerTimeline: any
+    public pointerTimeline: gsap.core.Timeline
 
     private MAX_Y_ANGLE: number = 50
     private MAX_X_ANGLE: number = 50
@@ -170,9 +170,6 @@ export default class Scope {
             this.focusTimeOut = null
             this.focusTarget = false
         }
-
-        // 
-
     }
 
     handleDeviceOrientation(data) {
