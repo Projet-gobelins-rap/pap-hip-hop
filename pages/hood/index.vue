@@ -4,6 +4,7 @@
     <Toast
       @click.native="openCollectible"
       v-if="toastText"
+      :type="toastType"
       :text="toastText"
     ></Toast>
     <InteractionPoints
@@ -80,6 +81,7 @@ export default class HoodScenePage extends Vue {
   public npcDialogues: object[];
   public currentOnboarding: object;
   public toastText: string | null = null;
+  public toastType: string | null = null;
   public toastUID: string = "";
   currentChat: object;
 
@@ -172,7 +174,8 @@ export default class HoodScenePage extends Vue {
 
   displayToast(toastID: string) {
     // this.onboardingStore.setOnboardingDisplay(true);
-    this.toastText = "consulter l'objet collecter !";
+    this.toastText = "consulter l'objet collecté !";
+    this.toastType = "collectible";
     this.toastUID = toastID;
 
     setTimeout(() => {
