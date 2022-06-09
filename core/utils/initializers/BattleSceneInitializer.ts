@@ -37,6 +37,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   private _player: Npc
 
   public _npcArray:Array<Npc> = []
+  private _currentNpc:Array<Npc> = []
 
   init(): void {
 
@@ -86,19 +87,12 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       onRender: (ctx) => {
         // Add interactions points tracking
         // console.log(ctx.camera.position)
-
-
-        this._npcArray.forEach((el)=>{
-          if (this._scene.getObjectByName(el.outfitParams.head.model)){
-            console.log(el.name,' :::: NAME')
-            el.update(ctx.deltaTime)
-          }
+        
+        this._currentNpc.forEach((el)=>{
+          el.update(ctx.deltaTime)
         })
 
-        // if (this._coach) {
-        //   this._coach.update(ctx.deltaTime)
-        // }
-        // console.log(camera.position)
+
       },
       onResume: (ctx) => {
 
@@ -123,7 +117,6 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
    * Create perspective camera
    */
 
-  // width / - 2, width / 2, height / 2, height / - 2, 1, 1000
   private _createCamera() {
     const camera = new PerspectiveCamera(
       70,
@@ -190,6 +183,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     console.log(this._coach.model,'QQ')
     console.log(this._coach.model.getObjectByName('head_coach'),'VVVVV')
     this._scene.add(this._coach.model)
+    this._currentNpc.push(this._coach)
   }
 
   private _registerGltfPlayer() {
@@ -202,11 +196,11 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
   public addObjectToScene() {
     emitter.on('battle::addObject',(modelName:string)=>{
-      console.log(modelName,'XXXXXXXXXXXXXXXXXXXXCCC')
       this._npcArray.forEach((el)=>{
         if (modelName === el.name) {
           console.log(el,'WXCVFDSFRE')
           this._scene.add(el.model)
+          this._currentNpc.push(el)
         }
       })
     })
@@ -220,6 +214,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       this._npcArray.forEach((el)=>{
         if (modelName === el.name) {
           this._scene.remove(el.model)
+          this._currentNpc.push(el)
           console.log('MODEL IS REMOVE')
         }
       })
