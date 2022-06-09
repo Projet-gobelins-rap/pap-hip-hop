@@ -184,7 +184,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   }
  
   addCube() {
-
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
@@ -196,7 +195,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     // const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
     // const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
-    const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
     const building2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_2).data.scene
     const building3 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_3).data.scene
@@ -206,7 +204,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     console.log(city);
     this._scene.add(city);
 
-    this._collectibles = city.getObjectByName('group_collec')
+    this._collectibles = city.getObjectByName('group_collectable')
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
@@ -276,7 +274,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
     // this._scene.add( directionalLight );
-
   }
 
   collectiblesCollider() {
