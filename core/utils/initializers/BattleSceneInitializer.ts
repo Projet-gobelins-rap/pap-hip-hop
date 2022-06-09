@@ -199,28 +199,21 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     this._coach.model.rotateY(degToRad(180))
     console.log(this._coach.model,'QQ')
     console.log(this._coach.model.getObjectByName('head_coach'),'VVVVV')
-    // this._scene.add(this._coach.model)
-    // this._currentNpc.push(this._coach)
+    this._scene.add(this._coach.model)
+    this._currentNpc.push(this._coach)
   }
 
   private _registerGltfPlayer():void {
-
     this._player.model.scale.set(50, 50, 50)
     this._player.model.position.set(20, -330, -0)
     this._player.model.rotateY(degToRad(180))
-    // this._scene.add(this._player.model)
   }
 
   private _registerGltfOpponent():void {
     this._opponent.model.scale.set(120, 120, 120)
     this._opponent.model.position.set(20, -330, -0)
     this._opponent.model.rotateY(degToRad(-130))
-
-
- // align the position of the box
-
-    this._scene.add(this._opponent.model)
-    this._currentNpc.push(this._opponent)
+    this._opponent.animationPlayed = 'rap'
   }
 
 

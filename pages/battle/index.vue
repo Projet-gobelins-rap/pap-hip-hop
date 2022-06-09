@@ -212,7 +212,7 @@ export default class battle extends Vue {
       console.log(this.pp,"ZZZZZZZZZXXXXXXZZZZZZZ");
 
       emitter.emit('battle::disposeObject','coach')
-      emitter.emit('battle::addObject','player')
+      emitter.emit('battle::addObject','opponent')
 
       this.hideOnboarding();
       if (ids === null) {
