@@ -1,8 +1,12 @@
 <template>
   <section class="battle" >
+    <div class="battle-overlay">
+      <video class="battle-transitionVideo battle-video" ref="transitionRound1" :src="TransitionRound1"></video>
+    </div>
     <canvas id="canvasGlobalScene" ref="battleScene"></canvas>
 
     <video class="battle-video" autoplay loop muted :src="bgVideo"></video>
+
     <div class="battle-hud">
       <div class="battle-top">
         <div v-if="pp" class="healthbar  player">
@@ -181,6 +185,7 @@ export default class battle extends Vue {
   public damage:number
   public damageElement:HTMLElement
   public comboMultiplicator:HTMLElement
+  public transitionRound1:HTMLMediaElement
 
   mounted() {
 
@@ -190,6 +195,7 @@ export default class battle extends Vue {
     this.globalResponse = this.$refs.globalResponse as HTMLElement;
     this.damageElement = this.$refs.damage as HTMLElement;
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
+    this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
     console.log(this.$refs.globalResponse,'TEST REF')
     console.log(this.globalResponse,"GLOB")
 
@@ -200,16 +206,11 @@ export default class battle extends Vue {
     }).init();
     BattleScene.context.disableOrbitControl();
 
-    // TODO UPDATE LA BG VIDEO ASSETS
-    // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
-    // console.log(this.bgVideo,'<---- bg video zebi')
-
     console.log("BATTLE");
 
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
-      console.log(this.pp,"ZZZZZZZZZXXXXXXZZZZZZZ");
 
       emitter.emit('battle::disposeObject','coach')
       emitter.emit('battle::addObject','opponent')
@@ -507,10 +508,12 @@ export default class battle extends Vue {
           this.chatStore.setChatStep("reading");
           break;
 
-        case "selectPunch":
-          this.closeChat();
-          this.displayOnboarding();
-          this.chatStore.setChatStep("reading");
+        case "round1Transition":
+          this.displayRound1Transition()
+          this.hideRound1Transition()
+          // this.closeChat();
+          // this.displayOnboarding();
+          // this.chatStore.setChatStep("reading");
           break;
         case "nextRound":
           this.closeChat();
@@ -519,6 +522,25 @@ export default class battle extends Vue {
           this.chatStore.setChatStep("reading");
           break;
       }
+    }
+  }
+
+  displayRound1Transition() {
+    gsap.to('.battle-overlay',{display:'block',duration:1.5,y:0,ease:'expo.inOut',onComplete:()=>{
+        console.log(this.$refs.transitionRound1,'XXX')
+        this.$refs.transitionRound1.play()
+        // this.$refs.transitionRound1.loop = true
+        console.log(this.$refs.transitionRound1.$el,'WWW')
+      }})
+  }
+
+  hideRound1Transition() {
+    this.$refs.transitionRound1.onended =()=> {
+      gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onComplete:()=>{
+          this.closeChat();
+          this.displayOnboarding();
+          this.chatStore.setChatStep("reading");
+        }})
     }
   }
 
@@ -540,6 +562,9 @@ export default class battle extends Vue {
     ]);
   }
 
+  get TransitionRound1():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_1).data.src
+  }
   get bgVideo():string {
     return  AssetsManager.getVideo(VIDEO_ASSET.BATTLE_VIDEO_BACKGROUND).data.src
   }
