@@ -280,9 +280,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
       
-      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, transparent: true, visible: false})
+      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: false})
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
+      console.log(collider.name);
+      
       this._collectibleColliders.add(collider)
     
     })
@@ -330,6 +332,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   lootCollectible(collectible: string) {
     let obj = this._collectibles.getObjectByName(collectible)
     this._collectibles.remove(obj)
+    let collider = this._collectibleColliders.getObjectByName(collectible)
+    this._collectibleColliders.remove(collider)
     HoodScene.onToastNotify(collectible)
   }
 
@@ -348,6 +352,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       if (intersect.length > 0) {
         if (intersect[0].distance < 1) {
           this.lootCollectible(intersect[0].object.name)
+          console.log(intersect[0].object.name);
+          
         }
       }
     }

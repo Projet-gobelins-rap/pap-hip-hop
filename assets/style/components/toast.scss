@@ -4,13 +4,28 @@
     top: 30px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 20px 24px;
+    padding: 16px;
     background-color: $white;
     border: solid 2px $yellow;
-    border-radius: 8px;
+    border-radius: 55px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 
     &-text {
         @include text(20px);
+        margin: 0 8px 0 0;
+    }
+
+    &-icon {
+        margin: 0 16px 0 0;
+        stroke: $yellow;
+    }
+
+    &-timer {
+        stroke-dasharray: 212;
+        stroke-dashoffset: 0;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
     }
 }

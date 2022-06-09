@@ -43,9 +43,23 @@
             background-color: $yellow;
             border: solid 4px $yellow_dark;
         }
+        &.green {
+            background-color: $green;
+            border: solid 4px $green_dark;
+        }
+        &.red {
+            background-color: $red;
+            border: solid 4px $red_dark;
+        }
     }
 
     &-libelle {
         @include stickerFont(12px);
+    }
+
+    &-button {
+        &.btn::before {
+            background-color: $red;
+        }
     }
 }
