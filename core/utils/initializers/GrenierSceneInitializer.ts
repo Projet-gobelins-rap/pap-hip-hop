@@ -122,7 +122,6 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
       }
     })
-
   }
 
   /**

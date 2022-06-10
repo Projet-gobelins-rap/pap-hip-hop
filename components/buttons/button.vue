@@ -16,7 +16,3 @@ export default class CustomButton extends Vue {
   mounted() {}
 }
 </script>
-
-<style lang="sass" scoped>
-</style>
- 

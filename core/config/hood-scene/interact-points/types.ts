@@ -1,10 +1,11 @@
 import { Vector3 } from "three";
-import grenierSceneStore from "../../../../store/grenierSceneStore";
+import hoodSceneStore from "../../../../store/grenierSceneStore";
 
 export type InteractionPoint = {
+  slug: string,
   name: string;
   type: string;
-  isCompleted: (grenierStore: grenierSceneStore) => boolean;
+  isCompleted: (hoodSceneStore: hoodSceneStore) => boolean;
   canvasCoords: () => Vector3;
   transformX: number;
   transformY: number;

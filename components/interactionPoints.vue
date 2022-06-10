@@ -1,8 +1,8 @@
 <template>
   <div :class="'point point-0 ' + data.type" :style="style()">
     <svg
-      v-if="data.type == 'chat'"
-      class="point-chat"
+      v-if="data.type == 'npc'"
+      class="point-npc"
       width="49"
       height="54"
       viewBox="0 0 49 54"

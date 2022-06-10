@@ -23,6 +23,7 @@ import grenierSceneStore from "~/store/grenierSceneStore";
 import GrenierSceneInitializer from "~/core/utils/initializers/GrenierSceneInitializer";
 import IntroMotion from "~/components/medias/IntroMotion.vue";
 import stepStore from "~/store/stepStore";
+import PapyInteractPoint from "../../core/config/grenier-scene/interact-points/objects/PapyInteractPoint";
 import PosterInteractPoint from "../../core/config/grenier-scene/interact-points/objects/PosterInteractPoint";
 import grenierScene from "~/core/scene/GrenierScene";
 import SprayInteractPoint from "../../core/config/grenier-scene/interact-points/objects/SprayInteractPoint";
@@ -72,13 +73,14 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.addInteractivePoint(TvInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(SprayInteractPoint.name);
     this.grenierSceneStore.addInteractivePoint(ModeInteractPoint.name);
+    this.grenierSceneStore.addInteractivePoint(PapyInteractPoint.name);
   }
 
   removeInteractionsPoints() {
     this.grenierSceneStore.removeInteractivePoint(TvInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(PosterInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(SprayInteractPoint.name);
-    this.grenierSceneStore.removeInteractivePoint(ModeInteractPoint.name);
+    this.grenierSceneStore.removeInteractivePoint(PapyInteractPoint.name);
   }
 
   goToInteractionPoint(point) {

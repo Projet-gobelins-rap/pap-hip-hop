@@ -1,8 +1,7 @@
 import {SceneManager} from "~/core/managers";
 
-class HoodScene {
+class BattleScene {
   private _context: SceneManager | null
-  public onToastNotify: Function
 
   constructor() {
     this._context = null
@@ -10,11 +9,6 @@ class HoodScene {
 
   public setSceneContext(sceneContext: SceneManager) {
     this._context = sceneContext
-  }
-
-  public initCallback(toastCallback) {
-    this.onToastNotify = toastCallback || function () {
-    }
   }
 
   get context() {
@@ -25,6 +19,6 @@ class HoodScene {
   }
 }
 
-const instance = new HoodScene()
+const instance = new BattleScene()
 
 export default instance

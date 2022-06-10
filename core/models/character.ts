@@ -59,7 +59,6 @@ export class Character {
     }
 
     public loadOutfit() {
-        console.log("model ", this.model);
 
         this.textures = {
             arms: AssetsManager.getTexture(this.outfitParams.body.textureArms).data,
