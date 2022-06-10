@@ -114,6 +114,20 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
         })
 
+        // emitter.on('battle::disposeObject',(modelName:string)=>{
+        //     this._currentNpc.forEach((el)=>{
+        //       // el.update(ctx.deltaTime)
+        //       el.stopAnimation()
+        //     })
+        // })
+        //
+        // emitter.on('battle::addObject',(modelName:string)=>{
+        //   this._currentNpc.forEach((el)=>{
+        //     // el.update(ctx.deltaTime)
+        //     el.playAnimation()
+        //   })
+        // })
+
 
 
       },
@@ -252,9 +266,11 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       console.log(modelName,'<-- MODEL - NAME')
       this._npcArray.forEach((el)=>{
         if (modelName === el.name) {
-          this._scene.remove(el.model)
+          // this._scene.remove(el.model)
+          // el.removeCharacter(this._scene,el.model)
           this._currentNpc.push(el)
           console.log('MODEL IS REMOVE')
+          console.log(this._scene,'<--- updated scene')
         }
       })
     })

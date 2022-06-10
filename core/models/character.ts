@@ -115,4 +115,14 @@ export class Character {
 
         this.mixer.update(delta)
     }
+
+    // public stopAnimation():void {
+    //   // this.mixer.s
+    //   this.animationsMap.get(this.currentAction)!.stop()
+    //
+    // }
+    //
+    // public playAnimation():void {
+    //   this.animationsMap.get(this.currentAction)!.play()
+    // }
 }

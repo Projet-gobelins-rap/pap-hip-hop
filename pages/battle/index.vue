@@ -434,6 +434,9 @@ export default class battle extends Vue {
       gsap.to('.responseContainer--player span',{display:'none',duration:1,opacity:0,onComplete:()=>{
           this.setNextChat();
           this.displayChat();
+          emitter.emit('battle::disposeObject','player')
+          emitter.emit('battle::addObject','coach')
+          console.log(BattleScene.context.scene,'<--- maj de la scene du battle ')
         }})
     }
     gsap.to('.btn-battle',{display:'none',opacity:0})
@@ -511,9 +514,6 @@ export default class battle extends Vue {
         case "round1Transition":
           this.displayRound1Transition()
           this.hideRound1Transition()
-          // this.closeChat();
-          // this.displayOnboarding();
-          // this.chatStore.setChatStep("reading");
           break;
         case "nextRound":
           this.closeChat();
@@ -525,18 +525,15 @@ export default class battle extends Vue {
     }
   }
 
-  displayRound1Transition() {
+  displayRound1Transition():void {
     gsap.to('.battle-overlay',{display:'block',duration:1.5,y:0,ease:'expo.inOut',onComplete:()=>{
-        console.log(this.$refs.transitionRound1,'XXX')
         this.$refs.transitionRound1.play()
-        // this.$refs.transitionRound1.loop = true
-        console.log(this.$refs.transitionRound1.$el,'WWW')
       }})
   }
 
-  hideRound1Transition() {
+  hideRound1Transition():void {
     this.$refs.transitionRound1.onended =()=> {
-      gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onComplete:()=>{
+      gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onStart:()=>{
           this.closeChat();
           this.displayOnboarding();
           this.chatStore.setChatStep("reading");

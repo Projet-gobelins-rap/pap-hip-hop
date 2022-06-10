@@ -1,7 +1,7 @@
 .onboarding {
   width: 100vw;
   height: 100vh;
-  z-index: 100;
+  z-index: 10;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -30,7 +30,7 @@
     max-width: 600px;
     position: relative;
 
- 
+
   }
 
   &-sticker {
