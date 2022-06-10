@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DoubleSide, MeshBasicMaterial } from 'three'
+import {DoubleSide, Group, MeshBasicMaterial, Scene} from 'three'
 // import { loadedCollection } from '../managers/OutfitLoader'
 import { getTextureColorSpec } from '../config/global/textureColorMapping'
 import AssetsManager from '../managers/AssetsManager'
@@ -84,6 +84,10 @@ export class Character {
         })
     }
 
+    public removeCharacter(scene:Scene,model:Group) {
+      scene.remove(model)
+    }
+
     public setParamsByName() {
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
@@ -116,13 +120,4 @@ export class Character {
         this.mixer.update(delta)
     }
 
-    // public stopAnimation():void {
-    //   // this.mixer.s
-    //   this.animationsMap.get(this.currentAction)!.stop()
-    //
-    // }
-    //
-    // public playAnimation():void {
-    //   this.animationsMap.get(this.currentAction)!.play()
-    // }
 }

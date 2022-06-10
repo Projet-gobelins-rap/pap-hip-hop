@@ -6,8 +6,4 @@ export class Npc extends Character {
         super(playerGltf, name, currentAction)
     }
 
-  removeCharacter(scene:Scene,model:Group) {
-    // this.animationsMap.get(this.currentAction)!.enabled = false
-    scene.remove(model)
-  }
 }

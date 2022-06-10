@@ -266,9 +266,9 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
       console.log(modelName,'<-- MODEL - NAME')
       this._npcArray.forEach((el)=>{
         if (modelName === el.name) {
-          // this._scene.remove(el.model)
-          // el.removeCharacter(this._scene,el.model)
-          this._currentNpc.push(el)
+          el.removeCharacter(this._scene,el.model)
+          this._currentNpc.shift()
+          console.log(this._currentNpc,'NPC ARRAY')
           console.log('MODEL IS REMOVE')
           console.log(this._scene,'<--- updated scene')
         }
