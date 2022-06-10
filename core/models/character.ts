@@ -88,7 +88,7 @@ export class Character {
       scene.remove(model)
     }
 
-    public setParamsByName() {
+    public setParamsByName():void {
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
                 this.outfitParams = outfitsData.pnj[key]

@@ -14,7 +14,7 @@ class BattleScene {
 
   get context() {
     if (!this._context) {
-      throw new Error(`You need to set a sceneContext for GlobalScene`)
+      throw new Error(`You need to set a sceneContext for BattleScene`)
     }
     return this._context
   }

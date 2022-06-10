@@ -1,6 +1,4 @@
 import { Initializers } from "~/core/defs";
-import grenierSceneStore from "~/store/grenierSceneStore";
-import GrenierScene from "~/core/scene/GrenierScene";
 import { AssetsManager, SceneManager } from "~/core/managers";
 import {
   BoxGeometry,
@@ -9,13 +7,11 @@ import {
   PerspectiveCamera, Plane, Raycaster,
   Scene, Vector2,
   Vector3,
-  VideoTexture,
   WebGLRenderer
 } from "three";
 import Helpers from "~/core/utils/Helpers";
 import { GLTF_ASSET, TEXTURE_ASSET, VIDEO_ASSET } from "../../enums";
 import { degToRad } from "three/src/math/MathUtils";
-import GrenierSceneConfig from "../../config/grenier-scene/grenier-scene.config";
 import { Npc } from "../../models/npc"
 
 import { Outfitloader } from "../../managers/OutfitLoader"
@@ -50,7 +46,6 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   init(): void {
 
     BattleScene.setSceneContext(this._createSceneContext())
-
     this._addSceneElements()
 
     this._addObjectToScene()
@@ -58,6 +53,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
     // this._optimizeScene()
     //this._configGUI()
     BattleScene.context.start()
+    emitter.emit('battle::initNpcs',this._npcArray)
   }
 
   /**
@@ -99,36 +95,24 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
         this._currentNpc.forEach((el)=>{
           el.update(ctx.deltaTime)
 
+
           if (el.name === 'opponent' ){
             this._corner.set(-0.5, -0.5); // NDC of the bottom-left corner
             this._raycaster.setFromCamera(this._corner, this._camera);
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
             el.model.position.copy(this._cornerPoint).add(new Vector3(1, -430, -1));
+            // console.log('OPPONENT')
           }
           if (el.name === 'player' ){
             this._corner.set(0.5, -0.5); // NDC of the bottom-left corner
             this._raycaster.setFromCamera(this._corner, this._camera);
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
             el.model.position.copy(this._cornerPoint).add(new Vector3(1, -430, -1));
+            // console.log('PLAYEER')
           }
 
+          // console.log('render')
         })
-
-        // emitter.on('battle::disposeObject',(modelName:string)=>{
-        //     this._currentNpc.forEach((el)=>{
-        //       // el.update(ctx.deltaTime)
-        //       el.stopAnimation()
-        //     })
-        // })
-        //
-        // emitter.on('battle::addObject',(modelName:string)=>{
-        //   this._currentNpc.forEach((el)=>{
-        //     // el.update(ctx.deltaTime)
-        //     el.playAnimation()
-        //   })
-        // })
-
-
 
       },
       onResume: (ctx) => {

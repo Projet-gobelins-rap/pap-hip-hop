@@ -103,6 +103,7 @@ import BattleScene from "../../core/scene/BattleScene";
 import HoodScene from "../../core/scene/HoodScene";
 import emitter from 'tiny-emitter/instance'
 import {VIDEO_ASSET} from "../../core/enums";
+import {Npc} from "../../core/models/npc";
 @Component({
   components: {
     CustomButton,
@@ -186,7 +187,8 @@ export default class battle extends Vue {
   public damageElement:HTMLElement
   public comboMultiplicator:HTMLElement
   public transitionRound1:HTMLMediaElement
-
+  public playerAndOpponentActive:boolean = false
+  public npcs:Array<Npc> = []
   mounted() {
 
     this.initRound2Datas();
@@ -196,9 +198,6 @@ export default class battle extends Vue {
     this.damageElement = this.$refs.damage as HTMLElement;
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
     this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
-    console.log(this.$refs.globalResponse,'TEST REF')
-    console.log(this.globalResponse,"GLOB")
-
 
     new BattleSceneInitializer({
       canvas: this.$refs.battleScene as HTMLCanvasElement,
@@ -206,14 +205,18 @@ export default class battle extends Vue {
     }).init();
     BattleScene.context.disableOrbitControl();
 
+    emitter.on('battle::initNpcs',(npcs:Array<Npc>)=>{
+      this.npcs = npcs
+      console.log(npcs,'AOOOO')
+    })
+
     console.log("BATTLE");
 
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
 
-      emitter.emit('battle::disposeObject','coach')
-      emitter.emit('battle::addObject','opponent')
+      // emitter.emit('battle::disposeObject','coach')
 
       this.hideOnboarding();
       if (ids === null) {
@@ -261,6 +264,17 @@ export default class battle extends Vue {
         this.round2StepCounter++;
       }
     });
+
+    $socket.io.on('battle::round1DisposeObject',()=>{
+      emitter.emit('battle::disposeObject','coach')
+    })
+
+    $socket.io.on('battle::mobileToAddObject',()=>{
+      emitter.emit('battle::addObject','player')
+      emitter.emit('battle::addObject','opponent')
+      emitter.emit('battle::disposeObject','coach')
+    })
+
   }
 
   // show opponent punchlines
@@ -268,6 +282,7 @@ export default class battle extends Vue {
 
     console.log(this.opponent);
     if (!this.isRound2) {
+      emitter.emit('battle::addObject','opponent')
       this.animatePunchline(this.opponent.$el.children,true,this.opponentRound1,null,true)
     } else {
       this.animatePunchline(this.globalResponse.$el.children,false,this.opponentRound2,null,true,this.round2StepCounter)
@@ -333,6 +348,7 @@ export default class battle extends Vue {
       this.animatePunchline(this.player.$el.children,true,null,this.punchArray,false)
     }
     else {
+      // emitter.emit('battle::addObject','player')
       this.animatePunchline(this.globalResponse.$el.children,false,null,this.punchArray,false,this.round2StepCounter-1)
     }
   }
@@ -441,6 +457,11 @@ export default class battle extends Vue {
     }
     gsap.to('.btn-battle',{display:'none',opacity:0})
   }
+
+  // toggleRapperAnimation():void{
+  //
+  //   console.log(this.npcs,'NPCSSSSSS')
+  // }
 
   showWinner() {
     // TODO : UPDATE LA METHODE DE LA DETECTION DU GAGNANT
@@ -559,11 +580,13 @@ export default class battle extends Vue {
     ]);
   }
 
+  // A getter function that returns the src of the video.
   get TransitionRound1():string {
     return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_1).data.src
   }
+  // Getting the video source from the AssetsManager.
   get bgVideo():string {
-    return  AssetsManager.getVideo(VIDEO_ASSET.BATTLE_VIDEO_BACKGROUND).data.src
+    return AssetsManager.getVideo(VIDEO_ASSET.BATTLE_VIDEO_BACKGROUND).data.src
   }
   // A getter function that returns the chatStep property of the chatStore object.
   get chatStep() {
