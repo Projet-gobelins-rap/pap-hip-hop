@@ -1,5 +1,8 @@
 <template>
   <section class="battle--mobile">
+    <div class="battle-head">
+      <h2 class="battle-head--title">Fais ton choix</h2>
+    </div>
     <Choice v-if="displayChoice" :multiple-choice="true" :content="battlePunchline"></Choice>
     <Onboarding :content="currentOnboarding"></Onboarding>
   </section>
