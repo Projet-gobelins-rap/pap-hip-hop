@@ -55,8 +55,6 @@ export class Character {
     public initAnimations() {
         this.gltfAnimations.forEach((a: THREE.AnimationClip) => {
             this.animationsMap.set(a.name, this.mixer.clipAction(a))
-
-          console.log(this.animationsMap,'<--- animations')
         })
     }
 

@@ -45,14 +45,22 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
 
   init(): void {
 
-    BattleScene.setSceneContext(this._createSceneContext())
-    this._addSceneElements()
+    // TRICKS pour que l'event battle::initNpcs soit catch par le template vue.js
+     new Promise((resolve, reject)=>{
+       BattleScene.setSceneContext(this._createSceneContext())
+       this._addSceneElements()
 
-    this._addObjectToScene()
-    this._disposeObject()
-    // this._optimizeScene()
-    //this._configGUI()
-    BattleScene.context.start()
+       this._addObjectToScene()
+       this._disposeObject()
+       BattleScene.context.start()
+       resolve()
+    }).then(()=>{
+       this.setupNpc()
+     })
+
+  }
+
+  setupNpc():void {
     emitter.emit('battle::initNpcs',this._npcArray)
   }
 

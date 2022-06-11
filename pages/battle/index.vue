@@ -104,6 +104,7 @@ import HoodScene from "../../core/scene/HoodScene";
 import emitter from 'tiny-emitter/instance'
 import {VIDEO_ASSET} from "../../core/enums";
 import {Npc} from "../../core/models/npc";
+import {ignoreNgOnChanges} from "swiper/angular/angular/src/utils/utils";
 @Component({
   components: {
     CustomButton,
@@ -189,6 +190,7 @@ export default class battle extends Vue {
   public transitionRound1:HTMLMediaElement
   public playerAndOpponentActive:boolean = false
   public npcs:Array<Npc> = []
+  public battleSceneInitializer:BattleSceneInitializer
   mounted() {
 
     this.initRound2Datas();
@@ -199,16 +201,25 @@ export default class battle extends Vue {
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
     this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
 
-    new BattleSceneInitializer({
-      canvas: this.$refs.battleScene as HTMLCanvasElement,
-      battleStore: this.battleStore,
-    }).init();
-    BattleScene.context.disableOrbitControl();
 
-    emitter.on('battle::initNpcs',(npcs:Array<Npc>)=>{
-      this.npcs = npcs
-      console.log(npcs,'AOOOO')
-    })
+      new BattleSceneInitializer({
+        canvas: this.$refs.battleScene as HTMLCanvasElement,
+        battleStore: this.battleStore,
+      }).init();
+      BattleScene.context.disableOrbitControl();
+
+
+      console.log("G UN ENORME GORO")
+      emitter.on('battle::initNpcs',(npcs:Array<Npc>)=>{
+        this.npcs = npcs
+        console.log(npcs,'AOOOO')
+      })
+
+      console.log("OUAIS MA GUEULE")
+
+
+
+
 
     console.log("BATTLE");
 
@@ -272,6 +283,9 @@ export default class battle extends Vue {
     $socket.io.on('battle::mobileToAddObject',()=>{
       emitter.emit('battle::addObject','player')
       emitter.emit('battle::addObject','opponent')
+      this.toggleRapperAnimation('player','idle')
+      this.toggleRapperAnimation('opponent','idle')
+
       emitter.emit('battle::disposeObject','coach')
     })
 
@@ -285,6 +299,8 @@ export default class battle extends Vue {
       emitter.emit('battle::addObject','opponent')
       this.animatePunchline(this.opponent.$el.children,true,this.opponentRound1,null,true)
     } else {
+      this.toggleRapperAnimation('player','idle')
+      this.toggleRapperAnimation('opponent','rap')
       this.animatePunchline(this.globalResponse.$el.children,false,this.opponentRound2,null,true,this.round2StepCounter)
     }
   }
@@ -349,6 +365,8 @@ export default class battle extends Vue {
     }
     else {
       // emitter.emit('battle::addObject','player')
+      this.toggleRapperAnimation('player','rap')
+      this.toggleRapperAnimation('opponent','idle')
       this.animatePunchline(this.globalResponse.$el.children,false,null,this.punchArray,false,this.round2StepCounter-1)
     }
   }
@@ -458,10 +476,13 @@ export default class battle extends Vue {
     gsap.to('.btn-battle',{display:'none',opacity:0})
   }
 
-  // toggleRapperAnimation():void{
-  //
-  //   console.log(this.npcs,'NPCSSSSSS')
-  // }
+  toggleRapperAnimation(npcName:string,animationName:string):void{
+    this.npcs.forEach((el:Npc)=>{
+      if (el.name === npcName){
+        el.animationPlayed = animationName
+      }
+    })
+  }
 
   showWinner() {
     // TODO : UPDATE LA METHODE DE LA DETECTION DU GAGNANT
