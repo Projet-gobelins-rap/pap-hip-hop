@@ -21,10 +21,12 @@ export default class SlotsLoader {
             // -Lead- : dispose ? remove ?
             object.children = []
             object.add(baseObject.clone())
+            const colliderGeometry = Helpers.generateBoxCollider(object)
+
         });
     }
+    
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void {
-        // public static generateBuilding(slots: Object3D[], buildingVariations: Object3D): void  {
         slots.forEach(slot => {
             const params = slot.name.split('_')
             slot.children = []
@@ -63,46 +65,9 @@ export default class SlotsLoader {
 
     public static generateCollectible(slots: Object3D[]): void {
         slots.forEach(slot => {
-            const params = slot.name.split('_')
-            let model = null
-
-            switch (params[1]) {
-                case "tape":
-                    model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_WALKMAN).data.scene.clone()
-                    slot.add(model)
-                    model.position.y = 30
-                    break;
-                case "camera":
-                    model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_CAMCORDER).data.scene.clone()
-                    slot.add(model)
-                    model.position.y = 30
-                    break;
-                case "boombox":
-                    model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_BOOMBOX).data.scene.clone()
-                    slot.add(model)
-                    model.position.y = 30
-                    break;
-                case "spray":
-                    model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_SPRAY).data.scene.clone()
-                    slot.add(model)
-                    model.position.y = 30
-                    break;
-                case "note":
-                    model = AssetsManager.getGltf(GLTF_ASSET.COLLECTABLE_NOTE).data.scene.clone()
-                    slot.add(model)
-                    model.position.y = 30
-                    break;
-                case "vinyle":
-                    model = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene.clone()
-                    slot.add(model)
-                    model.position.y = 30
-                    break;
-                default:
-                    break;
-            }
-
-
-
+            let model = AssetsManager.getGltf(slot.name).data.scene.clone()
+            slot.add(model) 
+            model.position.y = 30
         });
     }
 }
