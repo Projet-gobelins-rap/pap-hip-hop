@@ -55,11 +55,7 @@
 
     <div class="mobileScope-landscape">
       <div class="mobileScope-wrapper">
-        <img
-          class="mobileScope-img"
-          src="/images/graf/city-rooftop.png"
-          alt=""
-        />
+        <img class="mobileScope-img" :src="cityImage.src" alt="" />
         <svg
           class="mobileScope-markers"
           width="2320"
@@ -68,9 +64,9 @@
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g>
+          <g class="mobileScope-marker">
             <circle
-              class="mobileScope-marker"
+              class="mobileScope-marker--bg"
               cx="1566"
               cy="862"
               r="24.6863"
@@ -80,6 +76,14 @@
               stroke-width="2.62737"
             />
             <circle cx="1566" cy="862.001" r="15.6" fill="#ED6787" />
+            <circle
+              class="mobileScope-marker--progress"
+              cx="1566"
+              cy="862"
+              r="26.6863"
+              stroke="#22D175"
+              stroke-width="2.62737"
+            />
             <path
               d="M1566 857.125L1566 866.875M1570.88 862L1561.13 862"
               stroke="#FEFEFE"
@@ -87,9 +91,9 @@
               stroke-linecap="round"
             />
           </g>
-          <g>
+          <g class="mobileScope-marker">
             <circle
-              class="mobileScope-marker"
+              class="mobileScope-marker--bg"
               cx="1124"
               cy="657"
               r="24.6863"
@@ -99,6 +103,14 @@
               stroke-width="2.62737"
             />
             <circle cx="1124" cy="657.001" r="15.6" fill="#ED6787" />
+            <circle
+              class="mobileScope-marker--progress"
+              cx="1124"
+              cy="657"
+              r="26.6863"
+              stroke="#22D175"
+              stroke-width="2.62737"
+            />
             <path
               d="M1124 652.125L1124 661.875M1128.88 657L1119.13 657"
               stroke="#FEFEFE"
@@ -106,15 +118,23 @@
               stroke-linecap="round"
             />
           </g>
-          <g>
+          <g class="mobileScope-marker">
             <circle
-              class="mobileScope-marker"
+              class="mobileScope-marker--bg"
               cx="162"
               cy="831"
               r="24.6863"
               fill="white"
               fill-opacity="0.5"
               stroke="#FEFEFE"
+              stroke-width="2.62737"
+            />
+            <circle
+              class="mobileScope-marker--progress"
+              cx="162"
+              cy="831"
+              r="26.6863"
+              stroke="#22D175"
               stroke-width="2.62737"
             />
             <circle cx="161.999" cy="831.001" r="15.6" fill="#ED6787" />
@@ -138,8 +158,9 @@ import stepStore from "~/store/stepStore";
 import Scope from "~/core/interactions/Scope.ts";
 import Onboarding from "~/components/contentOverlays/onboarding";
 import onboardingStore from "~/store/onboardingStore";
-
+import { IMAGE_ASSET } from "~/core/enums";
 import permisions from "~/core/utils/Permisions";
+import { AssetsManager } from "~/core/managers";
 
 @Component({
   components: {
@@ -175,21 +196,21 @@ export default class MobileScope extends Vue {
   public gameplayOnboarding: object;
   public onboardingCounter: number = 1;
   public scopeInteraction: Scope;
+  public cityImage: HTMLImageElement = new Image();
 
   mounted() {
-    console.clear();
-    console.log(this.currentOnboarding, "<--- current onboarrding mobile");
-    console.log("scope");
     this.scopeInteraction = new Scope();
     this.displayOnboarding();
+
     setTimeout(() => {
       this.currentOnboarding = this.gameplayOnboarding;
       console.log(this.gameplayOnboarding);
-    }, 1000);
+    }, 3000);
 
     document.addEventListener(
       "click",
       (e) => {
+        this.cityImage = AssetsManager.getImage(IMAGE_ASSET.CITY_ROOFTOP).data;
         this.askPermisions();
       },
       { once: true }

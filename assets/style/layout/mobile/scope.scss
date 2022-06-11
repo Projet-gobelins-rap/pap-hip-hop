@@ -58,6 +58,15 @@
         z-index: 5;
     }
 
+    &-marker {
+        &--progress {
+            stroke-dasharray: 172;
+            stroke-dashoffset: 172;
+            // transform: rotate(-90deg);
+            // transform-origin: 50%;
+        }
+    }
+
     &-border {
         position: absolute;
         top: 50%;
@@ -90,21 +99,7 @@
         }
      
     }
-    &-progress {
-        height: 2px;
-        width: 60px;
-        background-color: white;
-        position: relative;
-
-        &--bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 2px;
-            width: 0;
-            background-color: green;
-        }
-    }
+    
 
     &-sight {
         position: absolute;
