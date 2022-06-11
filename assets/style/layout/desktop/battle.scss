@@ -5,19 +5,6 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  &-head{
-    position: fixed;
-    background: #02BA59;
-    padding: 20px;
-    width: 100%;
-    top: 0;
-    &--title{
-      @include stickerFont(20px, 26px);
-      margin: 24px 0 0;
-      position: relative;
-      z-index: 2;
-    }
-  }
   &-overlay {
     position: fixed;
     width: 100%;

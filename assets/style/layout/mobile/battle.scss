@@ -1,7 +1,45 @@
 .battle--mobile {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 20px;
+  .battle-head {
+    position: fixed;
+    background: $black;
+    height: 120px;
+    width: 100%;
+    top: 0;
+    padding: 0 20px;
+    &--icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    &--title{
+      @include stickerFont(20px, 26px);
+      margin: 24px 0 0;
+      position: relative;
+      z-index: 2;
+    }
+    &--separator {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: white;
+      opacity: 0.4;
+      height: 2px;
+    }
+    &--intro{
+      margin: 8px 0 18px;
+      position: relative;
+      z-index: 2;
+      p {
+        @include text(16px, 20px, $white, 500);
+        font-style: italic;
+      }
+    }
+  }
 }
