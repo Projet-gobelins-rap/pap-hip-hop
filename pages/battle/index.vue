@@ -2,6 +2,7 @@
   <section class="battle" >
     <div class="battle-overlay">
       <video class="battle-transitionVideo battle-video" ref="transitionRound1" :src="TransitionRound1"></video>
+      <video class="battle-transitionVideo battle-video" ref="transitionRound2" :src="TransitionRound2"></video>
     </div>
     <canvas id="canvasGlobalScene" ref="battleScene"></canvas>
 
@@ -188,6 +189,7 @@ export default class battle extends Vue {
   public damageElement:HTMLElement
   public comboMultiplicator:HTMLElement
   public transitionRound1:HTMLMediaElement
+  public transitionRound2:HTMLMediaElement
   public playerAndOpponentActive:boolean = false
   public npcs:Array<Npc> = []
   public battleSceneInitializer:BattleSceneInitializer
@@ -200,6 +202,7 @@ export default class battle extends Vue {
     this.damageElement = this.$refs.damage as HTMLElement;
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
     this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
+    this.transitionRound2 = this.$refs.transitionRound2 as HTMLMediaElement;
 
 
       new BattleSceneInitializer({
@@ -523,7 +526,11 @@ export default class battle extends Vue {
 
   // Emitting a socket event to the server.
   goToRound2() {
+    console.log("ROUUUUUUUUUUUUUUUND 2")
+    this.displayRoundTransition(false)
+    this.hideRoundTransition(false)
     $socket.io.emit("battle::round2");
+
   }
 
   updateHealthGauges() {
@@ -554,12 +561,11 @@ export default class battle extends Vue {
           break;
 
         case "round1Transition":
-          this.displayRound1Transition()
-          this.hideRound1Transition()
+          this.displayRoundTransition(true)
+          this.hideRoundTransition(true)
           break;
         case "nextRound":
           this.closeChat();
-          this.displayOnboarding();
           this.goToRound2();
           this.chatStore.setChatStep("reading");
           break;
@@ -567,20 +573,44 @@ export default class battle extends Vue {
     }
   }
 
-  displayRound1Transition():void {
-    gsap.to('.battle-overlay',{display:'block',duration:1.5,y:0,ease:'expo.inOut',onComplete:()=>{
-        this.$refs.transitionRound1.play()
+  displayRoundTransition(isRound1:boolean = true):void {
+    isRound1 ? gsap.set(this.$refs.transitionRound1,{display:'block'}) : gsap.set(this.$refs.transitionRound2,{display:'block'})
+    gsap.fromTo('.battle-overlay',{display:'none',yPercent:100},{display:'block',duration:1.5,yPercent:0,ease:'expo.inOut',onComplete:()=>{
+        if (isRound1){
+          this.$refs.transitionRound1.play()
+        } else {
+          this.$refs.transitionRound2.play()
+        }
       }})
   }
 
-  hideRound1Transition():void {
-    this.$refs.transitionRound1.onended =()=> {
-      gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onStart:()=>{
-          this.closeChat();
-          this.displayOnboarding();
-          this.chatStore.setChatStep("reading");
-        }})
+  hideRoundTransition(isRound1:boolean = true):void {
+    if (isRound1){
+      this.$refs.transitionRound1.onended =()=> {
+        gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onStart:()=>{
+            this.closeChat();
+            this.displayOnboarding();
+            this.chatStore.setChatStep("reading");
+          },
+          onComplete:()=>{
+            gsap.set('.battle-overlay',{opacity:1,yPercent:100})
+            gsap.set(this.$refs.transitionRound1,{display:'none'})
+          }
+        })
+      }
+    } else {
+      this.$refs.transitionRound2.onended =()=> {
+        gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onStart:()=>{
+            this.displayOnboarding();
+            this.chatStore.setChatStep("reading");
+          },
+          onComplete:()=>{
+            gsap.set(this.$refs.transitionRound2,{display:'none'})
+          }
+        })
+      }
     }
+
   }
 
   // watch dialogStep change in chatStore store
@@ -601,6 +631,10 @@ export default class battle extends Vue {
     ]);
   }
 
+  // A getter function that returns the src of the video.
+  get TransitionRound2():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_2).data.src
+  }
   // A getter function that returns the src of the video.
   get TransitionRound1():string {
     return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_1).data.src
