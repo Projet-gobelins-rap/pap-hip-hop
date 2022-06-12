@@ -1,7 +1,9 @@
 .onboarding {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 10;
+  top: 0;
+  left: 0;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -15,22 +17,28 @@
     top: 0;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     padding: 20px;
     position: relative;
+    background-color: $black;
+
+    &--text {
+      p {
+        @include text(16px, 20px, $white);
+      }
+    }
   }
 
   &-container {
     background-color: $white;
     border-radius: 16px;
-    padding: 70px 30px;
+    padding: 70px 16px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: calc(100% - 60px);
     max-width: 600px;
     position: relative;
-
-
   }
 
   &-sticker {
@@ -48,6 +56,10 @@
     text-align: center;
   }
 
+  &-button {
+    margin: 16px 0 0;
+  }
+
   .swiper-container {
     width: 100%;
     height: 100%;
@@ -61,7 +73,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 20px 60px;
     width: 100%;
   }
   .swiper__close {
@@ -75,6 +87,20 @@
   .swiper-button-prev,
   .swiper-button-next {
     color: $darkGrey;
+    content: url($arrow);
+  }
+
+  .swiper-button-next {
+    transform: rotate(180deg);
+  }
+  
+  .swiper-button-disabled {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .swiper-pagination {
+    bottom: 0px !important;
   }
   .swiper-pagination-bullet-active {
     background: $darkGrey;

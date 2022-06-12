@@ -120,12 +120,24 @@
     }
 
     .onboarding {
+        width: 100vh;
+        height: 100vw;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        
         &-container {
             transform: rotate(90deg) !important;
             /* height: calc(100% - 60px); */
             /* max-height: 600px; */
             width: calc(100vh - 40px) !important;
             height: calc(100vw - 20px) !important;
+        }
+
+        &-full {
+            transform: rotate(90deg);
+            width: 100vh;
+            height: 100vw;
         }
 
         &-sticker {

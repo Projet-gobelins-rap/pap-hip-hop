@@ -44,8 +44,8 @@
     </div>
 
     <div class="onboarding-full" v-else>
-      <img :src="content[0].icon.url" alt="" />
-      <PrismicRichText :field="content[0].description" />
+      <img class="onboarding-full--icon" :src="content[0].icon.url" alt="" />
+      <PrismicRichText class="onboarding-full--text" :field="content[0].description" />
     </div>
   </div>
 </template>

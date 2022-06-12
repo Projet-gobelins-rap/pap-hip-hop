@@ -83,7 +83,10 @@ export default class HoodScenePage extends Vue {
   public toastText: string | null = null;
   public toastType: string | null = null;
   public toastUID: string = "";
-  currentChat: object;
+  public chatDialogStep: string;
+  public focusPoints: object;
+  public currentChat: object;
+  public currentChatNum: number = 0;
 
   mounted() {
     this.displayOnboarding();
@@ -115,6 +118,10 @@ export default class HoodScenePage extends Vue {
         case "hide":
           this.hideOnboarding();
           this.startScene();
+           $socket.io.emit("goTo", {
+            path: "/_mobile/phone",
+            replace: true,
+          });
           this.onboardingStore.setOnboardingStep("reading");
           break;
       }
@@ -136,8 +143,12 @@ export default class HoodScenePage extends Vue {
   }
 
   goToInteractionPoint(point) {
+    console.log(this.npcDialogues);
+    
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
+        console.log(element[0]);
+        
         this.currentChat = element[0];
         return this.currentChat;
       }
@@ -184,32 +195,41 @@ export default class HoodScenePage extends Vue {
   }
 
   // Set next message in conversation order
-  // setNextDialog() {
-  //   this.currentChatNum++;
-  //   this.currentChat = this.conversation[this.currentChatNum];
-  // }
+  setNextDialog() {
+    this.currentChatNum++;
+    // this.currentChat = this.conversation[this.currentChatNum];
+  }
 
-  // Set next linked chat by using identifier in current chat
-  // setDialogByID() {
-  //   for (const key in this.conversation) {
-  //     const element = this.conversation[key];
-
-  //     if (element.primary.Identifiant === this.chatDialogStep) {
-  //       this.currentChat = element;
-  //       this.currentChatNum = parseInt(key);
-  //     }
-  //   }
-  // }
 
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
+      console.log(val);
+      
       switch (val) {
         case "reading":
           break;
+        case "next":
+          this.setNextDialog();
+          this.chatStore.setChatStep("reading");
+          break;
         case "goBack":
           this.goBack();
+          this.chatStore.setChatStep("reading");
+          break;
+        case "goGraff":
+          this.$router.push("/graf/scope");
+          $socket.io.emit("goTo", {
+            path: "/_mobile/off",
+            replace: true,
+          });
+        case "goBattle":
+          this.$router.push("/battle");
+          $socket.io.emit("goTo", {
+            path: "/_mobile/off",
+            replace: true,
+          });
           this.chatStore.setChatStep("reading");
           break;
       }
