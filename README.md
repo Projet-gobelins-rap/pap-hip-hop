@@ -43,7 +43,51 @@ https://github.com/Projet-gobelins-rap/pap-hip-hop.git
 ```
 npm install
 ```
-3. Installer les dépendances npm
+3. Générer le certificat ssl
 ```
-npm install
+npm run cert
 ```
+4. Lancer l'application
+```
+npm run start
+```
+
+Port utilisé : `` 3001``
+
+### 🛠 Workflow
+
+#### 🔀 Gestion des branches
+
+Afin d'avoir un sytème de branche clair permettant le travail collaboratif, nous avons utilisé les principes de [gitflow](https://www.atlassian.com/fr/git/tutorials/comparing-workflows/gitflow-workflow)
+
+Types de branches :
+- **master** : version stable 
+- **develop** : version de developpement
+- **feature/XXX** : developpement d'une feature spécifique
+- **fix/XXX** : correction d'un bug spécifique
+- **release/XXX** : ajout d'une release
+
+✏️ Convention de nommage des branches :
+
+La convention de nommage utilisé pour nos branches est : **type** / **sujet**
+
+Exemple :
+```
+feature/websocket-connexion
+```
+
+Pour faciliter la lisibilité de nos commits, nous utilisons [Gitmoji](https://gitmoji.dev/).
+
+Nous prefixons chaques commit par un emoji, cela permet d'avoir un historique de nos commits plus visuel. 
+
+#### 🚀 Intégration continue
+Nous avons lié notre repo à [Heroku](https://www.heroku.com/), cela nous permet notamment d'avoir une tâche d'intégration continue.
+
+La tâche d'intégration continue se lance automatiquement lorsqu'on push sur la branche master.
+
+Lien de la preprod : [https://pap-hip-hop-site.herokuapp.com](https://pap-hip-hop-site.herokuapp.com)
+
+### 🚧 Roadmap
+- [ ] Implementer PM2
+- [ ] Gestion du son
+
