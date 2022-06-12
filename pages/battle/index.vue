@@ -1,8 +1,13 @@
 <template>
   <section class="battle" >
+    <div class="battle-overlay">
+      <video class="battle-transitionVideo battle-video" ref="transitionRound1" :src="TransitionRound1"></video>
+      <video class="battle-transitionVideo battle-video" ref="transitionRound2" :src="TransitionRound2"></video>
+    </div>
     <canvas id="canvasGlobalScene" ref="battleScene"></canvas>
-<!-- TODO video lien dynamique -->
-    <video class="battle-video" autoplay loop muted src="https://pap-hip-hop.cdn.prismic.io/pap-hip-hop/774853fd-b591-4a78-8214-b273a18be0bb_Battle+Background+Loop-1.mp4"></video>
+
+    <video class="battle-video" autoplay loop muted :src="bgVideo"></video>
+
     <div class="battle-hud">
       <div class="battle-top">
         <div v-if="pp" class="healthbar  player">
@@ -96,7 +101,11 @@ import {Punchline} from "../../core/types/punchline";
 import BattleSceneInitializer from "../../core/utils/initializers/BattleSceneInitializer";
 import grenierScene from "../../core/scene/GrenierScene";
 import BattleScene from "../../core/scene/BattleScene";
-
+import HoodScene from "../../core/scene/HoodScene";
+import emitter from 'tiny-emitter/instance'
+import {VIDEO_ASSET} from "../../core/enums";
+import {Npc} from "../../core/models/npc";
+import {ignoreNgOnChanges} from "swiper/angular/angular/src/utils/utils";
 @Component({
   components: {
     CustomButton,
@@ -179,8 +188,11 @@ export default class battle extends Vue {
   public damage:number
   public damageElement:HTMLElement
   public comboMultiplicator:HTMLElement
-  public bgVideo:string
-
+  public transitionRound1:HTMLMediaElement
+  public transitionRound2:HTMLMediaElement
+  public playerAndOpponentActive:boolean = false
+  public npcs:Array<Npc> = []
+  public battleSceneInitializer:BattleSceneInitializer
   mounted() {
 
     this.initRound2Datas();
@@ -189,25 +201,36 @@ export default class battle extends Vue {
     this.globalResponse = this.$refs.globalResponse as HTMLElement;
     this.damageElement = this.$refs.damage as HTMLElement;
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
-    console.log(this.$refs.globalResponse,'TEST REF')
-    console.log(this.globalResponse,"GLOB")
+    this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
+    this.transitionRound2 = this.$refs.transitionRound2 as HTMLMediaElement;
 
-    new BattleSceneInitializer({
-      canvas: this.$refs.battleScene as HTMLCanvasElement,
-      battleStore: this.battleStore,
-    }).init();
-    BattleScene.context.disableOrbitControl();
 
-    // TODO UPDATE LA BG VIDEO ASSETS
-    // this.bgVideo = AssetsManager.getVideo('BATTLE_VIDEO_BACKGROUND').data.src
-    // console.log(this.bgVideo,'<---- bg video zebi')
+      new BattleSceneInitializer({
+        canvas: this.$refs.battleScene as HTMLCanvasElement,
+        battleStore: this.battleStore,
+      }).init();
+      BattleScene.context.disableOrbitControl();
+
+
+      console.log("G UN ENORME GORO")
+      emitter.on('battle::initNpcs',(npcs:Array<Npc>)=>{
+        this.npcs = npcs
+        console.log(npcs,'AOOOO')
+      })
+
+      console.log("OUAIS MA GUEULE")
+
+
+
+
 
     console.log("BATTLE");
 
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
       this.pp = AssetsManager.getImage("PP").data;
-      console.log(this.pp);
+
+      // emitter.emit('battle::disposeObject','coach')
 
       this.hideOnboarding();
       if (ids === null) {
@@ -255,6 +278,20 @@ export default class battle extends Vue {
         this.round2StepCounter++;
       }
     });
+
+    $socket.io.on('battle::round1DisposeObject',()=>{
+      emitter.emit('battle::disposeObject','coach')
+    })
+
+    $socket.io.on('battle::mobileToAddObject',()=>{
+      emitter.emit('battle::addObject','player')
+      emitter.emit('battle::addObject','opponent')
+      this.toggleRapperAnimation('player','idle')
+      this.toggleRapperAnimation('opponent','idle')
+
+      emitter.emit('battle::disposeObject','coach')
+    })
+
   }
 
   // show opponent punchlines
@@ -262,8 +299,11 @@ export default class battle extends Vue {
 
     console.log(this.opponent);
     if (!this.isRound2) {
+      emitter.emit('battle::addObject','opponent')
       this.animatePunchline(this.opponent.$el.children,true,this.opponentRound1,null,true)
     } else {
+      this.toggleRapperAnimation('player','idle')
+      this.toggleRapperAnimation('opponent','rap')
       this.animatePunchline(this.globalResponse.$el.children,false,this.opponentRound2,null,true,this.round2StepCounter)
     }
   }
@@ -327,6 +367,9 @@ export default class battle extends Vue {
       this.animatePunchline(this.player.$el.children,true,null,this.punchArray,false)
     }
     else {
+      // emitter.emit('battle::addObject','player')
+      this.toggleRapperAnimation('player','rap')
+      this.toggleRapperAnimation('opponent','idle')
       this.animatePunchline(this.globalResponse.$el.children,false,null,this.punchArray,false,this.round2StepCounter-1)
     }
   }
@@ -415,20 +458,33 @@ export default class battle extends Vue {
     }
   }
 
-  nextPunchRound1() {
+  nextPunchRound1():void {
 
     if (this.opponentTourRound1) {
       gsap.to('.responseContainer--opponent span',{display:'none',duration:1,opacity:0,onComplete:()=>{
           this.displayUserPunchline();
           this.opponentTourRound1 = false
+          emitter.emit('battle::disposeObject','opponent')
+          emitter.emit('battle::addObject','player')
         }})
     } else {
       gsap.to('.responseContainer--player span',{display:'none',duration:1,opacity:0,onComplete:()=>{
           this.setNextChat();
           this.displayChat();
+          emitter.emit('battle::disposeObject','player')
+          emitter.emit('battle::addObject','coach')
+          console.log(BattleScene.context.scene,'<--- maj de la scene du battle ')
         }})
     }
     gsap.to('.btn-battle',{display:'none',opacity:0})
+  }
+
+  toggleRapperAnimation(npcName:string,animationName:string):void{
+    this.npcs.forEach((el:Npc)=>{
+      if (el.name === npcName){
+        el.animationPlayed = animationName
+      }
+    })
   }
 
   showWinner() {
@@ -470,7 +526,11 @@ export default class battle extends Vue {
 
   // Emitting a socket event to the server.
   goToRound2() {
+    console.log("ROUUUUUUUUUUUUUUUND 2")
+    this.displayRoundTransition(false)
+    this.hideRoundTransition(false)
     $socket.io.emit("battle::round2");
+
   }
 
   updateHealthGauges() {
@@ -500,19 +560,57 @@ export default class battle extends Vue {
           this.chatStore.setChatStep("reading");
           break;
 
-        case "selectPunch":
-          this.closeChat();
-          this.displayOnboarding();
-          this.chatStore.setChatStep("reading");
+        case "round1Transition":
+          this.displayRoundTransition(true)
+          this.hideRoundTransition(true)
           break;
         case "nextRound":
           this.closeChat();
-          this.displayOnboarding();
           this.goToRound2();
           this.chatStore.setChatStep("reading");
           break;
       }
     }
+  }
+
+  displayRoundTransition(isRound1:boolean = true):void {
+    isRound1 ? gsap.set(this.$refs.transitionRound1,{display:'block'}) : gsap.set(this.$refs.transitionRound2,{display:'block'})
+    gsap.fromTo('.battle-overlay',{display:'none',yPercent:100},{display:'block',duration:1.5,yPercent:0,ease:'expo.inOut',onComplete:()=>{
+        if (isRound1){
+          this.$refs.transitionRound1.play()
+        } else {
+          this.$refs.transitionRound2.play()
+        }
+      }})
+  }
+
+  hideRoundTransition(isRound1:boolean = true):void {
+    if (isRound1){
+      this.$refs.transitionRound1.onended =()=> {
+        gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onStart:()=>{
+            this.closeChat();
+            this.displayOnboarding();
+            this.chatStore.setChatStep("reading");
+          },
+          onComplete:()=>{
+            gsap.set('.battle-overlay',{opacity:1,yPercent:100})
+            gsap.set(this.$refs.transitionRound1,{display:'none'})
+          }
+        })
+      }
+    } else {
+      this.$refs.transitionRound2.onended =()=> {
+        gsap.to('.battle-overlay',{opacity:0,display:'none',ease:'expo.inOut',duration:1,onStart:()=>{
+            this.displayOnboarding();
+            this.chatStore.setChatStep("reading");
+          },
+          onComplete:()=>{
+            gsap.set(this.$refs.transitionRound2,{display:'none'})
+          }
+        })
+      }
+    }
+
   }
 
   // watch dialogStep change in chatStore store
@@ -533,6 +631,18 @@ export default class battle extends Vue {
     ]);
   }
 
+  // A getter function that returns the src of the video.
+  get TransitionRound2():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_2).data.src
+  }
+  // A getter function that returns the src of the video.
+  get TransitionRound1():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_1).data.src
+  }
+  // Getting the video source from the AssetsManager.
+  get bgVideo():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.BATTLE_VIDEO_BACKGROUND).data.src
+  }
   // A getter function that returns the chatStep property of the chatStore object.
   get chatStep() {
     return this.chatStore.chatStep;

@@ -24,7 +24,7 @@
       text="Commencer l'expérience"
     ></CustomButton>
   </section>
-</template> 
+</template>
 
 <script lang="ts">
 import { Vue, Component, getModule } from "nuxt-property-decorator";

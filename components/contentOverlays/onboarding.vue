@@ -1,6 +1,6 @@
 <template>
   <div v-if="this.onboardingDisplay" class="onboarding">
-    <div class="onboarding-container"  v-if="!content.isFullscreen">
+    <div class="onboarding-container"  v-if="!content[0].isFullscreen">
        <img
           class="onboarding-sticker"
           src="/images/sticker-commande.png"
@@ -44,8 +44,8 @@
     </div>
 
     <div class="onboarding-full" v-else>
-      <img :src="content.icon.url" alt="" />
-      <PrismicRichText :field="content.description" />
+      <img class="onboarding-full--icon" :src="content[0].icon.url" alt="" />
+      <PrismicRichText class="onboarding-full--text" :field="content[0].description" />
     </div>
   </div>
 </template>

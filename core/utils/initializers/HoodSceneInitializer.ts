@@ -158,7 +158,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   * Register preset camera positions
   */
   private _registerPresetPositions() {
-    HoodSceneConfig.cameraPositions.forEach(presetPosition => {   
+    HoodSceneConfig.cameraPositions.forEach(presetPosition => {
       HoodScene.context.registerPresetCameraPositions(presetPosition)
         console.log(HoodScene.context);
     })
@@ -180,9 +180,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
-   
+
   }
- 
+
   addCube() {
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
@@ -214,8 +214,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const fenceSlots = city.getObjectByName('group_fence').children
     const electricPlotSlots = city.getObjectByName('group_electric_light').children
     const lightSlots = city.getObjectByName('group_public_light').children
+    const environement = city.getObjectByName('CITY_a_baked1')
 
-    // SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
+    console.log(tree);
+    SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
+    
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
     // SlotsLoader.populateSlots(busSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
     SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
@@ -225,7 +228,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
     SlotsLoader.generateCollectible(this._collectibles.children)
-  
+
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -267,7 +270,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this._scene.add(this.player.model);
 
-    console.log(city);
+    this.addTexture(environement, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
 
     this.bvhCollider(city)
     this.collectiblesCollider()
@@ -276,19 +279,25 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     // this._scene.add( directionalLight );
   }
 
+  addTexture(mesh: Mesh, texture: any) {
+      console.log(texture);
+      
+      texture.flipY = false
+      mesh.material.map = texture
+  }
+
   collectiblesCollider() {
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
-      
       const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: false})
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
       console.log(collider.name);
       
       this._collectibleColliders.add(collider)
-    
+
     })
-    this._scene.add(this._collectibleColliders) 
+    this._scene.add(this._collectibleColliders)
   }
 
   bvhCollider(env) {
@@ -304,7 +313,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     env.traverse(object => {
       if (object.type == "Mesh") {
 
-        
+
         geometries.push(Helpers.generateBoxCollider(object))
 
         // const mesh = new Mesh(boxGeometry, new MeshBasicMaterial({ wireframe: true }));
@@ -322,8 +331,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     // this.collider.material.opacity = 0.5;
     // this.collider.material.transparent = true;
     // this._scene.add(this.collider);
- 
-    this._collectibleCollection = { 
+
+    this._collectibleCollection = {
       env: [this.collider],
       collectibles: this._collectibleColliders.children
     }

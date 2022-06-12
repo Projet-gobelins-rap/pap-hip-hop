@@ -101,12 +101,6 @@ export default class Graf {
   }
 
   bindEvents() {
-    this.grafCanvas.addEventListener('mousemove', (evt) => {
-      this.erase()
-    })
-    this.resetStepBtn.addEventListener('click', () => {
-      this.updateCanvasBackground()
-    })
     $socket.io.on('graffValues', data => {
       let params = data.split(":")
       this.isPushed = (params[2] === 'true')
@@ -154,23 +148,30 @@ export default class Graf {
     // gsap.to(this.grafImg, { opacity: 1 })
   }
 
-  nextLayer() {
-    this.canvasUpdated = true
-
+  layerEnded() {
     if (this.layerCount < this.layers.length - 1) {
-      this.revealImg.src = this.layers[this.layerCount + 1].layer.url
-      this.imgUrl = this.layers[this.layerCount].layer.url
-      this.img.src = this.imgUrl
+
+      this._onStepChangeCallback('nextLayer')
+ 
+
     } else {
       console.log('fin');
       this._onStepChangeCallback('finish')
     }
   }
 
-  updateCanvasBackground() {
+  nextLayer() {
+    this.canvasUpdated = true
+    this.revealImg.src = this.layers[this.layerCount + 1].layer.url
+    this.imgUrl = this.layers[this.layerCount].layer.url
+    this.img.src = this.imgUrl
 
     this.layerCount++
-    this._onStepChangeCallback('nextLayer')
+    this.updateCanvasBackground()
+  }
+
+  updateCanvasBackground() {
+  
     let self = this
     // gsap.to(this.revealImg, { opacity: 0 })
 
@@ -205,7 +206,7 @@ export default class Graf {
     this.display.innerText = this.erasedPercentage.toString()
 
     if (this.erasedPercentage > 70) {
-      this.updateCanvasBackground()
+      this.layerEnded()
     }
   }
 

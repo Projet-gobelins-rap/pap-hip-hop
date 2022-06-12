@@ -88,6 +88,7 @@ export default class round1Mobile extends Vue {
       this.$router.push('/_mobile/battle/round2')
       console.log(' ROUND 2 🚨!🚨!')
 
+      $socket.io.emit('battle::round1DisposeObject')
     })
   }
 

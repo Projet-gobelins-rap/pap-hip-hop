@@ -2,31 +2,49 @@ import { gsap } from 'gsap'
 import $socket from "../../plugins/socket.io"
 
 export default class Scope {
-    public sensor: any
-    public grafCanvas: HTMLCanvasElement
+    // DOM elements
     public landscape: HTMLElement
     public pointer: HTMLElement
-    public markers: any
+    public markers: Element[]
+
+    public debugX: HTMLElement
+    public debugY: HTMLElement
+
+    // properties
+    public places: Array<{
+        id: number,
+        x: number,
+        y: number,
+        found: boolean,
+        isFocus: boolean,
+        icon: Element,
+        progressTl: gsap.core.Timeline,
+        slug: string
+    }>
+    public pointerTimeline: gsap.core.Timeline
+    public size: { width: number; height: number; }
+    public mobileSizes: { width: number; height: number; } = { height: window.innerHeight, width: window.innerWidth }
+
+    // const
+    private MAX_Y_ANGLE: number = 50
+    private MAX_X_ANGLE: number = 20
+    private colideRange: number = 0.05
+    private landscapeSizes: { width: number; height: number; } = { height: 2320, width: 1294 }
+   
+    // temporary data
     public baseX: number
     public latestX: number
     public normalizePosition: { x: number, y: number }
-    public rotation: any
-    public size: { width: number; height: number; }
-    public clientSizes: { width: number; height: number; } = { height: 2320, width: 1294 }
-    public mobileSizes: { width: number; height: number; } = { height: window.innerHeight, width: window.innerWidth }
-    public places: any
-    public debugX: HTMLElement
-    public debugY: HTMLElement
-    public focusTimeOut: any
-    public focusTarget: boolean = false
-    public focusTimeline: any
-    public pointerTimeline: any
+    public focusTimeOut: NodeJS.Timeout
+    // TODO : create type for "place" object
+    public focusTarget: any | null = null
 
-    private MAX_Y_ANGLE: number = 50
-    private MAX_X_ANGLE: number = 50
-    private colideRange: number = 0.05
+    //callback
+    private _onFocusCallback: Function
 
-    constructor() {
+    constructor(focusCallback: Function) {
+
+        this._onFocusCallback = focusCallback || function ()  {}
 
         this.landscape = document.querySelector('.mobileScope-wrapper')
         this.pointer = document.querySelector('.mobileScope-pointer')
@@ -34,6 +52,10 @@ export default class Scope {
         this.debugX = document.querySelector('.mobileScope-debug--x')
         this.debugY = document.querySelector('.mobileScope-debug--y')
 
+        this.init()
+    }
+
+    init() {
         this.latestX = 0
 
         this.size = {
@@ -41,28 +63,13 @@ export default class Scope {
             height: window.innerHeight,
         }
 
-        this.focusTimeline = gsap.timeline()
-        this.focusTimeline.to('.mobileScope-progress--bar', {
-            width: '100%',
-            duration: 1,
-            ease: 'none'
-        })
-        this.focusTimeline.pause()
-
         this.pointerTimeline = gsap.timeline()
-
         this.pointerTimeline.to(this.pointer, {
             scale: 2,
-            rotate: '45deg',
             duration: 0.2
         })
         this.pointerTimeline.pause()
 
-        this.init()
-    }
-
-    init() {
-        // this.initSensor()
         this.normalizePosition = { x: 0, y: 0.5 }
 
     }
@@ -83,25 +90,40 @@ export default class Scope {
                 found: false,
                 isFocus: true,
                 icon: this.markers[1],
+                progressTl: this.setProgressTimeline(this.markers[1]),
                 slug: "good"
             }, {
                 id: 2,
-                x: 0.63,
-                y: -0.39,
+                x: 0.47,
+                y: -0.50,
                 found: false,
                 isFocus: true,
                 icon: this.markers[0],
+                progressTl: this.setProgressTimeline(this.markers[0]),
                 slug: "bad-1"
             }, {
                 id: 3,
-                x: 0.63,
-                y: 0.39,
+                x: -1,
+                y: 0.40,
                 found: false,
                 isFocus: true,
                 icon: this.markers[2],
+                progressTl: this.setProgressTimeline(this.markers[2]),
                 slug: "bad-2"
             }
         ]
+    }
+
+    setProgressTimeline(marker: Element): gsap.core.Timeline {
+        const progressCircle = marker.querySelector('.mobileScope-marker--progress')
+        const focusTimeline = gsap.timeline()
+        focusTimeline.to(progressCircle, {
+            strokeDashoffset: 0,
+            duration: 1,
+            ease: 'none'
+        })
+        focusTimeline.pause()
+        return focusTimeline
     }
 
     deviceOrientation() {
@@ -120,8 +142,8 @@ export default class Scope {
 
     moveScope() {
         gsap.set(this.landscape, {
-            y: -this.normalizePosition.x * (this.clientSizes.width / 2 + this.mobileSizes.height ),
-            x: -this.normalizePosition.y * (this.clientSizes.height / 2 - this.mobileSizes.width)
+            y: -this.normalizePosition.x * (this.landscapeSizes.height - (this.mobileSizes.height * 2.2)),
+            x: -this.normalizePosition.y * (this.landscapeSizes.width - (this.mobileSizes.width * 2.2))
         })
     }
 
@@ -131,23 +153,25 @@ export default class Scope {
 
             if (this.normalizePosition.y <= (place.y + this.colideRange) && this.normalizePosition.y > (place.y - this.colideRange)) {
                 if (this.normalizePosition.x <= (place.x + this.colideRange) && this.normalizePosition.x > (place.x - this.colideRange)) {
-                    
+
                     if (!this.focusTarget && !this.focusTimeOut && !place.found) {
 
                         console.log(place.slug);
-                        this.focusTimeline.play()
+                        place.progressTl.play()
                         this.pointerTimeline.play()
                         place.isFocus = true
 
                         this.focusTimeOut = setTimeout(() => {
-                            gsap.set(place.icon, {
-                                fill: "#00ff00"
+                            const bg = place.icon.querySelector('.mobileScope-marker--bg')
+                            gsap.set(bg, {
+                                fill: "#22D175"
                             })
-                            $socket.io.emit('scope-focus', place.slug)
+                            $socket.io.emit('scope:focus', place.slug)
                             place.found = true
+                            this._onFocusCallback()
                         }, 1000);
                     }
-                    this.focusTarget = true
+                    this.focusTarget = place
                 } else {
                     place.isFocus = false
                     if (this.focusTarget) {
@@ -162,17 +186,14 @@ export default class Scope {
 
     resetAnim() {
         if (this.focusTarget) {
-            this.focusTimeline.restart()
-            this.focusTimeline.pause()
+            this.focusTarget.progressTl.restart()
+            this.focusTarget.progressTl.pause()
             this.pointerTimeline.reverse()
 
             clearTimeout(this.focusTimeOut)
             this.focusTimeOut = null
-            this.focusTarget = false
+            this.focusTarget = null
         }
-
-        // 
-
     }
 
     handleDeviceOrientation(data) {
@@ -197,7 +218,6 @@ export default class Scope {
             // phone is rotating left:
             x = (100 / this.MAX_X_ANGLE) * (0 - alpha)
         } else {
-
             // Stop rotation at max angle.
             if (alpha > this.MAX_X_ANGLE && alpha < 180) {
                 x = -100
@@ -206,9 +226,11 @@ export default class Scope {
             }
         }
 
+        // up/down rotation
         if ((gamma < 0 && gamma >= this.MAX_Y_ANGLE * -1)) {
             y = (100 / this.MAX_Y_ANGLE) * gamma * -1
         } else {
+            // Stop rotation at max angle.
             if (gamma < -this.MAX_Y_ANGLE) {
                 y = 100
             } else {
@@ -227,25 +249,5 @@ export default class Scope {
         this.moveScope()
         this.findPlace()
         requestAnimationFrame(this.animationLoop.bind(this))
-    }
-
-    // setRatio() {
-    //     gsap.set(this.landscape, {
-    //         width: this.clientSizes.width * 2,
-    //         height: this.clientSizes.height * 2,
-    //     })
-    // }
-
-    stepRotate() {
-        if (
-            (this.rotation.z >= Math.PI / 2 && this.rotation.z < Math.PI) ||
-            (this.rotation.z <= -Math.PI / 2 && this.rotation.z > -Math.PI)
-        ) {
-            //   console.log("Tel rotate : Vamos !");
-        }
-    }
-
-    normalize(val: number, max: number, min: number): number {
-        return (val - min) / (max - min);
     }
 }
