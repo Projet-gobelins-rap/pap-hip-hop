@@ -115,6 +115,10 @@ export default class HoodScenePage extends Vue {
         case "hide":
           this.hideOnboarding();
           this.startScene();
+           $socket.io.emit("goTo", {
+            path: "/_mobile/phone",
+            replace: true,
+          });
           this.onboardingStore.setOnboardingStep("reading");
           break;
       }
