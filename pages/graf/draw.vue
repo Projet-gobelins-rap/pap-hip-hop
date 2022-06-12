@@ -23,7 +23,12 @@
       @click.native="valideSelectedGraff"
       :text="'Choisir ce graff'"
     />
-    <ChatComponent class="graffDraw-chat" v-if="currentChat" :content="currentChat" />
+    <ChatComponent
+      class="graffDraw-chat"
+      v-if="chatElementState"
+      :content="currentChat"
+    />
+    <!-- <Onboarding :content="lookAtOnboarding"></Onboarding> -->
   </section>
 </template>
 
@@ -34,11 +39,14 @@ import $socket from "~/plugins/socket.io";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import CustomButton from "~/components/buttons/button.vue";
+import Onboarding from "~/components/contentOverlays/onboarding";
+import onboardingStore from "~/store/onboardingStore";
+
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
 
 @Component({
-  components: { 
+  components: {
     CustomButton,
     ChatComponent,
   },
@@ -72,11 +80,15 @@ export default class GraffActivity extends Vue {
   public activePreviewUrl: string = "";
   public graffInstance: Graf | null = null;
   public chatStore = getModule(chatStore, this.$store);
+  public onboardingStore = getModule(onboardingStore, this.$store);
   public wallTexture: HTMLImageElement = new Image();
 
   // get chatStep from store
   get chatStep() {
     return this.chatStore.chatStep;
+  }
+  get chatElementState() {
+    return this.chatStore.isChatDisplay;
   }
 
   mounted() {
@@ -84,12 +96,14 @@ export default class GraffActivity extends Vue {
     // this.wallTexture.src = ""
     console.log("mounted hook on HOME page");
     console.log(this.graffSketchsList);
+
     document.addEventListener("click", (e) => {
       this.handleMobileSelection();
       this.wallTexture = AssetsManager.getImage(
         IMAGE_ASSET.WALL_TEXTURE_GRAFF
       ).data;
       console.log(this.wallTexture);
+      this.chatStore.setChatDisplay(false);
     });
   }
 
@@ -109,32 +123,45 @@ export default class GraffActivity extends Vue {
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
 
     this.graffInstance = new Graf(this.graffSketchsList[0], (step: string) => {
-      console.log(step);
       this.displayChat(step);
     });
   }
 
   displayChat(step: string) {
+    console.log('yvgubh');
+    
     for (const key in this.graffDialogues) {
       const element = this.graffDialogues[key];
       if (element.primary.Identifiant === step) {
         this.currentChat = element;
-        console.log(this.currentChat);
-        console.log("yubhinjo,kl");
+        this.chatStore.setChatDisplay(true);
       }
     }
   }
 
+  hideChat() {
+    this.chatStore.setChatDisplay(false);
+  }
+
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
+    console.log(val);
     if (val) {
       switch (val) {
         case "reading":
           break;
         case "startInteraction":
+          this.hideChat()
+          this.chatStore.setChatStep("reading");
           break;
         case "nextBomb":
           this.graffInstance?.nextLayer();
+          this.hideChat()
+          this.chatStore.setChatStep("reading");
+          break;
+        case "leaveInteraction":
+          this.$router.push({ path: "/hood", replace: true });
+          this.chatStore.setChatStep("reading");
           break;
         default:
           this.displayChat(val);
