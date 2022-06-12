@@ -16,6 +16,7 @@ import Onboarding from '../../../components/contentOverlays/onboarding'
 import onboardingStore from "../../../store/onboardingStore";
 import choiceStore from "~/store/choiceStore";
 import {gsap} from 'gsap'
+import emitter from 'tiny-emitter/instance'
 
 @Component({
   components: {
@@ -130,12 +131,16 @@ export default class round2Mobile extends Vue {
         case "startRound2":
           this.hideOnboarding()
           this.displayRound2Punch();
+          this.displayBattlePlayers()
           this.onboardingStore.setOnboardingStep("reading");
           break;
       }
     }
   }
 
+  displayBattlePlayers() {
+    $socket.io.emit('battle::mobileToAddObject')
+  }
 
   round2Sequence(){
     $socket.io.on('battle::round2Sequence',()=>{

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { DoubleSide, MeshBasicMaterial } from 'three'
+import {DoubleSide, Group, MeshBasicMaterial, Scene} from 'three'
 // import { loadedCollection } from '../managers/OutfitLoader'
 import { getTextureColorSpec } from '../config/global/textureColorMapping'
 import AssetsManager from '../managers/AssetsManager'
@@ -48,7 +48,7 @@ export class Character {
         this.initAnimations()
         this.loadedCollection = AssetsManager.getLoadedCollection().outfitCollection
         this.texture = AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data
-     
+
         this.setParamsByName()
     }
 
@@ -68,9 +68,6 @@ export class Character {
         this.model.traverse(child => {
             if (child.name === "mixamorigHeadTop_End") {
                 child.add(this.loadedCollection.get(this.outfitParams.head.model))
-                let group = child.children[0]
-                group.position.y = -110
-                group.position.z = -30
             }
 
             if (child.name === 'body') {
@@ -85,7 +82,11 @@ export class Character {
         })
     }
 
-    public setParamsByName() {
+    public removeCharacter(scene:Scene,model:Group) {
+      scene.remove(model)
+    }
+
+    public setParamsByName():void {
         for (const key in outfitsData.pnj) {
             if (outfitsData.pnj[key].name === this.name) {
                 this.outfitParams = outfitsData.pnj[key]
@@ -116,4 +117,5 @@ export class Character {
 
         this.mixer.update(delta)
     }
+
 }

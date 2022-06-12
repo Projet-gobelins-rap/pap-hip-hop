@@ -158,7 +158,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   * Register preset camera positions
   */
   private _registerPresetPositions() {
-    HoodSceneConfig.cameraPositions.forEach(presetPosition => {   
+    HoodSceneConfig.cameraPositions.forEach(presetPosition => {
       HoodScene.context.registerPresetCameraPositions(presetPosition)
         console.log(HoodScene.context);
     })
@@ -180,11 +180,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
-   
-  }
- 
-  addCube() {
 
+  }
+
+  addCube() {
     const playerGltf = AssetsManager.getGltf(GLTF_ASSET.HUMANOIDE).data
     const tree = AssetsManager.getGltf(GLTF_ASSET.TREE).data.scene
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
@@ -196,7 +195,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
     // const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
     // const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
-    const vinyle = AssetsManager.getGltf(GLTF_ASSET.VINYLE).data.scene
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
     const building2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_2).data.scene
     const building3 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_3).data.scene
@@ -206,7 +204,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     console.log(city);
     this._scene.add(city);
 
-    this._collectibles = city.getObjectByName('group_collec')
+    this._collectibles = city.getObjectByName('group_collectable')
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
@@ -229,7 +227,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
     SlotsLoader.generateCollectible(this._collectibles.children)
-  
+
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -278,20 +276,20 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
     // this._scene.add( directionalLight );
-
   }
 
   collectiblesCollider() {
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
-      
-      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, transparent: true, visible: false})
+      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: false})
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
+      console.log(collider.name);
+      
       this._collectibleColliders.add(collider)
-    
+
     })
-    this._scene.add(this._collectibleColliders) 
+    this._scene.add(this._collectibleColliders)
   }
 
   bvhCollider(env) {
@@ -307,7 +305,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     env.traverse(object => {
       if (object.type == "Mesh") {
 
-        
+
         geometries.push(Helpers.generateBoxCollider(object))
 
         // const mesh = new Mesh(boxGeometry, new MeshBasicMaterial({ wireframe: true }));
@@ -325,8 +323,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     // this.collider.material.opacity = 0.5;
     // this.collider.material.transparent = true;
     // this._scene.add(this.collider);
- 
-    this._collectibleCollection = { 
+
+    this._collectibleCollection = {
       env: [this.collider],
       collectibles: this._collectibleColliders.children
     }
@@ -335,6 +333,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   lootCollectible(collectible: string) {
     let obj = this._collectibles.getObjectByName(collectible)
     this._collectibles.remove(obj)
+    let collider = this._collectibleColliders.getObjectByName(collectible)
+    this._collectibleColliders.remove(collider)
     HoodScene.onToastNotify(collectible)
   }
 
@@ -353,6 +353,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       if (intersect.length > 0) {
         if (intersect[0].distance < 1) {
           this.lootCollectible(intersect[0].object.name)
+          console.log(intersect[0].object.name);
+          
         }
       }
     }
