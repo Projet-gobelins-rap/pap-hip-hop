@@ -42,3 +42,6 @@ $purple_dark: #6330CA;
 	src: url("../../static/fonts/Gelica-medium.woff") format("woff"),
 	url("../../static/fonts/Gelica-medium.woff2") format("woff2"),
 }
+
+/* SVG */
+$arrow: "data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle r='11' transform='matrix(-1 0 0 1 12 12)' fill='%23FEFEFE' stroke='%23E7BC18' stroke-width='2'/%3E%3Cpath d='M13.25 17L9.5 12L13.25 7' stroke='%23E7BC18' stroke-width='2' stroke-linecap='square' stroke-linejoin='round'/%3E%3C/svg%3E%0A";
