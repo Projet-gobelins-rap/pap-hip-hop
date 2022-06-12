@@ -86,6 +86,15 @@ La tâche d'intégration continue se lance automatiquement lorsqu'on push sur la
 
 Lien de la preprod : [https://pap-hip-hop-site.herokuapp.com](https://pap-hip-hop-site.herokuapp.com)
 
+#### Convention de nommage des events
+
+Nous avons mis en place une convention de nommage concernant nos event. Celle-ci se base sur le **type** et **l'action de l'event** : `type::action`
+
+Exemple : 
+```
+$socket.io.emit('socket::connexion')
+```
+
 ### 🚧 Roadmap
 - [ ] Implementer PM2
 - [ ] Gestion du son
