@@ -41,8 +41,18 @@
     }
   }
   .timer{
+    margin-top: auto;
+    margin-bottom: 10px;
+    padding: 0 20px;
+    width: 100%;
+    &-indicator {
+      display: table;
+      padding: 5px;
+      background: white;
+      border-radius: 4px;
+    }
     &-gauge{
-      width: 100vw;
+      width: 100%;
       padding: 5px;
       background: white;
       border-radius: 4px;
