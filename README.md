@@ -1,4 +1,3 @@
-# TODO : Ajouter une documentation au repo
 # Pap-hip-hop
 
 ###  🧐 A propos du projet :
