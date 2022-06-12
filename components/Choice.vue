@@ -83,17 +83,26 @@ export default class Choice extends Vue {
   }
 
   updateIndexSelection(){
-    let badge:NodeList = document.querySelectorAll('.choices__item--selected .choices__itemBadge')
+    let badge = document.querySelectorAll('.choices__item--selected .choices__itemBadge')
     let initialValue = 1
-    badge.forEach((element:HTMLElement,currentIndex:number)=>{
-      // if (this.savedIds.indexOf(currentIndex)+1 === 0){
+    let currentOrder = []
+    this.savedIds.forEach((elemValue:number,index:number)=>{
+      let elem:HTMLElement =  badge[this.savedIds.indexOf(elemValue)] as HTMLElement
+      // if (this.savedIds.indexOf(elemValue)+1 === 0){
       //   element.innerHTML = `${initialValue}`
       // }else {
-        element.innerHTML = `${currentIndex+1}`
+      //   element.innerHTML = `${this.savedIds.indexOf(elemValue)}`
       // }
 
-      console.log(element,currentIndex+1)
+
+      let val = index+1
+      elem.innerHTML = `${val}`//val+1.toString()
+      console.log(badge[this.savedIds.indexOf(elemValue)],this.savedIds.indexOf(elemValue)+1,elemValue,index+1)
+
     })
+
+    // let lowestToHighest = this.savedIds.sort((a, b) => a - b);
+    // console.log(lowestToHighest,'lowest to highest')
   }
 
   validateSelection() {
