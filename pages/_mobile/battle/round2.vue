@@ -9,7 +9,7 @@
         <span>sec</span>
       </div>
       <div class="timer-gauge">
-        <span></span>
+        <span ref="ccc"></span>
       </div>
     </div>
 
@@ -88,9 +88,54 @@ export default class round2Mobile extends Vue {
   public round2Step3:object
   public round2Step4:object
   public timer:HTMLElement
+  public timerGauge:HTMLElement
 
   mounted() {
     this.timer = this.$refs.timer as HTMLElement
+    this.timerGauge = this.$refs.timerGauge as HTMLElement
+
+
+
+    // let timeleft = 10
+
+
+
+    var tl = gsap.timeline();
+    tl.to(".timer-gauge span", {width:0,ease:'none', duration:20})
+      //add blueGreenSpin label 1 second after end of timeline
+      .addLabel("timerHalf", 2)
+      //add tween at blueGreenSpin label
+      .to(".timer-gauge span", {backgroundColor:'yellow', duration:1}, "timerHalf")
+
+      .addLabel("timerPastHalf", 'timerHalf+=5')
+
+      .to(".timer-gauge span", {backgroundColor:'red', duration:1}, "timerPastHalf")
+
+    //insert tween 0.5 seconds after blueGreenSpin label
+
+
+
+
+
+    // gsap.to('.')
+    // let timerInterval = setInterval(()=>{
+    //   // if (timeleft<=0){
+    //   //   clearInterval(timerInterval)
+    //   //   this.currentOnboarding = this.battleOnboarding[1]
+    //   //   this.displayOnboarding()
+    //   //   this.displayChoice = false
+    //   //   $socket.io.emit('battle::response',null)
+    //   // }
+    //   let currentTimerValue = 10 - timeleft
+    //   this.timer.innerText = currentTimerValue.toString();
+    //
+    //   timeleft -= 1;
+    // },1000)
+
+
+
+
+
     this.displayOnboarding()
 
     this.initRound2Datas()
