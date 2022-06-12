@@ -16,7 +16,7 @@
     />
     <ChatComponent
       class="grenier-chat"
-      v-if="this.chatElementState"
+      v-if="this.chatElementState && currentChat"
       :content="currentChat"
     />
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
@@ -224,6 +224,8 @@ export default class HoodScenePage extends Vue {
             path: "/_mobile/off",
             replace: true,
           });
+          this.chatStore.setChatStep("reading");
+           break;
         case "goBattle":
           this.$router.push("/battle");
           $socket.io.emit("goTo", {

@@ -214,6 +214,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const fenceSlots = city.getObjectByName('group_fence').children
     const electricPlotSlots = city.getObjectByName('group_electric_light').children
     const lightSlots = city.getObjectByName('group_public_light').children
+    const environement = city.getObjectByName('CITY_a_baked1')
 
     console.log(tree);
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
@@ -269,13 +270,20 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this._scene.add(this.player.model);
 
-    console.log(city);
+    this.addTexture(environement, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
 
     this.bvhCollider(city)
     this.collectiblesCollider()
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
     // this._scene.add( directionalLight );
+  }
+
+  addTexture(mesh: Mesh, texture: any) {
+      console.log(texture);
+      
+      texture.flipY = false
+      mesh.material.map = texture
   }
 
   collectiblesCollider() {
