@@ -11,4 +11,39 @@ Notre expérience consiste à immergé l’utilisateur dans le futur d’un mond
 #### Partie client :
 - [Nuxt.js](https://nuxtjs.org/)
 - [Nuxt property decorator](https://github.com/nuxt-community/nuxt-property-decorator)
+- [Three.js](https://threejs.org/)
+- [Typescript](https://www.typescriptlang.org/)
+- [GSAP](https://greensock.com/gsap/)
+- [Tiny Emitter](https://www.npmjs.com/package/tiny-emitter)
 
+#### Partie serveur :
+- [Node.js](https://nodejs.org/en/)
+- [Express](https://expressjs.com/fr/)
+- [Socket.io](https://socket.io)
+
+#### Gestion des contenus :
+
+Tous les contenus du site sont gérés dynamiquement depuis un CMS headless ([Prismic](https://prismic.io/)).
+
+url de l'api :
+`https://pap-hip-hop.prismic.io/api/v2`
+
+### ✨ Installation
+
+#### ⚠️ Prérequis :
+- Node 14
+- npm 6
+
+1. Clone le repo
+
+```
+https://github.com/Projet-gobelins-rap/pap-hip-hop.git
+```
+2. Installer les dépendances npm
+```
+npm install
+```
+3. Installer les dépendances npm
+```
+npm install
+```
