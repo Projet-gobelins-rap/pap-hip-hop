@@ -2,7 +2,17 @@
   <section class="battle--mobile">
     <h1 ref="timer"></h1>
     <Choice v-if="displayChoice" :multiple-choice="false" :content="battlePunchline"></Choice>
-    <Onboarding :content="currentOnboarding"></Onboarding>
+
+    <div class="timer">
+      <div class="timer-indicator">
+        <span class="timer-indicator--second"></span>
+        <span>sec</span>
+      </div>
+      <div class="timer-gauge">
+        <span></span>
+      </div>
+    </div>
+
   </section>
 </template>
 

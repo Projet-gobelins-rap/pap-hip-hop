@@ -8,7 +8,13 @@
       <div class="choices__itemBadge"></div>
     </div>
 
-    <button v-if="this.multipleChoice"  class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER !</button>
+    <CustomButton
+      v-if="this.multipleChoice"
+      class="btn choices__validate medium"
+      @click.native="validateSelection"
+      :disabled="!isActive"
+      text="GO GO GO"
+    ></CustomButton>
   </div>
 </template>
 
