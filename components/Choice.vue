@@ -5,7 +5,7 @@
       <span>
         {{item.content[0].text}}
       </span>
-      <div class="choices__itemBadge">1</div>
+      <div class="choices__itemBadge"></div>
     </div>
 
     <button v-if="this.multipleChoice"  class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER !</button>
@@ -40,12 +40,14 @@ export default class Choice extends Vue {
 
   selectItem(index:number,item:object,event:PointerEvent) {
     let elem:HTMLElement = event.target as HTMLElement
+    let badge:HTMLElement = elem.querySelector('.choices__itemBadge')
 
     if (this.multipleChoice) {
       if(this.savedIds.length == 0){
         this.savedIds.push(index)
 
         elem.classList.toggle('choices__item--selected')
+        badge.innerHTML = `${this.savedIds.indexOf(index)+1}`
         this.isActive = false
 
       }
@@ -54,11 +56,13 @@ export default class Choice extends Vue {
           let indexPosition = this.savedIds.indexOf(index)
           this.savedIds.splice(indexPosition,1)
           elem.classList.toggle('choices__item--selected')
+          this.updateIndexSelection()
           this.isActive = false
         }else {
           if (this.savedIds.length <=3){
             this.savedIds.push(index)
             elem.classList.toggle('choices__item--selected')
+            badge.innerHTML = `${this.savedIds.indexOf(index)+1}`
             this.isActive = false
           }
           if (this.savedIds.length == 4){
@@ -76,6 +80,20 @@ export default class Choice extends Vue {
 
 
     console.log(this.savedIds)
+  }
+
+  updateIndexSelection(){
+    let badge:NodeList = document.querySelectorAll('.choices__item--selected .choices__itemBadge')
+    let initialValue = 1
+    badge.forEach((element:HTMLElement,currentIndex:number)=>{
+      // if (this.savedIds.indexOf(currentIndex)+1 === 0){
+      //   element.innerHTML = `${initialValue}`
+      // }else {
+        element.innerHTML = `${currentIndex+1}`
+      // }
+
+      console.log(element,currentIndex+1)
+    })
   }
 
   validateSelection() {
