@@ -6,7 +6,7 @@
         <p>Choisis 4 punchs parmis les 8 proposées en essayant de créer un lien entre elles</p>
       </div>
       <svg class="battle-head--icon" width="113" height="197" viewBox="0 0 113 197" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g opacity="1">
+        <g opacity="0.5">
           <g filter="url(#filter0_d_1966_1405)">
             <mask id="path-1-outside-1_1966_1405" maskUnits="userSpaceOnUse" x="-2.51267" y="4.93304" width="111.673" height="180.235" fill="black">
               <rect fill="white" x="-2.51267" y="4.93304" width="111.673" height="180.235"/>

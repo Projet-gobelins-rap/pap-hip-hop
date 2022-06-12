@@ -2,7 +2,10 @@
   <div class="choices">
 
     <div v-for="(item, i) in content" @click="selectItem(i,item,$event)"  class="choices__item">
-      <span>{{item.content[0].text}}</span>
+      <span>
+        {{item.content[0].text}}
+      </span>
+      <div class="choices__itemBadge">1</div>
     </div>
 
     <button v-if="this.multipleChoice"  class="choices__validate" @click="validateSelection" :disabled="!isActive">VALIDER !</button>
