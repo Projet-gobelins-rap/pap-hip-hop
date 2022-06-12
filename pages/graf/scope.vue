@@ -130,10 +130,6 @@ export default class GraffActivity extends Vue {
           this.setNextDialog();
           this.chatStore.setChatStep("reading");
           break;
-
-        case "custom":
-          console.log("custom 1");
-          break;
         case "startInteraction":
           $socket.io.emit("goTo", {
             path: "/_mobile/graff/scope",
@@ -149,10 +145,12 @@ export default class GraffActivity extends Vue {
             path: "/_mobile/graff/listing",
             replace: true,
           });
+          this.chatStore.setChatStep("reading");
           break;
         case "back":
           $socket.io.emit("scope:chatClossed");
           this.hideChat();
+          this.chatStore.setChatStep("reading");
           break;
 
         default:
