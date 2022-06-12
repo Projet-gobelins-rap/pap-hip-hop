@@ -224,8 +224,6 @@ export default class HoodScenePage extends Vue {
       this.addInteractionPoints();
       this.hoodInstance.cameraFollow = true;
     });
-
-    // TODO : reset camera prosition
   }
 
   // GETTERS

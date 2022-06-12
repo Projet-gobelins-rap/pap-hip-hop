@@ -2,23 +2,28 @@
   <section class="graffDraw">
     <span class="graffDraw-cursor"></span>
     <picture class="graffDraw-background">
-      <img class="graffDraw-background--img" src="/images/wall-0.png" alt="" />
+      <img class="graffDraw-background--img" :src="wallTexture.src" alt="" />
     </picture>
     <div class="graffDraw-preview"></div>
     <div class="graffDraw-container">
       <p class="graffDraw-display display"></p>
       <img class="graffDraw-img" src="" alt="" />
-      <img class="graffDraw-img--preview" v-if="!graffInstance" :src="activePreviewUrl" alt="" />
+      <img
+        class="graffDraw-img--preview"
+        v-if="!graffInstance"
+        :src="activePreviewUrl"
+        alt=""
+      />
       <canvas class="graffDraw-canvas"></canvas>
       <button class="graffDraw-reset">Passer à l'etape 2</button>
     </div>
     <CustomButton
-      class="graffDraw-preview--button"
+      class="graffDraw-button"
       v-if="activePreviewUrl && !graffInstance"
       @click.native="valideSelectedGraff"
-      :text="'choisir ce graff'"
+      :text="'Choisir ce graff'"
     />
-    <ChatComponent v-if="currentChat" :content="currentChat" />
+    <ChatComponent class="graffDraw-chat" v-if="currentChat" :content="currentChat" />
   </section>
 </template>
 
@@ -29,9 +34,11 @@ import $socket from "~/plugins/socket.io";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import CustomButton from "~/components/buttons/button.vue";
+import { AssetsManager } from "~/core/managers";
+import { IMAGE_ASSET } from "~/core/enums";
 
 @Component({
-  components: {
+  components: { 
     CustomButton,
     ChatComponent,
   },
@@ -65,6 +72,7 @@ export default class GraffActivity extends Vue {
   public activePreviewUrl: string = "";
   public graffInstance: Graf | null = null;
   public chatStore = getModule(chatStore, this.$store);
+  public wallTexture: HTMLImageElement = new Image();
 
   // get chatStep from store
   get chatStep() {
@@ -72,23 +80,27 @@ export default class GraffActivity extends Vue {
   }
 
   mounted() {
-    console.clear();
+    // console.clear();
+    // this.wallTexture.src = ""
     console.log("mounted hook on HOME page");
     console.log(this.graffSketchsList);
-
-    this.handleMobileSelection();
-
-    console.log($socket, "socket from plugin");
+    document.addEventListener("click", (e) => {
+      this.handleMobileSelection();
+      this.wallTexture = AssetsManager.getImage(
+        IMAGE_ASSET.WALL_TEXTURE_GRAFF
+      ).data;
+      console.log(this.wallTexture);
+    });
   }
 
   handleMobileSelection() {
     $socket.io.on("graffSelected", (idx) => {
       this.activePreview = this.graffSketchsList[idx];
-     
+
       this.activePreviewUrl = this.activePreview[
         this.activePreview.length - 1
       ].layer.url;
-       console.log(this.activePreviewUrl);
+      console.log(this.activePreviewUrl);
     });
   }
 
@@ -122,7 +134,7 @@ export default class GraffActivity extends Vue {
         case "startInteraction":
           break;
         case "nextBomb":
-          this.graffInstance?.nextLayer()
+          this.graffInstance?.nextLayer();
           break;
         default:
           this.displayChat(val);

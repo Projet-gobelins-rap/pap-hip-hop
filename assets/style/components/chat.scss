@@ -16,6 +16,7 @@
     border-radius: 30px;
     position: relative;
   }
+
   &-infos {
     display: flex;
     align-items: center;
@@ -73,10 +74,10 @@
   }
   &-text {
     p {
-      @include text(24px);
+      @include text(20px);
     }
     strong {
-      @include text(24px, 1.2, $darkGrey, 700);
+      @include text(20px, 1.2, $darkGrey, 700);
     }
   }
   &-choices {
@@ -87,7 +88,7 @@
   }
 
   &-choice {
-    margin: 16px 0 0;
+    margin: 12px 0 0;
   }
 }
 

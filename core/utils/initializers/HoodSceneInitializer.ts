@@ -215,7 +215,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const electricPlotSlots = city.getObjectByName('group_electric_light').children
     const lightSlots = city.getObjectByName('group_public_light').children
 
-    // SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
+    console.log(tree);
+    SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
+    
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
     // SlotsLoader.populateSlots(busSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
     SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
