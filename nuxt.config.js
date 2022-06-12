@@ -50,7 +50,8 @@ export default {
   loading: false,
 
   env: {
-    ip: 'https://192.168.8.101:3002'
+    ip: 'https://192.168.8.101:3002',
+    preprod: 'https://pap-hip-hop-site.herokuapp.com'
   },
 
   /*
