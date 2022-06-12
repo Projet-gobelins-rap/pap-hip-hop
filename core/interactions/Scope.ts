@@ -39,7 +39,12 @@ export default class Scope {
     // TODO : create type for "place" object
     public focusTarget: any | null = null
 
-    constructor() {
+    //callback
+    private _onFocusCallback: Function
+
+    constructor(focusCallback: Function) {
+
+        this._onFocusCallback = focusCallback || function ()  {}
 
         this.landscape = document.querySelector('.mobileScope-wrapper')
         this.pointer = document.querySelector('.mobileScope-pointer')
@@ -66,6 +71,7 @@ export default class Scope {
         this.pointerTimeline.pause()
 
         this.normalizePosition = { x: 0, y: 0.5 }
+
     }
 
     start() {
@@ -160,8 +166,9 @@ export default class Scope {
                             gsap.set(bg, {
                                 fill: "#22D175"
                             })
-                            $socket.io.emit('scope-focus', place.slug)
+                            $socket.io.emit('scope:focus', place.slug)
                             place.found = true
+                            this._onFocusCallback()
                         }, 1000);
                     }
                     this.focusTarget = place

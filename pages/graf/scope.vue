@@ -1,20 +1,26 @@
 <template>
   <section class="scope desktop">
     {{ this.graf }}
-    <img class="scope-background" src="/images/graf/city-rooftop.png" alt="" />
-    <ChatComponent v-if="currentChat" :content="currentChat" />
+    <img class="scope-background" :src="cityImage.src" alt="" />
+    <ChatComponent v-if="chatElementState" :content="currentChat" />
+    <Onboarding :content="lookAtOnboarding"></Onboarding>
   </section>
 </template>
-
+ 
 <script lang="ts">
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
+import Onboarding from "~/components/contentOverlays/onboarding";
+import onboardingStore from "~/store/onboardingStore";
 import $socket from "~/plugins/socket.io";
+import { AssetsManager } from "~/core/managers";
+import { IMAGE_ASSET } from "~/core/enums";
 
 @Component({
   components: {
     ChatComponent,
+    Onboarding,
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -22,6 +28,7 @@ import $socket from "~/plugins/socket.io";
         .data;
       const conversation = scopeContent?.slices1;
       const focusPoints = scopeContent?.slices2;
+      const lookAtOnboarding = scopeContent?.slices5[3].items;
 
       const currentChat = conversation[0];
 
@@ -29,6 +36,7 @@ import $socket from "~/plugins/socket.io";
         conversation,
         currentChat,
         focusPoints,
+        lookAtOnboarding,
       };
     } catch (e) {
       // Returns error page
@@ -39,21 +47,24 @@ import $socket from "~/plugins/socket.io";
 export default class GraffActivity extends Vue {
   public graf: string = "Scope";
   public scopeContent: object;
-  public conversation: any;
+  public conversation: object;
   public chatDialogStep: string;
   public focusPoints: object;
   public currentChat: object;
   public currentChatNum: number = 0;
+  public lookAtOnboarding: object;
   public chatStore = getModule(chatStore, this.$store);
+  public onboardingStore = getModule(onboardingStore, this.$store);
+  public cityImage: HTMLImageElement = new Image();
 
   mounted() {
-    // console.clear();
-    // console.log($socket);
-
-    $socket.io.on("scope-focus", (id) => {
+    this.cityImage = AssetsManager.getImage(IMAGE_ASSET.CITY_ROOFTOP).data;
+    this.displayChat();
+    $socket.io.on("scope:focus", (id) => {
+      this.hideOnboarding();
       this.displayFocusPointInfos(id);
+      this.displayChat();
     });
-    console.log(this.focusPoints);
   }
 
   displayFocusPointInfos(id: string) {
@@ -87,6 +98,24 @@ export default class GraffActivity extends Vue {
   get chatStep() {
     return this.chatStore.chatStep;
   }
+  get chatElementState() {
+    return this.chatStore.isChatDisplay;
+  }
+
+  displayChat() {
+    this.chatStore.setChatDisplay(true);
+  }
+
+  hideChat() {
+    this.chatStore.setChatDisplay(false);
+  }
+  displayOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(true);
+  }
+
+  hideOnboarding() {
+    this.onboardingStore.setOnboardingDisplay(false);
+  }
 
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
@@ -110,6 +139,8 @@ export default class GraffActivity extends Vue {
             path: "/_mobile/graff/scope",
             replace: true,
           });
+          this.hideChat();
+          this.displayOnboarding();
           break;
         case "nextStep":
           this.$router.push("/graf/draw");
@@ -120,7 +151,8 @@ export default class GraffActivity extends Vue {
           });
           break;
         case "back":
-          // TODO : back like in grenier scene
+          $socket.io.emit("scope:chatClossed");
+          this.hideChat();
           break;
 
         default:

@@ -6,8 +6,6 @@
       <span class="mobileScope-progress">
         <span class="mobileScope-progress--bar"></span>
       </span>
-      <!-- <span class="mobileScope-debug--nx">{{ nomalizeTranslation.x.toFixed(2) }}</span>
-      <span class="mobileScope-debug--ny">{{ nomalizeTranslation.y.toFixed(2) }}</span> -->
     </div>
     <div class="mobileScope-sight">
       <svg
@@ -148,7 +146,7 @@
         </svg>
       </div>
     </div>
-    <Onboarding :content="currentOnboarding"></Onboarding>
+    <Onboarding v-if="onboardingState" :content="currentOnboarding"></Onboarding>
   </section>
 </template>
 
@@ -161,6 +159,7 @@ import onboardingStore from "~/store/onboardingStore";
 import { IMAGE_ASSET } from "~/core/enums";
 import permisions from "~/core/utils/Permisions";
 import { AssetsManager } from "~/core/managers";
+import $socket from "~/plugins/socket.io";
 
 @Component({
   components: {
@@ -175,13 +174,14 @@ import { AssetsManager } from "~/core/managers";
 
       const rotateOnboarding = graffContent?.slices5[0].items;
       const gameplayOnboarding = graffContent?.slices5[1].items;
+      const lootAtOnboarding = graffContent?.slices5[2].items;
 
-      // const currentChat = battleChat[0];
       const currentOnboarding = rotateOnboarding[0];
 
       return {
         gameplayOnboarding,
         currentOnboarding,
+        lootAtOnboarding,
       };
     } catch (e) {
       // Returns error page
@@ -194,18 +194,22 @@ export default class MobileScope extends Vue {
   public onboardingStore = getModule(onboardingStore, this.$store);
   public currentOnboarding: object;
   public gameplayOnboarding: object;
+  public lootAtOnboarding: object;
   public onboardingCounter: number = 1;
   public scopeInteraction: Scope;
   public cityImage: HTMLImageElement = new Image();
 
   mounted() {
-    this.scopeInteraction = new Scope();
+    this.scopeInteraction = new Scope(() => {
+      this.displayLookAtDesktopOverlay()
+    });
+
+    this.currentOnboarding = this.gameplayOnboarding;
     this.displayOnboarding();
 
-    setTimeout(() => {
-      this.currentOnboarding = this.gameplayOnboarding;
-      console.log(this.gameplayOnboarding);
-    }, 3000);
+    $socket.io.on("scope:chatClossed", (id) => {
+      this.onboardingStore.setOnboardingStep("closePopup");
+    });
 
     document.addEventListener(
       "click",
@@ -217,9 +221,17 @@ export default class MobileScope extends Vue {
     );
   }
 
+  displayLookAtDesktopOverlay() {
+    this.currentOnboarding = this.lootAtOnboarding;
+    this.displayOnboarding();
+  }
+
   // GETTERS
   get onboardingStep() {
     return this.onboardingStore.onboardingStep;
+  }
+  get onboardingState() {
+    return this.onboardingStore.isOnboardingDisplay;
   }
 
   displayOnboarding() {
