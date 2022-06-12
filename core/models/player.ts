@@ -1,5 +1,5 @@
 import { Character } from "./character";
-import { A, D, DIRECTIONS, S, W } from '../utils/KeyDisplay'
+import { A, D, DIRECTIONS, W } from '../utils/KeyDisplay'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Camera, Mesh, Object3D, Quaternion, Raycaster, Vector3 } from "three";
 
@@ -44,8 +44,8 @@ export class Player extends Character {
         this._initRaycast()
     }
 
-    public setParamsByName() {
-        // super.setParamsByName()
+    // overide parent methode
+    public setParamsByName(): void {
         this.outfitParams = outfitsData.player
 
         Helpers.traverse(this.outfitParams, (key, value) => {
@@ -57,25 +57,25 @@ export class Player extends Character {
         this.loadOutfit()
     }
 
-    private _initRaycast() {
-        
+    private _initRaycast(): void {
+        // init raycast from player to forwards
         this.raycaster = new Raycaster(
             new Vector3().copy(this.model.position),
             this.walkDirection.negate()
         )
     }
 
-    public updateControls(delta: number, keysPressed: any) {
+    // animation loop
+    public updateControls(delta: number, keysPressed: any): void {
         this._keysPressed = keysPressed
         this._keypressedHandler()
         super.update(delta)
         this._displacements(delta)
     }
 
-    private _keypressedHandler() {
+    private _keypressedHandler(): void {
         const directionPressed = DIRECTIONS.some(key => this._keysPressed[key] == true)
 
-        // TODO : actions handle
         if (directionPressed && this.toggleRun) {
             this.animationPlayed = 'run'
         } else if (directionPressed) {
@@ -87,36 +87,44 @@ export class Player extends Character {
         }
     }
 
-    private _displacements(delta) {
+    private _displacements(delta) : void {
 
         if (this.currentAction == 'run' || this.currentAction == 'walk') {
             this.walkTimeOut += delta
-            
+
             // calculate towards camera direction
             var direction = this._directionOffset()
 
+            // get model and camera world direction to define walk direction and camera direction vectors 3
             this.model.getWorldDirection(this.walkDirection);
             this.camera.getWorldDirection(this.camDirection);
             this.walkDirection.y = 0
             this.walkDirection.normalize()
+            // fix walk direction
             this.walkDirection.negate()
 
             // run/walk velocity
             const velocity = this.currentAction == 'run' ? this.runVelocity : this.walkVelocity
 
+            // udpate player rotation
             this.model.rotation.y -= direction.orientation * delta * 5
 
-            if(!this.blocked) {
-
+            // if player's forward raycast collide with environement, player can't move forward
+            // rotation isn't blocked to not be stuck in collision
+            if (!this.blocked) {
                 this.model.translateZ(direction.move * delta * velocity)
             }
 
+            // disable orbit control when player is in motion
             this.orbitControl.enableRotate = false
             this._updateCameraPosition()
+
+            // run faster after 1.5s, like in Battlefield game eheh
             if (this.walkTimeOut > 1.5 && !this.toggleRun) {
                 this.toggleRun = true
             }
         } else {
+            // motionless, enable orbit control and reset run
             this.orbitControl.enableRotate = true
             this.walkTimeOut = 0
             this.toggleRun = false
@@ -126,21 +134,23 @@ export class Player extends Character {
         this._updateRaycast()
     }
 
-    private _updateRaycast() {
-        // this.walkDirection.y -=5
+    private _updateRaycast(): void {
+        // copy model position to keep raycast's origin on player position
         this.raycaster.ray.origin.copy(this.model.position)
+        // copy allow to modify y position, without copy, player fly away
         this.raycaster.ray.origin.y += 3
         this.raycaster.ray.direction = this.walkDirection.negate()
     }
 
 
-    private _updateCameraPosition() {
+    private _updateCameraPosition(): void {
+        // create smooth camera moves
         this.camera.position.x = Helpers.lerp(this.camera.position.x, this.model.position.x - Math.sin(this.model.rotation.y) * 25, 0.06)
         this.camera.position.z = Helpers.lerp(this.camera.position.z, this.model.position.z - Math.cos(this.model.rotation.y) * 25, 0.06)
         this.camera.position.y = Helpers.lerp(this.camera.position.y, 15, 0.03)
     }
 
-    private _updateCameraTarget() {
+    private _updateCameraTarget(): void {
         // update camera target
         this.cameraTarget.x = this.model.position.x
         this.cameraTarget.y = this.model.position.y + 10
@@ -148,19 +158,22 @@ export class Player extends Character {
         this.orbitControl.target = this.cameraTarget
     }
 
-    private _directionOffset() {
-        var direction = {
+    private _directionOffset(): {
+        move: number,
+        orientation: number
+    } {
+        const direction = {
             move: 0,
             orientation: 0
         }
 
+        // set move value for moving foward and orientation value for player rotation
         if (this._keysPressed[W]) {
             direction.move = 1
-
             if (this._keysPressed[A]) {
                 direction.orientation = -Math.PI / 4 // w+a
             } else if (this._keysPressed[D]) {
-                direction.orientation =  Math.PI / 4 // w+d
+                direction.orientation = Math.PI / 4 // w+d
             }
         } else if (this._keysPressed[A]) {
             direction.orientation = -Math.PI / 4 // a
