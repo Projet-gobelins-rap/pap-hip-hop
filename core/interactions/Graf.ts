@@ -6,11 +6,10 @@ export default class Graf {
 
   public grafCanvas: HTMLCanvasElement
   public ctx: CanvasRenderingContext2D
-  public display: HTMLElement
-  public cursor: HTMLElement
+  public display: Element
+  public cursor: Element
   public img: HTMLImageElement
   public revealImg: HTMLImageElement
-  public resetStepBtn: HTMLElement
   private size: {
     width: number
     height: number
@@ -37,13 +36,13 @@ export default class Graf {
 
   private _onStepChangeCallback: Function
 
-  constructor(layerLister: any, stepChangeCallback: Function) {
-    console.log("list ---> ", layerLister);
+  constructor(layerList: any, stepChangeCallback: Function) {
+    console.log("list ---> ", layerList);
 
     this.display = document.querySelector('.graffDraw-display')!
     this.grafCanvas = document.querySelector('.graffDraw-canvas')!
     this.cursor = document.querySelector('.graffDraw-cursor')!
-    this.layers = layerLister
+    this.layers = layerList
 
     this.imgUrl = this.layers[0].layer.url
     this.img = new Image()
@@ -52,7 +51,6 @@ export default class Graf {
 
     this.ctx = this.grafCanvas.getContext('2d')!
     this.revealImg = document.querySelector('.graffDraw-img')!
-    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
 
     this.erasedPercentage = 0
     this.canvasUpdated = false
@@ -149,7 +147,7 @@ export default class Graf {
   }
 
   layerEnded() {
-    if (this.layerCount < this.layers.length - 1) {
+    if (this.layerCount < this.layers.length - 2) {
 
       this._onStepChangeCallback('nextLayer')
  

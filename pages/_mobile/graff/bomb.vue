@@ -6,7 +6,7 @@
       class="graffBomb-onboarding"
       :content="currentOnboarding"
     ></Onboarding>
-    <div class="graffBomb-container">
+    <div :class="isStart ? 'graffBomb-container ' : 'graffBomb-container hide'">
       <span class="graffBomb-spray"></span>
       <CustomButton class="graffBomb-button white large" :text="'pp'" />
       <CustomButton
@@ -105,15 +105,14 @@ export default class Bomb extends Vue {
   public currentOnboarding: object;
   public graffBombInstance: GraffBomb;
   public wallTexture: HTMLImageElement = new Image();
+  public isStart: boolean = false;
 
   mounted() {
-    this.graffBombInstance = new GraffBomb();
+    
     this.displayOnboarding();
-    document.addEventListener("click", (e) => {
-      this.wallTexture = AssetsManager.getImage(
-        IMAGE_ASSET.WALL_TEXTURE_GRAFF
-      ).data;
-    });
+    // this.wallTexture = AssetsManager.getImage(
+    //   IMAGE_ASSET.WALL_TEXTURE_GRAFF
+    // ).data;
     console.log(this.currentOnboarding, "<--- current onboarrding mobile");
   }
 
@@ -129,6 +128,13 @@ export default class Bomb extends Vue {
   hideOnboarding() {
     this.onboardingStore.setOnboardingDisplay(false);
   }
+
+  startInteraction() {
+    this.isStart = true;
+    this.graffBombInstance = new GraffBomb();
+    this.graffBombInstance.startTicker();
+  }
+
   @Watch("onboardingStep", { immediate: true, deep: true })
   setOnboardingStep(val: string) {
     if (val) {
@@ -138,8 +144,10 @@ export default class Bomb extends Vue {
           break;
         case "closePopup":
           this.hideOnboarding();
+          this.startInteraction();
+
           this.onboardingStore.setOnboardingStep("reading");
-          this.graffBombInstance.startTicker();
+         
           break;
       }
     }

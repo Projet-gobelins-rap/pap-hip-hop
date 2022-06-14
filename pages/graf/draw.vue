@@ -6,6 +6,7 @@
     </picture>
     <div class="graffDraw-preview"></div>
     <div class="graffDraw-container">
+
       <p class="graffDraw-display display"></p>
       <img class="graffDraw-img" src="" alt="" />
       <img
@@ -15,8 +16,7 @@
         alt=""
       />
       <canvas class="graffDraw-canvas"></canvas>
-      <button class="graffDraw-reset">Passer à l'etape 2</button>
-    </div>
+      </div>
     <CustomButton
       class="graffDraw-button"
       v-if="activePreviewUrl && !graffInstance"
@@ -122,7 +122,7 @@ export default class GraffActivity extends Vue {
     console.log(this.graffSketchsList);
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
 
-    this.graffInstance = new Graf(this.graffSketchsList[0], (step: string) => {
+    this.graffInstance = new Graf(this.activePreview, (step: string) => {
       this.displayChat(step);
     });
   }
