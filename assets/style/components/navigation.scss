@@ -3,6 +3,10 @@
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
 
   &-icon {
     @include text(18px);
@@ -11,6 +15,7 @@
     padding: 20px;
     cursor: pointer;
     position: relative;
+    pointer-events: all;
   }
 
   &-panel {
@@ -24,6 +29,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 80px 0;
   }
 
   @media screen and (max-width: 800px) {
@@ -46,6 +52,8 @@
       display: block;
       text-decoration: none;
       @include text(28px);
+
+      pointer-events: all;
     }
   }
 }

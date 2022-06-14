@@ -26,7 +26,6 @@ export default class mobileConnection extends Vue {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     this.roomID = urlParams.get('room')
-    alert(this.roomID )
     this.connect()
 
     $socket.io.on("server:paired", (user) => {
@@ -35,7 +34,6 @@ export default class mobileConnection extends Vue {
   }
 
   connect() {
-    // permisions.requestOrientation();
     $socket.io.emit("server:join", this.roomID);
   }
 }
