@@ -46,7 +46,7 @@
     <div class="onboarding-full" v-else>
       <div class="onboarding-container">
         <img class="onboarding-full--sticker" :src="content.sticker.url" alt="" />
-        <img class="onboarding-full--icon" :src="content.icon.url" alt="" />
+        <img v-if="content.icon" class="onboarding-full--icon" :src="content.icon.url" alt="" />
         <PrismicRichText class="onboarding-full--text" :field="content.description" />
 
         <CustomButton
@@ -57,6 +57,7 @@
         >
         </CustomButton>
       </div>
+      <div class="onboarding-fullOverlay"></div>
 
     </div>
   </div>
