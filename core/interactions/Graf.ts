@@ -37,7 +37,6 @@ export default class Graf {
   private _onStepChangeCallback: Function
 
   constructor(layerList: any, stepChangeCallback: Function) {
-    console.log("list ---> ", layerList);
 
     this.display = document.querySelector('.graffDraw-display')!
     this.grafCanvas = document.querySelector('.graffDraw-canvas')!
@@ -148,12 +147,8 @@ export default class Graf {
 
   layerEnded() {
     if (this.layerCount < this.layers.length - 2) {
-
       this._onStepChangeCallback('nextLayer')
- 
-
     } else {
-      console.log('fin');
       this._onStepChangeCallback('finish')
     }
   }
@@ -184,7 +179,7 @@ export default class Graf {
 
   getErasedPercent() {
     const imgData = this.ctx.getImageData(0, 0, this.size.width, this.size.height)
-    // console.log(imgData)
+ 
     const pixelCount = this.size.width * this.size.height;
     const arrayElemsCount = pixelCount * 4; // for components (rgba) per pixel.
     const dataArray = imgData.data;
