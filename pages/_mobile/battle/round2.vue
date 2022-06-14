@@ -55,7 +55,7 @@
     <Onboarding :content="currentOnboarding"></Onboarding>
     <Choice v-if="displayChoice" :multiple-choice="false" :content="battlePunchline"></Choice>
 
-    <div v-if="displayChoice" class="timer">
+    <div class="timer">
       <div class="timer-indicator">
         <span class="timer-indicator--second" ref="timerIndicator"></span>
         <span>sec</span>
@@ -144,6 +144,7 @@ export default class round2Mobile extends Vue {
   public timerIndicator:HTMLElement
   public timerVal = { value: 20 };
   public tl:GSAPTimeline
+  public tl2:GSAPTimeline
   mounted() {
     this.timer = this.$refs.timer as HTMLElement
     this.timerGauge = this.$refs.timerGauge as HTMLElement
@@ -230,28 +231,28 @@ export default class round2Mobile extends Vue {
   }
 
   timerAnimation() {
-    this.tl = gsap.timeline();
-    // gsap.to('.timer-indicator--second',{duration:this.timerVal.value,})
-   this.tl.to(".timer-gauge span", {width:0,ease:'none', duration:20,
-     onStart:()=>{
-       gsap.to(this.timerVal,{value:0,ease: "none",duration:this.timerVal.value,onUpdate:this.updateNum})
-     },
-     onComplete:()=>{
-       this.currentOnboarding = this.battleOnboarding[1]
-       this.displayOnboarding()
-       this.displayChoice = false
-       $socket.io.emit('battle::response',null)
-     }})
-      //add blueGreenSpin label 1 second after end of timeline
-      .addLabel("timerHalf", 2)
-      //add tween at blueGreenSpin label
-      .to(".timer-gauge span", {backgroundColor:'#EDCC50', duration:1}, "timerHalf")
-      .to(".timer-indicator", {color:'#EDCC50', duration:1}, "timerHalf")
-
-      .addLabel("timerPastHalf", 'timerHalf+=5')
-
-      .to(".timer-gauge span", {backgroundColor:'#ED6787', duration:1}, "timerPastHalf")
-      .to(".timer-indicator", {color:'#ED6787', duration:1}, "timerPastHalf")
+   //  this.tl = gsap.timeline();
+   //  // gsap.to('.timer-indicator--second',{duration:this.timerVal.value,})
+   // this.tl.to(".timer-gauge span", {width:0,ease:'none', duration:20,
+   //   onStart:()=>{
+   //     gsap.to(this.timerVal,{value:0,ease: "none",duration:this.timerVal.value,onUpdate:this.updateNum})
+   //   },
+   //   onComplete:()=>{
+   //     this.currentOnboarding = this.battleOnboarding[1]
+   //     this.displayOnboarding()
+   //     this.displayChoice = false
+   //     $socket.io.emit('battle::response',null)
+   //   }})
+   //    //add blueGreenSpin label 1 second after end of timeline
+   //    .addLabel("timerHalf", 2)
+   //    //add tween at blueGreenSpin label
+   //    .to(".timer-gauge span", {backgroundColor:'#EDCC50', duration:1}, "timerHalf")
+   //    .to(".timer-indicator", {color:'#EDCC50', duration:1}, "timerHalf")
+   //
+   //    .addLabel("timerPastHalf", 'timerHalf+=5')
+   //
+   //    .to(".timer-gauge span", {backgroundColor:'#ED6787', duration:1}, "timerPastHalf")
+   //    .to(".timer-indicator", {color:'#ED6787', duration:1}, "timerPastHalf")
 
 
   }
@@ -264,14 +265,48 @@ export default class round2Mobile extends Vue {
     this.displayChoice = true
 
 
-    this.timerAnimation()
+    this.tl = gsap.timeline();
+    this.tl2 = gsap.timeline();
+
+    // gsap.to('.timer-indicator--second',{duration:this.timerVal.value,})
+
+    gsap.to('.timer',{opacity:1})
+    this.tl2.to(this.timerVal,{value:0,ease: "none",duration:this.timerVal.value,onUpdate:this.updateNum})
+    this.tl.to(".timer-gauge span", {width:0,ease:'none', duration:20,
+      onStart:()=>{
+      },
+      onComplete:()=>{
+        this.currentOnboarding = this.battleOnboarding[1]
+        this.displayOnboarding()
+        this.displayChoice = false
+        $socket.io.emit('battle::response',null)
+      }})
+      //add blueGreenSpin label 1 second after end of timeline
+      .addLabel("timerHalf", 2)
+      //add tween at blueGreenSpin label
+      .to(".timer-gauge span", {backgroundColor:'#EDCC50', duration:1}, "timerHalf")
+      .to(".timer-indicator", {color:'#EDCC50', duration:1}, "timerHalf")
+
+      .addLabel("timerPastHalf", 'timerHalf+=5')
+
+      .to(".timer-gauge span", {backgroundColor:'#ED6787', duration:1}, "timerPastHalf")
+      .to(".timer-indicator", {color:'#ED6787', duration:1}, "timerPastHalf")
+
+
+    // this.timerAnimation()
     // on clear le timer si on a cliquer sur un bouton
     this.$on('choice::updateState',()=>{
 
-      console.log('update state')
-      // clearInterval(timerInterval)
+      console.log('🚧🚧🚧update state🚧🚧🚧🚧')
+
+      gsap.to('.timer',{opacity:0})
+      this.tl.restart()
       this.tl.kill()
-      return
+
+      this.tl2.restart()
+      this.tl2.kill()
+
+      // return
     })
 
     console.log(this.roundStep,'STEP de chaque round')
