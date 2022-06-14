@@ -15,7 +15,6 @@
         alt=""
       />
       <canvas class="graffDraw-canvas"></canvas>
-      <button class="graffDraw-reset">Passer à l'etape 2</button>
     </div>
     <CustomButton
       class="graffDraw-button"
@@ -28,7 +27,6 @@
       v-if="chatElementState"
       :content="currentChat"
     />
-    <!-- <Onboarding :content="lookAtOnboarding"></Onboarding> -->
   </section>
 </template>
 
@@ -74,7 +72,7 @@ import { IMAGE_ASSET } from "~/core/enums";
 })
 export default class GraffActivity extends Vue {
   public graffSketchsList: any;
-  public graffDialogues: object;
+  public graffDialogues: any;
   public currentChat: object;
   public activePreview: any | null = null;
   public activePreviewUrl: string = "";
@@ -92,19 +90,11 @@ export default class GraffActivity extends Vue {
   }
 
   mounted() {
-    // console.clear();
-    // this.wallTexture.src = ""
-    console.log("mounted hook on HOME page");
-    console.log(this.graffSketchsList);
-
-    document.addEventListener("click", (e) => {
-      this.handleMobileSelection();
-      this.wallTexture = AssetsManager.getImage(
-        IMAGE_ASSET.WALL_TEXTURE_GRAFF
-      ).data;
-      console.log(this.wallTexture);
-      this.chatStore.setChatDisplay(false);
-    });
+    this.handleMobileSelection();
+    this.wallTexture = AssetsManager.getImage(
+      IMAGE_ASSET.WALL_TEXTURE_GRAFF
+    ).data;
+    this.chatStore.setChatDisplay(false);
   }
 
   handleMobileSelection() {
@@ -114,22 +104,18 @@ export default class GraffActivity extends Vue {
       this.activePreviewUrl = this.activePreview[
         this.activePreview.length - 1
       ].layer.url;
-      console.log(this.activePreviewUrl);
     });
   }
 
   valideSelectedGraff() {
-    console.log(this.graffSketchsList);
     $socket.io.emit("goTo", { path: "/_mobile/graff/bomb", replace: true });
 
-    this.graffInstance = new Graf(this.graffSketchsList[0], (step: string) => {
+    this.graffInstance = new Graf(this.activePreview, (step: string) => {
       this.displayChat(step);
     });
   }
 
   displayChat(step: string) {
-    console.log('yvgubh');
-    
     for (const key in this.graffDialogues) {
       const element = this.graffDialogues[key];
       if (element.primary.Identifiant === step) {
@@ -145,18 +131,17 @@ export default class GraffActivity extends Vue {
 
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
-    console.log(val);
     if (val) {
       switch (val) {
         case "reading":
           break;
         case "startInteraction":
-          this.hideChat()
+          this.hideChat();
           this.chatStore.setChatStep("reading");
           break;
         case "nextBomb":
           this.graffInstance?.nextLayer();
-          this.hideChat()
+          this.hideChat();
           this.chatStore.setChatStep("reading");
           break;
         case "leaveInteraction":
