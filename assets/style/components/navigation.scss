@@ -2,7 +2,8 @@
   z-index: 1000;
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
 
   &-icon {
     @include text(18px);
