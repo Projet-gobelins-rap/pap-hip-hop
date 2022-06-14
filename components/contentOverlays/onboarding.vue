@@ -1,6 +1,6 @@
 <template>
   <div v-if="this.onboardingDisplay" class="onboarding">
-    <div class="onboarding-container"  v-if="!content[0].isFullscreen">
+    <div class="onboarding-container"  v-if="!content.isFullscreen">
        <img
           class="onboarding-sticker"
           src="/images/sticker-commande.png"
@@ -15,7 +15,7 @@
         @swiper="onSwiper"
         @slideChange="onSlideChange"
       >
-       
+
         <swiper-slide
           v-for="(item, i) in content"
           :key="`slice-item-${i}`"
@@ -44,8 +44,20 @@
     </div>
 
     <div class="onboarding-full" v-else>
-      <img class="onboarding-full--icon" :src="content[0].icon.url" alt="" />
-      <PrismicRichText class="onboarding-full--text" :field="content[0].description" />
+      <div class="onboarding-container">
+        <img class="onboarding-full--sticker" :src="content.sticker.url" alt="" />
+        <img class="onboarding-full--icon" :src="content.icon.url" alt="" />
+        <PrismicRichText class="onboarding-full--text" :field="content.description" />
+
+        <CustomButton
+          v-if="content.isClickable"
+
+          class="onboarding-button small"
+          :text="'J\'ai capté !'"
+        >
+        </CustomButton>
+      </div>
+
     </div>
   </div>
 </template>
@@ -74,7 +86,7 @@ export default class Onboarding extends Vue {
   public onboardingStore = getModule(onboardingStore, this.$store);
   mounted() {
     console.log("Onboarding component");
-    console.log(this.content, "::: ppp");
+    console.log(this.content[0], "::: ppp");
   }
 
   hideOnboarding() {

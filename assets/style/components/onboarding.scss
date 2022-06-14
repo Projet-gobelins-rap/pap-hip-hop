@@ -20,12 +20,16 @@
     flex-direction: column;
     padding: 20px;
     position: relative;
-    background-color: $black;
+    //background-color: $black;
 
     &--text {
       p {
-        @include text(16px, 20px, $white);
+        @include text(16px, 20px, $black);
       }
+    }
+    &--sticker {
+      position: absolute;
+      top: -20%;
     }
   }
 
@@ -93,7 +97,7 @@
   .swiper-button-next {
     transform: rotate(180deg);
   }
-  
+
   .swiper-button-disabled {
     opacity: 0;
     visibility: hidden;
