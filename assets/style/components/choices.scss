@@ -22,6 +22,10 @@
       pointer-events: none;
       @include text(14px, 20px, $white, 500);
     }
+    svg {
+      width: 14px;
+      height: 14px;
+    }
   }
   &__itemBadge {
     display: none;

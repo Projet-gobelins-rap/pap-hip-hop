@@ -230,32 +230,7 @@ export default class round2Mobile extends Vue {
     return this.onboardingStore.onboardingStep;
   }
 
-  timerAnimation() {
-   //  this.tl = gsap.timeline();
-   //  // gsap.to('.timer-indicator--second',{duration:this.timerVal.value,})
-   // this.tl.to(".timer-gauge span", {width:0,ease:'none', duration:20,
-   //   onStart:()=>{
-   //     gsap.to(this.timerVal,{value:0,ease: "none",duration:this.timerVal.value,onUpdate:this.updateNum})
-   //   },
-   //   onComplete:()=>{
-   //     this.currentOnboarding = this.battleOnboarding[1]
-   //     this.displayOnboarding()
-   //     this.displayChoice = false
-   //     $socket.io.emit('battle::response',null)
-   //   }})
-   //    //add blueGreenSpin label 1 second after end of timeline
-   //    .addLabel("timerHalf", 2)
-   //    //add tween at blueGreenSpin label
-   //    .to(".timer-gauge span", {backgroundColor:'#EDCC50', duration:1}, "timerHalf")
-   //    .to(".timer-indicator", {color:'#EDCC50', duration:1}, "timerHalf")
-   //
-   //    .addLabel("timerPastHalf", 'timerHalf+=5')
-   //
-   //    .to(".timer-gauge span", {backgroundColor:'#ED6787', duration:1}, "timerPastHalf")
-   //    .to(".timer-indicator", {color:'#ED6787', duration:1}, "timerPastHalf")
 
-
-  }
 
   displayRound2Punch(){
     console.log("R2 PUNCH")
@@ -268,8 +243,6 @@ export default class round2Mobile extends Vue {
     this.tl = gsap.timeline();
     this.tl2 = gsap.timeline();
 
-    // gsap.to('.timer-indicator--second',{duration:this.timerVal.value,})
-
     gsap.to('.timer',{opacity:1})
     this.tl2.to(this.timerVal,{value:0,ease: "none",duration:this.timerVal.value,onUpdate:this.updateNum})
     this.tl.to(".timer-gauge span", {width:0,ease:'none', duration:20,
@@ -279,10 +252,10 @@ export default class round2Mobile extends Vue {
         this.currentOnboarding = this.battleOnboarding[1]
         this.displayOnboarding()
         this.displayChoice = false
-        $socket.io.emit('battle::response',null)
+        $socket.io.emit('battle::response',false)
       }})
       //add blueGreenSpin label 1 second after end of timeline
-      .addLabel("timerHalf", 2)
+      .addLabel("timerHalf", 8)
       //add tween at blueGreenSpin label
       .to(".timer-gauge span", {backgroundColor:'#EDCC50', duration:1}, "timerHalf")
       .to(".timer-indicator", {color:'#EDCC50', duration:1}, "timerHalf")
@@ -297,8 +270,6 @@ export default class round2Mobile extends Vue {
     // on clear le timer si on a cliquer sur un bouton
     this.$on('choice::updateState',()=>{
 
-      console.log('🚧🚧🚧update state🚧🚧🚧🚧')
-
       gsap.to('.timer',{opacity:0})
       this.tl.restart()
       this.tl.kill()
@@ -306,7 +277,6 @@ export default class round2Mobile extends Vue {
       this.tl2.restart()
       this.tl2.kill()
 
-      // return
     })
 
     console.log(this.roundStep,'STEP de chaque round')

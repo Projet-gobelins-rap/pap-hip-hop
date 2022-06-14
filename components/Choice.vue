@@ -5,7 +5,19 @@
       <span>
         {{item.content[0].text}}
       </span>
-      <div class="choices__itemBadge"></div>
+      <div class="choices__itemBadge">
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+             viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+          <g>
+            <g id="check">
+              <g>
+                <polygon style="fill:white;" points="11.941,28.877 0,16.935 5.695,11.24 11.941,17.486 26.305,3.123 32,8.818 			"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+
+      </div>
     </div>
 
     <CustomButton
@@ -53,7 +65,6 @@ export default class Choice extends Vue {
         this.savedIds.push(index)
 
         elem.classList.toggle('choices__item--selected')
-        badge.innerHTML = `${this.savedIds.indexOf(index)+1}`
         this.isActive = false
 
       }
@@ -62,13 +73,11 @@ export default class Choice extends Vue {
           let indexPosition = this.savedIds.indexOf(index)
           this.savedIds.splice(indexPosition,1)
           elem.classList.toggle('choices__item--selected')
-          this.updateIndexSelection()
           this.isActive = false
         }else {
           if (this.savedIds.length <=3){
             this.savedIds.push(index)
             elem.classList.toggle('choices__item--selected')
-            badge.innerHTML = `${this.savedIds.indexOf(index)+1}`
             this.isActive = false
           }
           if (this.savedIds.length == 4){
