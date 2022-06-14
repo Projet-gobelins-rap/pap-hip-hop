@@ -1,7 +1,80 @@
 .battle--mobile {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  flex-direction: column;
+
+  .battle-head {
+    position: relative;
+    padding: 0 20px;
+    width: 100%;
+    top: 0;
+    &--icon {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    &--title{
+      @include stickerFont(20px, 26px);
+      margin: 24px 0 0;
+      position: relative;
+      z-index: 2;
+    }
+    &--separator {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: white;
+      opacity: 0.4;
+      height: 2px;
+    }
+    &--intro{
+      margin: 8px 0 18px;
+      position: relative;
+      z-index: 4;
+      p {
+        @include text(16px, 20px, $white, 500);
+        font-style: italic;
+      }
+    }
+  }
+  .timer{
+    margin-top: auto;
+    margin-bottom: 10px;
+    padding: 0 20px;
+    width: 100%;
+    opacity: 0;
+    //display: none;
+    &-indicator {
+      display: table;
+      padding: 5px;
+      background: white;
+      border-radius: 4px;
+      color: $green;
+      margin-bottom: 10px;
+      &--second {
+        margin-right: 5px;
+      }
+      span {
+        @include stickerFont(12, 1.2,transparent);
+        color: currentColor;
+      }
+    }
+    &-gauge{
+      width: 100%;
+      padding: 5px;
+      background: white;
+      border-radius: 4px;
+      display: flex;
+      span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: $green;
+        border-radius: 4px;
+      }
+    }
+  }
 }
