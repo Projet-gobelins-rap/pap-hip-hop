@@ -20,7 +20,7 @@
     }
     span {
       pointer-events: none;
-      @include text(14px, 20px, $white, 500);
+      @include text(20px, 20px, $white, 500);
     }
     svg {
       width: 14px;
