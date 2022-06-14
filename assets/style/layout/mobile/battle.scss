@@ -50,6 +50,15 @@
       padding: 5px;
       background: white;
       border-radius: 4px;
+      color: $green;
+      margin-bottom: 10px;
+      &--second {
+        margin-right: 5px;
+      }
+      span {
+        @include stickerFont(12, 1.2,transparent);
+        color: currentColor;
+      }
     }
     &-gauge{
       width: 100%;

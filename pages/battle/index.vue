@@ -212,16 +212,12 @@ export default class battle extends Vue {
       BattleScene.context.disableOrbitControl();
 
 
-      console.log("G UN ENORME GORO")
       emitter.on('battle::initNpcs',(npcs:Array<Npc>)=>{
         this.npcs = npcs
         console.log(npcs,'AOOOO')
       })
 
       console.log("OUAIS MA GUEULE")
-
-
-
 
 
     console.log("BATTLE");

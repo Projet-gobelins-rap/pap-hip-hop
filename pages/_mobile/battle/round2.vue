@@ -52,11 +52,12 @@
       <div class="battle-head--separator"></div>
     </div>
     <h1 ref="timer"></h1>
+    <Onboarding :content="currentOnboarding"></Onboarding>
     <Choice v-if="displayChoice" :multiple-choice="false" :content="battlePunchline"></Choice>
 
-    <div class="timer">
+    <div v-if="displayChoice" class="timer">
       <div class="timer-indicator">
-        <span class="timer-indicator--second"></span>
+        <span class="timer-indicator--second" ref="timerIndicator"></span>
         <span>sec</span>
       </div>
       <div class="timer-gauge">
@@ -140,51 +141,13 @@ export default class round2Mobile extends Vue {
   public round2Step4:object
   public timer:HTMLElement
   public timerGauge:HTMLElement
-
+  public timerIndicator:HTMLElement
+  public timerVal = { value: 20 };
+  public tl:GSAPTimeline
   mounted() {
     this.timer = this.$refs.timer as HTMLElement
     this.timerGauge = this.$refs.timerGauge as HTMLElement
-
-
-
-    // let timeleft = 10
-
-
-
-    var tl = gsap.timeline();
-    tl.to(".timer-gauge span", {width:0,ease:'none', duration:20})
-      //add blueGreenSpin label 1 second after end of timeline
-      .addLabel("timerHalf", 2)
-      //add tween at blueGreenSpin label
-      .to(".timer-gauge span", {backgroundColor:'yellow', duration:1}, "timerHalf")
-
-      .addLabel("timerPastHalf", 'timerHalf+=5')
-
-      .to(".timer-gauge span", {backgroundColor:'red', duration:1}, "timerPastHalf")
-
-
-
-
-
-
-    // gsap.to('.')
-    // let timerInterval = setInterval(()=>{
-    //   // if (timeleft<=0){
-    //   //   clearInterval(timerInterval)
-    //   //   this.currentOnboarding = this.battleOnboarding[1]
-    //   //   this.displayOnboarding()
-    //   //   this.displayChoice = false
-    //   //   $socket.io.emit('battle::response',null)
-    //   // }
-    //   let currentTimerValue = 10 - timeleft
-    //   this.timer.innerText = currentTimerValue.toString();
-    //
-    //   timeleft -= 1;
-    // },1000)
-
-
-
-
+    this.timerIndicator = this.$refs.timerIndicator as HTMLElement
 
     this.displayOnboarding()
 
@@ -192,6 +155,10 @@ export default class round2Mobile extends Vue {
     this.updateChoiceState()
     this.initRound2()
     this.round2Sequence()
+  }
+
+  updateNum() {
+    this.$refs.timerIndicator.innerHTML = this.timerVal.value.toFixed(0)
   }
 
   initRound2(){
@@ -251,8 +218,6 @@ export default class round2Mobile extends Vue {
     $socket.io.on('battle::round2Sequence',()=>{
       this.displayRound2Punch()
     })
-
-
   }
 
   initRound2Datas() {
@@ -264,6 +229,33 @@ export default class round2Mobile extends Vue {
     return this.onboardingStore.onboardingStep;
   }
 
+  timerAnimation() {
+    this.tl = gsap.timeline();
+    // gsap.to('.timer-indicator--second',{duration:this.timerVal.value,})
+   this.tl.to(".timer-gauge span", {width:0,ease:'none', duration:20,
+     onStart:()=>{
+       gsap.to(this.timerVal,{value:0,ease: "none",duration:this.timerVal.value,onUpdate:this.updateNum})
+     },
+     onComplete:()=>{
+       this.currentOnboarding = this.battleOnboarding[1]
+       this.displayOnboarding()
+       this.displayChoice = false
+       $socket.io.emit('battle::response',null)
+     }})
+      //add blueGreenSpin label 1 second after end of timeline
+      .addLabel("timerHalf", 2)
+      //add tween at blueGreenSpin label
+      .to(".timer-gauge span", {backgroundColor:'#EDCC50', duration:1}, "timerHalf")
+      .to(".timer-indicator", {color:'#EDCC50', duration:1}, "timerHalf")
+
+      .addLabel("timerPastHalf", 'timerHalf+=5')
+
+      .to(".timer-gauge span", {backgroundColor:'#ED6787', duration:1}, "timerPastHalf")
+      .to(".timer-indicator", {color:'#ED6787', duration:1}, "timerPastHalf")
+
+
+  }
+
   displayRound2Punch(){
     console.log("R2 PUNCH")
     let timeleft = 10
@@ -271,30 +263,21 @@ export default class round2Mobile extends Vue {
     this.hideOnboarding()
     this.displayChoice = true
 
-    let timerInterval = setInterval(()=>{
-      if (timeleft<=0){
-        clearInterval(timerInterval)
-        this.currentOnboarding = this.battleOnboarding[1]
-        this.displayOnboarding()
-        this.displayChoice = false
-        $socket.io.emit('battle::response',null)
-      }
-      let currentTimerValue = 10 - timeleft
-      this.timer.innerText = currentTimerValue.toString();
 
-      timeleft -= 1;
-    },1000)
-
+    this.timerAnimation()
     // on clear le timer si on a cliquer sur un bouton
     this.$on('choice::updateState',()=>{
-      clearInterval(timerInterval)
+
+      console.log('update state')
+      // clearInterval(timerInterval)
+      this.tl.kill()
       return
     })
 
     console.log(this.roundStep,'STEP de chaque round')
     if (this.roundStep >3){
       console.log('FIN DE LINTERACTION')
-      clearInterval(timerInterval)
+      // clearInterval(timerInterval)
       return
     }
 
