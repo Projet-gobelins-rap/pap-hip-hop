@@ -82,7 +82,7 @@ export default class Graf {
     this.setupCanvas()
     this.bindEvents()
     this.nextLayer()
-    this._onStepChangeCallback('intro')
+    this._onStepChangeCallback('start')
     // this.renderLoop()
 
     gsap.ticker.fps(30);
@@ -92,7 +92,8 @@ export default class Graf {
   setupCanvas() {
     let self = this
     this.img.onload = () => {
-      this.drawImageProp(this.ctx, self.img, 0, 0, self.size.width, self.size.height, 0, 0)
+      
+      this.drawImageProp(this.ctx, self.img, 0, 0, this.grafCanvas.width, self.size.height / 2, 0, 0)
       self.ctx.globalCompositeOperation = "destination-out";
     }
   }
@@ -201,7 +202,7 @@ export default class Graf {
 
     this.display.innerText = this.erasedPercentage.toString()
 
-    if (this.erasedPercentage > 70) {
+    if (this.erasedPercentage > 65) {
       this.layerEnded()
     }
   }
