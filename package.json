@@ -19,7 +19,7 @@
       ".editorconfig",
       ".gitignore",
       "jsconfig.json",
-      "nuxt.config.js"
+      "nuxt.config.js" 
     ]
   },
   "dependencies": {
