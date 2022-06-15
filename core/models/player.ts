@@ -32,8 +32,8 @@ export class Player extends Character {
 
     // constants
     fadeDuration: number = 0.2
-    // runVelocity = 18
-    runVelocity = 30
+    runVelocity = 18
+    // runVelocity = 30
     walkVelocity = 6
 
     constructor(playerGltf: Object3D, name: string, currentAction: string, camera: Camera, control: OrbitControls) {

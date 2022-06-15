@@ -24,6 +24,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _collectibleColliders: Group = new Group()
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
+  ground: Mesh<BufferGeometry, Material | Material[]>;
 
   // private _keysPressed: any
 
@@ -218,7 +219,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const lightSlots = city.getObjectByName('group_public_light').children
     const tower1Slots = city.getObjectByName('slot_tower')
     const tower2Slots = city.getObjectByName('slot_tower_lg')
-    const environement = city.getObjectByName('CITY_a_baked1')
+    this.ground = city.getObjectByName('CITY_a_baked1')
 
     console.log(city);
     
@@ -238,9 +239,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
     SlotsLoader.generateCollectible(this._collectibles.children)
 
-
-
-   
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -248,9 +246,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
-
-   
-
 
     // const floor = city.getObjectByName('floor')
     // floor.material.needsUpdate = true;
@@ -280,8 +275,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
+    this.player.model.position.y = 0.75
 
-    this.addTexture(environement, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
+    this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
 
     this.bvhCollider(city)
 
@@ -326,8 +322,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     env.traverse(object => {
       if (object.type == "Mesh") {
-
-
         geometries.push(Helpers.generateBoxCollider(object))
 
         // const mesh = new Mesh(boxGeometry, new MeshBasicMaterial({ wireframe: true }));
@@ -347,7 +341,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._scene.add(this.collider);
 
     this._collectibleCollection = {
-      env: [this.collider],
+      env: [this.collider, this.ground],
       collectibles: this._collectibleColliders.children
     }
   }

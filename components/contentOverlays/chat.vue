@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <div class="chat-content" v-bind:class="{noChoice :content.items.length <= 0 }" ref="chatContent" @click="goToNextStep">
+    <div class="chat-content" v-bind:class="{noChoice: !content.items[0].Choix}" ref="chatContent" @click="goToNextStep">
       <div class="chat-infos">
 
           <PrismicImage
@@ -16,7 +16,7 @@
       </div>
       <PrismicRichText class="chat-text" :field="content.primary.Text" />
 
-      <svg class="chat-arrow" v-if="content.items.length <= 0" xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="chat-arrow" v-if="!content.items[0].Choix" xmlns="http://www.w3.org/2000/svg"  width="30" height="30" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
         <polyline points="6 9 12 15 18 9" />
       </svg>
@@ -24,7 +24,7 @@
       <div class="triangle"></div>
 
     </div>
-    <div class="chat-choices" v-if="content.items.length > 0">
+    <div class="chat-choices" v-if="content.items[0].Choix">
       <div
         class="chat-choice"
         v-for="(item, i) in content.items"
