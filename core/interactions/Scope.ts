@@ -135,8 +135,6 @@ export default class Scope {
     calibrateYRotation() {
         document.addEventListener('click', e => {
             this.baseX = this.latestX
-            console.log(this.latestX);
-
         })
     }
 
@@ -156,7 +154,6 @@ export default class Scope {
 
                     if (!this.focusTarget && !this.focusTimeOut && !place.found) {
 
-                        console.log(place.slug);
                         place.progressTl.play()
                         this.pointerTimeline.play()
                         place.isFocus = true

@@ -10,17 +10,17 @@ class WebsocketManager {
       autoConnect: true,
     })
     this.state = this.io ? 'connected' : 'disconnected'
-    // this.room = '667'
+    this.room = '667'
     console.log(this.state);
 
     // ON SET LA VALEUR ICI POUR LE DEV MODE --> TODO --> a remove quand on passera en production
-    // $storage.setInLocalStorage('room',this.room)
+    $storage.setInLocalStorage('room',this.room)
 
-    // if ($storage.getInLocalStorage('room')) {
-    //   this.room = $storage.getInLocalStorage('room')
-    //   console.log('ON PASSE')
-    //   this.autoConnect()
-    // }
+    if ($storage.getInLocalStorage('room')) {
+      this.room = $storage.getInLocalStorage('room')
+      console.log('ON PASSE')
+      this.autoConnect()
+    }
   }
 
   autoConnect() {

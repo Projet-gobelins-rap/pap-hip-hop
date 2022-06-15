@@ -24,6 +24,12 @@
   &-transitionVideo {
     display: none;
   }
+  &-end{
+    &--video {
+      display: none;
+      opacity: 0;
+    }
+  }
   &-hud {
     position: absolute;
     top: 0;

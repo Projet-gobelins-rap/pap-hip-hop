@@ -189,6 +189,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const plot = AssetsManager.getGltf(GLTF_ASSET.BITE).data.scene
     const fence = AssetsManager.getGltf(GLTF_ASSET.SLOT_FENCE).data.scene
     const bush = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUSH).data.scene
+    const bus = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUS).data.scene
     const light = AssetsManager.getGltf(GLTF_ASSET.SLOT_PUBLIC_LIGHT).data.scene
     const electricPlot = AssetsManager.getGltf(GLTF_ASSET.SLOT_ELECTRIC_PLOT).data.scene
     const bench = AssetsManager.getGltf(GLTF_ASSET.SLOT_BENCH).data.scene
@@ -199,12 +200,13 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const building2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_2).data.scene
     const building3 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_3).data.scene
     const building4 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_4).data.scene
+    const tower1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_TOWER).data.scene
+    const tower2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_TOWER_LG).data.scene
 
     city.scale.set(0.04, 0.04, 0.04)
     console.log(city);
     this._scene.add(city);
 
-    this._collectibles = city.getObjectByName('group_collectable')
     const treeSlots = city.getObjectByName('group_tree').children
     const plotSlots = city.getObjectByName('group_plot').children
     const buildingSlots = city.getObjectByName('group_building').children
@@ -214,21 +216,31 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const fenceSlots = city.getObjectByName('group_fence').children
     const electricPlotSlots = city.getObjectByName('group_electric_light').children
     const lightSlots = city.getObjectByName('group_public_light').children
+    const tower1Slots = city.getObjectByName('slot_tower')
+    const tower2Slots = city.getObjectByName('slot_tower_lg')
     const environement = city.getObjectByName('CITY_a_baked1')
 
+    console.log(city);
+    
     console.log(tree);
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
     
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
-    // SlotsLoader.populateSlots(busSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.COLOR_TEXTURE).data)
+    SlotsLoader.populateSlots(busSlots, bus, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUS_TEXTURE).data)
     SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
     SlotsLoader.populateSlots(benchSlots, bench, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BENCH_TEXTURE).data)
     SlotsLoader.populateSlots(fenceSlots, fence, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_FENCE_TEXTURE).data)
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
+
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
+    SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
+    SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
     SlotsLoader.generateCollectible(this._collectibles.children)
 
+
+
+   
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -236,6 +248,9 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         object.material.map = oldTexture
       }
     })
+
+   
+
 
     // const floor = city.getObjectByName('floor')
     // floor.material.needsUpdate = true;
@@ -247,19 +262,15 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
-    eric.model.position.set(-0, -100, -0)
 
     const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
-    npc_battle.model.position.set(-0, -0, -0)
 
     const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
     npc_ticaret.model.scale.set(25, 25, 25)
-    npc_ticaret.model.position.set(-0, -0, -0)
 
     const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
     npc_deenasty.model.scale.set(25, 25, 25)
-    npc_deenasty.model.position.set(-0, -0, -0)
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
@@ -273,6 +284,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.addTexture(environement, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
 
     this.bvhCollider(city)
+
+    this._collectibles = city.getObjectByName('group_collectable')
+    SlotsLoader.generateCollectible(this._collectibles.children)
+    
     this.collectiblesCollider()
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
@@ -299,7 +314,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     })
     this._scene.add(this._collectibleColliders)
   }
-
   bvhCollider(env) {
     const params = {
       displayCollider: true,
@@ -325,12 +339,12 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries(geometries, true);
     mergedGeometry.boundsTree = new MeshBVH(mergedGeometry, { lazyGeneration: false });
 
-    // this.collider = new Mesh(mergedGeometry);
-    // this.collider.material.wireframe = true;
-    // this.collider.material.color.setHex(0x00ff00)
-    // this.collider.material.opacity = 0.5;
-    // this.collider.material.transparent = true;
-    // this._scene.add(this.collider);
+    this.collider = new Mesh(mergedGeometry);
+    this.collider.material.wireframe = true;
+    this.collider.material.color.setHex(0x00ff00)
+    this.collider.material.opacity = 0.5;
+    this.collider.material.transparent = true;
+    this._scene.add(this.collider);
 
     this._collectibleCollection = {
       env: [this.collider],
@@ -348,14 +362,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   handleCollision() {
     if (this._collectibleCollection) {
-      // const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
-      // if (intersectCollision.length > 0) {
-      //   if (intersectCollision[0].distance < 0.8) {
-      //     this.player.blocked = true;
-      //   } else {
-      //     this.player.blocked = false;
-      //   }
-      // }
+      const intersectCollision = this.player.raycaster.intersectObjects(this._collectibleCollection.env);
+      if (intersectCollision.length > 0) {
+        if (intersectCollision[0].distance < 0.8) {
+          this.player.blocked = true;
+        } else {
+          this.player.blocked = false;
+        }
+      }
 
       const intersect = this.player.raycaster.intersectObjects(this._collectibleCollection.collectibles);
       if (intersect.length > 0) {

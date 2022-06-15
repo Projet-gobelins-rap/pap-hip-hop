@@ -28,13 +28,13 @@
         {
           "name": "player",
           "head": {
-            "model": "player_head",
+            "model": "head_player_bob",
             "color": "green"
           },
           "body": {
             "color": "green",
-            "textureBody": "NPC_WUTANG_BODY_TEXTURE",
-            "textureArms": "NPC_WUTANG_ARMS_TEXTURE"
+            "textureBody": "PLAYER_TICARET_BODY_TEXTURE",
+            "textureArms": "PLAYER_TICARET_ARMS_TEXTURE"
           }
         },
         {
@@ -52,7 +52,7 @@
         {
             "name": "battle",
             "head": {
-                "model": "victor_head",
+                "model": "head_coach",
                 "color": "green"
             },
             "body": {
@@ -76,7 +76,7 @@
         {
             "name": "eric",
             "head": {
-                "model": "victor_head",
+                "model": "head_graffeur",
                 "color": "green"
             },
             "body": {
@@ -102,7 +102,7 @@
     "player": {
         "name": "player",
         "head": {
-            "model": "hair-afro"
+            "model": "head_player_bob"
         },
         "body": {
             "color": "orange",

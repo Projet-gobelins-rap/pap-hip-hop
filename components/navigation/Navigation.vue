@@ -32,9 +32,8 @@ import $socket from "~/plugins/socket.io";
 @Component
 export default class Navigation extends Vue {
   public menuOpen: boolean = false;
+  
   mounted() {
-    console.log("Navigation log");
-
     $socket.io.on("goTo", (path) => {
       this.$router.push(path);
     });

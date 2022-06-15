@@ -104,19 +104,20 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
           el.update(ctx.deltaTime)
 
 
-          if (el.name === 'opponent' ){
+          if (el.name === 'player' ){
             this._corner.set(-0.5, -0.5); // NDC of the bottom-left corner
             this._raycaster.setFromCamera(this._corner, this._camera);
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
-            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -430, -1));
-            // console.log('OPPONENT')
+            el.model.position.copy(this._cornerPoint).add(new Vector3(-60, -650, -250));
+            // console.log('PLAYEER')
+
           }
-          if (el.name === 'player' ){
+          if (el.name === 'opponent' ){
             this._corner.set(0.5, -0.5); // NDC of the bottom-left corner
             this._raycaster.setFromCamera(this._corner, this._camera);
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
-            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -430, -1));
-            // console.log('PLAYEER')
+            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -650, -250));
+            // console.log('OPPONENT')
           }
 
           // console.log('render')
@@ -220,16 +221,16 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _registerGltfPlayer():void {
-    this._player.model.scale.set(120, 120, 120)
+    this._player.model.scale.set(140, 140, 140)
     this._player.model.position.set(20, -330, -0)
-    this._player.model.rotateY(degToRad(130))
+    this._player.model.rotateY(degToRad(-90))
     this._player.animationPlayed = 'rap'
   }
 
   private _registerGltfOpponent():void {
-    this._opponent.model.scale.set(120, 120, 120)
+    this._opponent.model.scale.set(140, 140, 140)
     this._opponent.model.position.set(20, -330, -0)
-    this._opponent.model.rotateY(degToRad(-130))
+    this._opponent.model.rotateY(degToRad(110))
     this._opponent.animationPlayed = 'rap'
   }
 

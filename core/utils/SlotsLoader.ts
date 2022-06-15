@@ -9,8 +9,12 @@ export default class SlotsLoader {
     public slots: Map<string, object>
     // public populateSlots: () => void
 
-    public static populateSingleSlots(slot: Object3D, baseObject: Object3D | Group | Mesh): void {
+    public static populateSingleSlots(slot: Object3D, baseObject: Object3D | Group | Mesh, texture: Texture| null = null): void {
         slot.children = []
+        if(texture) {
+            texture.flipY = false
+            baseObject.children[0].material.map = texture
+        }
         slot.add(baseObject)
     }
 
@@ -18,7 +22,6 @@ export default class SlotsLoader {
         texture.flipY = false
         baseObject.children[0].material.map = texture
         slots.forEach(object => {
-            // -Lead- : dispose ? remove ?
             object.children = []
             object.add(baseObject.clone())
             const colliderGeometry = Helpers.generateBoxCollider(object)
@@ -29,6 +32,7 @@ export default class SlotsLoader {
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void {
         slots.forEach(slot => {
             const params = slot.name.split('_')
+            const variation = slot.name.split(':')
             slot.children = []
             let texture = null
 
