@@ -6,11 +6,10 @@ export default class Graf {
 
   public grafCanvas: HTMLCanvasElement
   public ctx: CanvasRenderingContext2D
-  public display: HTMLElement
-  public cursor: HTMLElement
+  public display: Element
+  public cursor: Element
   public img: HTMLImageElement
   public revealImg: HTMLImageElement
-  public resetStepBtn: HTMLElement
   private size: {
     width: number
     height: number
@@ -37,13 +36,12 @@ export default class Graf {
 
   private _onStepChangeCallback: Function
 
-  constructor(layerLister: any, stepChangeCallback: Function) {
-    console.log("list ---> ", layerLister);
+  constructor(layerList: any, stepChangeCallback: Function) {
 
     this.display = document.querySelector('.graffDraw-display')!
     this.grafCanvas = document.querySelector('.graffDraw-canvas')!
     this.cursor = document.querySelector('.graffDraw-cursor')!
-    this.layers = layerLister
+    this.layers = layerList
 
     this.imgUrl = this.layers[0].layer.url
     this.img = new Image()
@@ -52,7 +50,6 @@ export default class Graf {
 
     this.ctx = this.grafCanvas.getContext('2d')!
     this.revealImg = document.querySelector('.graffDraw-img')!
-    this.resetStepBtn = document.querySelector('.graffDraw-reset')!
 
     this.erasedPercentage = 0
     this.canvasUpdated = false
@@ -149,13 +146,9 @@ export default class Graf {
   }
 
   layerEnded() {
-    if (this.layerCount < this.layers.length - 1) {
-
+    if (this.layerCount < this.layers.length - 2) {
       this._onStepChangeCallback('nextLayer')
- 
-
     } else {
-      console.log('fin');
       this._onStepChangeCallback('finish')
     }
   }
@@ -165,6 +158,9 @@ export default class Graf {
     this.revealImg.src = this.layers[this.layerCount + 1].layer.url
     this.imgUrl = this.layers[this.layerCount].layer.url
     this.img.src = this.imgUrl
+    gsap.to(this.revealImg, {
+      opacity: 1
+    })
 
     this.layerCount++
     this.updateCanvasBackground()
@@ -186,7 +182,7 @@ export default class Graf {
 
   getErasedPercent() {
     const imgData = this.ctx.getImageData(0, 0, this.size.width, this.size.height)
-    // console.log(imgData)
+ 
     const pixelCount = this.size.width * this.size.height;
     const arrayElemsCount = pixelCount * 4; // for components (rgba) per pixel.
     const dataArray = imgData.data;

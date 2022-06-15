@@ -20,13 +20,32 @@
     flex-direction: column;
     padding: 20px;
     position: relative;
-    background-color: $black;
-
+    //background-color: $black;
+    .onboarding-container {
+      padding-bottom: 38px;
+    }
     &--text {
       p {
-        @include text(16px, 20px, $white);
+        @include text(16px, 20px, $black);
+        text-align: center;
       }
     }
+    &--sticker {
+      position: absolute;
+      top: 0;
+      transform: translateY(-50%);
+    }
+    &--icon {
+      margin-bottom: 10px;
+    }
+  }
+
+  &-fullOverlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+    z-index: -1;
   }
 
   &-container {
@@ -93,7 +112,7 @@
   .swiper-button-next {
     transform: rotate(180deg);
   }
-  
+
   .swiper-button-disabled {
     opacity: 0;
     visibility: hidden;

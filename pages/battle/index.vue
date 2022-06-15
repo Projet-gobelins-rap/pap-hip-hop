@@ -212,16 +212,12 @@ export default class battle extends Vue {
       BattleScene.context.disableOrbitControl();
 
 
-      console.log("G UN ENORME GORO")
       emitter.on('battle::initNpcs',(npcs:Array<Npc>)=>{
         this.npcs = npcs
         console.log(npcs,'AOOOO')
       })
 
       console.log("OUAIS MA GUEULE")
-
-
-
 
 
     console.log("BATTLE");
@@ -232,8 +228,11 @@ export default class battle extends Vue {
 
       // emitter.emit('battle::disposeObject','coach')
 
+      console.log(ids,'IDSSSS')
       this.hideOnboarding();
-      if (ids === null) {
+      if (!ids) {
+        console.log(ids,'ID EST NUUUUUULL OU FALSE')
+
         this.punchArray.push({
           id: -1,
           text: "...",
@@ -242,17 +241,31 @@ export default class battle extends Vue {
         });
 
       } else {
+        console.log(ids,'ID EST GOOD')
         ids.forEach((id) => {
           if (this.isRound2) {
             console.log("ROUND 2💩💩");
             this.punchArray = [];
 
-            this.punchArray.push({
-              id: id,
-              text: this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text,
-              score: parseInt(this.battleStore.round2Datas[this.round2StepCounter][id].score),
-              status:  this.battleStore.round2Datas[this.round2StepCounter][id].status,
-            });
+            if (!id) {
+              console.log(id,'ID EST NUUUUUULL OU FALSE')
+
+              this.punchArray.push({
+                id: -1,
+                text: "...",
+                score: 0,
+                status:  "nul",
+              });
+
+            }else {
+              this.punchArray.push({
+                id: id,
+                text: this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text,
+                score: parseInt(this.battleStore.round2Datas[this.round2StepCounter][id].score),
+                status:  this.battleStore.round2Datas[this.round2StepCounter][id].status,
+              });
+            }
+
 
 
             console.log(this.punchArray,"<------- PUNCH R2")
