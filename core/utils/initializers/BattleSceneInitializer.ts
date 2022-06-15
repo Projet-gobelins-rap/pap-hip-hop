@@ -108,7 +108,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
             this._corner.set(-0.5, -0.5); // NDC of the bottom-left corner
             this._raycaster.setFromCamera(this._corner, this._camera);
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
-            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -560, -250));
+            el.model.position.copy(this._cornerPoint).add(new Vector3(-60, -650, -250));
             // console.log('PLAYEER')
 
           }
@@ -116,7 +116,7 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
             this._corner.set(0.5, -0.5); // NDC of the bottom-left corner
             this._raycaster.setFromCamera(this._corner, this._camera);
             this._raycaster.ray.intersectPlane(this._plane, this._cornerPoint);
-            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -560, -250));
+            el.model.position.copy(this._cornerPoint).add(new Vector3(1, -650, -250));
             // console.log('OPPONENT')
           }
 
@@ -221,14 +221,14 @@ export default class BattleSceneInitializer extends Initializers<{ canvas: HTMLC
   }
 
   private _registerGltfPlayer():void {
-    this._player.model.scale.set(120, 120, 120)
+    this._player.model.scale.set(140, 140, 140)
     this._player.model.position.set(20, -330, -0)
     this._player.model.rotateY(degToRad(-90))
     this._player.animationPlayed = 'rap'
   }
 
   private _registerGltfOpponent():void {
-    this._opponent.model.scale.set(120, 120, 120)
+    this._opponent.model.scale.set(140, 140, 140)
     this._opponent.model.position.set(20, -330, -0)
     this._opponent.model.rotateY(degToRad(110))
     this._opponent.animationPlayed = 'rap'

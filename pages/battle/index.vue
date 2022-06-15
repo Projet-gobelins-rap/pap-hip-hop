@@ -228,10 +228,8 @@ export default class battle extends Vue {
 
       // emitter.emit('battle::disposeObject','coach')
 
-      console.log(ids,'IDSSSS')
       this.hideOnboarding();
       if (!ids) {
-        console.log(ids,'ID EST NUUUUUULL OU FALSE')
 
         this.punchArray.push({
           id: -1,
