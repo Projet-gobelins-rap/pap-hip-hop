@@ -8,6 +8,11 @@
 
     <video class="battle-video" autoplay loop muted :src="bgVideo"></video>
 
+    <div class="battle-end">
+      <video class="battle-end--video battle-video" ref="videoLoose" :src="videoLoose"></video>
+      <video class="battle-end--video battle-video" ref="videoVictory" :src="videoVictory"></video>
+    </div>
+
     <div class="battle-hud">
       <div class="battle-top">
         <div v-if="pp" class="healthbar  player">
@@ -193,6 +198,8 @@ export default class battle extends Vue {
   public playerAndOpponentActive:boolean = false
   public npcs:Array<Npc> = []
   public battleSceneInitializer:BattleSceneInitializer
+  public videoLooseElement:HTMLMediaElement
+  public videoVictoryElement:HTMLMediaElement
   mounted() {
 
     this.initRound2Datas();
@@ -203,6 +210,8 @@ export default class battle extends Vue {
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
     this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
     this.transitionRound2 = this.$refs.transitionRound2 as HTMLMediaElement;
+    this.videoLooseElement = this.$refs.videoLoose as HTMLMediaElement;
+    this.videoVictoryElement = this.$refs.videoVictory as HTMLMediaElement;
 
 
       new BattleSceneInitializer({
@@ -485,20 +494,29 @@ export default class battle extends Vue {
   }
 
   showWinner() {
-    // TODO : UPDATE LA METHODE DE LA DETECTION DU GAGNANT
-
     console.log(this.resultBattle)
     console.log(this.score.player,'<-- score player')
     console.log(this.score.opponent,'<-- score opponent')
+    $socket.io.emit("goTo", {
+      path: "/_mobile/off",
+      replace: true,
+    });
     if (this.score.player >= this.score.opponent) {
-      console.log('VICTOIRE')
+      this.videoVictoryElement.play()
+      this.videoVictoryElement.loop = true
+      gsap.to(this.videoVictoryElement,{opacity:1,display:'block'})
       this.currentOnboarding = this.resultBattle[0].items[0]
       this.displayOnboarding()
     }else {
       console.log('DEFAITE')
+      this.videoLooseElement.play()
+      this.videoLooseElement.loop = true
+      gsap.to(this.videoLooseElement,{opacity:1,display:'block'})
       this.currentOnboarding = this.resultBattle[1].items[0]
       this.displayOnboarding()
     }
+    BattleScene.context.destroy()
+    gsap.set(this.$refs.battleScene,{display:'none'})
   }
 
   // Setting the isChatDisplay property to true.
@@ -625,7 +643,8 @@ export default class battle extends Vue {
         case "reading":
           break;
         case "goToHood":
-          this.setNextChat();
+          // this.setNextChat();
+          this.goToHood()
           this.onboardingStore.setOnboardingStep("reading");
           break;
       }
@@ -642,6 +661,20 @@ export default class battle extends Vue {
     ]);
   }
 
+  goToHood(){
+    // remove scene children
+    this.$router.push('/hood');
+    console.log('ON VA DANS LE HOOD BB')
+  }
+
+  // A getter function that returns the src of the video.
+  get videoVictory():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.BATTLE_END_BG_VICTORY).data.src
+  }
+  // A getter function that returns the src of the video.
+  get videoLoose():string {
+    return AssetsManager.getVideo(VIDEO_ASSET.BATTLE_END_BG_DEFEAT).data.src
+  }
   // A getter function that returns the src of the video.
   get TransitionRound2():string {
     return AssetsManager.getVideo(VIDEO_ASSET.TRANSITION_ROUND_2).data.src
