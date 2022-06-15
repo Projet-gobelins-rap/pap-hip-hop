@@ -247,26 +247,12 @@ export default class battle extends Vue {
             console.log("ROUND 2💩💩");
             this.punchArray = [];
 
-            if (!id) {
-              console.log(id,'ID EST NUUUUUULL OU FALSE')
-
-              this.punchArray.push({
-                id: -1,
-                text: "...",
-                score: 0,
-                status:  "nul",
-              });
-
-            }else {
-              this.punchArray.push({
-                id: id,
-                text: this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text,
-                score: parseInt(this.battleStore.round2Datas[this.round2StepCounter][id].score),
-                status:  this.battleStore.round2Datas[this.round2StepCounter][id].status,
-              });
-            }
-
-
+            this.punchArray.push({
+              id: id,
+              text: this.battleStore.round2Datas[this.round2StepCounter][id].content[0].text,
+              score: parseInt(this.battleStore.round2Datas[this.round2StepCounter][id].score),
+              status:  this.battleStore.round2Datas[this.round2StepCounter][id].status,
+            });
 
             console.log(this.punchArray,"<------- PUNCH R2")
             console.log(this.battleStore.round2Datas);
