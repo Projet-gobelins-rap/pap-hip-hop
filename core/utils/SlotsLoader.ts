@@ -28,7 +28,7 @@ export default class SlotsLoader {
 
         });
     }
-    
+
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void {
         slots.forEach(slot => {
             const params = slot.name.split('_')
@@ -70,7 +70,7 @@ export default class SlotsLoader {
     public static generateCollectible(slots: Object3D[]): void {
         slots.forEach(slot => {
             let model = AssetsManager.getGltf(slot.name).data.scene.clone()
-            slot.add(model) 
+            slot.add(model)
             model.position.y = 30
         });
     }
