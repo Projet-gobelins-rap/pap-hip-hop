@@ -21,26 +21,25 @@ $purple_dark: #6330CA;
 @font-face {
 	font-family: "Panchang-Extrabold";
     font-weight: 700;
-	src: url("../../static/font/Panchang-Extrabold.woff") format("woff"),
-	url("../../static/font/Panchang-Extrabold.woff2") format("woff2"),
+    src: url("../../static/font/Panchang-Extrabold.woff") format("woff"),
+    url("../../static/font/Panchang-Extrabold.woff2") format("woff2"),
 }
 @font-face {
 	font-family: "Panchang-Bold";
     font-weight: 700;
-	src: url("../../static/font/Panchang-Bold.woff") format("woff"),
-	url("../../static/font/Panchang-Bold.woff2") format("woff2"),
+    src: url("../../static/font/Panchang-Bold.woff") format("woff"),
+    url("../../static/font/Panchang-Bold.woff2") format("woff2"),
 }
 @font-face {
     font-family: "Panchang-Semibold";
     font-weight: 600;
-	src: url("../../static/font/Panchang-Semibold.woff") format("woff"),
-	url("../../static/font/Panchang-Semibold.woff2") format("woff2"),
+    src: url("../../static/font/Panchang-Semibold.woff") format("woff"),
+    url("../../static/font/Panchang-Semibold.woff2") format("woff2"),
 }
 @font-face {
     font-family: "Vollkorn-medium";
     font-weight: 500;
-	src: url("../../static/font/Vollkorn-500.woff") format("woff"),
-	url("../../static/font/Vollkorn-500.woff2") format("woff2"),
+	  src: url("https://fonts.googleapis.com/css2?family=Vollkorn+SC:wght@600&display=swap'");
 }
 
 /* SVG */
