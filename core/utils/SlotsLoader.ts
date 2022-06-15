@@ -22,7 +22,6 @@ export default class SlotsLoader {
         texture.flipY = false
         baseObject.children[0].material.map = texture
         slots.forEach(object => {
-            // -Lead- : dispose ? remove ?
             object.children = []
             object.add(baseObject.clone())
             const colliderGeometry = Helpers.generateBoxCollider(object)
