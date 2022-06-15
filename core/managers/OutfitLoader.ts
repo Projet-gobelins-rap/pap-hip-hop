@@ -13,6 +13,7 @@ export class Outfitloader {
             GLTF_ASSET.NPC_COACH_HEAD,
             GLTF_ASSET.NPC_PLAYER_HEAD,
             GLTF_ASSET.OPPONENT_HEAD,
+            GLTF_ASSET.PLAYER_TICARET_HEAD,
         ]
         this.outfitCollection = new Map()
         this.loadOutfits()

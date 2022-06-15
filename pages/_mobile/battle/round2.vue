@@ -234,11 +234,9 @@ export default class round2Mobile extends Vue {
 
   displayRound2Punch(){
     console.log("R2 PUNCH")
-    let timeleft = 10
     this.battlePunchline = this.battleStore.round2Datas[this.roundStep]
     this.hideOnboarding()
     this.displayChoice = true
-
 
     this.tl = gsap.timeline();
     this.tl2 = gsap.timeline();
@@ -283,6 +281,8 @@ export default class round2Mobile extends Vue {
     if (this.roundStep >3){
       console.log('FIN DE LINTERACTION')
       // clearInterval(timerInterval)
+      this.tl.kill()
+      this.tl2.kill()
       return
     }
 
