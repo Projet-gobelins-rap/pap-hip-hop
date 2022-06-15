@@ -130,7 +130,7 @@ import {ignoreNgOnChanges} from "swiper/angular/angular/src/utils/utils";
       const opponentRound1 = battleContent?.slices10[0].items;
       const opponentRound2 = battleContent?.slices11[0].items;
 
-      const resultBattle =  battleContent?.slices12[0].items;
+      const resultBattle =  battleContent?.slices12;
 
       const currentChat = battleChat[0];
       const currentOnboarding = battleOnboarding[0];
@@ -486,12 +486,18 @@ export default class battle extends Vue {
 
   showWinner() {
     // TODO : UPDATE LA METHODE DE LA DETECTION DU GAGNANT
-    this.currentOnboarding = this.resultBattle[0]
-    this.displayOnboarding()
+
+    console.log(this.resultBattle)
+    console.log(this.score.player,'<-- score player')
+    console.log(this.score.opponent,'<-- score opponent')
     if (this.score.player >= this.score.opponent) {
       console.log('VICTOIRE')
+      this.currentOnboarding = this.resultBattle[0].items[0]
+      this.displayOnboarding()
     }else {
       console.log('DEFAITE')
+      this.currentOnboarding = this.resultBattle[1].items[0]
+      this.displayOnboarding()
     }
   }
 
@@ -615,6 +621,14 @@ export default class battle extends Vue {
   setOnboardingStep(val: string) {
     if (val) {
       console.log(val);
+      switch (val) {
+        case "reading":
+          break;
+        case "goToHood":
+          this.setNextChat();
+          this.onboardingStore.setOnboardingStep("reading");
+          break;
+      }
     }
   }
 

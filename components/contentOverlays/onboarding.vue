@@ -51,7 +51,7 @@
 
         <CustomButton
           v-if="content.isClickable"
-
+          @click.native="nextStep(content.action[0].text)"
           class="onboarding-button small"
           :text="'J\'ai capté !'"
         >
