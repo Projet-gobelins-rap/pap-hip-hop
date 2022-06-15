@@ -40,6 +40,7 @@ import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
 import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
+import emitter from 'tiny-emitter/instance'
 
 @Component({
   components: {
@@ -101,7 +102,15 @@ export default class HoodScenePage extends Vue {
 
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
-
+      this.stepStore.textureStep
+      emitter.emit('zebizebi')
+      // console.log(HoodScene.context._hoodTextureEvolution,'HOOD EVOLUTION TEXTUREEEE')
+      // emitter.on('hood::textureEvolution',(el:number)=>{
+      //   console.log(el)
+      //   console.log(HoodScene.context._hoodTextureEvolution,'HOOD EVOLUTION TEXTUREEEE')
+      //   HoodScene.context._hoodTextureEvolution = el
+      //   console.log(HoodScene.context._hoodTextureEvolution,'HOOD EVOLUTION TEXTUREEEE ----->')
+      // })
       HoodScene.initCallback((toastID: string) => {
         console.log(toastID);
         this.displayToast(toastID);
@@ -144,11 +153,11 @@ export default class HoodScenePage extends Vue {
 
   goToInteractionPoint(point) {
     console.log(this.npcDialogues);
-    
+
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
-        
+
         this.currentChat = element[0];
         return this.currentChat;
       }
@@ -206,7 +215,7 @@ export default class HoodScenePage extends Vue {
   setChatStep(val: string) {
     if (val) {
       console.log(val);
-      
+
       switch (val) {
         case "reading":
           break;

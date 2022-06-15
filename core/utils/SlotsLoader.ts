@@ -2,12 +2,39 @@ import { Group, Object3D, Mesh, Texture, MeshBasicMaterial } from "three"
 import { AssetsManager } from "../managers";
 import { TEXTURE_ASSET, GLTF_ASSET } from "../enums";
 import Helpers from "./Helpers";
-
+import emitter from 'tiny-emitter/instance'
 
 export default class SlotsLoader {
     private _scene: any
     public slots: Map<string, object>
     // public populateSlots: () => void
+
+    public buildingTextureArray:Array<object> = [
+      {
+        id:1,
+      texturePath: [
+        AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data,
+        AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data,
+        AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data,
+        AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_4_TEXTURE).data
+      ]},
+      {
+        id:2,
+        texturePath: [
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data,
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data,
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data,
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_4_TEXTURE).data
+        ]},
+      {
+        id:2,
+        texturePath: [
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data,
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data,
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data,
+          AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_4_TEXTURE).data
+        ]},
+    ]
 
     public static populateSingleSlots(slot: Object3D, baseObject: Object3D | Group | Mesh, texture: Texture| null = null): void {
         slot.children = []
@@ -30,6 +57,9 @@ export default class SlotsLoader {
     }
 
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void {
+      emitter.on('zebizebi',()=>{
+        console.log("ZEBIIII SA PASSE MGL C LOURD DE FOU")
+      })
         slots.forEach(slot => {
             const params = slot.name.split('_')
             const variation = slot.name.split(':')
@@ -44,7 +74,7 @@ export default class SlotsLoader {
                     slot.add(buildingVariations[0].clone())
                     break;
                 case "2":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data
+                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data
                     texture.flipY = false
                     buildingVariations[1].children[0].material.map = texture
                     slot.add(buildingVariations[1].clone())

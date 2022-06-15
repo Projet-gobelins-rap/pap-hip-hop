@@ -109,7 +109,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
         ctx.renderer.setSize(ctx.canvas.width, ctx.canvas.height)
         ctx.renderer.setPixelRatio(Math.min(Helpers.getWindowRatio(), ctx.defaultRatio))
-      }
+      },
     })
   }
 
@@ -221,10 +221,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const environement = city.getObjectByName('CITY_a_baked1')
 
     console.log(city);
-    
+
     console.log(tree);
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
-    
+
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(busSlots, bus, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUS_TEXTURE).data)
     SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
@@ -240,7 +240,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
 
 
-   
+
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -249,7 +249,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       }
     })
 
-   
+
 
 
     // const floor = city.getObjectByName('floor')
@@ -287,7 +287,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this._collectibles = city.getObjectByName('group_collectable')
     SlotsLoader.generateCollectible(this._collectibles.children)
-    
+
     this.collectiblesCollider()
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
@@ -296,7 +296,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
   addTexture(mesh: Mesh, texture: any) {
       console.log(texture);
-      
+
       texture.flipY = false
       mesh.material.map = texture
   }
@@ -308,7 +308,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
       console.log(collider.name);
-      
+
       this._collectibleColliders.add(collider)
 
     })
@@ -376,7 +376,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         if (intersect[0].distance < 1) {
           this.lootCollectible(intersect[0].object.name)
           console.log(intersect[0].object.name);
-          
+
         }
       }
     }

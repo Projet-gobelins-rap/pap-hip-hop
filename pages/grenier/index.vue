@@ -1,5 +1,6 @@
 <template>
-  <section class="grenier">
+<!--  <transition v-on:leave="leavePage" appear>è-->
+  <section v-on:leave="leavePage" appear class="grenier">
     <IntroMotion v-if="!stepStore.introMotionState"></IntroMotion>
     <ChatComponent
       class="grenier-chat"
@@ -15,6 +16,7 @@
     />
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
+<!--  </transition>-->
 </template>
 
 <script lang="ts">
@@ -35,7 +37,7 @@ import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions
 import GUI from "lil-gui";
 
 import $socket from "~/plugins/socket.io";
-
+import emitter from 'tiny-emitter/instance'
 @Component({
   components: {
     IntroMotion,
@@ -125,7 +127,19 @@ export default class GrenierScene extends Vue {
 
   goToCity() {
     this.$router.push({ path: "/hood", replace: true });
+    // grenierScene.context._hoodTextureEvolution = è
+    // emitter.emit('hood::textureEvolution',1)
+    this.stepStore.setTextureStep(1)
   }
+
+  //
+  leavePage(el,done) {
+
+    console.log('JE QUITTE LA PAGE DU GRENIER',el)
+    done()
+
+  }
+
 
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })

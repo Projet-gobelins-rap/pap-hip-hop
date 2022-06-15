@@ -9,8 +9,16 @@ import {User} from "~/core/types";
 export default class stepStore extends VuexModule {
   private _intro:boolean = false
   private _introMotion:boolean = false
+  private _textureStep:number = 0
 
   // Mutations
+  @Mutation
+  public setTextureStep(textureStep:number){
+    console.log(textureStep,'on est dans le store')
+    this._textureStep = textureStep
+  }
+
+
   @Mutation
   public setIntroState(introState:boolean){
     console.log(introState,'on est dans le store')
@@ -32,4 +40,7 @@ export default class stepStore extends VuexModule {
     return this._introMotion
   }
 
+  get textureStep(){
+    return this._textureStep
+  }
 }
