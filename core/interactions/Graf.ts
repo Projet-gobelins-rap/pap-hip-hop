@@ -158,6 +158,9 @@ export default class Graf {
     this.revealImg.src = this.layers[this.layerCount + 1].layer.url
     this.imgUrl = this.layers[this.layerCount].layer.url
     this.img.src = this.imgUrl
+    gsap.to(this.revealImg, {
+      opacity: 1
+    })
 
     this.layerCount++
     this.updateCanvasBackground()
