@@ -616,6 +616,11 @@ export default class battle extends Vue {
           onComplete:()=>{
             gsap.set('.battle-overlay',{opacity:1,yPercent:100})
             gsap.set(this.$refs.transitionRound1,{display:'none'})
+            $socket.io.emit("goTo", {
+              path: "/_mobile/battle/round1",
+              replace: true,
+            });
+
           }
         })
       }

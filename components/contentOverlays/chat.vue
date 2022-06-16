@@ -58,6 +58,7 @@ export default class ChatComponent extends Vue {
 
 
   mounted() {
+    console.log(this.content,'content!!!')
     this.chatContent = this.$refs.chatContent as HTMLElement;
   }
 
