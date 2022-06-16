@@ -8,31 +8,89 @@
     justify-content: flex-start;
     align-items: center;
     padding: 4px;
-    border: solid 2px $white;
-    border-radius: 26px;
-    background-color: rgba($white, 0.5);
+    // border: solid 2px $white;
+    // border-radius: 26px;
+    // background-color: rgba($white, 0.5);
 
+    
+
+    &.plus {
+        &::after {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 44px;
+            height: 44px;
+            border-radius: 26px;
+            z-index: -1;
+            // padding: 4px;
+            border: solid 2px $white;
+            background-color: rgba($white, 0.5);
+            transition: all 0.3s ease;
+       
+        }
+
+        &:hover {
+            .point-text {
+                padding: 0 10px;
+            }
+        }
+
+    }
     &.npc {
-        border-radius: 0 26px 26px 0;
+        white-space: nowrap;
+        padding: 4px 0;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            border-radius: 0 26px 26px 0;
+            opacity: 0;
+            z-index: -1;
+            // padding: 4px;
+            border: solid 2px $white;
+            background-color: rgba($white, 0.5);
+            transition: all 0.3s ease;
+       
+        }
+
+        &:hover {
+            .point-text {
+                padding: 0 10px 0 0;
+            }
+        }
 
         svg {
             height: 30px;
             width: 30px;
-            transform: translateX(-20px) scale(1.6);
-        }
-    }
 
-    &.interaction {
+            transform: translateX(-17px) scale(1.6);
+        }
     }
 
     &:hover {
         .point-text {
-            padding: 0 10px;
             width: auto;
             opacity: 1;
-            transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease 0.1s;
+            transition: width 0.3s ease, padding 0.3s ease, opacity 0.3s ease 0.3s;
+        }
+        
+        &::after {
+            width: 100%;
+            opacity: 1;
+            transition: all 0.3s ease 0.3;
         }
     }
+
+  
 
     &-text {
         @include stickerFont(16px, 16px, $black);

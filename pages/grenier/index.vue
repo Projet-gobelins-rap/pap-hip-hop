@@ -81,6 +81,7 @@ export default class GrenierScene extends Vue {
     this.grenierSceneStore.removeInteractivePoint(PosterInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(SprayInteractPoint.name);
     this.grenierSceneStore.removeInteractivePoint(PapyInteractPoint.name);
+    this.grenierSceneStore.removeInteractivePoint(ModeInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
