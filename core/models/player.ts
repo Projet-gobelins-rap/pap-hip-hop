@@ -42,6 +42,7 @@ export class Player extends Character {
         this.camera = camera
         this.orbitControl = control
         this._initRaycast()
+        this._initCameraPosition()
     }
 
     // overide parent methode
@@ -87,7 +88,7 @@ export class Player extends Character {
         }
     }
 
-    private _displacements(delta) : void {
+    private _displacements(delta): void {
 
         if (this.currentAction == 'run' || this.currentAction == 'walk') {
             this.walkTimeOut += delta
@@ -141,7 +142,14 @@ export class Player extends Character {
         this.raycaster.ray.origin.y += 3
         this.raycaster.ray.direction = this.walkDirection.negate()
     }
-
+ 
+    private _initCameraPosition(): void {
+        this.camera.position.set(
+            this.model.position.x - Math.sin(this.model.rotation.y),
+            this.model.position.z - Math.cos(this.model.rotation.y),
+            15
+        )
+    }
 
     private _updateCameraPosition(): void {
         // create smooth camera moves
