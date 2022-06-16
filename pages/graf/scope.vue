@@ -28,7 +28,7 @@ import { IMAGE_ASSET } from "~/core/enums";
         .data;
       const conversation = scopeContent?.slices1;
       const focusPoints = scopeContent?.slices2;
-      const lookAtOnboarding = scopeContent?.slices5[3].items;
+      const lookAtOnboarding = scopeContent?.slices5[3].items[0];
 
       const currentChat = conversation[0];
 
@@ -44,6 +44,7 @@ import { IMAGE_ASSET } from "~/core/enums";
     }
   },
 })
+
 export default class GraffActivity extends Vue {
   public graf: string = "Scope";
   public scopeContent: object;
@@ -60,6 +61,8 @@ export default class GraffActivity extends Vue {
   mounted() {
     this.cityImage = AssetsManager.getImage(IMAGE_ASSET.CITY_ROOFTOP).data;
     this.displayChat();
+    console.log("aqzerstyuiopl^mt",this.lookAtOnboarding);
+    
     $socket.io.on("scope:focus", (id) => {
       this.hideOnboarding();
       this.displayFocusPointInfos(id);
@@ -121,8 +124,6 @@ export default class GraffActivity extends Vue {
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
-      console.log(val);
-
       switch (val) {
         case "reading":
           break;
