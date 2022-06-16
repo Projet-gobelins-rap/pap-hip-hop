@@ -7,6 +7,11 @@
   transition: box-shadow 0.2s ease;
   cursor: pointer;
 
+  audio {
+    //display: none;
+    //opacity: 0;
+    //pointer-events: none;
+  }
   &.small {
     padding: 8px 10px;
   }
