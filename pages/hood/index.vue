@@ -99,11 +99,10 @@ export default class HoodScenePage extends Vue {
       hoodSceneStore: this.hoodSceneStore,
     });
     this.hoodInstance.init();
+    emitter.emit('hood::textureEvolution', this.stepStore.textureStep)
 
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
-      this.stepStore.textureStep
-      emitter.emit('zebizebi')
       // console.log(HoodScene.context._hoodTextureEvolution,'HOOD EVOLUTION TEXTUREEEE')
       // emitter.on('hood::textureEvolution',(el:number)=>{
       //   console.log(el)

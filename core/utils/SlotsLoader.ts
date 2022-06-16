@@ -9,7 +9,7 @@ export default class SlotsLoader {
     public slots: Map<string, object>
     // public populateSlots: () => void
 
-    public buildingTextureArray:Array<object> = [
+    public static buildingTextureArray:Array<object> = [
       {
         id:1,
       texturePath: [
@@ -27,7 +27,7 @@ export default class SlotsLoader {
           AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_4_TEXTURE).data
         ]},
       {
-        id:2,
+        id:3,
         texturePath: [
           AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data,
           AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data,
@@ -57,44 +57,67 @@ export default class SlotsLoader {
     }
 
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void {
-      emitter.on('zebizebi',()=>{
-        console.log("ZEBIIII SA PASSE MGL C LOURD DE FOU")
-      })
-        slots.forEach(slot => {
-            const params = slot.name.split('_')
-            const variation = slot.name.split(':')
-            slot.children = []
-            let texture = null
 
-            switch (params[3]) {
-                case "1":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data
-                    texture.flipY = false
-                    buildingVariations[0].children[0].material.map = texture
-                    slot.add(buildingVariations[0].clone())
-                    break;
-                case "2":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data
-                    texture.flipY = false
-                    buildingVariations[1].children[0].material.map = texture
-                    slot.add(buildingVariations[1].clone())
-                    break;
-                case "3":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data
-                    texture.flipY = false
-                    buildingVariations[2].children[0].material.map = texture
-                    slot.add(buildingVariations[2].clone())
-                    break;
-                case "4":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_4_TEXTURE).data
-                    texture.flipY = false
-                    buildingVariations[3].children[0].material.map = texture
-                    slot.add(buildingVariations[3].clone())
-                    break;
-                default:
-                    break;
-            }
+      let currentTextureArray:Array<object> = []
+      console.log('TESTTTT DES LOG 999999999')
+      emitter.on('hood::textureEvolution',(textureStep:number)=>{
+
+        console.log('EVENT hood est lancé')
+        this.buildingTextureArray.forEach((el)=>{
+          console.log(el)
+          if (el.id === textureStep){
+            currentTextureArray = el.texturePath
+            return
+          }
+        })
+
+        slots.forEach(slot => {
+          const params = slot.name.split('_')
+          const variation = slot.name.split(':')
+          slot.children = []
+          let texture = null
+          //
+          // console.log('TESTTTT DES LOG 222222222')
+          // console.log(currentTextureArray,'current text array after ')
+
+          switch (params[3]) {
+            case "1":
+              texture = currentTextureArray[0]
+              texture.flipY = false
+              buildingVariations[0].children[0].material.map = texture
+              slot.add(buildingVariations[0].clone())
+              break;
+            case "2":
+              texture = currentTextureArray[1]
+              texture.flipY = false
+              buildingVariations[1].children[0].material.map = texture
+              slot.add(buildingVariations[1].clone())
+              break;
+            case "3":
+              texture = currentTextureArray[2]
+              texture.flipY = false
+              buildingVariations[2].children[0].material.map = texture
+              slot.add(buildingVariations[2].clone())
+              break;
+            case "4":
+              texture = currentTextureArray[3]
+              texture.flipY = false
+              buildingVariations[3].children[0].material.map = texture
+              slot.add(buildingVariations[3].clone())
+              break;
+            default:
+              break;
+          }
         });
+
+
+      })
+      console.log('TESTTTT DES LOG 77777777777')
+
+      console.log(currentTextureArray,'current text array after ')
+
+
+
     }
 
     public static generateCollectible(slots: Object3D[]): void {
