@@ -10,6 +10,7 @@ import DeenastyCameraPosition from "./camera-positions/DeenastyCameraPosition";
 import BattleCameraPosition from "./camera-positions/BattleCameraPosition";
 import EricCameraPosition from "./camera-positions/EricCameraPosition";
 import TicaretCameraPosition from "./camera-positions/TicaretCameraPosition";
+import InitialCameraPosition from "./camera-positions/InitialCameraPosition";
 
 const HoodSceneConfig = {
   // CAMERA POSITIONS
@@ -19,6 +20,7 @@ const HoodSceneConfig = {
     BattleCameraPosition,
     EricCameraPosition,
     TicaretCameraPosition,
+    InitialCameraPosition,
   ] as Array<CameraPosition>,
 
   // INTERACT POINTS
