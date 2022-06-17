@@ -233,7 +233,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
 
-    SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
+    SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4], true)
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
     SlotsLoader.generateCollectible(this._collectibles.children)
@@ -254,22 +254,22 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     // floor.material.normalMap = floorNM
     // floor.material.side = DoubleSide
 
-    const eric = new Npc(playerGltf, 'eric', 't-pose')
-    eric.model.scale.set(25, 25, 25)
+    // const eric = new Npc(playerGltf, 'eric', 't-pose')
+    // eric.model.scale.set(25, 25, 25)
 
-    const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
-    npc_battle.model.scale.set(25, 25, 25)
+    // const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
+    // npc_battle.model.scale.set(25, 25, 25)
 
-    const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
-    npc_ticaret.model.scale.set(25, 25, 25)
+    // const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
+    // npc_ticaret.model.scale.set(25, 25, 25)
 
-    const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
-    npc_deenasty.model.scale.set(25, 25, 25)
+    // const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
+    // npc_deenasty.model.scale.set(25, 25, 25)
 
-    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_deenasty"), npc_deenasty.model)
+    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
+    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
+    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
+    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_deenasty"), npc_deenasty.model)
 
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 

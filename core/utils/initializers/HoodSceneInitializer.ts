@@ -259,6 +259,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
+    eric.model.position.set(-0, -100, -0)
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)

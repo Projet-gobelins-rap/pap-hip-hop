@@ -29,7 +29,7 @@ export default class SlotsLoader {
         });
     }
     
-    public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[]): void {
+    public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[], isGraffed: boolean = false): void {
         slots.forEach(slot => {
             const params = slot.name.split('_')
             const variation = slot.name.split(':')
@@ -44,7 +44,8 @@ export default class SlotsLoader {
                     slot.add(buildingVariations[0].clone())
                     break;
                 case "2":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data
+
+                    texture = isGraffed ? AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data : AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data
                     texture.flipY = false
                     buildingVariations[1].children[0].material.map = texture
                     slot.add(buildingVariations[1].clone())
