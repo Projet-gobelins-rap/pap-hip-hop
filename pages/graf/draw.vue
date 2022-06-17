@@ -179,7 +179,7 @@ export default class GraffActivity extends Vue {
           break;
 
         case "leaveInteraction":
-          this.$router.push({ path: "/hood", replace: true });
+          this.$router.push({ path: "/hood2", replace: true });
           this.chatStore.setChatStep("reading");
           break;
         default:

@@ -26,7 +26,7 @@
 <script lang="ts">
 import { Vue, Component, getModule, Watch } from "nuxt-property-decorator";
 import hoodSceneStore from "~/store/hoodSceneStore";
-import HoodSceneInitializer from "~/core/utils/initializers/HoodSceneInitializer";
+import HoodSceneInitializer2 from "~/core/utils/initializers/HoodSceneInitializer2";
 import stepStore from "~/store/stepStore";
 import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
@@ -34,9 +34,12 @@ import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
 import Toast from "../../components/contentOverlays/toast";
 import HoodScene from "~/core/scene/HoodScene";
+import DeenastyInteractPoint from "~/core/config/hood-scene/interact-points/DeenastyInteractPoint";
 
 import $socket from "~/plugins/socket.io";
+import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
+import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
 
 @Component({
   components: {
@@ -68,12 +71,12 @@ import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInte
     }
   },
 })
-export default class HoodScenePage extends Vue {
+export default class HoodScenePage2 extends Vue {
   public hoodSceneStore = getModule(hoodSceneStore, this.$store);
   public stepStore = getModule(stepStore, this.$store);
   public chatStore = getModule(chatStore, this.$store);
   public onboardingStore = getModule(onboardingStore, this.$store);
-  public hoodInstance: HoodSceneInitializer;
+  public hoodInstance: HoodSceneInitializer2;
   public hoodOnboarding: object;
   public npcDialogues: object[];
   public currentOnboarding: object;
@@ -90,17 +93,16 @@ export default class HoodScenePage extends Vue {
   }
 
   destroyed() {
-    HoodScene.context.destroy()
+    HoodScene.context.destroy();
   }
-  
 
   startScene() {
-    this.hoodInstance = new HoodSceneInitializer({
+    this.hoodInstance = new HoodSceneInitializer2({
       canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
       hoodSceneStore: this.hoodSceneStore,
     });
     this.hoodInstance.init();
-    this.hoodInstance.player.camera.position.set(-294, 15, -92)
+    this.hoodInstance.player.camera.position.set(-194, 15, -118);
 
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
@@ -121,7 +123,7 @@ export default class HoodScenePage extends Vue {
         case "hide":
           this.hideOnboarding();
           this.startScene();
-           $socket.io.emit("goTo", {
+          $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
           });
@@ -132,20 +134,26 @@ export default class HoodScenePage extends Vue {
   }
 
   addInteractionPoints() {
+    this.hoodSceneStore.addInteractivePoint(DeenastyInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
   }
 
   removeInteractionsPoints() {
+    this.hoodSceneStore.removeInteractivePoint(DeenastyInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
     console.log(this.npcDialogues);
-    
+
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
-        
+
         this.currentChat = element[0];
         return this.currentChat;
       }
@@ -197,13 +205,12 @@ export default class HoodScenePage extends Vue {
     // this.currentChat = this.conversation[this.currentChatNum];
   }
 
-
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
       console.log(val);
-      
+
       switch (val) {
         case "reading":
           break;
@@ -222,7 +229,7 @@ export default class HoodScenePage extends Vue {
             replace: true,
           });
           this.chatStore.setChatStep("reading");
-           break;
+          break;
         case "goBattle":
           this.$router.push("/battle");
           $socket.io.emit("goTo", {

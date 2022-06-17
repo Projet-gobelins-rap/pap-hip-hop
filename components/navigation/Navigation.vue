@@ -15,6 +15,12 @@
         <nuxt-link to="/hood" @click.native="toggleMenu">Hood</nuxt-link>
       </div>
       <div class="navigation__items">
+        <nuxt-link to="/hood2" @click.native="toggleMenu">Hood 2</nuxt-link>
+      </div>
+      <div class="navigation__items">
+        <nuxt-link to="/hood3" @click.native="toggleMenu">Hood 3</nuxt-link>
+      </div>
+      <div class="navigation__items">
         <nuxt-link to="/graf" @click.native="toggleMenu">Graf</nuxt-link>
       </div>
       <div class="navigation__items">

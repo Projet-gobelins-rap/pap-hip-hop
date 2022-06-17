@@ -13,7 +13,7 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 import { MeshBVH, MeshBVHVisualizer } from "three-mesh-bvh"
 import { Npc } from "../../models/npc";
 
-export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
+export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCanvasElement, hoodSceneStore: hoodSceneStore }, void> {
 
   private _scene: Scene
   private _controls: OrbitControls
@@ -80,21 +80,20 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         if (this.player && this.cameraFollow) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
           this.handleCollision()
-  
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
         }
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
-          const screenPosition = point.canvasCoords().clone()
-          screenPosition.project(HoodScene.context.camera)
-          const updateData = {
-            name: point.name,
-            transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
-            transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
+            const screenPosition = point.canvasCoords().clone()
+            screenPosition.project(HoodScene.context.camera)
+            const updateData = {
+              name: point.name,
+              transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,
+              transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
+            }
+            this._data.hoodSceneStore.updatePositionsInteractivePoint(updateData)
           }
-          this._data.hoodSceneStore.updatePositionsInteractivePoint(updateData)
-        }
       },
       onResume: (ctx) => {
 
@@ -134,9 +133,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       1,
       1000
     )
-    // this._camera.position.set(-294, 15, -92)
-    // this._camera.position.copy(HoodSceneConfig.cameraPositions[0].coords().newCameraPosition)
-
+    this._camera.position.set(0, 0, 5)
 
     return this._camera
   }
@@ -163,7 +160,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _registerPresetPositions() {
     HoodSceneConfig.cameraPositions.forEach(presetPosition => {
       HoodScene.context.registerPresetCameraPositions(presetPosition)
-      console.log(HoodScene.context);
+        console.log(HoodScene.context);
     })
   }
 
@@ -224,10 +221,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this.ground = city.getObjectByName('CITY_a_baked1')
 
     console.log(city);
-
+    
     console.log(tree);
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
-
+    
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(busSlots, bus, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUS_TEXTURE).data)
     SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
@@ -236,7 +233,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
 
-    SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
+    SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4], true)
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
     SlotsLoader.generateCollectible(this._collectibles.children)
@@ -259,21 +256,33 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
-    eric.model.position.set(-0, -100, -0)
+
+    const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
+    npc_battle.model.scale.set(25, 25, 25)
+
+    const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
+    npc_ticaret.model.scale.set(25, 25, 25)
+
+    const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
+    npc_deenasty.model.scale.set(25, 25, 25)
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_deenasty"), npc_deenasty.model)
+
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
-    this.player.model.position.set(-293, 0.75, -119)
-    this.player.model.rotation.y += Math.PI
+    this.player.model.position.set(-192, 0.75, -99)
+
     this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
 
     this.bvhCollider(city)
 
     this._collectibles = city.getObjectByName('group_collectable')
     SlotsLoader.generateCollectible(this._collectibles.children)
-
+    
     this.collectiblesCollider()
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );
@@ -281,20 +290,20 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   }
 
   addTexture(mesh: Mesh, texture: any) {
-    console.log(texture);
-
-    texture.flipY = false
-    mesh.material.map = texture
+      console.log(texture);
+      
+      texture.flipY = false
+      mesh.material.map = texture
   }
 
   collectiblesCollider() {
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
-      const mat = new MeshBasicMaterial({ color: 'red', wireframe: true, visible: false })
+      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: false})
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
       console.log(collider.name);
-
+      
       this._collectibleColliders.add(collider)
 
     })
@@ -325,6 +334,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this.collider = new Mesh(mergedGeometry);
     this.collider.material.visible = false
+    // this.collider.material.wireframe = true;
     // this.collider.material.color.setHex(0x00ff00)
     // this.collider.material.opacity = 0.5;
     // this.collider.material.transparent = true;
@@ -360,7 +370,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         if (intersect[0].distance < 1) {
           this.lootCollectible(intersect[0].object.name)
           console.log(intersect[0].object.name);
-
+          
         }
       }
     }
