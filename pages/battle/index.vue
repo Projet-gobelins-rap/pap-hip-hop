@@ -562,9 +562,8 @@ export default class battle extends Vue {
           duration: 2,
           opacity: 1,
           ease: "expo.out",
-          delay: index * 2,
-          onComplete: () => {
-            console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY");
+          delay: index*1.5,
+          onStart:()=>{
             if (!isOpponentTour) {
               this.detectCombo(
                 playerData[!isOpponentTour && !round1 ? 0 : index]
@@ -574,6 +573,18 @@ export default class battle extends Vue {
                 playerData[!isOpponentTour && !round1 ? 0 : index].score,
                 true
               );
+            } else {
+              this.calculateScore(
+                this.score.player,
+                opponentData[index].score,
+                false
+              );
+            }
+
+          },
+          onComplete: () => {
+            console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY");
+            if (!isOpponentTour) {
 
               if (index === 3) {
                 if (this.round2StepCounter <= 0) {
@@ -589,11 +600,6 @@ export default class battle extends Vue {
                 }
               }
             } else {
-              this.calculateScore(
-                this.score.player,
-                opponentData[index].score,
-                false
-              );
               if (index === 3) {
                 gsap.to(".btn-battle", { display: "block", opacity: 1 });
                 // this.nextPunchRound1(true)
@@ -627,11 +633,9 @@ export default class battle extends Vue {
         duration: 2,
         opacity: 1,
         ease: "expo.out",
-        delay: 2,
-        onComplete: () => {
-          gsap.to(currentElement, { opacity: 0.5 });
+        delay: 0.5,
+        onStart: ()=> {
           if (!isOpponentTour) {
-            this.toggleRapperAnimation("player", "idle");
             this.detectCombo(
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex]
             );
@@ -640,6 +644,18 @@ export default class battle extends Vue {
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score,
               true
             );
+          }else {
+            this.calculateScore(
+              this.score.player,
+              opponentData[punchIndex].score,
+              false
+            );
+          }
+        },
+        onComplete: () => {
+          gsap.to(currentElement, { opacity: 0.5 });
+          if (!isOpponentTour) {
+            this.toggleRapperAnimation("player", "idle");
             if (punchIndex == 1) {
               gsap.to(".battleResponse--group", {
                 display: "none",
@@ -652,11 +668,6 @@ export default class battle extends Vue {
             }
             $socket.io.emit("battle::round2Sequence");
           } else {
-            this.calculateScore(
-              this.score.player,
-              opponentData[punchIndex].score,
-              false
-            );
             this.displayUserPunchline();
           }
         },
