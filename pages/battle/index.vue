@@ -697,9 +697,27 @@ export default class battle extends Vue {
   }
 
   toggleRapperAnimation(npcName: string, animationName: string): void {
+    const fadeDuration:number = 0.5
     this.npcs.forEach((el: Npc) => {
       if (el.name === npcName) {
-        el.animationPlayed = animationName;
+        // el.animationPlayed = animationName;
+
+        if (animationName === 'rap') {
+          const toPlay = el.animationsMap.get(animationName)
+          const current = el.animationsMap.get('idle')
+
+          current.fadeOut(fadeDuration)
+          toPlay.reset().fadeIn(fadeDuration).play();
+        }else {
+          const toPlay = el.animationsMap.get(animationName)
+          const current = el.animationsMap.get('rap')
+
+          current.fadeOut(fadeDuration)
+          toPlay.reset().fadeIn(fadeDuration).play();
+        }
+
+
+
       }
     });
   }

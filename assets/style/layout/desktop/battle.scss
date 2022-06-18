@@ -137,6 +137,7 @@
     display: none;
     opacity: 0;
     border: 2px solid $purple;
+    @include text(18px);
     &:nth-child(1) {
       transform: rotate(2deg);
     }
