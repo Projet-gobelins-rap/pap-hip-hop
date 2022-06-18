@@ -631,6 +631,7 @@ export default class battle extends Vue {
         onComplete: () => {
           gsap.to(currentElement, { opacity: 0.5 });
           if (!isOpponentTour) {
+            this.toggleRapperAnimation("player", "idle");
             this.detectCombo(
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex]
             );
@@ -656,7 +657,6 @@ export default class battle extends Vue {
               opponentData[punchIndex].score,
               false
             );
-            // this.toggleRapperAnimation("player", "idle");
             this.displayUserPunchline();
           }
         },
