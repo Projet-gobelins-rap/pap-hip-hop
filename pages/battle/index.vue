@@ -656,6 +656,7 @@ export default class battle extends Vue {
               opponentData[punchIndex].score,
               false
             );
+            // this.toggleRapperAnimation("player", "idle");
             this.displayUserPunchline();
           }
         },
@@ -700,7 +701,6 @@ export default class battle extends Vue {
     const fadeDuration:number = 0.5
     this.npcs.forEach((el: Npc) => {
       if (el.name === npcName) {
-        // el.animationPlayed = animationName;
 
         if (animationName === 'rap') {
           const toPlay = el.animationsMap.get(animationName)
@@ -715,8 +715,6 @@ export default class battle extends Vue {
           current.fadeOut(fadeDuration)
           toPlay.reset().fadeIn(fadeDuration).play();
         }
-
-
 
       }
     });
