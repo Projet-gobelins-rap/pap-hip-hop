@@ -558,11 +558,12 @@ export default class battle extends Vue {
      */
     if (round1) {
       Array.from(target).forEach((el: HTMLElement, index: number) => {
-        el.innerHTML = isOpponentTour
+        let responseElem = el.querySelector('.battleResponse')
+        responseElem.innerHTML = isOpponentTour
           ? opponentData[index].content[0].text
           : playerData[!isOpponentTour && !round1 ? punchIndex : index].text;
 
-        gsap.to(el, {
+        gsap.to(responseElem, {
           display: "block",
           duration: 2,
           opacity: 1,
