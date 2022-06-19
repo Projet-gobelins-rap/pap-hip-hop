@@ -931,7 +931,18 @@ export default class battle extends Vue {
 
   goToHood() {
     // remove scene children
-    this.$router.push("/hood3");
+    gsap.fromTo(
+      ".battle-overlay",
+      { display: "none", yPercent: 100,opacity:1 },
+      {
+        display: "block",
+        duration: 1.5,
+        yPercent: 0,
+        ease: "expo.inOut",
+        onComplete:()=>{
+          this.$router.push("/hood3");
+        }
+      })
     console.log("ON VA DANS LE HOOD BB");
   }
 
