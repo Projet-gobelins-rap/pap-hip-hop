@@ -505,7 +505,7 @@ export default class battle extends Vue {
 
   // Show user punchline
   displayUserPunchline() {
-    gsap.set(Array.from(this.player.$el.children), {
+    gsap.set(Array.from(this.player.$el.querySelectorAll('.battleResponse')), {
       display: "none",
       opacity: 0,
     });
@@ -571,6 +571,16 @@ export default class battle extends Vue {
           delay: index*1.5,
           onStart:()=>{
             if (!isOpponentTour) {
+              if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'top') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--20')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              } else if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'moyen') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--10')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }else  {
+                let currentSticker = el.querySelector('.battleResponse-sticker--0')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }
               this.detectCombo(
                 playerData[!isOpponentTour && !round1 ? 0 : index]
               );
@@ -580,6 +590,16 @@ export default class battle extends Vue {
                 true
               );
             } else {
+              if (opponentData[index].status === 'top') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--20')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              } else if (opponentData[index].status === 'moyen') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--10')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }else  {
+                let currentSticker = el.querySelector('.battleResponse-sticker--0')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }
               this.calculateScore(
                 this.score.player,
                 opponentData[index].score,
@@ -623,18 +643,20 @@ export default class battle extends Vue {
 
       const result = isOpponentTour
         ? [...target].filter((element) =>
-            element.classList.contains("battleResponse--opponent")
+            element.classList.contains("battleResponseWrapper--opponent")
           )
         : [...target].filter((element) =>
-            element.classList.contains("battleResponse--player")
+            element.classList.contains("battleResponseWrapper--player")
           );
 
       console.log(result, "✅✅✅✅✅");
       let currentElement = result[punchIndex] as HTMLElement;
-      currentElement.innerHTML = isOpponentTour
+      console.log(currentElement,'<--- current element')
+      let response = currentElement.querySelector('.battleResponse')
+      response.innerHTML = isOpponentTour
         ? opponentData[punchIndex].content[0].text
         : playerData[0].text;
-      gsap.to(currentElement, {
+      gsap.to(response, {
         display: "block",
         duration: 2,
         opacity: 1,
@@ -642,6 +664,16 @@ export default class battle extends Vue {
         delay: 0.5,
         onStart: ()=> {
           if (!isOpponentTour) {
+            if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'top') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            } else if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'moyen') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }else  {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }
             this.detectCombo(
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex]
             );
@@ -651,6 +683,16 @@ export default class battle extends Vue {
               true
             );
           }else {
+            if (opponentData[punchIndex].status === 'top') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            } else if (opponentData[punchIndex].status === 'moyen') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }else  {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }
             this.calculateScore(
               this.score.player,
               opponentData[punchIndex].score,
@@ -663,7 +705,7 @@ export default class battle extends Vue {
           if (!isOpponentTour) {
             this.toggleRapperAnimation("player", "idle");
             if (punchIndex == 1) {
-              gsap.to(".battleResponse--group", {
+              gsap.to(".battleResponseWrapper--group", {
                 display: "none",
                 opacity: 0,
               });
@@ -683,7 +725,7 @@ export default class battle extends Vue {
 
   nextPunchRound1(): void {
     if (this.opponentTourRound1) {
-      gsap.to(".responseContainer--opponent span", {
+      gsap.to(".responseContainer--opponent ", {
         display: "none",
         duration: 1,
         opacity: 0,
@@ -695,7 +737,7 @@ export default class battle extends Vue {
         },
       });
     } else {
-      gsap.to(".responseContainer--player span", {
+      gsap.to(".responseContainer--player", {
         display: "none",
         duration: 1,
         opacity: 0,
