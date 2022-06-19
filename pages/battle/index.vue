@@ -216,7 +216,7 @@ import grenierScene from "../../core/scene/GrenierScene";
 import BattleScene from "../../core/scene/BattleScene";
 import HoodScene from "../../core/scene/HoodScene";
 import emitter from "tiny-emitter/instance";
-import { VIDEO_ASSET } from "../../core/enums";
+import {AUDIO_ASSET, VIDEO_ASSET} from "../../core/enums";
 import { Npc } from "../../core/models/npc";
 import { ignoreNgOnChanges } from "swiper/angular/angular/src/utils/utils";
 @Component({
@@ -898,6 +898,7 @@ export default class battle extends Vue {
           } else {
             this.$refs.transitionRound2.play();
           }
+          this.playAudioCloche()
         },
       }
     );
@@ -989,6 +990,14 @@ export default class battle extends Vue {
     console.log("ON VA DANS LE HOOD BB");
   }
 
+  playAudioCloche() {
+    let audio = new Audio(this.clocheAudio);
+    audio.play();
+  }
+
+  get clocheAudio():string {
+    return AssetsManager.getAudio(AUDIO_ASSET.CLOCHE_SOUND).data.src
+  }
   // A getter function that returns the src of the video.
   get videoVictory(): string {
     return AssetsManager.getVideo(VIDEO_ASSET.BATTLE_END_BG_VICTORY).data.src;

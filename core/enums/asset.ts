@@ -82,6 +82,7 @@ export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
   CTA_CLIC = 'CTA_CLIC',
   CTA_HOVER = 'CTA_HOVER',
+  CLOCHE_SOUND = 'CLOCHE_SOUND',
 }
 
 /**
