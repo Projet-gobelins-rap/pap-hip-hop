@@ -38,7 +38,7 @@
           <img class="healthbar-img" :src="pp.src" alt="" />
         </div>
         <div v-if="pp" class="healthbar opponent">
-          <img class="healthbar-img" :src="pp.src" alt="" />
+          <img class="healthbar-img" :src="ppOpp.src" alt="" />
           <div class="healthbar-container">
             <span class="healthbar-gauge" ref="opponentGauge"></span>
           </div>
@@ -216,7 +216,7 @@ import grenierScene from "../../core/scene/GrenierScene";
 import BattleScene from "../../core/scene/BattleScene";
 import HoodScene from "../../core/scene/HoodScene";
 import emitter from "tiny-emitter/instance";
-import {AUDIO_ASSET, VIDEO_ASSET} from "../../core/enums";
+import {AUDIO_ASSET, IMAGE_ASSET, VIDEO_ASSET} from "../../core/enums";
 import { Npc } from "../../core/models/npc";
 import { ignoreNgOnChanges } from "swiper/angular/angular/src/utils/utils";
 @Component({
@@ -296,6 +296,7 @@ export default class battle extends Vue {
   public opponentRound2: object;
   public resultBattle: object;
   public pp: HTMLImageElement | null = null;
+  public ppOpp: HTMLImageElement | null = null;
   public score: { player: number; opponent: number } = {
     player: 200,
     opponent: 200,
@@ -342,7 +343,8 @@ export default class battle extends Vue {
 
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
-      this.pp = AssetsManager.getImage("PP").data;
+      this.pp =  AssetsManager.getImage('BATTLE_PP_PLAYER').data
+      this.ppOpp =  AssetsManager.getImage('BATTLE_PP_OPP').data
 
       // emitter.emit('battle::disposeObject','coach')
 
@@ -994,6 +996,14 @@ export default class battle extends Vue {
     let audio = new Audio(this.clocheAudio);
     audio.play();
   }
+
+  // get ppPlayer():string {
+  //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_PLAYER).data.src
+  // }
+  //
+  // get ppOpp():string {
+  //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_OPP).data.src
+  // }
 
   get clocheAudio():string {
     return AssetsManager.getAudio(AUDIO_ASSET.CLOCHE_SOUND).data.src
