@@ -1,5 +1,5 @@
 <template>
-  <section class="battle">
+  <section ref="battle" class="battle">
     <div class="battle-overlay">
       <video
         class="battle-transitionVideo battle-video"
@@ -311,6 +311,7 @@ export default class battle extends Vue {
   public battleSceneInitializer: BattleSceneInitializer;
   public videoLooseElement: HTMLMediaElement;
   public videoVictoryElement: HTMLMediaElement;
+  public battle: HTMLElement;
   mounted() {
     this.initRound2Datas();
     this.player = this.$refs.player as HTMLElement;
@@ -318,6 +319,7 @@ export default class battle extends Vue {
     this.globalResponse = this.$refs.globalResponse as HTMLElement;
     this.damageElement = this.$refs.damage as HTMLElement;
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
+    this.battle = this.$refs.battle as HTMLElement;
     this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
     this.transitionRound2 = this.$refs.transitionRound2 as HTMLMediaElement;
     this.videoLooseElement = this.$refs.videoLoose as HTMLMediaElement;
@@ -411,6 +413,7 @@ export default class battle extends Vue {
   displayOpponentPunchline() {
     console.log(this.opponent);
     if (!this.isRound2) {
+      this.battle.classList.add('battle-opponentTour')
       emitter.emit("battle::addObject", "opponent");
       this.animatePunchline(
         this.opponent.$el.children,
@@ -508,6 +511,8 @@ export default class battle extends Vue {
     });
     console.log(this.round2StepCounter, "<---est ceque leround 2");
     if (this.round2StepCounter == 0) {
+      this.battle.classList.remove('battle-opponentTour')
+      this.battle.classList.add('battle-playerTour')
       this.animatePunchline(
         this.player.$el.children,
         true,
@@ -696,6 +701,7 @@ export default class battle extends Vue {
         onComplete: () => {
           this.setNextChat();
           this.displayChat();
+          this.battle.classList.remove('battle-playerTour')
           emitter.emit("battle::disposeObject", "player");
           emitter.emit("battle::addObject", "coach");
           console.log(

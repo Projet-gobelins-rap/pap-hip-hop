@@ -5,6 +5,22 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  &-opponentTour {
+    .responseContainer {
+      transform: translateX(-40%);
+    }
+    .btn-battle {
+      transform: translateX(-40%);
+    }
+  }
+  &-playerTour {
+    .responseContainer {
+      transform: translateX(40%);
+    }
+    .btn-battle {
+      transform: translateX(40%);
+    }
+  }
   &-overlay {
     position: fixed;
     width: 100%;
@@ -190,4 +206,8 @@
   //span {
   //  display: block;
   //}
+}
+
+.btn-battle {
+  z-index: 4;
 }
