@@ -36,7 +36,7 @@ import Onboarding from "../../components/contentOverlays/onboarding";
 import Toast from "../../components/contentOverlays/toast";
 import HoodScene from "~/core/scene/HoodScene";
 import DeenastyInteractPoint from "~/core/config/hood-scene/interact-points/DeenastyInteractPoint";
-
+import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";

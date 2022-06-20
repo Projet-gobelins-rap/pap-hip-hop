@@ -16,6 +16,7 @@
     &.collec {
         border: solid 2px $yellow;
         top: 40px;
+        z-index: 101;
     }
 
     &-text {

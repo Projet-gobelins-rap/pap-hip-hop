@@ -5,9 +5,9 @@
       @click.native="openCollectible"
       v-if="toastText"
       :type="toastType"
-      :text="toastMessage"
+      :text="toastText"
     />
-    <Toast :type="'message'" :text="'Explore la place'" />
+    <Toast :type="'message'" :text="toastMessage" />
 
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
@@ -37,7 +37,7 @@ import Onboarding from "../../components/contentOverlays/onboarding";
 import Toast from "../../components/contentOverlays/toast";
 import HoodScene from "~/core/scene/HoodScene";
 import DeenastyInteractPoint from "~/core/config/hood-scene/interact-points/DeenastyInteractPoint";
-
+import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
@@ -83,7 +83,7 @@ export default class HoodScenePage2 extends Vue {
   public npcDialogues: object[];
   public currentOnboarding: object;
   public toastText: string | null = null;
-  public toastMessage: string | null = null;
+  public toastMessage: string | null = 'Va à la boutique Ticaret';
   public toastType: string | null = null;
   public toastUID: string = "";
   public chatDialogStep: string;
@@ -245,6 +245,9 @@ export default class HoodScenePage2 extends Vue {
           break;
         case "goBack":
           this.goBack();
+
+          // Demo mode : trigger when leave dialogue (Dan)
+          this.toastMessage = 'Trouve le coach'
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
