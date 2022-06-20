@@ -30,12 +30,6 @@
         v-for="(item, i) in content.items"
         :key="`slice-item-${i}`"
       >
-<!--        <div>-->
-<!--          {{item.linkUrl[0]}}-->
-<!--        </div>-->
-<!--        <PrismicRichText :field="item.linkUrl" />-->
-<!--        -->
-<!--        -->
 
         <CustomButton
           v-if="item.Choix && item.linkUrl[0]"

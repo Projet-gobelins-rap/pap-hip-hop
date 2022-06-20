@@ -49,13 +49,31 @@
         <img v-if="content.icon" class="onboarding-full--icon" :src="content.icon.url" alt="" />
         <PrismicRichText class="onboarding-full--text" :field="content.description" />
 
+<!--        <CustomButton-->
+<!--          v-if="content.isClickable"-->
+<!--          @click.native="nextStep(content.action[0].text)"-->
+<!--          class="onboarding-button small"-->
+<!--          :text="'J\'ai capté !'"-->
+<!--        >-->
+<!--        </CustomButton>-->
+
+
         <CustomButton
-          v-if="content.isClickable"
-          @click.native="nextStep(content.action[0].text)"
+          v-if="content.isClickable && content.linkUrl[0]"
+          :is-link="content.isLink"
+          :link-url="content.linkUrl[0].text"
           class="onboarding-button small"
+          @click.native="nextStep(content.action[0].text)"
           :text="'J\'ai capté !'"
-        >
-        </CustomButton>
+        />
+        <CustomButton
+          v-else-if="content.isClickable"
+          :is-link="content.isLink"
+          class="onboarding-button small"
+          @click.native="nextStep(content.action[0].text)"
+          :text="'J\'ai capté !'"
+        />
+
       </div>
       <div class="onboarding-fullOverlay"></div>
 

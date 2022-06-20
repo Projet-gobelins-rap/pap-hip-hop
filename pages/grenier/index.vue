@@ -124,9 +124,9 @@ export default class GrenierScene extends Vue {
     });
   }
 
-  goToCity() {
-    this.$router.push({ path: "/hood", replace: true });
-  }
+  // goToCity() {
+  //   this.$router.push({ path: "/hood", replace: true });
+  // }
 
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
@@ -141,11 +141,26 @@ export default class GrenierScene extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goToCity":
-          this.goToCity();
+          // this.goToCity();
           break;
       }
     }
   }
+
+  transition() {
+
+    return {
+      leave(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition leave ekip")
+
+        done()
+
+      }
+    };
+  }
+
+
 
   get chatStep() {
     return this.chatStore.chatStep;
