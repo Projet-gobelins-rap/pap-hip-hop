@@ -14,9 +14,9 @@ let ModeCameraPosition: CameraPosition = {
     GrenierScene.context.scene.getObjectByName("interaction_mode")!.getWorldPosition(lookAtPosition)
 
     const newCameraPosition = new Vector3(
-      lookAtPosition.x + 10,
+      lookAtPosition.x + 20,
       lookAtPosition.y,
-      lookAtPosition.z -10,
+      lookAtPosition.z -20,
     )
 
     return { newCameraPosition, lookAtPosition }

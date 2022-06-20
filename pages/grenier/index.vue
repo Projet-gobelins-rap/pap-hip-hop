@@ -90,7 +90,7 @@ export default class GrenierScene extends Vue {
         this.currentChat = element;
         return this.currentChat;
       }
-      if (point.name == "TV") {
+      if (point.name == "Audiovisuel") {
         this.genierInstance.videoTV.muted = false
       }
     });
