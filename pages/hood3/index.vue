@@ -6,7 +6,7 @@
       v-if="toastText"
       :type="toastType"
       :text="toastText"
-    ></Toast>
+    />
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
       class="interactive-points"
@@ -15,7 +15,7 @@
       :key="index"
     />
     <ChatComponent
-      class="grenier-chat"
+      class="hood-chat"
       v-if="this.chatElementState && currentChat"
       :content="currentChat"
     />

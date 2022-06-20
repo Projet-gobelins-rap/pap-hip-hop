@@ -15,7 +15,7 @@
       :key="index"
     />
     <ChatComponent
-      class="grenier-chat"
+      class="hood-chat"
       v-if="this.chatElementState && currentChat"
       :content="currentChat"
     />
