@@ -25,6 +25,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
+  private _npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -83,6 +84,18 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
         }
+
+        if (this._npcArray.length > 0) {
+          this._npcArray.forEach((npc: Npc) => {
+            npc.update(ctx.deltaTime)
+          })
+        }
+
+        this._collectibles.children.forEach(object => {
+          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
+        })
+
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
             const screenPosition = point.canvasCoords().clone()
@@ -204,7 +217,6 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     const tower2 = AssetsManager.getGltf(GLTF_ASSET.SLOT_TOWER_LG).data.scene
 
     city.scale.set(0.04, 0.04, 0.04)
-    console.log(city);
     this._scene.add(city);
 
     const treeSlots = city.getObjectByName('group_tree').children
@@ -222,9 +234,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     console.log(city);
     
-    console.log(tree);
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
-    
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(busSlots, bus, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUS_TEXTURE).data)
     SlotsLoader.populateSlots(bushSlots, bush, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUSH_TEXTURE).data)
@@ -256,27 +266,48 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
+    this._npcArray.push(eric)
 
     const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_battle)
 
     const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
     npc_ticaret.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_ticaret)
 
     const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
     npc_deenasty.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_deenasty)
+
+    const npc_break_1 = new Npc(playerGltf, 'break_1', 't-pose')
+    npc_break_1.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_break_1)
+
+    const npc_break_2 = new Npc(playerGltf, 'break_2', 't-pose')
+    npc_break_2.model.scale.set(25, 25, 25)
+    npc_break_2.animationPlayed = 'break'
+    this._npcArray.push(npc_break_2) 
+
+    const npc_break_3 = new Npc(playerGltf, 'break_3', 't-pose')
+    npc_break_3.model.scale.set(25, 25, 25)
+    npc_break_3.animationPlayed = 'rap'
+    this._npcArray.push(npc_break_3)
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_deenasty"), npc_deenasty.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_1"), npc_break_1.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_2"), npc_break_2.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_3"), npc_break_3.model)
 
+    
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
-
     this._scene.add(this.player.model);
     this.player.model.position.set(-192, 0.75, -99)
 
-    this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
+    this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE_V1).data)
 
     this.bvhCollider(city)
 

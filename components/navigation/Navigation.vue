@@ -31,17 +31,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "nuxt-property-decorator";
+import { Component, getModule, Vue } from "nuxt-property-decorator";
 import stepStore from "~/store/stepStore";
 import $socket from "~/plugins/socket.io";
+import collectibleStore from "~/store/collectibleStore";
 
 @Component
 export default class Navigation extends Vue {
   public menuOpen: boolean = false;
+  public collectibleStore = getModule(collectibleStore, this.$store);
   
   mounted() {
     $socket.io.on("goTo", (path) => {
       this.$router.push(path);
+    });
+
+    $socket.io.on("collectible::looted", collectibleID => {
+      this.collectibleStore.addCollected(collectibleID);
     });
   }
 

@@ -25,6 +25,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
+  private _npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -82,8 +83,19 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
           this.handleCollision()
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
-          console.log(this.player.model.position);
           
+        }
+        
+        this._collectibles.children.forEach(object => {
+          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
+        })
+
+
+        if (this._npcArray.length > 0) {
+          this._npcArray.forEach((npc: Npc) => {
+            npc.update(ctx.deltaTime)
+          })
         }
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {

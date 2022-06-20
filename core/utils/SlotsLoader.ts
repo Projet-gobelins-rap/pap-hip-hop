@@ -68,11 +68,15 @@ export default class SlotsLoader {
         });
     }
 
-    public static generateCollectible(slots: Object3D[]): void {
+    public static generateCollectible(slots: Object3D[], collectedItems: string[]): void {
         slots.forEach(slot => {
-            let model = AssetsManager.getGltf(slot.name).data.scene.clone()
-            slot.add(model) 
-            model.position.y = 30
+            if(!(collectedItems?.includes(slot.name))) {
+                let model = AssetsManager.getGltf(slot.name).data.scene.clone()
+                slot.add(model) 
+                model.position.y = 30
+            } else {
+                slot.children = []
+            }
         });
     }
 }

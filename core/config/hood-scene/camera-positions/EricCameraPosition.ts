@@ -7,7 +7,7 @@ const EricCameraPosition: CameraPosition = {
   coords: () => {
     const lookAtPosition =  new Vector3()
     HoodScene.context.scene.getObjectByName("npc_eric")!.getWorldPosition(lookAtPosition)
-    lookAtPosition.y += 8
+    lookAtPosition.y += 4
     const newCameraPosition = new Vector3(
       lookAtPosition.x - 20,
       lookAtPosition.y ,
