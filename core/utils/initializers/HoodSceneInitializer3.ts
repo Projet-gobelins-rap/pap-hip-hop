@@ -283,6 +283,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
+    this.player.changeOutfit('player')
     this.player.model.position.set(2, 0.75, 11)
     this.player.model.rotation.y -= 2 * Math.PI / 3
 

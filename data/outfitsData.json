@@ -56,8 +56,8 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "NPC_COACH_BODY_TEXTURE",
+                "textureArms": "NPC_COACH_ARMS_TEXTURE"
             }
         },
         {
@@ -68,8 +68,8 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "PLAYER_TICARET_BODY_TEXTURE",
+                "textureArms": "PLAYER_TICARET_ARMS_TEXTURE"
             }
         },
         {
@@ -138,12 +138,12 @@
     "player": {
         "name": "player",
         "head": {
-            "model": "head_player_bob"
+            "model": "player_head"
         },
         "body": {
             "color": "orange",
-            "textureBody": "OPPONENT_BODY_TEXTURE",
-            "textureArms": "OPPONENT_ARMS_TEXTURE"
+            "textureBody": "PLAYER_BODY_TEXTURE",
+            "textureArms": "PLAYER_ARMS_TEXTURE"
         }
     }
 }
