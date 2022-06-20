@@ -30,12 +30,19 @@
         v-for="(item, i) in content.items"
         :key="`slice-item-${i}`"
       >
-        <CustomButton
-          v-if="item.Choix"
-          class="chat-button medium"
-          @click.native="nextStep(item.Choix.split('_')[0])"
-          :text="item.Choix.split('_')[1]"
-        />
+        <div>
+          {{item.linkUrl[0]}}
+        </div>
+        <PrismicRichText :field="item.linkUrl" />
+
+<!--        <CustomButton-->
+<!--          v-if="item.Choix"-->
+<!--          :is-link="item.isLink"-->
+<!--          :link-url="item.linkUrl"-->
+<!--          class="chat-button medium"-->
+<!--          @click.native="nextStep(item.Choix.split('_')[0])"-->
+<!--          :text="item.Choix.split('_')[1]"-->
+<!--        />-->
       </div>
     </div>
   </div>
