@@ -86,6 +86,42 @@
             }
         },
         {
+            "name": "break_1",
+            "head": {
+                "model": "head_graffeur",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
+        },
+        {
+            "name": "break_2",
+            "head": {
+                "model": "head_graffeur",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
+        },
+        {
+            "name": "break_3",
+            "head": {
+                "model": "head_graffeur",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "VICTOR_BODY_TEXTURE",
+                "textureArms": "VICTOR_ARMS_TEXTURE"
+            }
+        },
+        {
             "name": "deenasty",
             "head": {
                 "model": "victor_head",
