@@ -33,6 +33,7 @@ import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodSceneInitializer from "~/core/utils/initializers/HoodSceneInitializer";
 import stepStore from "~/store/stepStore";
 import chatStore from "~/store/chatStore";
+import collectibleStore from "~/store/collectibleStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
@@ -76,6 +77,7 @@ export default class HoodScenePage extends Vue {
   public hoodSceneStore = getModule(hoodSceneStore, this.$store);
   public stepStore = getModule(stepStore, this.$store);
   public chatStore = getModule(chatStore, this.$store);
+  public collectibleStore = getModule(collectibleStore, this.$store);
   public onboardingStore = getModule(onboardingStore, this.$store);
   public hoodInstance: HoodSceneInitializer;
   public hoodOnboarding: object;
@@ -102,7 +104,10 @@ export default class HoodScenePage extends Vue {
       canvas: this.$refs.canvasGlobalScene as HTMLCanvasElement,
       hoodSceneStore: this.hoodSceneStore,
     });
-    this.hoodInstance.init();
+    console.clear();
+    console.log(this.collectedItems);
+
+    this.hoodInstance.init(this.collectedItems);
     this.hoodInstance.player.camera.position.set(-294, 15, -92);
 
     if (HoodScene.context._isStarted) {
@@ -193,6 +198,8 @@ export default class HoodScenePage extends Vue {
     this.toastText = "consulter l'objet collecté !";
     this.toastType = "collec";
     this.toastUID = toastID;
+    this.collectibleStore.addCollected(toastID);
+    $socket.io.emit("collectible::looted", this.toastUID.toLowerCase());
 
     gsap.to(".toast.message", {
       y: -30,
@@ -285,6 +292,10 @@ export default class HoodScenePage extends Vue {
 
   get chatElementState() {
     return this.hoodSceneStore.isChatDisplay;
+  }
+
+  get collectedItems() {
+    return this.collectibleStore.collected;
   }
 }
 </script>

@@ -26,14 +26,16 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   public cameraFollow: boolean = true;
   public ground: Mesh;
   private _npcArray: Npc[] = []
+  private _collectedItems: string[]
 
   // private _keysPressed: any
 
-  init(): void {
+  init(collectedItems: string[]): void {
     HoodScene.setSceneContext(this._createSceneContext())
+    // this._collectedItems = collectedItems
     this._addSceneElements()
     this._registerPresetPositions()
-
+    
     HoodScene.context.start()
   }
 
@@ -93,8 +95,10 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         } 
         
         this._collectibles.children.forEach(object => {
-          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
-          object.children[1].rotation.y += ctx.deltaTime * 0.5
+          object.position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.rotation.y += ctx.deltaTime * 0.5
+          // object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          // object.children[1].rotation.y += ctx.deltaTime * 0.5
         })
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
@@ -251,7 +255,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4])
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
-    SlotsLoader.generateCollectible(this._collectibles.children)
+    // SlotsLoader.generateCollectible(this._collectibles.children)
 
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -286,9 +290,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this.bvhCollider(city)
 
+    console.log(this._collectedItems);
+    
     this._collectibles = city.getObjectByName('group_collectable')
-    SlotsLoader.generateCollectible(this._collectibles.children)
-
+    SlotsLoader.generateCollectible(this._collectibles.children, this._collectedItems)
+    
     this.collectiblesCollider()
 
     // const directionalLight = new DirectionalLight( 0xffffff, 1 );

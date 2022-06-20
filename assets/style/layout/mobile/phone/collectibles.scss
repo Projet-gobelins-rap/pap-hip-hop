@@ -51,6 +51,12 @@
             background-color: $red;
             border: solid 4px $red_dark;
         }
+
+        &.locked {
+            background-color: $grey;
+            border: solid 4px $darkGrey;
+            pointer-events: none;
+        }
     }
 
     &-libelle {

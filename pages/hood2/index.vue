@@ -31,6 +31,7 @@ import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodSceneInitializer2 from "~/core/utils/initializers/HoodSceneInitializer2";
 import stepStore from "~/store/stepStore";
 import chatStore from "~/store/chatStore";
+import collectibleStore from "~/store/collectibleStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
@@ -77,13 +78,14 @@ export default class HoodScenePage2 extends Vue {
   public hoodSceneStore = getModule(hoodSceneStore, this.$store);
   public stepStore = getModule(stepStore, this.$store);
   public chatStore = getModule(chatStore, this.$store);
+  public collectibleStore = getModule(collectibleStore, this.$store);
   public onboardingStore = getModule(onboardingStore, this.$store);
   public hoodInstance: HoodSceneInitializer2;
   public hoodOnboarding: object;
   public npcDialogues: object[];
   public currentOnboarding: object;
   public toastText: string | null = null;
-  public toastMessage: string | null = 'Va à la boutique Ticaret';
+  public toastMessage: string | null = "Va à la boutique Ticaret";
   public toastType: string | null = null;
   public toastUID: string = "";
   public chatDialogStep: string;
@@ -200,6 +202,8 @@ export default class HoodScenePage2 extends Vue {
     this.toastText = "consulter l'objet collecté !";
     this.toastType = "collec";
     this.toastUID = toastID;
+    this.collectibleStore.addCollected(toastID);
+    $socket.io.emit("collectible::looted", this.toastUID.toLowerCase());
 
     gsap.to(".toast.message", {
       y: -30,
@@ -247,7 +251,7 @@ export default class HoodScenePage2 extends Vue {
           this.goBack();
 
           // Demo mode : trigger when leave dialogue (Dan)
-          this.toastMessage = 'Trouve le coach'
+          this.toastMessage = "Trouve le coach";
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
@@ -295,6 +299,9 @@ export default class HoodScenePage2 extends Vue {
 
   get chatElementState() {
     return this.hoodSceneStore.isChatDisplay;
+  }
+  get collectedItems() {
+    return this.collectibleStore.collected;
   }
 }
 </script>
