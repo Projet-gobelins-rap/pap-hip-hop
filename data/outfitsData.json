@@ -1,6 +1,5 @@
 {
     "pnj": [
-
         {
             "name": "coach",
             "head": {
@@ -81,56 +80,57 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "NPC_MOUSSA_BODY_TEXTURE",
+                "textureArms": "NPC_MOUSSA_ARMS_TEXTURE",
+                "textureLegs": "NPC_MOUSSA_LEGS_TEXTURE"
             }
         },
         {
             "name": "break_1",
             "head": {
-                "model": "head_graffeur",
+                "model": "HEAD_BREAKER_A",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "BODY_BREAKER_A_TEXTURE",
+                "textureArms": "ARMS_BREAKER_A_TEXTURE"
             }
         },
         {
             "name": "break_2",
             "head": {
-                "model": "head_graffeur",
+                "model": "HEAD_BREAKER_B",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "BODY_BREAKER_B_TEXTURE",
+                "textureArms": "ARMS_BREAKER_B_TEXTURE"
             }
         },
         {
             "name": "break_3",
             "head": {
-                "model": "head_graffeur",
+                "model": "HEAD_BREAKER_C",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "BODY_BREAKER_C_TEXTURE",
+                "textureArms": "ARMS_BREAKER_B_TEXTURE"
             }
         },
         {
             "name": "deenasty",
             "head": {
-                "model": "victor_head",
+                "model": "head_deenasty",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
             }
         }
 

@@ -31,7 +31,7 @@ export class Character {
     public textures: {
         arms: Texture,
         body: Texture,
-        // legs: Texture,
+        legs: Texture,
     };
     private _fadeDuration: number;
 
@@ -71,7 +71,10 @@ export class Character {
         this.textures = {
             arms: AssetsManager.getTexture(this.outfitParams.body.textureArms).data,
             body: AssetsManager.getTexture(this.outfitParams.body.textureBody).data,
+            legs: AssetsManager.getTexture(this.outfitParams.body.textureLegs ? this.outfitParams.body.textureLegs : TEXTURE_ASSET.BLUE_JEAN_TEXTURE).data,
         }
+        console.log();
+
 
         this.model.traverse((child: Object3D | Mesh) => {
             // append in top head bone for sticking with rigged mesh
@@ -84,6 +87,15 @@ export class Character {
                 child.material = new MeshMatcapMaterial({ map: this.textures.body })
             }
 
+            if (child.name === 'pant') {
+                // this.textures.arms.flipY = false
+                child.material = new MeshMatcapMaterial({ map: this.textures.legs })
+            }
+
+            if (child.name === 'hand') {
+                this.textures.arms.flipY = false
+                child.material = new MeshMatcapMaterial({ map: AssetsManager.getTexture(TEXTURE_ASSET.HAND_SKIN_COLOR).data })
+            }
             if (child.name === 'arms') {
                 this.textures.arms.flipY = false
                 child.material = new MeshMatcapMaterial({ map: this.textures.arms })
