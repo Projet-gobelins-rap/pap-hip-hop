@@ -14,7 +14,7 @@ import {Vector3} from "three";
 //   cameraPosZ: 0,
 // }
 const PosterCameraPosition: CameraPosition = {
-  name: 'poster',
+  name: 'Musique',
   coords: () => {
     const lookAtPosition =  new Vector3()
     GrenierScene.context.scene.getObjectByName("interaction_support")!.getWorldPosition(lookAtPosition)
