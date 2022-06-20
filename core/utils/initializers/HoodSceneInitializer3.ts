@@ -85,6 +85,12 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
           // ctx.scene.add(arrow);
           
         }
+        
+        this._collectibles.children.forEach(object => {
+          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
+        })
+
 
         if (this._npcArray.length > 0) {
           this._npcArray.forEach((npc: Npc) => {

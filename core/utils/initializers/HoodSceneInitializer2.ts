@@ -91,6 +91,12 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
           })
         }
 
+        this._collectibles.children.forEach(object => {
+          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
+        })
+
+        
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
             const screenPosition = point.canvasCoords().clone()
             screenPosition.project(HoodScene.context.camera)

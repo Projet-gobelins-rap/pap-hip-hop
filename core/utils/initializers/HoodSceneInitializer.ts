@@ -91,6 +91,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
             npc.update(ctx.deltaTime)
           })
         } 
+        
+        this._collectibles.children.forEach(object => {
+          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
+        })
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
@@ -303,6 +308,8 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
       const mat = new MeshBasicMaterial({ color: 'red', wireframe: true, visible: false })
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
+      console.log(object);
+      
       console.log(collider.name);
 
       this._collectibleColliders.add(collider)
