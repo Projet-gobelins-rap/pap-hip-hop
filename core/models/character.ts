@@ -79,6 +79,7 @@ export class Character {
         this.model.traverse((child: Object3D | Mesh) => {
             // append in top head bone for sticking with rigged mesh
             if (child.name === "mixamorigHeadTop_End") {
+                child.children = []
                 child.add(this.loadedCollection.get(this.outfitParams.head.model).clone())
             }
 

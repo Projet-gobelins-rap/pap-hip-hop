@@ -249,6 +249,7 @@ export default class HoodScenePage2 extends Vue {
           break;
         case "goBack":
           this.goBack();
+          this.hoodInstance.player.changeOutfit('player')
 
           // Demo mode : trigger when leave dialogue (Dan)
           this.toastMessage = "Trouve le coach";
