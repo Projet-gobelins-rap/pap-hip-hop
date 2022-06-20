@@ -154,30 +154,7 @@
     opacity: 0;
     border: 2px solid $purple;
     @include text(18px);
-    &:nth-child(1) {
-      transform: rotate(2deg);
-    }
-    &:nth-child(2) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(3) {
-      transform: rotate(1deg);
-    }
-    &:nth-child(4) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(5) {
-      transform: rotate(2deg);
-    }
-    &:nth-child(6) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(7) {
-      transform: rotate(1deg);
-    }
-    &:nth-child(8) {
-      transform: rotate(-1deg);
-    }
+
   }
   &--opponent {
     span {
@@ -203,11 +180,47 @@
   font-size: 2rem;
   z-index: 1;
   max-width: 500px;
-  //span {
-  //  display: block;
-  //}
+  &-sticker {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(75%) translateY(-20%) scale(0.8);
+    &--20 {
+      transform: translateX(75%) translateY(-40%) scale(0.8);
+    }
+
 }
 
+}
+.battleResponseWrapper {
+  position: relative;
+  &:nth-child(1) {
+    transform: rotate(2deg);
+  }
+  &:nth-child(2) {
+    transform: rotate(-1deg);
+  }
+  &:nth-child(3) {
+    transform: rotate(1deg);
+  }
+  &:nth-child(4) {
+    transform: rotate(-1deg);
+  }
+  &:nth-child(5) {
+    transform: rotate(2deg);
+  }
+  &:nth-child(6) {
+    transform: rotate(-1deg);
+  }
+  &:nth-child(7) {
+    transform: rotate(1deg);
+  }
+  &:nth-child(8) {
+    transform: rotate(-1deg);
+  }
+}
 .btn-battle {
   z-index: 4;
 }
