@@ -25,6 +25,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
+  private _npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -82,6 +83,12 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
           this.handleCollision()
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
+        }
+
+        if (this._npcArray.length > 0) {
+          this._npcArray.forEach((npc: Npc) => {
+            npc.update(ctx.deltaTime)
+          })
         }
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
@@ -256,15 +263,19 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
+    this._npcArray.push(eric)
 
     const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_battle)
 
     const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
     npc_ticaret.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_ticaret)
 
     const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
     npc_deenasty.model.scale.set(25, 25, 25)
+    this._npcArray.push(npc_deenasty)
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)

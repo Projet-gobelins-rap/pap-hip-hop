@@ -25,6 +25,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
+  private _npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -80,10 +81,16 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
         if (this.player && this.cameraFollow) {
           this.player.updateControls(ctx.deltaTime, ctx.keysPressed)
           this.handleCollision()
-  
+
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
         }
+
+        if (this._npcArray.length > 0) {
+          this._npcArray.forEach((npc: Npc) => {
+            npc.update(ctx.deltaTime)
+          })
+        } 
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
@@ -258,8 +265,11 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     // floor.material.side = DoubleSide
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
+    this._npcArray.push(eric)
     eric.model.scale.set(25, 25, 25)
     eric.model.position.set(-0, -100, -0)
+    console.log('eric : ', eric);
+
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
