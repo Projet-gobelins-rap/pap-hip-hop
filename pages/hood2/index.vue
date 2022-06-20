@@ -1,12 +1,17 @@
 <template>
   <section class="hood">
     <Onboarding :content="currentOnboarding"></Onboarding>
-    <Toast
+   <Toast
       @click.native="openCollectible"
       v-if="toastText"
       :type="toastType"
-      :text="toastText"
-    ></Toast>
+      :text="toastMessage"
+    />
+    <Toast
+      :type="'message'"
+      :text="'Explore la place'"
+    />
+
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
       class="interactive-points"
@@ -81,6 +86,7 @@ export default class HoodScenePage2 extends Vue {
   public npcDialogues: object[];
   public currentOnboarding: object;
   public toastText: string | null = null;
+  public toastMessage: string | null = null;
   public toastType: string | null = null;
   public toastUID: string = "";
   public chatDialogStep: string;
@@ -191,7 +197,7 @@ export default class HoodScenePage2 extends Vue {
   displayToast(toastID: string) {
     // this.onboardingStore.setOnboardingDisplay(true);
     this.toastText = "consulter l'objet collecté !";
-    this.toastType = "collectible";
+    this.toastType = "collec";
     this.toastUID = toastID;
 
     setTimeout(() => {

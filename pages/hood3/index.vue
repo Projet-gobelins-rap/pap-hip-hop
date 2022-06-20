@@ -7,6 +7,10 @@
       :type="toastType"
       :text="toastText"
     />
+    <Toast
+      :type="'message'"
+      :text="'Explore la place'"
+    />
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
       class="interactive-points"
@@ -191,7 +195,7 @@ export default class HoodScenePage3 extends Vue {
   displayToast(toastID: string) {
     // this.onboardingStore.setOnboardingDisplay(true);
     this.toastText = "consulter l'objet collecté !";
-    this.toastType = "collectible";
+    this.toastType = "collec";
     this.toastUID = toastID;
 
     setTimeout(() => {
