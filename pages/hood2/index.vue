@@ -1,16 +1,13 @@
 <template>
   <section class="hood">
     <Onboarding :content="currentOnboarding"></Onboarding>
-   <Toast
+    <Toast
       @click.native="openCollectible"
       v-if="toastText"
       :type="toastType"
       :text="toastMessage"
     />
-    <Toast
-      :type="'message'"
-      :text="'Explore la place'"
-    />
+    <Toast :type="'message'" :text="'Explore la place'" />
 
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
@@ -192,6 +189,10 @@ export default class HoodScenePage2 extends Vue {
   hideToast() {
     this.toastText = null;
     this.toastUID = "";
+    gsap.to(".toast.message", {
+      y: 0,
+      opacity: 1,
+    });
   }
 
   displayToast(toastID: string) {
@@ -200,9 +201,27 @@ export default class HoodScenePage2 extends Vue {
     this.toastType = "collec";
     this.toastUID = toastID;
 
+    gsap.to(".toast.message", {
+      y: -30,
+      opacity: 0.5,
+    });
+
     setTimeout(() => {
       this.hideToast();
     }, 5000);
+  }
+
+  toastEnter() {
+    gsap.from(".toast.collec", {
+      y: 30,
+      opacity: 0,
+    });
+  }
+  toastLeave() {
+    gsap.to(".toast.collec", {
+      y: 30,
+      opacity: 0,
+    });
   }
 
   // Set next message in conversation order

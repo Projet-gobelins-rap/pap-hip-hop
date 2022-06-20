@@ -1,16 +1,16 @@
 <template>
   <section class="hood">
     <Onboarding :content="currentOnboarding"></Onboarding>
-    <Toast
-      :type="'message'"
-      :text="'Retrouve Eric pour apprendre à graffer'"
-    />
-    <Toast
-      @click.native="openCollectible"
-      v-if="toastText"
-      :type="toastType"
-      :text="toastText"
-    />
+    <Toast :type="'message'" :text="'Retrouve Eric pour apprendre à graffer'" />
+    <transition v-on:enter="toastEnter" v-on:leave="toastLeave">
+      <Toast
+        @click.native="openCollectible"
+        v-if="toastText"
+        :type="toastType"
+        :text="toastText"
+      />
+    </transition>
+
     <InteractionPoints
       @click.native="goToInteractionPoint(point)"
       class="interactive-points"
@@ -38,7 +38,7 @@ import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
 import Toast from "../../components/contentOverlays/toast";
 import HoodScene from "~/core/scene/HoodScene";
-
+import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
 
@@ -94,9 +94,8 @@ export default class HoodScenePage extends Vue {
   }
 
   destroyed() {
-    HoodScene.context.destroy()
+    HoodScene.context.destroy();
   }
-  
 
   startScene() {
     this.hoodInstance = new HoodSceneInitializer({
@@ -104,7 +103,7 @@ export default class HoodScenePage extends Vue {
       hoodSceneStore: this.hoodSceneStore,
     });
     this.hoodInstance.init();
-    this.hoodInstance.player.camera.position.set(-294, 15, -92)
+    this.hoodInstance.player.camera.position.set(-294, 15, -92);
 
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
@@ -125,7 +124,7 @@ export default class HoodScenePage extends Vue {
         case "hide":
           this.hideOnboarding();
           this.startScene();
-           $socket.io.emit("goTo", {
+          $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
           });
@@ -145,11 +144,11 @@ export default class HoodScenePage extends Vue {
 
   goToInteractionPoint(point) {
     console.log(this.npcDialogues);
-    
+
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
-        
+
         this.currentChat = element[0];
         return this.currentChat;
       }
@@ -182,6 +181,11 @@ export default class HoodScenePage extends Vue {
   hideToast() {
     this.toastText = null;
     this.toastUID = "";
+
+    gsap.to(".toast.message", {
+      y: 0,
+      opacity: 1,
+    });
   }
 
   displayToast(toastID: string) {
@@ -190,9 +194,27 @@ export default class HoodScenePage extends Vue {
     this.toastType = "collec";
     this.toastUID = toastID;
 
+    gsap.to(".toast.message", {
+      y: -30,
+      opacity: 0.5,
+    });
+
     setTimeout(() => {
       this.hideToast();
     }, 5000);
+  }
+
+  toastEnter() {
+    gsap.from(".toast.collec", {
+      y: 30,
+      opacity: 0,
+    });
+  }
+  toastLeave() {
+    gsap.to(".toast.collec", {
+      y: 30,
+      opacity: 0,
+    });
   }
 
   // Set next message in conversation order
@@ -201,13 +223,12 @@ export default class HoodScenePage extends Vue {
     // this.currentChat = this.conversation[this.currentChatNum];
   }
 
-
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
       console.log(val);
-      
+
       switch (val) {
         case "reading":
           break;
@@ -226,7 +247,7 @@ export default class HoodScenePage extends Vue {
             replace: true,
           });
           this.chatStore.setChatStep("reading");
-           break;
+          break;
         case "goBattle":
           this.$router.push("/battle");
           $socket.io.emit("goTo", {

@@ -83,6 +83,7 @@ export default class Toast extends Vue {
   }
 
   timerAnimation() {
+   
     gsap.to(".collec .toast-timer", {
       strokeDashoffset: 212,
       duration: 5,
