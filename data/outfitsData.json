@@ -1,6 +1,5 @@
 {
     "pnj": [
-
         {
             "name": "coach",
             "head": {
@@ -38,6 +37,18 @@
           }
         },
         {
+          "name": "player0",
+          "head": {
+            "model": "player_head",
+            "color": "green"
+          },
+          "body": {
+            "color": "green",
+            "textureBody": "PLAYER_BODY_TEXTURE",
+            "textureArms": "PLAYER_ARMS_TEXTURE"
+          }
+        },
+        {
             "name": "papy",
             "head": {
                 "model": "victor_head",
@@ -57,8 +68,8 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "NPC_COACH_BODY_TEXTURE",
+                "textureArms": "NPC_COACH_ARMS_TEXTURE"
             }
         },
         {
@@ -69,8 +80,8 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "PLAYER_TICARET_BODY_TEXTURE",
+                "textureArms": "PLAYER_TICARET_ARMS_TEXTURE"
             }
         },
         {
@@ -81,20 +92,57 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "NPC_MOUSSA_BODY_TEXTURE",
+                "textureArms": "NPC_MOUSSA_ARMS_TEXTURE",
+                "textureLegs": "NPC_MOUSSA_LEGS_TEXTURE"
+            }
+        },
+        {
+            "name": "break_1",
+            "head": {
+                "model": "HEAD_BREAKER_A",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "BODY_BREAKER_A_TEXTURE",
+                "textureArms": "ARMS_BREAKER_A_TEXTURE"
+            }
+        },
+        {
+            "name": "break_2",
+            "head": {
+                "model": "HEAD_BREAKER_B",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "BODY_BREAKER_B_TEXTURE",
+                "textureArms": "ARMS_BREAKER_B_TEXTURE"
+            }
+        },
+        {
+            "name": "break_3",
+            "head": {
+                "model": "HEAD_BREAKER_C",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "BODY_BREAKER_C_TEXTURE",
+                "textureArms": "ARMS_BREAKER_B_TEXTURE"
             }
         },
         {
             "name": "deenasty",
             "head": {
-                "model": "victor_head",
+                "model": "head_deenasty",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "VICTOR_BODY_TEXTURE",
-                "textureArms": "VICTOR_ARMS_TEXTURE"
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
             }
         }
 
@@ -102,12 +150,12 @@
     "player": {
         "name": "player",
         "head": {
-            "model": "head_player_bob"
+            "model": "player_head"
         },
         "body": {
             "color": "orange",
-            "textureBody": "OPPONENT_BODY_TEXTURE",
-            "textureArms": "OPPONENT_ARMS_TEXTURE"
+            "textureBody": "PLAYER_BODY_TEXTURE",
+            "textureArms": "PLAYER_ARMS_TEXTURE"
         }
     }
 }

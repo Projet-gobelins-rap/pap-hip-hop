@@ -8,24 +8,7 @@
       </span>
     </div>
     <div class="mobileScope-sight">
-      <svg
-        class="mobileScope-pointer"
-        width="68"
-        height="68"
-        viewBox="0 0 68 68"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle
-          cx="34"
-          cy="34"
-          r="32"
-          stroke="#FEFEFE"
-          stroke-width="3"
-          stroke-linecap="square"
-          stroke-dasharray="35 16"
-        />
-      </svg>
+      <svg  class="mobileScope-pointer" width="68" height="68" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 47.546A31.878 31.878 0 0 1 2 34c0-4.842 1.075-9.432 3-13.546M47.546 63A31.879 31.879 0 0 1 34 66a31.88 31.88 0 0 1-13.546-3M63 20.454c1.925 4.114 3 8.704 3 13.546 0 4.842-1.075 9.432-3 13.546M20.454 5C24.568 3.075 29.158 2 34 2c4.842 0 9.432 1.075 13.546 3" stroke="#FEFEFE" stroke-width="3"/></svg>
     </div>
 
     <div class="mobileScope-border">
@@ -49,12 +32,14 @@
           stroke-width="8"
         />
       </svg>
+      
     </div>
 
     <div class="mobileScope-landscape">
       <div class="mobileScope-wrapper">
         <img class="mobileScope-img" :src="cityImage.src" alt="" />
-        <svg
+        
+        <!-- <svg
           class="mobileScope-markers"
           width="2320"
           height="1294"
@@ -143,7 +128,28 @@
               stroke-linecap="round"
             />
           </g>
-        </svg>
+        </svg> -->
+        <svg class="mobileScope-markers" width="2320" height="1305" viewBox="0 0 2320 1305" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g class="mobileScope-marker">
+        <path class="mobileScope-marker--bg" d="M1977.71 700.471C1977.71 714.093 1966.77 725.112 1953.29 725.112C1939.82 725.112 1928.87 714.093 1928.87 700.471C1928.87 686.85 1939.82 675.83 1953.29 675.83C1966.77 675.83 1977.71 686.85 1977.71 700.471Z" fill="white" fill-opacity="0.5" stroke="#FEFEFE" stroke-width="3.16014"/>
+        <ellipse cx="1953.29" cy="700.472" rx="15.6" ry="15.7326" fill="#ED6787"/>
+        <path class="mobileScope-marker--progress" d="M1979.71 700.471C1979.71 715.206 1967.87 727.129 1953.29 727.129C1938.71 727.129 1926.87 715.206 1926.87 700.471C1926.87 685.736 1938.71 673.813 1953.29 673.813C1967.87 673.813 1979.71 685.736 1979.71 700.471Z" stroke="#22D175" stroke-width="3.16014"/>
+        <path d="M1953.29 695.555L1953.29 705.387M1958.17 700.471L1948.42 700.471" stroke="#FEFEFE" stroke-width="3.16014" stroke-linecap="round"/>
+    </g>
+    <g class="mobileScope-marker">
+        <path class="mobileScope-marker--bg" d="M1401.34 480.554C1401.34 494.176 1390.39 505.195 1376.92 505.195C1363.44 505.195 1352.5 494.176 1352.5 480.554C1352.5 466.933 1363.44 455.913 1376.92 455.913C1390.39 455.913 1401.34 466.933 1401.34 480.554Z" fill="white" fill-opacity="0.5" stroke="#FEFEFE" stroke-width="3.16014"/>
+        <ellipse cx="1376.92" cy="480.555" rx="15.6" ry="15.7326" fill="#ED6787"/>
+        <path class="mobileScope-marker--progress" d="M1403.34 480.554C1403.34 495.29 1391.49 507.212 1376.92 507.212C1362.34 507.212 1350.5 495.29 1350.5 480.554C1350.5 465.819 1362.34 453.896 1376.92 453.896C1391.49 453.896 1403.34 465.819 1403.34 480.554Z" stroke="#22D175" stroke-width="3.16014"/>
+        <path d="M1376.92 475.638L1376.92 485.471M1381.79 480.554L1372.04 480.554" stroke="#FEFEFE" stroke-width="3.16014" stroke-linecap="round"/>
+    </g>
+    <g class="mobileScope-marker">
+        <path class="mobileScope-marker--bg" d="M705.336 394.763C705.336 408.384 694.39 419.404 680.916 419.404C667.442 419.404 656.496 408.384 656.496 394.763C656.496 381.141 667.442 370.122 680.916 370.122C694.39 370.122 705.336 381.141 705.336 394.763Z" fill="white" fill-opacity="0.5" stroke="#FEFEFE" stroke-width="3.16014"/>
+        <path class="mobileScope-marker--progress" d="M707.336 394.763C707.336 409.498 695.495 421.421 680.916 421.421C666.337 421.421 654.496 409.498 654.496 394.763C654.496 380.027 666.337 368.105 680.916 368.105C695.495 368.105 707.336 380.027 707.336 394.763Z" stroke="#22D175" stroke-width="3.16014"/>
+        <ellipse cx="680.915" cy="394.764" rx="15.6" ry="15.7326" fill="#ED6787"/>
+        <path d="M680.917 389.846L680.917 399.679M685.792 394.763L676.042 394.763" stroke="#FEFEFE" stroke-width="3.16014" stroke-linecap="round"/>
+    </g>
+</svg>
+
       </div>
     </div>
     <Onboarding v-if="onboardingState" :content="currentOnboarding"></Onboarding>
@@ -174,7 +180,7 @@ import $socket from "~/plugins/socket.io";
 
       const rotateOnboarding = graffContent?.slices5[0].items;
       const gameplayOnboarding = graffContent?.slices5[1].items;
-      const lootAtOnboarding = graffContent?.slices5[2].items;
+      const lootAtOnboarding = graffContent?.slices5[2].items[0];
 
       const currentOnboarding = rotateOnboarding[0];
 
@@ -188,7 +194,7 @@ import $socket from "~/plugins/socket.io";
       //   error({ statusCode: 404, message: 'Content not found' })
     }
   },
-})
+}) 
 export default class MobileScope extends Vue {
   public stepStore = getModule(stepStore, this.$store);
   public onboardingStore = getModule(onboardingStore, this.$store);

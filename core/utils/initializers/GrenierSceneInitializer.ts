@@ -96,6 +96,8 @@ export default class GrenierSceneInitializer extends Initializers<{ canvas: HTML
         for (const point of this._data.grenierSceneStore.activeInteractionPoints) {
           const screenPosition = point.canvasCoords().clone()
           screenPosition.project(GrenierScene.context.camera)
+          
+          
           const updateData = {
             name: point.name,
             transformX: screenPosition.x * this._data.canvas.clientWidth * 0.5,

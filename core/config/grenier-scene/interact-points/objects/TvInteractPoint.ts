@@ -4,7 +4,7 @@ import { InteractionPoint } from "~/core/config/grenier-scene/interact-points/ty
 import GrenierScene from "../../../../scene/GrenierScene";
 
 const TvInteractPoint: InteractionPoint = {
-  name: "TV",
+  name: "Audiovisuel",
   type: "plus",
 
   canvasCoords: () => {
