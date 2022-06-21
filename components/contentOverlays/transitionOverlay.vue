@@ -34,7 +34,7 @@
           <span>INFO</span>
         </div>
         <div class="transitionInfo-content">
-          <span>La tour dans laquelle ont grandi les artistes du Seven Binks</span>
+          <span></span>
         </div>
     </div>
 
