@@ -21,6 +21,48 @@
       v-if="this.chatElementState && currentChat"
       :content="currentChat"
     />
+
+    <div class="hood-store" ref="store" v-if="storeOpen">
+      <svg
+        @click="closeStore"
+        class="hood-store--close"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="20" cy="20" r="20" fill="#151515" />
+        <circle cx="20.3448" cy="19.6553" r="18.2759" fill="#FEFEFE" />
+        <path
+          d="M15.1732 14.4829L25.518 24.8277"
+          stroke="#151515"
+          stroke-width="1.37931"
+        />
+        <path
+          d="M25.5172 14.4829L15.1724 24.8277"
+          stroke="#151515"
+          stroke-width="1.37931"
+        />
+      </svg>
+
+      <div class="hood-outfits">
+        <div
+          class="hood-outfit"
+          v-for="(item, i) in storeOutfits"
+          :key="'previewOutfit' + i"
+        >
+          <img class="hood-outfit--img" :src="item.img.src" alt="" />
+          <CustomButton
+            :class="'hood-outfit--button small white ' + item.worn"
+            @click.native="changeOutfit(item.name)"
+            v-if="i < 2 && outfitWorn != item.name"
+            :text="'J\'prends direct !'"
+          />
+        </div>
+      </div>
+    </div>
+
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
 </template>
@@ -32,6 +74,7 @@ import HoodSceneInitializer2 from "~/core/utils/initializers/HoodSceneInitialize
 import stepStore from "~/store/stepStore";
 import chatStore from "~/store/chatStore";
 import collectibleStore from "~/store/collectibleStore";
+import CustomButton from "~/components/buttons/button.vue";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
@@ -43,12 +86,15 @@ import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
 import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
+import { AssetsManager } from "~/core/managers";
+import { IMAGE_ASSET } from "~/core/enums";
 
 @Component({
   components: {
     Onboarding,
     Toast,
     ChatComponent,
+    CustomButton,
   },
   async asyncData({ $prismic, error }) {
     try {
@@ -92,6 +138,9 @@ export default class HoodScenePage2 extends Vue {
   public focusPoints: object;
   public currentChat: object;
   public currentChatNum: number = 0;
+  public storeOpen: boolean = false;
+  public storeOutfits: object[] = [];
+  public outfitWorn: string = "player0";
 
   mounted() {
     this.displayOnboarding();
@@ -108,6 +157,25 @@ export default class HoodScenePage2 extends Vue {
     });
     this.hoodInstance.init();
     this.hoodInstance.player.camera.position.set(-194, 15, -118);
+
+    this.storeOutfits = [
+      {
+        img: AssetsManager.getImage(IMAGE_ASSET.STICKER_TENUE_01).data,
+        name: "player0",
+      },
+      {
+        img: AssetsManager.getImage(IMAGE_ASSET.STICKER_TENUE_02).data,
+        name: "player",
+      },
+      {
+        img: AssetsManager.getImage(IMAGE_ASSET.STICKER_TENUE_03).data,
+        name: "none",
+      },
+      {
+        img: AssetsManager.getImage(IMAGE_ASSET.STICKER_TENUE_04).data,
+        name: "none",
+      },
+    ];
 
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
@@ -180,6 +248,19 @@ export default class HoodScenePage2 extends Vue {
     this.onboardingStore.setOnboardingDisplay(true);
   }
 
+  showStore() {
+    this.storeOpen = true;
+    // gsap.to(this.$refs.store, {
+    //   y: 0,
+    //   opacity: 1,
+    // });
+  }
+
+  closeStore() {
+    this.storeOpen = false;
+    this.goBack();
+  }
+
   openCollectible() {
     $socket.io.emit("goTo", {
       path: "/_mobile/phone/collectibles/" + this.toastUID.toLowerCase(),
@@ -195,6 +276,13 @@ export default class HoodScenePage2 extends Vue {
       y: 0,
       opacity: 1,
     });
+  }
+
+  changeOutfit(name: string) {
+    if (name !== "none") {
+      this.outfitWorn = name;
+      this.hoodInstance.player.changeOutfit(name);
+    }
   }
 
   displayToast(toastID: string) {
@@ -249,10 +337,14 @@ export default class HoodScenePage2 extends Vue {
           break;
         case "goBack":
           this.goBack();
-          this.hoodInstance.player.changeOutfit('player')
 
           // Demo mode : trigger when leave dialogue (Dan)
           this.toastMessage = "Trouve le coach";
+          this.chatStore.setChatStep("reading");
+          break;
+        case "showStore":
+          this.showStore();
+          this.hoodSceneStore.setIsChatDisplay(false);
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":

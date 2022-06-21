@@ -267,6 +267,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
     this._npcArray.push(eric)
+    console.log(eric);
+    
 
     const npc_battle = new Npc(playerGltf, 'coach', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
@@ -282,11 +284,12 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     const npc_break_1 = new Npc(playerGltf, 'break_1', 't-pose')
     npc_break_1.model.scale.set(25, 25, 25)
+    npc_break_1.animationPlayed = 'break_2'
     this._npcArray.push(npc_break_1)
 
     const npc_break_2 = new Npc(playerGltf, 'break_2', 't-pose')
     npc_break_2.model.scale.set(25, 25, 25)
-    npc_break_2.animationPlayed = 'break'
+    npc_break_2.animationPlayed = 'break_3'
     this._npcArray.push(npc_break_2) 
 
     const npc_break_3 = new Npc(playerGltf, 'break_3', 't-pose')

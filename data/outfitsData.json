@@ -37,6 +37,18 @@
           }
         },
         {
+          "name": "player0",
+          "head": {
+            "model": "player_head",
+            "color": "green"
+          },
+          "body": {
+            "color": "green",
+            "textureBody": "PLAYER_BODY_TEXTURE",
+            "textureArms": "PLAYER_ARMS_TEXTURE"
+          }
+        },
+        {
             "name": "papy",
             "head": {
                 "model": "victor_head",
