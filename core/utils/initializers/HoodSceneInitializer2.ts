@@ -143,7 +143,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     this._camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
-      1,
+      12,
       1000
     )
     this._camera.position.set(0, 0, 5)
