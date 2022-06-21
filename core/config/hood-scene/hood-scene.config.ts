@@ -5,12 +5,14 @@ import DeenastyInteractPoint from "./interact-points/DeenastyInteractPoint";
 import BattleInteractPoint from "./interact-points/BattleInteractPoint";
 import EricInteractPoint from "./interact-points/EricInteractPoint";
 import TicaretInteractPoint from "./interact-points/TicaretInteractPoint";
+import NepalInteractPoint from "./interact-points/NepalInteractPoint";
 
 import DeenastyCameraPosition from "./camera-positions/DeenastyCameraPosition";
 import BattleCameraPosition from "./camera-positions/BattleCameraPosition";
 import EricCameraPosition from "./camera-positions/EricCameraPosition";
 import TicaretCameraPosition from "./camera-positions/TicaretCameraPosition";
 import InitialCameraPosition from "./camera-positions/InitialCameraPosition";
+import NepalCameraPosition from "./camera-positions/NepalCameraPosition";
 
 const HoodSceneConfig = {
   // CAMERA POSITIONS
@@ -21,6 +23,7 @@ const HoodSceneConfig = {
     EricCameraPosition,
     TicaretCameraPosition,
     InitialCameraPosition,
+    NepalCameraPosition,
   ] as Array<CameraPosition>,
 
   // INTERACT POINTS
@@ -30,6 +33,7 @@ const HoodSceneConfig = {
     BattleInteractPoint,
     EricInteractPoint,
     TicaretInteractPoint,
+    NepalInteractPoint,
   ] as Array<InteractionPoint>,
 }
 

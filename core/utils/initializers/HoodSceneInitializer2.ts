@@ -302,11 +302,6 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     npc_futura.animationPlayed = 'rap'
     this.npcArray.push(npc_futura)
 
-    const npc_lino = new Npc(playerGltf, 'lino', 't-pose')
-    npc_lino.model.scale.set(25, 25, 25)
-    npc_lino.animationPlayed = 'rap'
-    this.npcArray.push(npc_lino)
-
     const npc_graff = new Npc(playerGltf, 'graff', 't-pose')
     npc_graff.model.scale.set(25, 25, 25)
     npc_graff.animationPlayed = 'rap'
@@ -339,9 +334,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_3"), npc_break_3.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_sitting_wall"), npc_sitting_wall.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_sitting_floor"), npc_sitting_floor.model)
-    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_futura"), npc_futura.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_futura"), npc_futura.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_nepal"), npc_nepal.model)
-    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_lino"), npc_lino.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_graff"), npc_graff.model)
 
     

@@ -85,6 +85,7 @@ import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
+import NepalInteractPoint from "~/core/config/hood-scene/interact-points/NepalInteractPoint";
 import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
@@ -211,6 +212,7 @@ export default class HoodScenePage2 extends Vue {
     this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(NepalInteractPoint.name);
   }
 
   removeInteractionsPoints() {
@@ -218,6 +220,7 @@ export default class HoodScenePage2 extends Vue {
     this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(NepalInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
@@ -236,7 +239,6 @@ export default class HoodScenePage2 extends Vue {
       this.hoodSceneStore.setIsCameraMoving(false);
       this.hoodSceneStore.setIsChatDisplay(true);
       const name = point.slug.split('_')
-      console.log("name[1]");
       
       this.talkToNpc(name[1])
     });

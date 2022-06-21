@@ -98,6 +98,19 @@
             }
         },
         {
+            "name": "francois",
+            "head": {
+                "model": "head_graffeur",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_MOUSSA_BODY_TEXTURE",
+                "textureArms": "NPC_MOUSSA_ARMS_TEXTURE",
+                "textureLegs": "NPC_MOUSSA_LEGS_TEXTURE"
+            }
+        },
+        {
             "name": "break_1",
             "head": {
                 "model": "HEAD_BREAKER_A",

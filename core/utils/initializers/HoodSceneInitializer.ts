@@ -347,12 +347,14 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     mergedGeometry.boundsTree = new MeshBVH(mergedGeometry, { lazyGeneration: false });
 
     this.collider = new Mesh(mergedGeometry);
-    this.collider.material.visible = false
-    // this.collider.material.color.setHex(0x00ff00)
-    // this.collider.material.opacity = 0.5;
+    this.collider.material.visible = true
+    this.collider.material.wireframe = true
+    this.collider.material.color.setHex(0x00ff00)
+    this.collider.material.opacity = 0.5;
+
     // this.collider.material.transparent = true;
     this._scene.add(this.collider);
-
+ 
     this._collectibleCollection = {
       env: [this.collider, this.ground],
       collectibles: this._collectibleColliders.children
