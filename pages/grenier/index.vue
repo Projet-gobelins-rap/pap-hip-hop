@@ -35,6 +35,7 @@ import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions
 import GUI from "lil-gui";
 
 import $socket from "~/plugins/socket.io";
+import {gsap} from "gsap";
 
 @Component({
   components: {
@@ -124,9 +125,9 @@ export default class GrenierScene extends Vue {
     });
   }
 
-  goToCity() {
-    this.$router.push({ path: "/hood", replace: true });
-  }
+  // goToCity() {
+  //   this.$router.push({ path: "/hood", replace: true });
+  // }
 
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
@@ -141,11 +142,51 @@ export default class GrenierScene extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goToCity":
-          this.goToCity();
+          // this.goToCity();
           break;
       }
     }
   }
+
+  transition() {
+
+    return {
+
+      leave(el: Element, done: Function) {
+        console.log("transition leave ekip")
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = 'LE TIEKS'
+
+        let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
+        infoContent.innerHTML = `Le quartier`
+
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+          }
+        );
+        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
+        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
+        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
+        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
+        tl.to('.transitionInfo',{duration:3,
+          onComplete:()=>{
+            done()
+          }
+        })
+
+      }
+    };
+  }
+
+
 
   get chatStep() {
     return this.chatStore.chatStep;

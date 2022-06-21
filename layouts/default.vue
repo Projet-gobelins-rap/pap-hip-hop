@@ -3,6 +3,7 @@
     <!-- NAVIGATION   -->
     <navigation />
 
+    <transition-overlay  v-if="this.globalStore.isAppInit"></transition-overlay>
     <!-- LOADER   -->
     <transition v-on:leave="leaveLoader" appear>
       <Loader
@@ -25,8 +26,11 @@ import { IMAGE_ASSET, VIDEO_ASSET, GLTF_ASSET } from "../core/enums";
 import loaderStore from "../store/loaderStore";
 import { gsap } from "gsap";
 import $appState from "~/plugins/appState";
+import TransitionOverlay from "../components/contentOverlays/transitionOverlay.vue";
+
 @Component({
   components: {
+    TransitionOverlay,
     Navigation,
     Loader,
   },
@@ -67,7 +71,7 @@ export default class Default extends Vue {
     this.$nuxt.$on("loadDesktopMedia", (desktopMedia) => {
       this.desktopMedias = desktopMedia.desktopMedias.slices[0].items;
       console.log(this.desktopMedias);
-      
+
       this.desktopMedias.forEach((el) => {
         let mediaType;
         if (el.mediaType === "GLTF") {

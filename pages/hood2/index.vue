@@ -89,6 +89,7 @@ import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/Ticar
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
 
+
 @Component({
   components: {
     Onboarding,
@@ -348,7 +349,6 @@ export default class HoodScenePage2 extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
-          this.$router.push("/graf/scope");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -356,7 +356,6 @@ export default class HoodScenePage2 extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goBattle":
-          this.$router.push("/battle");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -377,6 +376,70 @@ export default class HoodScenePage2 extends Vue {
     });
   }
 
+  transition() {
+
+    return {
+      enter(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition enter ekip")
+
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "flex", yPercent: 0 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 100,
+            ease: "expo.inOut",
+            onComplete:()=>{
+              gsap.set('.transition-overlay',{clearProps:"all"})
+              gsap.set('.transition-stars',{clearProps:"all"})
+              gsap.set('.transition-subtitle span',{clearProps:"all"})
+              gsap.set('.transition-title span',{clearProps:"all"})
+              gsap.set('.transitionInfo',{clearProps:"all"})
+              done()
+            }
+          }
+        );
+
+      },
+      leave(el: Element, done: Function) {
+        console.log("transition leave ekip")
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = `LE TRABENDO`
+        let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
+        infoContent.innerHTML = `La tour dans laquelle ont grandi les artistes du Seven Binks`
+
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+          }
+        );
+        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
+        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
+        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
+        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
+        tl.to('.transitionInfo',{duration:3,
+          onComplete:()=>{
+            done()
+          }
+        })
+
+      }
+    };
+  }
   // GETTERS
   get onboardingStep() {
     return this.onboardingStore.onboardingStep;

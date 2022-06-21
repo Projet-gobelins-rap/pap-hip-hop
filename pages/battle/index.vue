@@ -977,19 +977,82 @@ export default class battle extends Vue {
 
   goToHood() {
     // remove scene children
-    gsap.fromTo(
-      ".battle-overlay",
-      { display: "none", yPercent: 100,opacity:1 },
-      {
-        display: "block",
-        duration: 1.5,
-        yPercent: 0,
-        ease: "expo.inOut",
-        onComplete:()=>{
-          this.$router.push("/hood3");
-        }
-      })
-    console.log("ON VA DANS LE HOOD BB");
+    // gsap.fromTo(
+    //   ".battle-overlay",
+    //   { display: "none", yPercent: 100,opacity:1 },
+    //   {
+    //     display: "block",
+    //     duration: 1.5,
+    //     yPercent: 0,
+    //     ease: "expo.inOut",
+    //     onComplete:()=>{
+    //       this.$router.push("/hood3");
+    //     }
+    //   })
+    // console.log("ON VA DANS LE HOOD BB");
+  }
+
+  transition() {
+
+    return {
+      enter(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition enter ekip")
+
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "flex", yPercent: 0 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 100,
+            ease: "expo.inOut",
+            onComplete:()=>{
+              gsap.set('.transition-overlay',{clearProps:"all"})
+              gsap.set('.transition-stars',{clearProps:"all"})
+              gsap.set('.transition-subtitle span',{clearProps:"all"})
+              gsap.set('.transition-title span',{clearProps:"all"})
+              gsap.set('.transitionInfo',{clearProps:"all"})
+              done()
+            }
+          }
+        );
+
+      },
+      leave(el: Element, done: Function) {
+        console.log("transition leave ekip")
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = `LE TIEKS`
+        let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
+        infoContent.innerHTML = `Le quartier`
+
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+          }
+        );
+        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
+        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
+        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
+        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
+        tl.to('.transitionInfo',{duration:3,
+          onComplete:()=>{
+            done()
+          }
+        })
+
+      }
+    };
   }
 
   playAudioCloche() {
