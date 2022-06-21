@@ -7,4 +7,55 @@
     display: flex;
     background: rgb(179,229,255);
     background: linear-gradient(0deg, rgba(179,229,255,1) 0%, rgba(46,183,255,1) 100%); 
+
+    &-store {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 200;
+        background-color: $white;
+
+        border-radius: 16px;
+        padding: 70px 0 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+
+        &--close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+    }
+
+    &-outfits {
+        display: flex;
+      
+        width: 100%;
+
+    }
+
+    &-outfit {
+        margin: 0 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        &--img {
+            width: 184px;
+            height: 262px;
+        }
+
+        &--button {
+            // margin: 40px 0 0;
+            position: absolute;
+            left: 50%;
+            bottom: -40px;
+            transform: translate(-50%, 100%);
+        }
+    }
 }
