@@ -572,6 +572,7 @@ export default class battle extends Vue {
           ease: "expo.out",
           delay: index*1.5,
           onStart:()=>{
+            this.playAudioVoice()
             if (!isOpponentTour) {
               if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'top') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--20')
@@ -1055,6 +1056,11 @@ export default class battle extends Vue {
     };
   }
 
+  playAudioVoice() {
+    let audio = new Audio(this.voiceAudio);
+    audio.play();
+  }
+
   playAudioCloche() {
     let audio = new Audio(this.clocheAudio);
     audio.play();
@@ -1067,6 +1073,10 @@ export default class battle extends Vue {
   // get ppOpp():string {
   //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_OPP).data.src
   // }
+
+  get voiceAudio():string {
+    return AssetsManager.getAudio(AUDIO_ASSET.BATTLE_VOICE).data.src
+  }
 
   get clocheAudio():string {
     return AssetsManager.getAudio(AUDIO_ASSET.CLOCHE_SOUND).data.src
