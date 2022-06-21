@@ -311,7 +311,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
   collectiblesCollider() {
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
-      const mat = new MeshBasicMaterial({ color: 'red', wireframe: true, visible: false })
+      const mat = new MeshBasicMaterial({ color: 'red', wireframe: true, visible: true })
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
       console.log(object);

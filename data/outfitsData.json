@@ -144,6 +144,78 @@
                 "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
                 "textureArms": "RED_TEXTURE"
             }
+        },
+        {
+            "name": "sitting_wall",
+            "head": {
+                "model": "head_deenasty",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
+            }
+        },
+        {
+            "name": "sitting_floor",
+            "head": {
+                "model": "head_deenasty",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
+            }
+        },
+        {
+            "name": "nepal",
+            "head": {
+                "model": "head_deenasty",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
+            }
+        },
+        {
+            "name": "futura",
+            "head": {
+                "model": "head_deenasty",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
+            }
+        },
+        {
+            "name": "lino",
+            "head": {
+                "model": "head_deenasty",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
+            }
+        },
+        {
+            "name": "graff",
+            "head": {
+                "model": "head_deenasty",
+                "color": "green"
+            },
+            "body": {
+                "color": "green",
+                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
+                "textureArms": "RED_TEXTURE"
+            }
         }
 
     ],

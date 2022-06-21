@@ -92,8 +92,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
         }
 
         this._collectibles.children.forEach(object => {
-          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
-          object.children[1].rotation.y += ctx.deltaTime * 0.5
+          // object.children[1].position.y = 8 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          // object.children[1].rotation.y += ctx.deltaTime * 0.5
         })
 
 
@@ -297,6 +297,39 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     npc_break_3.animationPlayed = 'rap'
     this.npcArray.push(npc_break_3)
 
+    const npc_futura = new Npc(playerGltf, 'futura', 't-pose')
+    npc_futura.model.scale.set(25, 25, 25)
+    npc_futura.animationPlayed = 'rap'
+    this.npcArray.push(npc_futura)
+
+    const npc_lino = new Npc(playerGltf, 'lino', 't-pose')
+    npc_lino.model.scale.set(25, 25, 25)
+    npc_lino.animationPlayed = 'rap'
+    this.npcArray.push(npc_lino)
+
+    const npc_graff = new Npc(playerGltf, 'graff', 't-pose')
+    npc_graff.model.scale.set(25, 25, 25)
+    npc_graff.animationPlayed = 'rap'
+    this.npcArray.push(npc_graff)
+
+    const npc_nepal = new Npc(playerGltf, 'nepal', 't-pose')
+    npc_nepal.model.scale.set(25, 25, 25)
+    npc_nepal.animationPlayed = 'rap'
+    this.npcArray.push(npc_nepal)
+
+    const npc_sitting_floor = new Npc(playerGltf, 'sitting_floor', 't-pose')
+    npc_sitting_floor.model.scale.set(25, 25, 25)
+    npc_sitting_floor.model.position.y = -310
+    npc_sitting_floor.animationPlayed = 'sitting_floor'
+    this.npcArray.push(npc_sitting_floor)
+
+    const npc_sitting_wall = new Npc(playerGltf, 'sitting_wall', 't-pose')
+    npc_sitting_wall.model.scale.set(25, 25, 25)
+    npc_sitting_wall.model.position.y = -110
+    npc_sitting_wall.model.position.z = 50
+    npc_sitting_wall.animationPlayed = 'sitting_wall'
+    this.npcArray.push(npc_sitting_wall)
+
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
@@ -304,6 +337,12 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_1"), npc_break_1.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_2"), npc_break_2.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_break_3"), npc_break_3.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_sitting_wall"), npc_sitting_wall.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_sitting_floor"), npc_sitting_floor.model)
+    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_futura"), npc_futura.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_nepal"), npc_nepal.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_lino"), npc_lino.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_graff"), npc_graff.model)
 
     
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
@@ -333,7 +372,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
   collectiblesCollider() {
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
-      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: false})
+      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: true})
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
       console.log(collider.name);
