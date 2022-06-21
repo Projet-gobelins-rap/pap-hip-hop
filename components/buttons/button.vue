@@ -5,7 +5,7 @@
     </button>
   </div>
   <div v-else>
-    <nuxt-link  @click="playAudioOnClick" @mouseenter="playAudioOnHover" class="btn" :to="linkUrl">
+    <nuxt-link @click="playAudioOnClick" @mouseenter="playAudioOnHover" class="btn" :to="linkUrl">
       <span class="btn-text">{{ text }}</span>
     </nuxt-link>
   </div>

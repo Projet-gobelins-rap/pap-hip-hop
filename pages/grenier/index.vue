@@ -180,8 +180,9 @@ export default class GrenierScene extends Vue {
       },
       leave(el: Element, done: Function) {
         console.log("transition leave ekip")
-        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
-        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = 'LE TIEKS'
 
         let tl = gsap.timeline()
         tl.fromTo(

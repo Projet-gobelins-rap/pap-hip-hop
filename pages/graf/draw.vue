@@ -58,6 +58,7 @@ import onboardingStore from "~/store/onboardingStore";
 
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
+import {gsap} from "gsap";
 
 @Component({
   components: {
@@ -122,7 +123,7 @@ export default class GraffActivity extends Vue {
       ].layer.url;
     });
   }
- 
+
   valideSelectedGraff() {
     $socket.io.emit("goTo", { path: "/_mobile/off", replace: true });
     this.$refs.container.style.zIndex = 4
@@ -152,6 +153,40 @@ export default class GraffActivity extends Vue {
     this.chatStore.setChatDisplay(false);
   }
 
+  transition() {
+
+    return {
+      leave(el: Element, done: Function) {
+        console.log("transition leave ekip")
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = `LE TIEKS`
+
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+          }
+        );
+        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
+        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
+        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
+        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
+        tl.to('.transitionInfo',{duration:3,
+          onComplete:()=>{
+            done()
+          }
+        })
+
+      }
+    };
+  }
+
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
@@ -179,7 +214,6 @@ export default class GraffActivity extends Vue {
           break;
 
         case "leaveInteraction":
-          this.$router.push({ path: "/hood2", replace: true });
           this.chatStore.setChatStep("reading");
           break;
         default:

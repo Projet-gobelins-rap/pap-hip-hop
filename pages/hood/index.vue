@@ -217,6 +217,7 @@ export default class HoodScenePage extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
+          this.setupDynamicTextTransition()
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -278,6 +279,9 @@ export default class HoodScenePage extends Vue {
         console.log("transition leave ekip")
         // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
         // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = `LE BAT'7`
 
         let tl = gsap.timeline()
         tl.fromTo(
