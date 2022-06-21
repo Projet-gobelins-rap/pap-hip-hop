@@ -1,5 +1,4 @@
 import {Module, Mutation, VuexModule} from "vuex-module-decorators";
-import {User} from "~/core/types";
 
 @Module({
   name: "stepStore",
@@ -31,5 +30,4 @@ export default class stepStore extends VuexModule {
   get introMotionState(){
     return this._introMotion
   }
-
 }

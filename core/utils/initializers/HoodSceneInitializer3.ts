@@ -3,9 +3,9 @@ import hoodSceneStore from "~/store/hoodSceneStore";
 import HoodScene from "~/core/scene/HoodScene";
 import HoodSceneConfig from "../../config/hood-scene/hood-scene.config";
 import { AssetsManager, SceneManager } from "~/core/managers";
-import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, DirectionalLight, DoubleSide, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, Raycaster, Scene, Vector3, WebGLRenderer } from "three";
+import { AmbientLight, ArrowHelper, Box3, BoxBufferGeometry, BoxGeometry, Camera, DirectionalLight, DoubleSide, Group, Line3, Matrix4, Mesh, MeshBasicMaterial, MeshMatcapMaterial, Object3D, PerspectiveCamera, PlaneGeometry, Raycaster, Scene, Vector3, VideoTexture, WebGLRenderer } from "three";
 import Helpers from "~/core/utils/Helpers";
-import { GLTF_ASSET, TEXTURE_ASSET } from "../../enums";
+import { GLTF_ASSET, TEXTURE_ASSET, VIDEO_ASSET } from "../../enums";
 import SlotsLoader from "../SlotsLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Player } from "../../models/player";
@@ -25,6 +25,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
+  private _npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -82,6 +83,19 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
           this.handleCollision()
           // let arrow = new ArrowHelper(this.player.raycaster.ray.direction, this.player.raycaster.ray.origin, 8, 0xff0000);
           // ctx.scene.add(arrow);
+          
+        }
+        
+        this._collectibles.children.forEach(object => {
+          object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
+        })
+
+
+        if (this._npcArray.length > 0) {
+          this._npcArray.forEach((npc: Npc) => {
+            npc.update(ctx.deltaTime)
+          })
         }
 
         for (const point of this._data.hoodSceneStore.activeInteractionPoints) {
@@ -180,7 +194,6 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
   private _addSceneElements() {
     console.log('add scene elements')
     this.addCube()
-
   }
 
   addCube() {
@@ -220,9 +233,6 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     const tower2Slots = city.getObjectByName('slot_tower_lg')
     this.ground = city.getObjectByName('CITY_a_baked1')
 
-    console.log(city);
-    
-    console.log(tree);
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
     
     SlotsLoader.populateSlots(plotSlots, plot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PLOT_TEXTURE).data)
@@ -238,6 +248,12 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
     SlotsLoader.generateCollectible(this._collectibles.children)
 
+    const plane = new PlaneGeometry(32, 18)
+    const screen = new Mesh(plane)
+    screen.position.set(-69, 20, -42)
+    screen.rotateY(Math.PI /2)
+    this._scene.add(screen);
+
     this._scene.traverse(object => {
       if (object.isMesh) {
         let oldTexture = object.material.map
@@ -246,14 +262,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
       }
     })
 
-    // const floor = city.getObjectByName('floor')
-    // floor.material.needsUpdate = true;
-    // floorDM.flipY = false
-    // floorNM.flipY = false
-    // floor.material.displacementMap = floorDM
-    // floor.material.normalMap = floorNM
-    // floor.material.side = DoubleSide
-
+    this.addScreen(screen)
     // const eric = new Npc(playerGltf, 'eric', 't-pose')
     // eric.model.scale.set(25, 25, 25)
 
@@ -274,6 +283,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
+    this.player.changeOutfit('player')
     this.player.model.position.set(2, 0.75, 11)
     this.player.model.rotation.y -= 2 * Math.PI / 3
 
@@ -295,6 +305,21 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
       
       texture.flipY = false
       mesh.material.map = texture
+  }
+
+  addScreen(screen) {
+    const videoScreen = AssetsManager.getVideo(VIDEO_ASSET.TV_VIDEO).data
+    videoScreen.play()
+    videoScreen.loop = true
+    videoScreen.muted = true
+
+    const videoTexture = new VideoTexture(videoScreen)
+    
+   
+    videoTexture.needsUpdate = true;
+    screen.material.map = videoTexture
+    screen.rotateY(-Math.PI /2)
+    
   }
 
   collectiblesCollider() {

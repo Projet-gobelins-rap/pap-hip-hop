@@ -3,14 +3,14 @@ import {CameraPosition} from "~/core/config/grenier-scene/camera-positions/types
 import {Vector3} from "three";
 
 const SprayCameraPosition: CameraPosition = {
-  name: 'spray',
+  name: 'Graff',
 
   coords: () => {
     const lookAtPosition =  new Vector3()
     GrenierScene.context.scene.getObjectByName("interaction_graf")!.getWorldPosition(lookAtPosition)
 
     const newCameraPosition = new Vector3(
-      lookAtPosition.x + 30,
+      lookAtPosition.x + 40,
       lookAtPosition.y,
       lookAtPosition.z ,
     )

@@ -58,6 +58,16 @@ export class Player extends Character {
         this.loadOutfit()
     }
 
+    public changeOutfit(name) {
+        for (const key in outfitsData.pnj) {
+            if (outfitsData.pnj[key].name === name) {
+                this.outfitParams = outfitsData.pnj[key]
+                break
+            }
+        }
+        this.loadOutfit()
+    }
+
     private _initRaycast(): void {
         // init raycast from player to forwards
         this.raycaster = new Raycaster(

@@ -5,6 +5,22 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  &-opponentTour {
+    .responseContainer {
+      transform: translateX(-40%);
+    }
+    .btn-battle {
+      transform: translateX(-40%);
+    }
+  }
+  &-playerTour {
+    .responseContainer {
+      transform: translateX(40%);
+    }
+    .btn-battle {
+      transform: translateX(40%);
+    }
+  }
   &-overlay {
     position: fixed;
     width: 100%;
@@ -137,30 +153,8 @@
     display: none;
     opacity: 0;
     border: 2px solid $purple;
-    &:nth-child(1) {
-      transform: rotate(2deg);
-    }
-    &:nth-child(2) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(3) {
-      transform: rotate(1deg);
-    }
-    &:nth-child(4) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(5) {
-      transform: rotate(2deg);
-    }
-    &:nth-child(6) {
-      transform: rotate(-1deg);
-    }
-    &:nth-child(7) {
-      transform: rotate(1deg);
-    }
-    &:nth-child(8) {
-      transform: rotate(-1deg);
-    }
+    @include text(18px);
+
   }
   &--opponent {
     span {
@@ -186,7 +180,47 @@
   font-size: 2rem;
   z-index: 1;
   max-width: 500px;
-  //span {
-  //  display: block;
-  //}
+  &-sticker {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateX(75%) translateY(-20%) scale(0.8);
+    &--20 {
+      transform: translateX(75%) translateY(-40%) scale(0.8);
+    }
+
+}
+
+}
+.battleResponseWrapper {
+  position: relative;
+  &:nth-child(1) {
+    transform: rotate(2deg);
+  }
+  &:nth-child(2) {
+    transform: rotate(-1deg);
+  }
+  &:nth-child(3) {
+    transform: rotate(1deg);
+  }
+  &:nth-child(4) {
+    transform: rotate(-1deg);
+  }
+  &:nth-child(5) {
+    transform: rotate(2deg);
+  }
+  &:nth-child(6) {
+    transform: rotate(-1deg);
+  }
+  &:nth-child(7) {
+    transform: rotate(1deg);
+  }
+  &:nth-child(8) {
+    transform: rotate(-1deg);
+  }
+}
+.btn-battle {
+  z-index: 4;
 }

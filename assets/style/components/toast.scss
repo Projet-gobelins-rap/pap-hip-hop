@@ -1,25 +1,36 @@
 .toast {
     z-index: 100;
     position: fixed;
-    top: 30px;
+    top: 20px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(0.8);
     padding: 16px;
     background-color: $white;
-    border: solid 2px $yellow;
+
+    border: solid 2px $green_dark;
     border-radius: 55px;
     cursor: pointer;
     display: flex;
     align-items: center;
 
+    &.collec {
+        border: solid 2px $yellow;
+        top: 40px;
+        z-index: 101;
+    }
+
     &-text {
         @include text(20px);
         margin: 0 8px 0 0;
+        white-space: nowrap;
     }
 
     &-icon {
         margin: 0 16px 0 0;
-        stroke: $yellow;
+
+        .collec & {
+            stroke: $yellow;
+        }
     }
 
     &-timer {

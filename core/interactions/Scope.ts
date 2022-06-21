@@ -65,7 +65,7 @@ export default class Scope {
 
         this.pointerTimeline = gsap.timeline()
         this.pointerTimeline.to(this.pointer, {
-            scale: 2,
+            scale: 1.2,
             duration: 0.2
         })
         this.pointerTimeline.pause()
@@ -85,8 +85,8 @@ export default class Scope {
         this.places = [
             {
                 id: 1,
-                x: -0.05,
-                y: -0.02,
+                x: 0.25,
+                y: 0.38,
                 found: false,
                 isFocus: true,
                 icon: this.markers[1],
@@ -94,8 +94,8 @@ export default class Scope {
                 slug: "good"
             }, {
                 id: 2,
-                x: 0.47,
-                y: -0.50,
+                x: 0.90,
+                y: -0.10,
                 found: false,
                 isFocus: true,
                 icon: this.markers[0],
@@ -103,8 +103,8 @@ export default class Scope {
                 slug: "bad-1"
             }, {
                 id: 3,
-                x: -1,
-                y: 0.40,
+                x: -0.55,
+                y: 0.58,
                 found: false,
                 isFocus: true,
                 icon: this.markers[2],

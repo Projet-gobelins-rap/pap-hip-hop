@@ -1,5 +1,5 @@
 <template>
-  <section class="battle">
+  <section ref="battle" class="battle">
     <div class="battle-overlay">
       <video
         class="battle-transitionVideo battle-video"
@@ -38,7 +38,7 @@
           <img class="healthbar-img" :src="pp.src" alt="" />
         </div>
         <div v-if="pp" class="healthbar opponent">
-          <img class="healthbar-img" :src="pp.src" alt="" />
+          <img class="healthbar-img" :src="ppOpp.src" alt="" />
           <div class="healthbar-container">
             <span class="healthbar-gauge" ref="opponentGauge"></span>
           </div>
@@ -216,7 +216,7 @@ import grenierScene from "../../core/scene/GrenierScene";
 import BattleScene from "../../core/scene/BattleScene";
 import HoodScene from "../../core/scene/HoodScene";
 import emitter from "tiny-emitter/instance";
-import { VIDEO_ASSET } from "../../core/enums";
+import {AUDIO_ASSET, IMAGE_ASSET, VIDEO_ASSET} from "../../core/enums";
 import { Npc } from "../../core/models/npc";
 import { ignoreNgOnChanges } from "swiper/angular/angular/src/utils/utils";
 @Component({
@@ -296,6 +296,7 @@ export default class battle extends Vue {
   public opponentRound2: object;
   public resultBattle: object;
   public pp: HTMLImageElement | null = null;
+  public ppOpp: HTMLImageElement | null = null;
   public score: { player: number; opponent: number } = {
     player: 200,
     opponent: 200,
@@ -311,6 +312,7 @@ export default class battle extends Vue {
   public battleSceneInitializer: BattleSceneInitializer;
   public videoLooseElement: HTMLMediaElement;
   public videoVictoryElement: HTMLMediaElement;
+  public battle: HTMLElement;
   mounted() {
     this.initRound2Datas();
     this.player = this.$refs.player as HTMLElement;
@@ -318,6 +320,7 @@ export default class battle extends Vue {
     this.globalResponse = this.$refs.globalResponse as HTMLElement;
     this.damageElement = this.$refs.damage as HTMLElement;
     this.comboMultiplicator = this.$refs.comboMultiplicator as HTMLElement;
+    this.battle = this.$refs.battle as HTMLElement;
     this.transitionRound1 = this.$refs.transitionRound1 as HTMLMediaElement;
     this.transitionRound2 = this.$refs.transitionRound2 as HTMLMediaElement;
     this.videoLooseElement = this.$refs.videoLoose as HTMLMediaElement;
@@ -340,7 +343,8 @@ export default class battle extends Vue {
 
     // Listening for a battle response from the server.
     $socket.io.on("battle::response", (ids) => {
-      this.pp = AssetsManager.getImage("PP").data;
+      this.pp =  AssetsManager.getImage('BATTLE_PP_PLAYER').data
+      this.ppOpp =  AssetsManager.getImage('BATTLE_PP_OPP').data
 
       // emitter.emit('battle::disposeObject','coach')
 
@@ -411,6 +415,7 @@ export default class battle extends Vue {
   displayOpponentPunchline() {
     console.log(this.opponent);
     if (!this.isRound2) {
+      this.battle.classList.add('battle-opponentTour')
       emitter.emit("battle::addObject", "opponent");
       this.animatePunchline(
         this.opponent.$el.children,
@@ -502,12 +507,14 @@ export default class battle extends Vue {
 
   // Show user punchline
   displayUserPunchline() {
-    gsap.set(Array.from(this.player.$el.children), {
+    gsap.set(Array.from(this.player.$el.querySelectorAll('.battleResponse')), {
       display: "none",
       opacity: 0,
     });
     console.log(this.round2StepCounter, "<---est ceque leround 2");
     if (this.round2StepCounter == 0) {
+      this.battle.classList.remove('battle-opponentTour')
+      this.battle.classList.add('battle-playerTour')
       this.animatePunchline(
         this.player.$el.children,
         true,
@@ -553,19 +560,29 @@ export default class battle extends Vue {
      */
     if (round1) {
       Array.from(target).forEach((el: HTMLElement, index: number) => {
-        el.innerHTML = isOpponentTour
+        let responseElem = el.querySelector('.battleResponse')
+        responseElem.innerHTML = isOpponentTour
           ? opponentData[index].content[0].text
           : playerData[!isOpponentTour && !round1 ? punchIndex : index].text;
 
-        gsap.to(el, {
+        gsap.to(responseElem, {
           display: "block",
           duration: 2,
           opacity: 1,
           ease: "expo.out",
-          delay: index * 2,
-          onComplete: () => {
-            console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY");
+          delay: index*1.5,
+          onStart:()=>{
             if (!isOpponentTour) {
+              if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'top') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--20')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              } else if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'moyen') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--10')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }else  {
+                let currentSticker = el.querySelector('.battleResponse-sticker--0')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }
               this.detectCombo(
                 playerData[!isOpponentTour && !round1 ? 0 : index]
               );
@@ -574,6 +591,28 @@ export default class battle extends Vue {
                 playerData[!isOpponentTour && !round1 ? 0 : index].score,
                 true
               );
+            } else {
+              if (opponentData[index].status === 'top') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--20')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              } else if (opponentData[index].status === 'moyen') {
+                let currentSticker = el.querySelector('.battleResponse-sticker--10')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }else  {
+                let currentSticker = el.querySelector('.battleResponse-sticker--0')
+                gsap.to(currentSticker,{display:'block',opacity:1})
+              }
+              this.calculateScore(
+                this.score.player,
+                opponentData[index].score,
+                false
+              );
+            }
+
+          },
+          onComplete: () => {
+            console.log(this.punchArray[index], "INDEX DU PUNCH ARRAY");
+            if (!isOpponentTour) {
 
               if (index === 3) {
                 if (this.round2StepCounter <= 0) {
@@ -589,11 +628,6 @@ export default class battle extends Vue {
                 }
               }
             } else {
-              this.calculateScore(
-                this.score.player,
-                opponentData[index].score,
-                false
-              );
               if (index === 3) {
                 gsap.to(".btn-battle", { display: "block", opacity: 1 });
                 // this.nextPunchRound1(true)
@@ -611,26 +645,37 @@ export default class battle extends Vue {
 
       const result = isOpponentTour
         ? [...target].filter((element) =>
-            element.classList.contains("battleResponse--opponent")
+            element.classList.contains("battleResponseWrapper--opponent")
           )
         : [...target].filter((element) =>
-            element.classList.contains("battleResponse--player")
+            element.classList.contains("battleResponseWrapper--player")
           );
 
       console.log(result, "✅✅✅✅✅");
       let currentElement = result[punchIndex] as HTMLElement;
-      currentElement.innerHTML = isOpponentTour
+      console.log(currentElement,'<--- current element')
+      let response = currentElement.querySelector('.battleResponse')
+      response.innerHTML = isOpponentTour
         ? opponentData[punchIndex].content[0].text
         : playerData[0].text;
-      gsap.to(currentElement, {
+      gsap.to(response, {
         display: "block",
         duration: 2,
         opacity: 1,
         ease: "expo.out",
-        delay: 2,
-        onComplete: () => {
-          gsap.to(currentElement, { opacity: 0.5 });
+        delay: 0.5,
+        onStart: ()=> {
           if (!isOpponentTour) {
+            if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'top') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            } else if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'moyen') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }else  {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }
             this.detectCombo(
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex]
             );
@@ -639,8 +684,30 @@ export default class battle extends Vue {
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex].score,
               true
             );
+          }else {
+            if (opponentData[punchIndex].status === 'top') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            } else if (opponentData[punchIndex].status === 'moyen') {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }else  {
+              let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
+              gsap.to(currentSticker,{display:'block',opacity:1})
+            }
+            this.calculateScore(
+              this.score.player,
+              opponentData[punchIndex].score,
+              false
+            );
+          }
+        },
+        onComplete: () => {
+          gsap.to(currentElement, { opacity: 0.5 });
+          if (!isOpponentTour) {
+            this.toggleRapperAnimation("player", "idle");
             if (punchIndex == 1) {
-              gsap.to(".battleResponse--group", {
+              gsap.to(".battleResponseWrapper--group", {
                 display: "none",
                 opacity: 0,
               });
@@ -651,11 +718,6 @@ export default class battle extends Vue {
             }
             $socket.io.emit("battle::round2Sequence");
           } else {
-            this.calculateScore(
-              this.score.player,
-              opponentData[punchIndex].score,
-              false
-            );
             this.displayUserPunchline();
           }
         },
@@ -665,7 +727,7 @@ export default class battle extends Vue {
 
   nextPunchRound1(): void {
     if (this.opponentTourRound1) {
-      gsap.to(".responseContainer--opponent span", {
+      gsap.to(".responseContainer--opponent ", {
         display: "none",
         duration: 1,
         opacity: 0,
@@ -677,13 +739,14 @@ export default class battle extends Vue {
         },
       });
     } else {
-      gsap.to(".responseContainer--player span", {
+      gsap.to(".responseContainer--player", {
         display: "none",
         duration: 1,
         opacity: 0,
         onComplete: () => {
           this.setNextChat();
           this.displayChat();
+          this.battle.classList.remove('battle-playerTour')
           emitter.emit("battle::disposeObject", "player");
           emitter.emit("battle::addObject", "coach");
           console.log(
@@ -697,9 +760,24 @@ export default class battle extends Vue {
   }
 
   toggleRapperAnimation(npcName: string, animationName: string): void {
+    const fadeDuration:number = 0.5
     this.npcs.forEach((el: Npc) => {
       if (el.name === npcName) {
-        el.animationPlayed = animationName;
+
+        if (animationName === 'rap') {
+          const toPlay = el.animationsMap.get(animationName)
+          const current = el.animationsMap.get('idle')
+
+          current.fadeOut(fadeDuration)
+          toPlay.reset().fadeIn(fadeDuration).play();
+        }else {
+          const toPlay = el.animationsMap.get(animationName)
+          const current = el.animationsMap.get('rap')
+
+          current.fadeOut(fadeDuration)
+          toPlay.reset().fadeIn(fadeDuration).play();
+        }
+
       }
     });
   }
@@ -822,6 +900,7 @@ export default class battle extends Vue {
           } else {
             this.$refs.transitionRound2.play();
           }
+          this.playAudioCloche()
         },
       }
     );
@@ -898,10 +977,37 @@ export default class battle extends Vue {
 
   goToHood() {
     // remove scene children
-    this.$router.push("/hood3");
+    gsap.fromTo(
+      ".battle-overlay",
+      { display: "none", yPercent: 100,opacity:1 },
+      {
+        display: "block",
+        duration: 1.5,
+        yPercent: 0,
+        ease: "expo.inOut",
+        onComplete:()=>{
+          this.$router.push("/hood3");
+        }
+      })
     console.log("ON VA DANS LE HOOD BB");
   }
 
+  playAudioCloche() {
+    let audio = new Audio(this.clocheAudio);
+    audio.play();
+  }
+
+  // get ppPlayer():string {
+  //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_PLAYER).data.src
+  // }
+  //
+  // get ppOpp():string {
+  //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_OPP).data.src
+  // }
+
+  get clocheAudio():string {
+    return AssetsManager.getAudio(AUDIO_ASSET.CLOCHE_SOUND).data.src
+  }
   // A getter function that returns the src of the video.
   get videoVictory(): string {
     return AssetsManager.getVideo(VIDEO_ASSET.BATTLE_END_BG_VICTORY).data.src;
