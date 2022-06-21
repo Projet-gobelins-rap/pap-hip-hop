@@ -25,7 +25,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
-  private _npcArray: Npc[] = []
+  public npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -85,8 +85,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
           // ctx.scene.add(arrow);
         }
 
-        if (this._npcArray.length > 0) {
-          this._npcArray.forEach((npc: Npc) => {
+        if (this.npcArray.length > 0) {
+          this.npcArray.forEach((npc: Npc) => {
             npc.update(ctx.deltaTime)
           })
         }
@@ -266,36 +266,36 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     eric.model.scale.set(25, 25, 25)
-    this._npcArray.push(eric)
+    this.npcArray.push(eric)
     console.log(eric);
     
 
     const npc_battle = new Npc(playerGltf, 'coach', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
-    this._npcArray.push(npc_battle)
+    this.npcArray.push(npc_battle)
 
     const npc_ticaret = new Npc(playerGltf, 'ticaret', 't-pose')
     npc_ticaret.model.scale.set(25, 25, 25)
-    this._npcArray.push(npc_ticaret)
+    this.npcArray.push(npc_ticaret)
 
     const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
     npc_deenasty.model.scale.set(25, 25, 25)
-    this._npcArray.push(npc_deenasty)
+    this.npcArray.push(npc_deenasty)
 
     const npc_break_1 = new Npc(playerGltf, 'break_1', 't-pose')
     npc_break_1.model.scale.set(25, 25, 25)
     npc_break_1.animationPlayed = 'break_2'
-    this._npcArray.push(npc_break_1)
+    this.npcArray.push(npc_break_1)
 
     const npc_break_2 = new Npc(playerGltf, 'break_2', 't-pose')
     npc_break_2.model.scale.set(25, 25, 25)
     npc_break_2.animationPlayed = 'break_3'
-    this._npcArray.push(npc_break_2) 
+    this.npcArray.push(npc_break_2) 
 
     const npc_break_3 = new Npc(playerGltf, 'break_3', 't-pose')
     npc_break_3.model.scale.set(25, 25, 25)
     npc_break_3.animationPlayed = 'rap'
-    this._npcArray.push(npc_break_3)
+    this.npcArray.push(npc_break_3)
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)

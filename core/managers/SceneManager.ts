@@ -109,7 +109,7 @@ export default class SceneManager {
 
     this._isPlaying = false
     this._isRayCasting = false
-    this._isStatsActive = false
+    this._isStatsActive = true
     this._isParallaxActive = false
 
     this._onStartCallback = options.onStart || function () {
@@ -477,10 +477,10 @@ export default class SceneManager {
   }
 
   private _configStats() {
-    // this._stats = new Stats();
+    this._stats = new Stats();
     // this._isStatsActive = false
-    // this._stats.showPanel(0);
-    // document.body.appendChild(this._stats.dom);
+    this._stats.showPanel(0);
+    document.body.appendChild(this._stats.dom);
   }
 
 
