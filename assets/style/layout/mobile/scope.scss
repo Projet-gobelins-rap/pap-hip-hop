@@ -13,7 +13,7 @@
         transform: rotate(90deg);
         z-index: 9999;
         opacity: 0;
-    }
+    } 
 
     &-landscape {
         position: absolute;
@@ -116,8 +116,8 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 10;
-        width: 60px;
-        height: 60px;
+        // width: 60px;
+        // height: 60px;
     }
 
     .onboarding {
@@ -128,7 +128,7 @@
         transform: translate(-50%, -50%);
         
         &-container {
-            transform: rotate(90deg) !important;
+            // transform: rotate(90deg) !important;
             /* height: calc(100% - 60px); */
             /* max-height: 600px; */
             width: calc(100vh - 40px) !important;
