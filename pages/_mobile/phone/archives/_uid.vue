@@ -1,25 +1,28 @@
 <template>
-  <section class="archive">
-     <div class="archive-top">
+  <section class="collectible">
+    <div class="collectible-top">
       <CustomButton
-        class="archive-button small"
+        class="collectibles-button small"
         @click.native="goToPrev"
         text="Retour"
       ></CustomButton>
-      <h1 class="archive-title">{{ archive.data.title }}</h1>
-      
+      <h1 class="collectible-title">{{ archive.data.title }}</h1>
+      <PrismicImage
+        class="collectible-icon"
+        :field="archive.data.image"
+        width="200"
+      />
       <PrismicRichText
-        class="archive-intro"
-        :field="archive.data.text"
+        class="collectible-intro"
+        :field="archive.data.description"
       />
     </div>
-    <div class="archive-content">
-      <div class="archive-slice" v-for="(slice, idx) in archive.data.slices" :key="'slice'+idx">
-        <PrismicImage class="archive-image" v-if="slice.slice_type == 'image'" :field="slice.primary.image" />
-        <PrismicRichText class="archive-text" v-if="slice.slice_type == 'text'"  :field="slice.primary.text" />
+    <div class="collectible-content">
+      <div class="collectible-slice" v-for="(slice, idx) in archive.data.slices" :key="'slice'+idx">
+        <PrismicImage class="collectible-image" v-if="slice.slice_type == 'image'" :field="slice.primary.image" />
+        <PrismicRichText class="collectible-text" v-if="slice.slice_type == 'text'"  :field="slice.primary.text" />
       </div>
     </div>
-    
   </section>
 </template>
 
@@ -48,5 +51,8 @@ export default class archiveSingle extends Vue {
   public archive: any;
 
   mounted() {}
+  goToPrev() {
+    this.$router.push({ path: "/_mobile/phone/archives", replace: true });
+  }
 }
 </script>
