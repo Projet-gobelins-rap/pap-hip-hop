@@ -12,6 +12,14 @@
           "placeholder": ""
         }
       },
+      "image": {
+        "type": "Image",
+        "config": {
+          "label": "Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
       "title": {
         "type": "Text",
         "config": {
@@ -19,27 +27,27 @@
           "placeholder": ""
         }
       },
-      "text": {
+      "description": {
         "type": "StructuredText",
         "config": {
-          "label": "Text",
+          "label": "Description",
           "placeholder": "",
           "allowTargetBlank": true,
           "single": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+        }
+      },
+      "color": {
+        "type": "Text",
+        "config": {
+          "label": "Color",
+          "placeholder": ""
         }
       },
       "slices": {
         "type": "Slices",
         "fieldset": "Slice Zone",
         "config": {
-          "choices": {
-            "image": {
-              "type": "SharedSlice"
-            },
-            "text": {
-              "type": "SharedSlice"
-            }
-          }
+          "choices": {}
         }
       }
     }
