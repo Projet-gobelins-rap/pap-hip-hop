@@ -194,7 +194,7 @@ import $socket from "~/plugins/socket.io";
       //   error({ statusCode: 404, message: 'Content not found' })
     }
   },
-})
+}) 
 export default class MobileScope extends Vue {
   public stepStore = getModule(stepStore, this.$store);
   public onboardingStore = getModule(onboardingStore, this.$store);

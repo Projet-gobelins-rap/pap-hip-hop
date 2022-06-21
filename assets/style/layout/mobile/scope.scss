@@ -4,6 +4,7 @@
     justify-content: center;
     position: relative;
     height: 100%;
+    overflow: hidden;
 
     &-debug {
         display: flex;
@@ -40,7 +41,7 @@
 
         // TODO : use desktop size / ratio
         width: 2320px;
-        height: 1294px;
+        height: 1305px;
     }
     
     &-img {
@@ -91,17 +92,17 @@
         &::before {
             content: "";
             background-color: #161820;
-            height: 100%;
-            width: 100%;
+            border: solid 2px #161820;
+            height: 100%; 
+            width: 100% ;
+            transform: scale(1.1);
             position: relative;
             display: flex;
             flex-shrink: 1;
             flex-grow: 1;
         }
-     
     }
     
-
     &-sight {
         position: absolute;
         top: 0;
@@ -110,6 +111,7 @@
         height: 100%;
         z-index: 10;
     }
+
     &-pointer {
         position: absolute;
         top: 50%;
@@ -128,7 +130,7 @@
         transform: translate(-50%, -50%);
         
         &-container {
-            // transform: rotate(90deg) !important;
+            transform: rotate(90deg) !important;
             /* height: calc(100% - 60px); */
             /* max-height: 600px; */
             width: calc(100vh - 40px) !important;
@@ -136,7 +138,7 @@
         }
 
         &-full {
-            transform: rotate(90deg);
+            // transform: rotate(90deg);
             width: 100vh;
             height: 100vw;
         }

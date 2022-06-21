@@ -25,7 +25,6 @@ export default class SlotsLoader {
             object.children = []
             object.add(baseObject.clone())
             const colliderGeometry = Helpers.generateBoxCollider(object)
-
         });
     }
     
