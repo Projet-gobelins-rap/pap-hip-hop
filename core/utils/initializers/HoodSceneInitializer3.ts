@@ -242,7 +242,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.populateSlots(fenceSlots, fence, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_FENCE_TEXTURE).data)
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
-
+ 
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4], true)
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)

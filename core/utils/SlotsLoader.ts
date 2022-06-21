@@ -30,11 +30,15 @@ export default class SlotsLoader {
     
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[], isGraffed: boolean = false): void {
         slots.forEach(slot => {
+            const variation = slot.name.split('__')
             const params = slot.name.split('_')
-            const variation = slot.name.split(':')
             slot.children = []
             let texture = null
 
+
+            // console.log(variation);
+            // console.log(params);
+ 
             switch (params[3]) {
                 case "1":
                     texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data
@@ -43,17 +47,37 @@ export default class SlotsLoader {
                     slot.add(buildingVariations[0].clone())
                     break;
                 case "2":
+                    
+                    if(isGraffed && (variation[1] == "nepal")) {
+                        texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data 
+                        texture.flipY = false
+                        slot.add(buildingVariations[1].clone())
 
-                    texture = isGraffed ? AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data : AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data
-                    texture.flipY = false
-                    buildingVariations[1].children[0].material.map = texture
-                    slot.add(buildingVariations[1].clone())
+                        const mat = new MeshBasicMaterial({map: texture})
+                        slot.children[0].children[0].material = mat
+                        
+                    } else {
+                        texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data
+                        texture.flipY = false
+                         const mat = new MeshBasicMaterial({map: texture})
+                        slot.add(buildingVariations[1].clone())
+                        slot.children[0].children[0].material = mat
+                    }
                     break;
                 case "3":
-                    texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data
-                    texture.flipY = false
-                    buildingVariations[2].children[0].material.map = texture
-                    slot.add(buildingVariations[2].clone())
+                    if(isGraffed && (variation[1] == "futura")) {
+                     texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_FUTURA).data 
+                        texture.flipY = false
+                        slot.add(buildingVariations[2].clone())
+                        const mat = new MeshBasicMaterial({map: texture})
+                        slot.children[0].children[0].material = mat
+                    } else {
+                       texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data
+                        texture.flipY = false
+                         const mat = new MeshBasicMaterial({map: texture})
+                        slot.add(buildingVariations[2].clone())
+                        slot.children[0].children[0].material = mat
+                    }
                     break;
                 case "4":
                     texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_4_TEXTURE).data

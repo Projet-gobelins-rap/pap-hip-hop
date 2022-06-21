@@ -110,7 +110,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
             transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
           }
           this._data.hoodSceneStore.updatePositionsInteractivePoint(updateData)
-          console.log(screenPosition);
         }
       },
       onResume: (ctx) => {
