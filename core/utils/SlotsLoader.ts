@@ -72,7 +72,8 @@ export default class SlotsLoader {
             if(!(collectedItems?.includes(slot.name))) {
                 let model = AssetsManager.getGltf(slot.name).data.scene.clone()
                 slot.add(model) 
-                model.position.y = 30
+                // model.children[0].material.color = 'red'
+                model.children[0].position.y = 70
             } else {
                 slot.children = []
             }
