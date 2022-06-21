@@ -217,7 +217,6 @@ export default class HoodScenePage extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
-          this.$router.push("/graf/scope");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -225,7 +224,6 @@ export default class HoodScenePage extends Vue {
           this.chatStore.setChatStep("reading");
            break;
         case "goBattle":
-          this.$router.push("/battle");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,

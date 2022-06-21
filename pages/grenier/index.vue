@@ -181,8 +181,6 @@ export default class GrenierScene extends Vue {
         console.log("transition leave ekip")
 
         let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
-        gsap.set(videoIn, { display: "block",opacity:1 })
-
         let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
 
         gsap.fromTo(
@@ -194,6 +192,8 @@ export default class GrenierScene extends Vue {
             yPercent: 0,
             ease: "expo.inOut",
             onComplete: () => {
+              gsap.set(videoIn, { display: "block",opacity:1 })
+              gsap.set(videoOut, { display: "none",opacity:0 })
               videoIn.play()
             },
           }
