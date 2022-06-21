@@ -85,6 +85,7 @@ import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
+import NepalInteractPoint from "~/core/config/hood-scene/interact-points/NepalInteractPoint";
 import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
@@ -142,6 +143,7 @@ export default class HoodScenePage2 extends Vue {
   public storeOpen: boolean = false;
   public storeOutfits: object[] = [];
   public outfitWorn: string = "player0";
+  public talkingNpc: string = null
 
   mounted() {
     this.displayOnboarding();
@@ -182,7 +184,6 @@ export default class HoodScenePage2 extends Vue {
       this.addInteractionPoints();
 
       HoodScene.initCallback((toastID: string) => {
-        console.log(toastID);
         this.displayToast(toastID);
       });
     }
@@ -212,6 +213,7 @@ export default class HoodScenePage2 extends Vue {
     this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(NepalInteractPoint.name);
   }
 
   removeInteractionsPoints() {
@@ -219,25 +221,27 @@ export default class HoodScenePage2 extends Vue {
     this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(NepalInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
-    console.log(this.npcDialogues);
-
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
-
+ 
         this.currentChat = element[0];
         return this.currentChat;
       }
     });
-
+    
     this.removeInteractionsPoints();
     this.hoodInstance.cameraFollow = false;
     HoodScene.context.goToPresetPosition(point.slug, 2, () => {
       this.hoodSceneStore.setIsCameraMoving(false);
       this.hoodSceneStore.setIsChatDisplay(true);
+      const name = point.slug.split('_')
+      
+      this.talkToNpc(name[1])
     });
   }
 
@@ -323,6 +327,16 @@ export default class HoodScenePage2 extends Vue {
     // this.currentChat = this.conversation[this.currentChatNum];
   }
 
+  talkToNpc(name: string[]) {
+    this.talkingNpc = name
+    this.findNpc(name).animationPlayed = 'talk'
+    console.log(this.talkingNpc);
+  }
+
+  findNpc(name: string) {
+    return this.hoodInstance.npcArray.find(element => element.name = name)
+  }
+
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
@@ -369,7 +383,9 @@ export default class HoodScenePage2 extends Vue {
   goBack() {
     this.hoodSceneStore.setIsChatDisplay(false);
     // this.addInteractionPoints();
-
+    // this.talkingNpc.animationPlayed = 'idle'
+    // this.talkingNpc = null
+    this.findNpc(this.talkingNpc).animationPlayed = 'idle'
     HoodScene.context.goToPresetPosition("reset", 2, () => {
       this.addInteractionPoints();
       this.hoodInstance.cameraFollow = true;

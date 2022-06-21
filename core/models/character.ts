@@ -33,7 +33,7 @@ export class Character {
         body: Texture,
         legs: Texture,
     };
-    private _fadeDuration: number;
+    private _fadeDuration: number = 0.2;
 
     constructor(playerGltf: any, name: string, currentAction: string) {
         //@ts-ignore
@@ -131,7 +131,8 @@ export class Character {
         if (this.currentAction != this.animationPlayed) {
             const toPlay = this.animationsMap.get(this.animationPlayed)
             const current = this.animationsMap.get(this.currentAction)
-
+            console.log(this._fadeDuration);
+            
             current.fadeOut(this._fadeDuration)
             toPlay.reset().fadeIn(this._fadeDuration).play();
 

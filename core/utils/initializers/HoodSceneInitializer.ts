@@ -110,7 +110,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
             transformY: - screenPosition.y * this._data.canvas.clientHeight * 0.5
           }
           this._data.hoodSceneStore.updatePositionsInteractivePoint(updateData)
-          console.log(screenPosition);
         }
       },
       onResume: (ctx) => {
@@ -148,7 +147,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     this._camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
-      1,
+      12,
       1000
     )
     // this._camera.position.set(-294, 15, -92)
@@ -277,8 +276,6 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const eric = new Npc(playerGltf, 'eric', 't-pose')
     this._npcArray.push(eric)
     eric.model.scale.set(25, 25, 25)
-    eric.model.position.set(-0, -100, -0)
-    console.log('eric : ', eric);
 
 
     SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
@@ -349,11 +346,13 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
 
     this.collider = new Mesh(mergedGeometry);
     this.collider.material.visible = false
+    // this.collider.material.wireframe = true
     // this.collider.material.color.setHex(0x00ff00)
     // this.collider.material.opacity = 0.5;
+
     // this.collider.material.transparent = true;
     this._scene.add(this.collider);
-
+ 
     this._collectibleCollection = {
       env: [this.collider, this.ground],
       collectibles: this._collectibleColliders.children
