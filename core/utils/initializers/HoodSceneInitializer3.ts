@@ -330,7 +330,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
   }
 
   addScreen(screen) {
-    const videoScreen = AssetsManager.getVideo(VIDEO_ASSET.TV_VIDEO).data
+    const videoScreen = AssetsManager.getVideo(VIDEO_ASSET.HIP_HOP_360).data
     videoScreen.play()
     videoScreen.loop = true
     videoScreen.muted = true
