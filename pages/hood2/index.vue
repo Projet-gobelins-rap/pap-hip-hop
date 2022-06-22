@@ -149,9 +149,9 @@ export default class HoodScenePage2 extends Vue {
     this.displayOnboarding();
   }
 
-  destroyed() {
-    HoodScene.context.destroy();
-  }
+  // destroyed() {
+  //   HoodScene.context.destroy();
+  // }
 
   startScene() {
     this.hoodInstance = new HoodSceneInitializer2({
@@ -374,6 +374,7 @@ export default class HoodScenePage2 extends Vue {
             path: "/_mobile/off",
             replace: true,
           });
+          HoodScene.context.destroy();
           this.chatStore.setChatStep("reading");
           break;
       }
