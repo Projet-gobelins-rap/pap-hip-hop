@@ -33,7 +33,7 @@ import ChatComponent from "~/components/contentOverlays/chat.vue";
 import TvInteractPoint from "../../core/config/grenier-scene/interact-points/objects/TvInteractPoint";
 import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions/ModeCameraPosition";
 import GUI from "lil-gui";
-
+import emitter from 'tiny-emitter/instance'
 import $socket from "~/plugins/socket.io";
 import {gsap} from "gsap";
 
