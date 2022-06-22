@@ -575,7 +575,6 @@ export default class battle extends Vue {
           ease: "expo.out",
           delay: index*1.5,
           onStart:()=>{
-            this.playAudioVoice()
             if (!isOpponentTour) {
               if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'top') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--20')
@@ -1061,12 +1060,7 @@ export default class battle extends Vue {
       }
     };
   }
-
-  playAudioVoice() {
-    let audio = new Audio(this.voiceAudio);
-    audio.play();
-  }
-
+  
   playAudioCloche() {
     let audio = new Audio(this.clocheAudio);
     audio.play();
