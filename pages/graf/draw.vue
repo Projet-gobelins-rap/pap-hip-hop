@@ -162,7 +162,7 @@ export default class GraffActivity extends Vue {
         let title = document.querySelector('.transition-title span') as HTMLElement
         title.innerHTML = `LE TIEKS`
         let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
-        infoContent.innerHTML = `Le quartier`
+        infoContent.innerHTML = `Un quartier qui reprend de la couleur`
 
         let tl = gsap.timeline()
         tl.fromTo(

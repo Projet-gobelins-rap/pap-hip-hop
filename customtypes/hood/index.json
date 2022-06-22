@@ -69,6 +69,32 @@
           }
         }
       }
+    },
+    "pnj-papy": {
+      "slices6": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
+    },
+    "interaction-nepal": {
+      "slices7": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "dialog": {
+              "type": "SharedSlice"
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -316,7 +316,7 @@ export default class HoodScenePage extends Vue {
         let title = document.querySelector('.transition-title span') as HTMLElement
         title.innerHTML = `LE BAT'7`
         let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
-        infoContent.innerHTML = `La tour dans laquelle ont grandi les artistes du Seven Binks`
+        infoContent.innerHTML = `La tour dans laquelle ont grandi les artistes du label Seven Binks`
 
         let tl = gsap.timeline()
         tl.fromTo(

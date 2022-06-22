@@ -22,7 +22,7 @@
 
     <CustomButton
       v-if="this.multipleChoice"
-      class="btn choices__validate medium"
+      class="btn choices__validate small"
       @click.native="validateSelection"
       :disabled="!isActive"
       text="GO GO GO"

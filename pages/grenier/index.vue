@@ -159,7 +159,7 @@ export default class GrenierScene extends Vue {
         title.innerHTML = 'LE TIEKS'
 
         let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
-        infoContent.innerHTML = `Le quartier`
+        infoContent.innerHTML = `Un quartier ou rien ne se passe`
 
         let tl = gsap.timeline()
         tl.fromTo(

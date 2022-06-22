@@ -64,7 +64,7 @@ export enum VIDEO_ASSET {
   BATTLE_END_BG_DEFEAT = 'BATTLE_END_BG_DEFEAT',
   TV_VIDEO = 'TV_VIDEO',
   HIP_HOP_360 = 'HIP_HOP_360'
-} 
+}
 
 /**
  * Name given to image asset in order to retrieve it through AssetManager
@@ -94,14 +94,17 @@ export enum IMAGE_ASSET {
  */
 export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
+  BATTLE_VOICE = 'BATTLE_VOICE',
+  BATTLE_BOO = 'BATTLE_BOO',
+  BATTLE_GLOBAL_VOICE = 'BATTLE_GLOBAL_VOICE',
   CTA_CLIC = 'CTA_CLIC',
   CTA_HOVER = 'CTA_HOVER',
   CLOCHE_SOUND = 'CLOCHE_SOUND',
 }
- 
+
 /**
  * Name given to texture assets in order to retrieve it through AssetManager
- */ 
+ */
 export enum TEXTURE_ASSET {
   COLOR_TEXTURE = 'COLOR_TEXTURE',
   GRENIER_TEXTURE = 'GRENIER_TEXTURE',
@@ -155,7 +158,7 @@ export enum TEXTURE_ASSET {
   CITY_TEXTURE = 'CITY_TEXTURE',
   CITY_TEXTURE_V1 = 'CITY_TEXTURE_V1',
 }
- 
+
 /**
  * Name given to sprite texture color
  */
