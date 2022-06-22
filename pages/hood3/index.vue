@@ -186,7 +186,7 @@ export default class HoodScenePage3 extends Vue {
         this.currentChat = element[0];
         return this.currentChat;
       }
-    });
+    }); 
 
     this.removeInteractionsPoints();
     this.hoodInstance.cameraFollow = false;
