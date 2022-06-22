@@ -674,22 +674,13 @@ export default class battle extends Vue {
           if (!isOpponentTour) {
             if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'top') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
-              this.playAudioBoo()
-              gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                  this.resetAudioBoo()
-                }})
+              gsap.to(currentSticker,{display:'block',opacity:1})
             } else if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'moyen') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
-              this.playAudioBoo()
-              gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                  this.resetAudioBoo()
-                }})
+              gsap.to(currentSticker,{display:'block',opacity:1})
             }else  {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
-              this.playAudioBoo()
-              gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                  this.resetAudioBoo()
-                }})
+              gsap.to(currentSticker,{display:'block',opacity:1})
             }
             this.detectCombo(
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex]
@@ -702,22 +693,13 @@ export default class battle extends Vue {
           }else {
             if (opponentData[punchIndex].status === 'top') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+              gsap.to(currentSticker,{display:'block',opacity:1})
             } else if (opponentData[punchIndex].status === 'moyen') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+              gsap.to(currentSticker,{display:'block',opacity:1})
             }else  {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+              gsap.to(currentSticker,{display:'block',opacity:1})
             }
             this.calculateScore(
               this.score.player,
@@ -1089,17 +1071,7 @@ export default class battle extends Vue {
     let audio = new Audio(this.clocheAudio);
     audio.play();
   }
-
-  playAudioBoo() {
-    this.audioboo = new Audio(this.battleBooAudio);
-    this.audioboo.play();
-  }
-
-  resetAudioBoo() {
-    this.audioboo.pause()
-    this.audioboo.currentTime = 0
-  }
-
+  
   playBattleGlobalSound() {
     this.audioGlobalBattle = new Audio(this.battleGlobalAudio)
     this.audioGlobalBattle.volume = 0.3
