@@ -109,6 +109,7 @@ import { IMAGE_ASSET } from "~/core/enums";
         hoodContent?.slices3,
         hoodContent?.slices4,
         hoodContent?.slices5,
+        hoodContent?.slices6,
       ];
 
       return {
@@ -225,6 +226,9 @@ export default class HoodScenePage2 extends Vue {
   }
 
   goToInteractionPoint(point) {
+    console.log(this.npcDialogues);
+    console.log(point);
+
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);

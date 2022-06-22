@@ -5,8 +5,8 @@
     align-items: flex-end;
     justify-content: center;
     display: flex;
-    background: rgb(179,229,255);
-    background: linear-gradient(0deg, rgba(179,229,255,1) 0%, rgba(46,183,255,1) 100%); 
+    background: rgb(179, 229, 255);
+    background: linear-gradient(0deg, rgba(179, 229, 255, 1) 0%, rgba(46, 183, 255, 1) 100%);
 
     &-store {
         position: absolute;
@@ -22,7 +22,6 @@
         flex-direction: column;
         align-items: center;
 
-
         &--close {
             position: absolute;
             top: 10px;
@@ -33,9 +32,8 @@
 
     &-outfits {
         display: flex;
-      
-        width: 100%;
 
+        width: 100%;
     }
 
     &-outfit {
@@ -58,4 +56,32 @@
             transform: translate(-50%, 100%);
         }
     }
+
+    &-popup {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        z-index: 100;
+        transform: translateX(-50%);
+        width: 1200px;
+        max-width: 100%;
+        display: flex;
+        height: calc(100% - 100px);
+        overflow-y: scroll;
+        border-radius: 20px;
+        &.false {
+            opacity: 0;
+            pointer-events: none;
+        }
+       
+    }
+
+    &-html {
+        width: 100%;
+        height: 1926px;
+    }
+
+    // #canvasGlobalScene {
+    //     background:red;
+    // }
 }
