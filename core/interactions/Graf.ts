@@ -211,7 +211,7 @@ export default class Graf {
 
     this.display.innerText = this.erasedPercentage.toString()
 
-    if (this.erasedPercentage > 65) {
+    if (this.erasedPercentage > 62) {
       this.layerEnded()
     }
   }

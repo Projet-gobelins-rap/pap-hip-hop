@@ -206,7 +206,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     const light = AssetsManager.getGltf(GLTF_ASSET.SLOT_PUBLIC_LIGHT).data.scene
     const electricPlot = AssetsManager.getGltf(GLTF_ASSET.SLOT_ELECTRIC_PLOT).data.scene
     const bench = AssetsManager.getGltf(GLTF_ASSET.SLOT_BENCH).data.scene
-    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
+    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene.clone()
     // const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
     // const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
@@ -330,7 +330,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
   }
 
   addScreen(screen) {
-    const videoScreen = AssetsManager.getVideo(VIDEO_ASSET.TV_VIDEO).data
+    const videoScreen = AssetsManager.getVideo(VIDEO_ASSET.HIP_HOP_360).data
     videoScreen.play()
     videoScreen.loop = true
     videoScreen.muted = true
