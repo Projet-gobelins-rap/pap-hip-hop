@@ -59,10 +59,14 @@
             v-if="i < 2 && outfitWorn != item.name"
             :text="'J\'prends direct !'"
           />
+          <CustomButton
+            :class="'hood-outfit--button small disable'"
+            v-else-if="i < 2 "
+            :text="'Déjà équipée'"
+          />
         </div>
       </div>
     </div>
-
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
 </template>
@@ -263,6 +267,8 @@ export default class HoodScenePage2 extends Vue {
 
   closeStore() {
     this.storeOpen = false;
+    this.toastMessage = "Trouve le coach";
+    this.chatStore.setChatStep("reading");
     this.goBack();
   }
 
@@ -352,10 +358,6 @@ export default class HoodScenePage2 extends Vue {
           break;
         case "goBack":
           this.goBack();
-
-          // Demo mode : trigger when leave dialogue (Dan)
-          this.toastMessage = "Trouve le coach";
-          this.chatStore.setChatStep("reading");
           break;
         case "showStore":
           this.showStore();

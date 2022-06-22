@@ -252,7 +252,6 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     const screen = new Mesh(plane)
     screen.position.set(-69, 20, -65)
     
-    
     screen.rotateY(9 * Math.PI /16)
     console.log(screen);
     this._scene.add(screen);
@@ -269,22 +268,27 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
 
     const npc_eric = new Npc(playerGltf, 'eric', 't-pose')
     npc_eric.model.scale.set(25, 25, 25)
+    npc_eric.model.rotateY(-Math.PI / 2)
     this.npcArray.push(npc_eric)
 
     const npc_battle = new Npc(playerGltf, 'coach', 't-pose')
     npc_battle.model.scale.set(25, 25, 25)
+    npc_battle.model.rotateY(-Math.PI / 2)
     this.npcArray.push(npc_battle)
 
     const npc_victor = new Npc(playerGltf, 'papy', 't-pose')
     npc_victor.model.scale.set(25, 25, 25)
+    npc_victor.model.rotateY(Math.PI / 2)
     this.npcArray.push(npc_victor)
 
     const npc_opponent = new Npc(playerGltf, 'opponent', 't-pose')
     npc_opponent.model.scale.set(25, 25, 25)
+    npc_opponent.model.rotateY(-Math.PI / 2)
     this.npcArray.push(npc_opponent)
 
     const npc_francois = new Npc(playerGltf, 'francois', 't-pose')
     npc_francois.model.scale.set(25, 25, 25)
+    npc_francois.model.rotateY(Math.PI / 2)
     this.npcArray.push(npc_francois)
 
     // const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
@@ -309,7 +313,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     this.player.model.position.set(2, 0.75, 11)
     this.player.model.rotation.y -= 2 * Math.PI / 3
 
-    this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE).data)
+    this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE_V1).data)
 
     this.bvhCollider(city)
 

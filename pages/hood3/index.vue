@@ -187,7 +187,7 @@ export default class HoodScenePage3 extends Vue {
         this.currentChat = element[0];
         return this.currentChat;
       }
-    }); 
+    });
 
     this.removeInteractionsPoints();
     this.hoodInstance.cameraFollow = false;
@@ -268,8 +268,6 @@ export default class HoodScenePage3 extends Vue {
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
-      console.log(val);
-
       switch (val) {
         case "reading":
           break;
@@ -279,6 +277,11 @@ export default class HoodScenePage3 extends Vue {
           break;
         case "goBack":
           this.goBack();
+          this.chatStore.setChatStep("reading");
+          break;
+        case "showTickets":
+          this.popupOpen = true;
+          this.hoodSceneStore.setIsChatDisplay(false);
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":

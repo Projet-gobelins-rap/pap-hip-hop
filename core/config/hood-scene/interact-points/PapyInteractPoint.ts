@@ -13,9 +13,7 @@ const PapyInteractPoint: InteractionPoint = {
     const target = HoodScene.context.scene.getObjectByName("npc_victor_end")!
     target.getWorldPosition(position);
     
-
-    // position.y = 1 + position.y;
-    // position.x = 1 + position.x;
+    position.y = 12 + position.y;
 
     return position;
   },
