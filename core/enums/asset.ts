@@ -63,7 +63,7 @@ export enum VIDEO_ASSET {
   VIDEO_INTRO = 'VIDEO_INTRO',
   BATTLE_END_BG_DEFEAT = 'BATTLE_END_BG_DEFEAT',
   TV_VIDEO = 'TV_VIDEO'
-} 
+}
 
 /**
  * Name given to image asset in order to retrieve it through AssetManager
@@ -94,6 +94,8 @@ export enum IMAGE_ASSET {
 export enum AUDIO_ASSET {
   GLOBAL_AMBIANCE = 'globalAmbiance',
   BATTLE_VOICE = 'BATTLE_VOICE',
+  BATTLE_BOO = 'BATTLE_BOO',
+  BATTLE_GLOBAL_VOICE = 'BATTLE_GLOBAL_VOICE',
   CTA_CLIC = 'CTA_CLIC',
   CTA_HOVER = 'CTA_HOVER',
   CLOCHE_SOUND = 'CLOCHE_SOUND',

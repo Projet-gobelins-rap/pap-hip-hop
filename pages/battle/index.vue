@@ -313,6 +313,8 @@ export default class battle extends Vue {
   public videoLooseElement: HTMLMediaElement;
   public videoVictoryElement: HTMLMediaElement;
   public battle: HTMLElement;
+  public audioboo:HTMLAudioElement
+  public audioGlobalBattle:HTMLAudioElement
   mounted() {
     this.initRound2Datas();
     this.player = this.$refs.player as HTMLElement;
@@ -331,6 +333,7 @@ export default class battle extends Vue {
       battleStore: this.battleStore,
     }).init();
     BattleScene.context.disableOrbitControl();
+    this.playBattleGlobalSound()
 
     emitter.on("battle::initNpcs", (npcs: Array<Npc>) => {
       this.npcs = npcs;
@@ -576,13 +579,22 @@ export default class battle extends Vue {
             if (!isOpponentTour) {
               if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'top') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--20')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               } else if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'moyen') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--10')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               }else  {
                 let currentSticker = el.querySelector('.battleResponse-sticker--0')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               }
               this.detectCombo(
                 playerData[!isOpponentTour && !round1 ? 0 : index]
@@ -595,14 +607,24 @@ export default class battle extends Vue {
             } else {
               if (opponentData[index].status === 'top') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--20')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               } else if (opponentData[index].status === 'moyen') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--10')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               }else  {
                 let currentSticker = el.querySelector('.battleResponse-sticker--0')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               }
+
               this.calculateScore(
                 this.score.player,
                 opponentData[index].score,
@@ -669,13 +691,22 @@ export default class battle extends Vue {
           if (!isOpponentTour) {
             if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'top') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
-              gsap.to(currentSticker,{display:'block',opacity:1})
+              this.playAudioBoo()
+              gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                  this.resetAudioBoo()
+                }})
             } else if ( playerData[!isOpponentTour && !round1 ? 0 : punchIndex].status === 'moyen') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
-              gsap.to(currentSticker,{display:'block',opacity:1})
+              this.playAudioBoo()
+              gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                  this.resetAudioBoo()
+                }})
             }else  {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
-              gsap.to(currentSticker,{display:'block',opacity:1})
+              this.playAudioBoo()
+              gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                  this.resetAudioBoo()
+                }})
             }
             this.detectCombo(
               playerData[!isOpponentTour && !round1 ? 0 : punchIndex]
@@ -688,13 +719,22 @@ export default class battle extends Vue {
           }else {
             if (opponentData[punchIndex].status === 'top') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--20')
-              gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
             } else if (opponentData[punchIndex].status === 'moyen') {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--10')
-              gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
             }else  {
               let currentSticker = currentElement.querySelector('.battleResponse-sticker--0')
-              gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
             }
             this.calculateScore(
               this.score.player,
@@ -1026,6 +1066,7 @@ export default class battle extends Vue {
       leave(el: Element, done: Function) {
         console.log("transition leave ekip")
 
+        this.stopBattleGlobalSound()
         let title = document.querySelector('.transition-title span') as HTMLElement
         title.innerHTML = `LE TIEKS`
         let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
@@ -1066,6 +1107,27 @@ export default class battle extends Vue {
     audio.play();
   }
 
+  playAudioBoo() {
+    this.audioboo = new Audio(this.battleBooAudio);
+    this.audioboo.play();
+  }
+
+  resetAudioBoo() {
+    this.audioboo.pause()
+    this.audioboo.currentTime = 0
+  }
+
+  playBattleGlobalSound() {
+    this.audioGlobalBattle = new Audio(this.battleGlobalAudio)
+    this.audioGlobalBattle.volume = 0.3
+    this.audioGlobalBattle.loop = true
+    this.audioGlobalBattle.play()
+  }
+
+  stopBattleGlobalSound() {
+    this.audioGlobalBattle.pause()
+  }
+
   // get ppPlayer():string {
   //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_PLAYER).data.src
   // }
@@ -1073,6 +1135,14 @@ export default class battle extends Vue {
   // get ppOpp():string {
   //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_OPP).data.src
   // }
+
+  get battleGlobalAudio():string {
+    return AssetsManager.getAudio(AUDIO_ASSET.BATTLE_GLOBAL_VOICE).data.src
+  }
+
+  get battleBooAudio():string {
+    return AssetsManager.getAudio(AUDIO_ASSET.BATTLE_BOO).data.src
+  }
 
   get voiceAudio():string {
     return AssetsManager.getAudio(AUDIO_ASSET.BATTLE_VOICE).data.src
