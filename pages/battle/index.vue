@@ -1017,6 +1017,7 @@ export default class battle extends Vue {
   }
 
   goToHood() {
+    this.stopBattleGlobalSound()
     // remove scene children
     // gsap.fromTo(
     //   ".battle-overlay",
@@ -1066,7 +1067,6 @@ export default class battle extends Vue {
       leave(el: Element, done: Function) {
         console.log("transition leave ekip")
 
-        this.stopBattleGlobalSound()
         let title = document.querySelector('.transition-title span') as HTMLElement
         title.innerHTML = `LE TIEKS`
         let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
