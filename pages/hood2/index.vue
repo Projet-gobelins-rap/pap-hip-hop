@@ -90,7 +90,6 @@ import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/Ticar
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
 
-
 @Component({
   components: {
     Onboarding,
@@ -144,10 +143,11 @@ export default class HoodScenePage2 extends Vue {
   public storeOpen: boolean = false;
   public storeOutfits: object[] = [];
   public outfitWorn: string = "player0";
-  public talkingNpc: string = null
+  public talkingNpc: string | null = null;
 
   mounted() {
-    this.displayOnboarding();
+    // this.displayOnboarding();
+    this.startScene();
   }
 
   // destroyed() {
@@ -197,8 +197,7 @@ export default class HoodScenePage2 extends Vue {
         case "reading":
           break;
         case "hide":
-          this.hideOnboarding();
-          this.startScene();
+          // this.hideOnboarding();
           $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
@@ -226,26 +225,23 @@ export default class HoodScenePage2 extends Vue {
   }
 
   goToInteractionPoint(point) {
-    console.log(this.npcDialogues);
-    console.log(point);
-
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
- 
+
         this.currentChat = element[0];
         return this.currentChat;
       }
     });
-    
+
     this.removeInteractionsPoints();
     this.hoodInstance.cameraFollow = false;
     HoodScene.context.goToPresetPosition(point.slug, 2, () => {
       this.hoodSceneStore.setIsCameraMoving(false);
       this.hoodSceneStore.setIsChatDisplay(true);
-      const name = point.slug.split('_')
-      
-      this.talkToNpc(name[1])
+      const name = point.slug.split("_");
+
+      this.talkToNpc(name[1]);
     });
   }
 
@@ -332,13 +328,13 @@ export default class HoodScenePage2 extends Vue {
   }
 
   talkToNpc(name: string[]) {
-    this.talkingNpc = name
-    this.findNpc(name).animationPlayed = 'talk'
+    this.talkingNpc = name;
+    this.findNpc(name).animationPlayed = "talk";
     console.log(this.talkingNpc);
   }
 
   findNpc(name: string) {
-    return this.hoodInstance.npcArray.find(element => element.name = name)
+    return this.hoodInstance.npcArray.find((element) => (element.name = name));
   }
 
   // watch dialogStep change in chatStore store
@@ -390,7 +386,7 @@ export default class HoodScenePage2 extends Vue {
     // this.addInteractionPoints();
     // this.talkingNpc.animationPlayed = 'idle'
     // this.talkingNpc = null
-    this.findNpc(this.talkingNpc).animationPlayed = 'idle'
+    this.findNpc(this.talkingNpc).animationPlayed = "idle";
     HoodScene.context.goToPresetPosition("reset", 2, () => {
       this.addInteractionPoints();
       this.hoodInstance.cameraFollow = true;
@@ -398,15 +394,14 @@ export default class HoodScenePage2 extends Vue {
   }
 
   transition() {
-
     return {
       enter(el: Element, done: Function) {
-        console.log(el,'<--- voici el')
-        console.log("transition enter ekip")
+        console.log(el, "<--- voici el");
+        console.log("transition enter ekip");
 
         // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
         // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
-        let tl = gsap.timeline()
+        let tl = gsap.timeline();
         tl.fromTo(
           ".transition-overlay",
           { display: "flex", yPercent: 0 },
@@ -415,29 +410,32 @@ export default class HoodScenePage2 extends Vue {
             duration: 1.5,
             yPercent: 100,
             ease: "expo.inOut",
-            onComplete:()=>{
-              gsap.set('.transition-overlay',{clearProps:"all"})
-              gsap.set('.transition-stars',{clearProps:"all"})
-              gsap.set('.transition-subtitle span',{clearProps:"all"})
-              gsap.set('.transition-title span',{clearProps:"all"})
-              gsap.set('.transitionInfo',{clearProps:"all"})
-              done()
-            }
+            onComplete: () => {
+              gsap.set(".transition-overlay", { clearProps: "all" });
+              gsap.set(".transition-stars", { clearProps: "all" });
+              gsap.set(".transition-subtitle span", { clearProps: "all" });
+              gsap.set(".transition-title span", { clearProps: "all" });
+              gsap.set(".transitionInfo", { clearProps: "all" });
+              done();
+            },
           }
         );
-
       },
       leave(el: Element, done: Function) {
-        console.log("transition leave ekip")
+        console.log("transition leave ekip");
         // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
         // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
 
-        let title = document.querySelector('.transition-title span') as HTMLElement
-        title.innerHTML = `LE TRABENDO`
-        let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
-        infoContent.innerHTML = `Une des salles mythiques des battles Rap Contenders`
+        let title = document.querySelector(
+          ".transition-title span"
+        ) as HTMLElement;
+        title.innerHTML = `LE TRABENDO`;
+        let infoContent = document.querySelector(
+          ".transitionInfo-content span"
+        ) as HTMLElement;
+        infoContent.innerHTML = `Une des salles mythiques des battles Rap Contenders`;
 
-        let tl = gsap.timeline()
+        let tl = gsap.timeline();
         tl.fromTo(
           ".transition-overlay",
           { display: "none", yPercent: 100 },
@@ -448,17 +446,36 @@ export default class HoodScenePage2 extends Vue {
             ease: "expo.inOut",
           }
         );
-        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
-        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
-        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
-        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
-        tl.to('.transitionInfo',{duration:3,
-          onComplete:()=>{
-            done()
-          }
-        })
-
-      }
+        tl.fromTo(
+          ".transition-stars",
+          { opacity: 0 },
+          { stagger: 0.1, opacity: 1, duration: 0.5, ease: "expo.inOut" }
+        );
+        tl.fromTo(
+          ".transition-subtitle span",
+          { yPercent: 100 },
+          { ease: "expo.out", duration: 1, yPercent: 0 },
+          "-=0.25"
+        );
+        tl.fromTo(
+          ".transition-title span",
+          { yPercent: 100 },
+          { ease: "expo.out", duration: 1, yPercent: 0 },
+          "-=0.75"
+        );
+        tl.fromTo(
+          ".transitionInfo",
+          { opacity: 0 },
+          { ease: "expo.out", duration: 1, opacity: 1 },
+          "-=0.5"
+        );
+        tl.to(".transitionInfo", {
+          duration: 3,
+          onComplete: () => {
+            done();
+          },
+        });
+      },
     };
   }
   // GETTERS

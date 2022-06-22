@@ -118,7 +118,9 @@ export default class HoodScenePage3 extends Vue {
   public popupOpen: boolean = false;
 
   mounted() {
-    this.displayOnboarding();
+    // this.displayOnboarding();
+
+    this.startScene();
   }
 
   destroyed() {
@@ -150,8 +152,7 @@ export default class HoodScenePage3 extends Vue {
         case "reading":
           break;
         case "hide":
-          this.hideOnboarding();
-          this.startScene();
+          // this.hideOnboarding();
           $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
