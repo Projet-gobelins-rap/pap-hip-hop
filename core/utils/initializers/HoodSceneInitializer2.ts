@@ -92,8 +92,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
         }
 
         this._collectibles.children.forEach(object => {
-          // object.children[1].position.y = 8 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
-          // object.children[1].rotation.y += ctx.deltaTime * 0.5
+           object.children[1].position.y = 6 + Math.sin(ctx.clock.getElapsedTime() * 3) * 4
+          object.children[1].rotation.y += ctx.deltaTime * 0.5
         })
 
 
@@ -206,7 +206,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     const light = AssetsManager.getGltf(GLTF_ASSET.SLOT_PUBLIC_LIGHT).data.scene
     const electricPlot = AssetsManager.getGltf(GLTF_ASSET.SLOT_ELECTRIC_PLOT).data.scene
     const bench = AssetsManager.getGltf(GLTF_ASSET.SLOT_BENCH).data.scene
-    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
+    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene.clone()
     // const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
     // const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
@@ -246,7 +246,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4], true)
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
-    SlotsLoader.generateCollectible(this._collectibles.children)
+    
 
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -346,6 +346,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     this.addTexture(this.ground, AssetsManager.getTexture(TEXTURE_ASSET.CITY_TEXTURE_V1).data)
 
     this.bvhCollider(city)
+
+    SlotsLoader.generateCollectible(this._collectibles.children)
 
     this._collectibles = city.getObjectByName('group_collectable')
     SlotsLoader.generateCollectible(this._collectibles.children)

@@ -212,7 +212,7 @@ export default class HoodSceneInitializer extends Initializers<{ canvas: HTMLCan
     const light = AssetsManager.getGltf(GLTF_ASSET.SLOT_PUBLIC_LIGHT).data.scene
     const electricPlot = AssetsManager.getGltf(GLTF_ASSET.SLOT_ELECTRIC_PLOT).data.scene
     const bench = AssetsManager.getGltf(GLTF_ASSET.SLOT_BENCH).data.scene
-    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene
+    const city = AssetsManager.getGltf(GLTF_ASSET.CITY).data.scene.clone()
     // const floorNM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_NORMAL_MAP).data
     // const floorDM = AssetsManager.getTexture(TEXTURE_ASSET.CITY_FLOOR_DISPLACEMENT).data
     const building1 = AssetsManager.getGltf(GLTF_ASSET.SLOT_BUILDING_TYPE_1).data.scene
