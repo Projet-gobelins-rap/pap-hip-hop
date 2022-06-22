@@ -1,5 +1,5 @@
 <template>
-  <video class="video" :src="sourceLink" autoplay muted controls>
+  <video class="video" :src="sourceLink" autoplay muted>
   </video>
 </template>
 

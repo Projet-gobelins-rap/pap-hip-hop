@@ -92,16 +92,25 @@ export default class Graf {
   setupCanvas() {
     let self = this
     this.img.onload = () => {
-      
+
       this.drawImageProp(this.ctx, self.img, 0, 0, this.grafCanvas.width, self.size.height / 2, 0, 0)
       self.ctx.globalCompositeOperation = "destination-out";
     }
   }
 
   bindEvents() {
+    const audioGraf = new Audio('/sound/spray.mp3')
     $socket.io.on('graffValues', data => {
       let params = data.split(":")
       this.isPushed = (params[2] === 'true')
+
+      if (this.isPushed) {
+        audioGraf.play()
+        audioGraf.loop = true
+      }else {
+        audioGraf.pause()
+        audioGraf.currentTime = 0
+      }
 
       this.position = {
         x: parseFloat(params[0]) * window.innerWidth,
@@ -168,7 +177,7 @@ export default class Graf {
   }
 
   updateCanvasBackground() {
-  
+
     let self = this
     // gsap.to(this.revealImg, { opacity: 0 })
 
@@ -183,7 +192,7 @@ export default class Graf {
 
   getErasedPercent() {
     const imgData = this.ctx.getImageData(0, 0, this.size.width, this.size.height)
- 
+
     const pixelCount = this.size.width * this.size.height;
     const arrayElemsCount = pixelCount * 4; // for components (rgba) per pixel.
     const dataArray = imgData.data;
@@ -202,7 +211,7 @@ export default class Graf {
 
     this.display.innerText = this.erasedPercentage.toString()
 
-    if (this.erasedPercentage > 65) {
+    if (this.erasedPercentage > 62) {
       this.layerEnded()
     }
   }

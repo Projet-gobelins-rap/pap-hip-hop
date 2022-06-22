@@ -150,6 +150,7 @@ export default class SceneManager {
     }
     this._renderer.dispose()
     // @ts-ignore
+    this._scene.children = []
     this._scene = null
   }
 

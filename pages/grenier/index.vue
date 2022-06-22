@@ -33,7 +33,7 @@ import ChatComponent from "~/components/contentOverlays/chat.vue";
 import TvInteractPoint from "../../core/config/grenier-scene/interact-points/objects/TvInteractPoint";
 import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions/ModeCameraPosition";
 import GUI from "lil-gui";
-
+import emitter from 'tiny-emitter/instance'
 import $socket from "~/plugins/socket.io";
 import {gsap} from "gsap";
 
@@ -159,7 +159,7 @@ export default class GrenierScene extends Vue {
         title.innerHTML = 'LE TIEKS'
 
         let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
-        infoContent.innerHTML = `Un quartier ou rien ne se passe`
+        infoContent.innerHTML = `Un quartier où rien ne se passe`
 
         let tl = gsap.timeline()
         tl.fromTo(

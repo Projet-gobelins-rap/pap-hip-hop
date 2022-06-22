@@ -2,7 +2,6 @@
   <div class="videoWrapper">
     <Video @ended.native="skipMotion" :source-link="videoIntro">
     </Video>
-    <button @click="skipMotion" class="btn">SKIP MOTION</button>
   </div>
 
 </template>
@@ -13,6 +12,9 @@ import Video from "~/components/medias/Video.vue";
 import stepStore from "~/store/stepStore";
 import {AssetsManager} from "../../core/managers";
 import {VIDEO_ASSET} from "../../core/enums";
+import {gsap} from "gsap";
+import emitter from 'tiny-emitter/instance'
+
 @Component({
   components: {
     Video
@@ -25,7 +27,10 @@ export default class IntroMotion extends Vue {
 
   skipMotion() {
     console.log('skip motion')
-    this.stepStore.skipIntroMotionState(true)
+
+    gsap.to('.video',{opacity:0,display:'none',onComplete:()=>{
+        this.stepStore.skipIntroMotionState(true)
+      }})
   }
 
   // A getter function that returns the src of the video.

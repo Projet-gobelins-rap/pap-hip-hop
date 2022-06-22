@@ -20,6 +20,31 @@
       v-if="this.chatElementState && currentChat"
       :content="currentChat"
     />
+    <div :class="`hood-popup ${popupOpen}`">
+      <svg
+        @click="closePopup"
+        class="hood-store--close"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="20" cy="20" r="20" fill="#151515" />
+        <circle cx="20.3448" cy="19.6553" r="18.2759" fill="#FEFEFE" />
+        <path
+          d="M15.1732 14.4829L25.518 24.8277"
+          stroke="#151515"
+          stroke-width="1.37931"
+        />
+        <path
+          d="M25.5172 14.4829L15.1724 24.8277"
+          stroke="#151515"
+          stroke-width="1.37931"
+        />
+      </svg>
+      <img class="hood-html" src="images/hp360.png" alt="" />
+    </div>
     <canvas id="canvasGlobalScene" ref="canvasGlobalScene"></canvas>
   </section>
 </template>
@@ -36,13 +61,9 @@ import onboardingStore from "../../store/onboardingStore";
 import Onboarding from "../../components/contentOverlays/onboarding";
 import Toast from "../../components/contentOverlays/toast";
 import HoodScene from "~/core/scene/HoodScene";
-import DeenastyInteractPoint from "~/core/config/hood-scene/interact-points/DeenastyInteractPoint";
 import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
-import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
-import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
-import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
-import {gsap} from "gsap";
+import PapyInteractPoint from "~/core/config/hood-scene/interact-points/PapyInteractPoint";
 
 @Component({
   components: {
@@ -50,6 +71,7 @@ import {gsap} from "gsap";
     Toast,
     ChatComponent,
   },
+
   async asyncData({ $prismic, error }) {
     try {
       const hoodContent = (await $prismic.api.getSingle("hood")).data;
@@ -61,6 +83,8 @@ import {gsap} from "gsap";
         hoodContent?.slices3,
         hoodContent?.slices4,
         hoodContent?.slices5,
+        hoodContent?.slices6,
+        hoodContent?.slices7,
       ];
 
       return {
@@ -91,6 +115,7 @@ export default class HoodScenePage3 extends Vue {
   public focusPoints: object;
   public currentChat: object;
   public currentChatNum: number = 0;
+  public popupOpen: boolean = false;
 
   mounted() {
     this.displayOnboarding();
@@ -138,17 +163,17 @@ export default class HoodScenePage3 extends Vue {
   }
 
   addInteractionPoints() {
-    this.hoodSceneStore.addInteractivePoint(DeenastyInteractPoint.name);
-    this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
-    this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
-    this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(PapyInteractPoint.name);
+    // this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
+    // this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
+    // this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
   }
 
   removeInteractionsPoints() {
-    this.hoodSceneStore.removeInteractivePoint(DeenastyInteractPoint.name);
-    this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
-    this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
-    this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(PapyInteractPoint.name);
+    // this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
+    // this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
+    // this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
@@ -177,6 +202,11 @@ export default class HoodScenePage3 extends Vue {
 
   displayOnboarding() {
     this.onboardingStore.setOnboardingDisplay(true);
+  }
+
+  closePopup() {
+    this.popupOpen = false;
+    this.goBack();
   }
 
   openCollectible() {
@@ -279,41 +309,47 @@ export default class HoodScenePage3 extends Vue {
   }
 
   transition() {
-
     return {
       enter(el: Element, done: Function) {
-        console.log(el,'<--- voici el')
-        console.log("transition enter ekip")
+        console.log(el, "<--- voici el");
+        console.log("transition enter ekip");
 
-        let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
-        let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
-        videoOut.play()
-        videoOut.onended = ()=>{
-          gsap.to(
-            ".transition-overlay",
-            {
-              display: "none",
-              duration: 1.5,
-              yPercent: 100,
-              ease: "expo.inOut",
-              onComplete: () => {
-                gsap.set(".transition-overlay", { display: 'none', yPercent: 100 });
-                gsap.set(videoOut, { display: "none",opacity:0 })
-                done()
-              },
-            }
-          );
-        }
-
+        let videoIn = document.querySelector(
+          ".transition-overlayVideoIn"
+        ) as HTMLMediaElement;
+        let videoOut = document.querySelector(
+          ".transition-overlayVideoOut"
+        ) as HTMLMediaElement;
+        videoOut.play();
+        videoOut.onended = () => {
+          gsap.to(".transition-overlay", {
+            display: "none",
+            duration: 1.5,
+            yPercent: 100,
+            ease: "expo.inOut",
+            onComplete: () => {
+              gsap.set(".transition-overlay", {
+                display: "none",
+                yPercent: 100,
+              });
+              gsap.set(videoOut, { display: "none", opacity: 0 });
+              done();
+            },
+          });
+        };
       },
       leave(el: Element, done: Function) {
-        console.log(el,'<--- voici el')
-        console.log("transition leave ekip")
+        console.log(el, "<--- voici el");
+        console.log("transition leave ekip");
 
-        let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
-        gsap.set(videoIn, { display: "block",opacity:1 })
+        let videoIn = document.querySelector(
+          ".transition-overlayVideoIn"
+        ) as HTMLMediaElement;
+        gsap.set(videoIn, { display: "block", opacity: 1 });
 
-        let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+        let videoOut = document.querySelector(
+          ".transition-overlayVideoOut"
+        ) as HTMLMediaElement;
 
         gsap.fromTo(
           ".transition-overlay",
@@ -324,31 +360,29 @@ export default class HoodScenePage3 extends Vue {
             yPercent: 0,
             ease: "expo.inOut",
             onComplete: () => {
-              videoIn.play()
+              videoIn.play();
             },
           }
         );
 
-        videoIn.onended = ()=>{
-          gsap.set(videoIn, { display: "none",opacity:0 })
-          gsap.set(videoOut, { display: "block",opacity:1 })
-          done()
-        }
-
-      }
+        videoIn.onended = () => {
+          gsap.set(videoIn, { display: "none", opacity: 0 });
+          gsap.set(videoOut, { display: "block", opacity: 1 });
+          done();
+        };
+      },
     };
   }
 
   transition() {
-
     return {
       enter(el: Element, done: Function) {
-        console.log(el,'<--- voici el')
-        console.log("transition enter ekip")
+        console.log(el, "<--- voici el");
+        console.log("transition enter ekip");
 
         // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
         // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
-        let tl = gsap.timeline()
+        let tl = gsap.timeline();
         tl.fromTo(
           ".transition-overlay",
           { display: "flex", yPercent: 0 },
@@ -357,48 +391,18 @@ export default class HoodScenePage3 extends Vue {
             duration: 1.5,
             yPercent: 100,
             ease: "expo.inOut",
-            onComplete:()=>{
-              gsap.set('.transition-overlay',{clearProps:"all"})
-              gsap.set('.transition-stars',{clearProps:"all"})
-              gsap.set('.transition-subtitle span',{clearProps:"all"})
-              gsap.set('.transition-title span',{clearProps:"all"})
-              gsap.set('.transitionInfo',{clearProps:"all"})
-              done()
-            }
+            onComplete: () => {
+              gsap.set(".transition-overlay", { clearProps: "all" });
+              gsap.set(".transition-stars", { clearProps: "all" });
+              gsap.set(".transition-subtitle span", { clearProps: "all" });
+              gsap.set(".transition-title span", { clearProps: "all" });
+              gsap.set(".transitionInfo", { clearProps: "all" });
+              done();
+            },
           }
         );
-
-      },
-      leave(el: Element, done: Function) {
-        console.log("transition leave ekip")
-        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
-        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
-
-        let title = document.querySelector('.transition-title span') as HTMLElement
-        title.innerHTML = `LE TRABENDO`
-
-        let tl = gsap.timeline()
-        tl.fromTo(
-          ".transition-overlay",
-          { display: "none", yPercent: 100 },
-          {
-            display: "flex",
-            duration: 1.5,
-            yPercent: 0,
-            ease: "expo.inOut",
-          }
-        );
-        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
-        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
-        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
-        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
-        tl.to('.transitionInfo',{duration:3,
-          onComplete:()=>{
-            done()
-          }
-        })
-
       }
+
     };
   }
 
