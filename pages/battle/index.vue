@@ -1071,7 +1071,7 @@ export default class battle extends Vue {
     let audio = new Audio(this.clocheAudio);
     audio.play();
   }
-  
+
   playBattleGlobalSound() {
     this.audioGlobalBattle = new Audio(this.battleGlobalAudio)
     this.audioGlobalBattle.volume = 0.3
