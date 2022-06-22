@@ -28,8 +28,6 @@ import Helpers from "../utils/Helpers";
 import { Stats } from 'stats.ts'
 import { CameraPosition } from "../config/hood-scene/camera-positions/types";
 
-
-
 export default class SceneManager {
 
   // - PROPERTIES
