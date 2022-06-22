@@ -118,7 +118,9 @@ export default class HoodScenePage3 extends Vue {
   public popupOpen: boolean = false;
 
   mounted() {
-    this.displayOnboarding();
+    // this.displayOnboarding();
+
+    this.startScene();
   }
 
   destroyed() {
@@ -150,8 +152,7 @@ export default class HoodScenePage3 extends Vue {
         case "reading":
           break;
         case "hide":
-          this.hideOnboarding();
-          this.startScene();
+          // this.hideOnboarding();
           $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
@@ -267,8 +268,6 @@ export default class HoodScenePage3 extends Vue {
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
-      console.log(val);
-
       switch (val) {
         case "reading":
           break;
@@ -278,6 +277,11 @@ export default class HoodScenePage3 extends Vue {
           break;
         case "goBack":
           this.goBack();
+          this.chatStore.setChatStep("reading");
+          break;
+        case "showTickets":
+          this.popupOpen = true;
+          this.hoodSceneStore.setIsChatDisplay(false);
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":

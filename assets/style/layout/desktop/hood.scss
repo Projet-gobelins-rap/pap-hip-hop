@@ -54,6 +54,20 @@
             left: 50%;
             bottom: -40px;
             transform: translate(-50%, 100%);
+
+            &.disable {
+                opacity: 0.5;
+            }
+        }
+
+        .btn {
+            span {
+                color: $black;
+            }
+
+            &::before {
+                background-color: $white;
+            }
         }
     }
 
@@ -73,7 +87,6 @@
             opacity: 0;
             pointer-events: none;
         }
-       
     }
 
     &-html {

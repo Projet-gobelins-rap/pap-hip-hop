@@ -74,6 +74,7 @@ import {gsap} from "gsap";
     }
   },
 })
+
 export default class HoodScenePage extends Vue {
   public hoodSceneStore = getModule(hoodSceneStore, this.$store);
   public stepStore = getModule(stepStore, this.$store);
@@ -94,6 +95,7 @@ export default class HoodScenePage extends Vue {
 
   mounted() {
     this.displayOnboarding();
+    this.startScene();
   }
 
   // destroyed() {
@@ -130,7 +132,6 @@ export default class HoodScenePage extends Vue {
           break;
         case "hide":
           this.hideOnboarding();
-          this.startScene();
           $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
