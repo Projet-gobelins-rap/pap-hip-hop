@@ -59,12 +59,13 @@ export default class GraffBomb {
 
     sendValues() {
       if(this.rotation.yaw >= -0.6 && this.rotation.yaw <= 0.6 && this.rotation.pitch >= -0.6 && this.rotation.pitch <= 0.6) {
-        $socket.io.emit('graffValues', 
+        $socket.io.emit('graffValues',
         Helpers.normalize(this.rotation.yaw, 0.6, -0.6).toFixed(2)
-        + ':' + 
+        + ':' +
         Helpers.normalize(this.rotation.pitch, 0.6, -0.6).toFixed(2)
-        + ':' + 
+        + ':' +
         this.buttonPressed)
+
       }
     }
 
@@ -74,7 +75,7 @@ export default class GraffBomb {
             yaw: this.gimbal.yaw,
             pitch: this.gimbal.pitch,
             roll: this.gimbal.roll
-        } 
+        }
         // this.debugX.innerHTML = this.rotation.yaw.toFixed(2) + " : " + this.rotation.pitch.toFixed(2) + " : " + this.rotation.roll.toFixed(2)
         this.sendValues()
     }
