@@ -34,7 +34,3 @@ export default class IntroMotion extends Vue {
   }
 }
 </script>
-
-<style lang="sass" scoped>
-
-</style>

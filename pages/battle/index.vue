@@ -313,6 +313,7 @@ export default class battle extends Vue {
   public videoLooseElement: HTMLMediaElement;
   public videoVictoryElement: HTMLMediaElement;
   public battle: HTMLElement;
+  public audioboo:HTMLAudioElement
   mounted() {
     this.initRound2Datas();
     this.player = this.$refs.player as HTMLElement;
@@ -582,6 +583,7 @@ export default class battle extends Vue {
                 gsap.to(currentSticker,{display:'block',opacity:1})
               }else  {
                 let currentSticker = el.querySelector('.battleResponse-sticker--0')
+                this.playAudioBoo()
                 gsap.to(currentSticker,{display:'block',opacity:1})
               }
               this.detectCombo(
@@ -601,8 +603,12 @@ export default class battle extends Vue {
                 gsap.to(currentSticker,{display:'block',opacity:1})
               }else  {
                 let currentSticker = el.querySelector('.battleResponse-sticker--0')
-                gsap.to(currentSticker,{display:'block',opacity:1})
+                this.playAudioBoo()
+                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
+                    this.resetAudioBoo()
+                  }})
               }
+
               this.calculateScore(
                 this.score.player,
                 opponentData[index].score,
@@ -1066,6 +1072,16 @@ export default class battle extends Vue {
     audio.play();
   }
 
+  playAudioBoo() {
+    this.audioboo = new Audio(this.battleBooAudio);
+    this.audioboo.play();
+  }
+
+  resetAudioBoo() {
+    this.audioboo.pause()
+    this.audioboo.currentTime = 0
+  }
+
   // get ppPlayer():string {
   //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_PLAYER).data.src
   // }
@@ -1073,6 +1089,10 @@ export default class battle extends Vue {
   // get ppOpp():string {
   //   return AssetsManager.getImage(IMAGE_ASSET.BATTLE_PP_OPP).data.src
   // }
+
+  get battleBooAudio():string {
+    return AssetsManager.getAudio(AUDIO_ASSET.BATTLE_BOO).data.src
+  }
 
   get voiceAudio():string {
     return AssetsManager.getAudio(AUDIO_ASSET.BATTLE_VOICE).data.src

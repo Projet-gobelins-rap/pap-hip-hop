@@ -50,7 +50,7 @@ export default {
   loading: false,
 
   env: {
-    ip: 'https://192.168.1.13:3001', // partage de co --> https://172.20.10.2:3001 / wifi : 192.168.1.13
+    ip: 'https://172.20.10.2:3001', // partage de co --> https://172.20.10.2:3001 / wifi : 192.168.1.13
     preprod: 'https://pap-hip-hop-site.herokuapp.com'
   },
 
