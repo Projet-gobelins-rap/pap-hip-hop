@@ -579,22 +579,14 @@ export default class battle extends Vue {
             if (!isOpponentTour) {
               if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'top') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--20')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+                gsap.to(currentSticker,{display:'block',opacity:1})
               } else if ( playerData[!isOpponentTour && !round1 ? 0 : index].status === 'moyen') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--10')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+
+                gsap.to(currentSticker,{display:'block',opacity:1})
               }else  {
                 let currentSticker = el.querySelector('.battleResponse-sticker--0')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+                gsap.to(currentSticker,{display:'block',opacity:1})
               }
               this.detectCombo(
                 playerData[!isOpponentTour && !round1 ? 0 : index]
@@ -607,22 +599,13 @@ export default class battle extends Vue {
             } else {
               if (opponentData[index].status === 'top') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--20')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+                gsap.to(currentSticker,{display:'block',opacity:1})
               } else if (opponentData[index].status === 'moyen') {
                 let currentSticker = el.querySelector('.battleResponse-sticker--10')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+                gsap.to(currentSticker,{display:'block',opacity:1})
               }else  {
                 let currentSticker = el.querySelector('.battleResponse-sticker--0')
-                this.playAudioBoo()
-                gsap.to(currentSticker,{display:'block',opacity:1,onComplete:()=>{
-                    this.resetAudioBoo()
-                  }})
+                gsap.to(currentSticker,{display:'block',opacity:1})
               }
 
               this.calculateScore(
