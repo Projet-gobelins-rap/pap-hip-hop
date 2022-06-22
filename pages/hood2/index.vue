@@ -85,9 +85,11 @@ import gsap from "gsap";
 import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
+import NepalInteractPoint from "~/core/config/hood-scene/interact-points/NepalInteractPoint";
 import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
 import { AssetsManager } from "~/core/managers";
 import { IMAGE_ASSET } from "~/core/enums";
+
 
 @Component({
   components: {
@@ -141,6 +143,7 @@ export default class HoodScenePage2 extends Vue {
   public storeOpen: boolean = false;
   public storeOutfits: object[] = [];
   public outfitWorn: string = "player0";
+  public talkingNpc: string = null
 
   mounted() {
     this.displayOnboarding();
@@ -181,7 +184,6 @@ export default class HoodScenePage2 extends Vue {
       this.addInteractionPoints();
 
       HoodScene.initCallback((toastID: string) => {
-        console.log(toastID);
         this.displayToast(toastID);
       });
     }
@@ -211,6 +213,7 @@ export default class HoodScenePage2 extends Vue {
     this.hoodSceneStore.addInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(EricInteractPoint.name);
     this.hoodSceneStore.addInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.addInteractivePoint(NepalInteractPoint.name);
   }
 
   removeInteractionsPoints() {
@@ -218,25 +221,27 @@ export default class HoodScenePage2 extends Vue {
     this.hoodSceneStore.removeInteractivePoint(BattleInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(EricInteractPoint.name);
     this.hoodSceneStore.removeInteractivePoint(TicaretInteractPoint.name);
+    this.hoodSceneStore.removeInteractivePoint(NepalInteractPoint.name);
   }
 
   goToInteractionPoint(point) {
-    console.log(this.npcDialogues);
-
     this.npcDialogues.forEach((element) => {
       if (element[0].primary.Identifiant === point.slug) {
         console.log(element[0]);
-
+ 
         this.currentChat = element[0];
         return this.currentChat;
       }
     });
-
+    
     this.removeInteractionsPoints();
     this.hoodInstance.cameraFollow = false;
     HoodScene.context.goToPresetPosition(point.slug, 2, () => {
       this.hoodSceneStore.setIsCameraMoving(false);
       this.hoodSceneStore.setIsChatDisplay(true);
+      const name = point.slug.split('_')
+      
+      this.talkToNpc(name[1])
     });
   }
 
@@ -322,6 +327,16 @@ export default class HoodScenePage2 extends Vue {
     // this.currentChat = this.conversation[this.currentChatNum];
   }
 
+  talkToNpc(name: string[]) {
+    this.talkingNpc = name
+    this.findNpc(name).animationPlayed = 'talk'
+    console.log(this.talkingNpc);
+  }
+
+  findNpc(name: string) {
+    return this.hoodInstance.npcArray.find(element => element.name = name)
+  }
+
   // watch dialogStep change in chatStore store
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
@@ -348,7 +363,6 @@ export default class HoodScenePage2 extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
-          this.$router.push("/graf/scope");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -356,7 +370,6 @@ export default class HoodScenePage2 extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goBattle":
-          this.$router.push("/battle");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -370,13 +383,79 @@ export default class HoodScenePage2 extends Vue {
   goBack() {
     this.hoodSceneStore.setIsChatDisplay(false);
     // this.addInteractionPoints();
-
+    // this.talkingNpc.animationPlayed = 'idle'
+    // this.talkingNpc = null
+    this.findNpc(this.talkingNpc).animationPlayed = 'idle'
     HoodScene.context.goToPresetPosition("reset", 2, () => {
       this.addInteractionPoints();
       this.hoodInstance.cameraFollow = true;
     });
   }
 
+  transition() {
+
+    return {
+      enter(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition enter ekip")
+
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "flex", yPercent: 0 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 100,
+            ease: "expo.inOut",
+            onComplete:()=>{
+              gsap.set('.transition-overlay',{clearProps:"all"})
+              gsap.set('.transition-stars',{clearProps:"all"})
+              gsap.set('.transition-subtitle span',{clearProps:"all"})
+              gsap.set('.transition-title span',{clearProps:"all"})
+              gsap.set('.transitionInfo',{clearProps:"all"})
+              done()
+            }
+          }
+        );
+
+      },
+      leave(el: Element, done: Function) {
+        console.log("transition leave ekip")
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = `LE TRABENDO`
+        let infoContent = document.querySelector('.transitionInfo-content span') as HTMLElement
+        infoContent.innerHTML = `Une des salles mythiques des battles Rap Contenders`
+
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+          }
+        );
+        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
+        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
+        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
+        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
+        tl.to('.transitionInfo',{duration:3,
+          onComplete:()=>{
+            done()
+          }
+        })
+
+      }
+    };
+  }
   // GETTERS
   get onboardingStep() {
     return this.onboardingStore.onboardingStep;

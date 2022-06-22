@@ -25,7 +25,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
   private _collectibleCollection: { env: Mesh[], collectibles: Mesh[] | Object3D[] }
   public cameraFollow: boolean = true;
   public ground: Mesh;
-  private _npcArray: Npc[] = []
+  public npcArray: Npc[] = []
 
   // private _keysPressed: any
 
@@ -92,8 +92,8 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
         })
 
 
-        if (this._npcArray.length > 0) {
-          this._npcArray.forEach((npc: Npc) => {
+        if (this.npcArray.length > 0) {
+          this.npcArray.forEach((npc: Npc) => {
             npc.update(ctx.deltaTime)
           })
         }
@@ -144,7 +144,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     this._camera = new PerspectiveCamera(
       50,
       this._data.canvas.width / this._data.canvas.height,
-      1,
+      12,
       1000
     )
     this._camera.position.set(0, 0, 5)
@@ -242,7 +242,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.populateSlots(fenceSlots, fence, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_FENCE_TEXTURE).data)
     SlotsLoader.populateSlots(electricPlotSlots, electricPlot, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_ELECTRIC_PLOT_TEXTURE).data)
     SlotsLoader.populateSlots(lightSlots, light, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_PUBLIC_LIGHT_TEXTURE).data)
-
+ 
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4], true)
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
@@ -250,8 +250,11 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
 
     const plane = new PlaneGeometry(32, 18)
     const screen = new Mesh(plane)
-    screen.position.set(-69, 20, -42)
-    screen.rotateY(Math.PI /2)
+    screen.position.set(-69, 20, -65)
+    
+    
+    screen.rotateY(9 * Math.PI /16)
+    console.log(screen);
     this._scene.add(screen);
 
     this._scene.traverse(object => {
@@ -263,8 +266,26 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     })
 
     this.addScreen(screen)
-    // const eric = new Npc(playerGltf, 'eric', 't-pose')
-    // eric.model.scale.set(25, 25, 25)
+
+    const npc_eric = new Npc(playerGltf, 'eric', 't-pose')
+    npc_eric.model.scale.set(25, 25, 25)
+    this.npcArray.push(npc_eric)
+
+    const npc_battle = new Npc(playerGltf, 'coach', 't-pose')
+    npc_battle.model.scale.set(25, 25, 25)
+    this.npcArray.push(npc_battle)
+
+    const npc_victor = new Npc(playerGltf, 'papy', 't-pose')
+    npc_victor.model.scale.set(25, 25, 25)
+    this.npcArray.push(npc_victor)
+
+    const npc_opponent = new Npc(playerGltf, 'opponent', 't-pose')
+    npc_opponent.model.scale.set(25, 25, 25)
+    this.npcArray.push(npc_opponent)
+
+    const npc_francois = new Npc(playerGltf, 'francois', 't-pose')
+    npc_francois.model.scale.set(25, 25, 25)
+    this.npcArray.push(npc_francois)
 
     // const npc_battle = new Npc(playerGltf, 'battle', 't-pose')
     // npc_battle.model.scale.set(25, 25, 25)
@@ -275,11 +296,12 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     // const npc_deenasty = new Npc(playerGltf, 'deenasty', 't-pose')
     // npc_deenasty.model.scale.set(25, 25, 25)
 
-    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric"), eric.model)
-    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_battle"), npc_battle.model)
-    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_ticaret"), npc_ticaret.model)
-    // SlotsLoader.populateSingleSlots(city.getObjectByName("npc_deenasty"), npc_deenasty.model)
-
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_eric_end"), npc_eric.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_victor_end"), npc_victor.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_coach_end"), npc_battle.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_opponent_end"), npc_opponent.model)
+    SlotsLoader.populateSingleSlots(city.getObjectByName("npc_francois_end"), npc_francois.model)
+ 
     this.player = new Player(playerGltf, 'player', 't-pose', this._camera, this._controls)
 
     this._scene.add(this.player.model);
@@ -335,6 +357,7 @@ export default class HoodSceneInitializer3 extends Initializers<{ canvas: HTMLCa
     })
     this._scene.add(this._collectibleColliders)
   }
+
   bvhCollider(env) {
     const params = {
       displayCollider: true,

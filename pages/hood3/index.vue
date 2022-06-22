@@ -42,6 +42,7 @@ import $socket from "~/plugins/socket.io";
 import BattleInteractPoint from "~/core/config/hood-scene/interact-points/BattleInteractPoint";
 import EricInteractPoint from "~/core/config/hood-scene/interact-points/EricInteractPoint";
 import TicaretInteractPoint from "~/core/config/hood-scene/interact-points/TicaretInteractPoint";
+import {gsap} from "gsap";
 
 @Component({
   components: {
@@ -250,7 +251,6 @@ export default class HoodScenePage3 extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
-          this.$router.push("/graf/scope");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -258,7 +258,6 @@ export default class HoodScenePage3 extends Vue {
           this.chatStore.setChatStep("reading");
           break;
         case "goBattle":
-          this.$router.push("/battle");
           $socket.io.emit("goTo", {
             path: "/_mobile/off",
             replace: true,
@@ -277,6 +276,130 @@ export default class HoodScenePage3 extends Vue {
       this.addInteractionPoints();
       this.hoodInstance.cameraFollow = true;
     });
+  }
+
+  transition() {
+
+    return {
+      enter(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition enter ekip")
+
+        let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+        videoOut.play()
+        videoOut.onended = ()=>{
+          gsap.to(
+            ".transition-overlay",
+            {
+              display: "none",
+              duration: 1.5,
+              yPercent: 100,
+              ease: "expo.inOut",
+              onComplete: () => {
+                gsap.set(".transition-overlay", { display: 'none', yPercent: 100 });
+                gsap.set(videoOut, { display: "none",opacity:0 })
+                done()
+              },
+            }
+          );
+        }
+
+      },
+      leave(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition leave ekip")
+
+        let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        gsap.set(videoIn, { display: "block",opacity:1 })
+
+        let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+
+        gsap.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "block",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+            onComplete: () => {
+              videoIn.play()
+            },
+          }
+        );
+
+        videoIn.onended = ()=>{
+          gsap.set(videoIn, { display: "none",opacity:0 })
+          gsap.set(videoOut, { display: "block",opacity:1 })
+          done()
+        }
+
+      }
+    };
+  }
+
+  transition() {
+
+    return {
+      enter(el: Element, done: Function) {
+        console.log(el,'<--- voici el')
+        console.log("transition enter ekip")
+
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "flex", yPercent: 0 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 100,
+            ease: "expo.inOut",
+            onComplete:()=>{
+              gsap.set('.transition-overlay',{clearProps:"all"})
+              gsap.set('.transition-stars',{clearProps:"all"})
+              gsap.set('.transition-subtitle span',{clearProps:"all"})
+              gsap.set('.transition-title span',{clearProps:"all"})
+              gsap.set('.transitionInfo',{clearProps:"all"})
+              done()
+            }
+          }
+        );
+
+      },
+      leave(el: Element, done: Function) {
+        console.log("transition leave ekip")
+        // let videoIn = document.querySelector('.transition-overlayVideoIn') as HTMLMediaElement
+        // let videoOut = document.querySelector('.transition-overlayVideoOut') as HTMLMediaElement
+
+        let title = document.querySelector('.transition-title span') as HTMLElement
+        title.innerHTML = `LE TRABENDO`
+
+        let tl = gsap.timeline()
+        tl.fromTo(
+          ".transition-overlay",
+          { display: "none", yPercent: 100 },
+          {
+            display: "flex",
+            duration: 1.5,
+            yPercent: 0,
+            ease: "expo.inOut",
+          }
+        );
+        tl.fromTo('.transition-stars',{opacity:0},{stagger:0.1,opacity:1,duration:0.5,ease: "expo.inOut"})
+        tl.fromTo('.transition-subtitle span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.25')
+        tl.fromTo('.transition-title span',{yPercent:100},{ease: "expo.out",duration:1,yPercent:0},'-=0.75')
+        tl.fromTo('.transitionInfo',{opacity:0},{ease: "expo.out",duration:1,opacity:1},'-=0.5')
+        tl.to('.transitionInfo',{duration:3,
+          onComplete:()=>{
+            done()
+          }
+        })
+
+      }
+    };
   }
 
   // GETTERS

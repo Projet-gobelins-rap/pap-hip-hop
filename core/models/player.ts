@@ -149,7 +149,7 @@ export class Player extends Character {
         // copy model position to keep raycast's origin on player position
         this.raycaster.ray.origin.copy(this.model.position)
         // copy allow to modify y position, without copy, player fly away
-        this.raycaster.ray.origin.y += 3
+        this.raycaster.ray.origin.y += 2
         this.raycaster.ray.direction = this.walkDirection.negate()
     }
  

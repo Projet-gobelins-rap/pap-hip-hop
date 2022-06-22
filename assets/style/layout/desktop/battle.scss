@@ -101,6 +101,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px;
 
   &-img {
     width: 100px;
@@ -113,7 +114,7 @@
     background-color: $white;
     border-radius: 8px;
     padding: 5px;
-    width: 240px;
+    width: 210px;
     height: 40px;
     position: relative;
     z-index: 2;
@@ -131,7 +132,7 @@
   }
 
   &-gauge {
-    width: 60%;
+    width: 100%;
     height: 100%;
     position: relative;
     border-radius: 5px;
