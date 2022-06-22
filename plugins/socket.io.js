@@ -15,7 +15,7 @@ class WebsocketManager {
 
     // ON SET LA VALEUR ICI POUR LE DEV MODE --> TODO --> a remove quand on passera en production
     $storage.setInLocalStorage('room',this.room)
-
+    //
     // if ($storage.getInLocalStorage('room')) {
     //   this.room = $storage.getInLocalStorage('room')
     //   console.log('ON PASSE')
