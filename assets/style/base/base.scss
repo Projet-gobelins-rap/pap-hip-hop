@@ -29,6 +29,9 @@ body {
 	flex-direction: column;
   //overflow-x: hidden;
 }
+.desktop {
+  overflow: hidden;
+}
 
 #noise {
 	z-index: 100;
