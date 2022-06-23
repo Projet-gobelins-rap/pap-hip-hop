@@ -61,7 +61,7 @@
           />
           <CustomButton
             :class="'hood-outfit--button small disable'"
-            v-else-if="i < 2 "
+            v-else-if="i < 2"
             :text="'Déjà équipée'"
           />
         </div>
@@ -190,7 +190,12 @@ export default class HoodScenePage2 extends Vue {
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
       console.log(this.npcDialogues);
-    
+
+      $socket.io.emit("goTo", {
+        path: "/_mobile/phone",
+        replace: true,
+      });
+
       HoodScene.initCallback((toastID: string) => {
         this.displayToast(toastID);
       });
@@ -270,7 +275,7 @@ export default class HoodScenePage2 extends Vue {
 
   closeStore() {
     this.storeOpen = false;
-    this.toastMessage = "Trouve le coach";
+    this.toastMessage = "Trouve le stunner";
     this.chatStore.setChatStep("reading");
     this.goBack();
   }

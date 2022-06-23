@@ -32,7 +32,7 @@ import chatStore from "~/store/chatStore";
 import ChatComponent from "~/components/contentOverlays/chat.vue";
 import TvInteractPoint from "../../core/config/grenier-scene/interact-points/objects/TvInteractPoint";
 import ModeCameraPosition from "../../core/config/grenier-scene/camera-positions/ModeCameraPosition";
-import GUI from "lil-gui";
+
 import emitter from 'tiny-emitter/instance'
 import $socket from "~/plugins/socket.io";
 import {gsap} from "gsap";
@@ -62,7 +62,6 @@ export default class GrenierScene extends Vue {
   public chatStore = getModule(chatStore, this.$store);
   public conversation: any;
   public currentChat: any;
-  public gui = new GUI();
   public genierInstance: GrenierSceneInitializer;
 
   mounted() {

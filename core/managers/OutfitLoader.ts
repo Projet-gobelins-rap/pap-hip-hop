@@ -19,6 +19,10 @@ export class Outfitloader {
             GLTF_ASSET.HEAD_BREAKER_A,
             GLTF_ASSET.HEAD_BREAKER_B,
             GLTF_ASSET.HEAD_BREAKER_C,
+            GLTF_ASSET.FRANCOIS_HEAD,
+            GLTF_ASSET.HEAD_NEPAL,
+            GLTF_ASSET.HEAD_FUTURA,
+            GLTF_ASSET.NPC_DAN_HEAD,
         ]
         this.outfitCollection = new Map()
         this.loadOutfits()

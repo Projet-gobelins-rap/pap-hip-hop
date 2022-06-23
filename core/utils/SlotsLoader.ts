@@ -9,9 +9,9 @@ export default class SlotsLoader {
     public slots: Map<string, object>
     // public populateSlots: () => void
 
-    public static populateSingleSlots(slot: Object3D, baseObject: Object3D | Group | Mesh, texture: Texture| null = null): void {
+    public static populateSingleSlots(slot: Object3D, baseObject: Object3D | Group | Mesh, texture: Texture | null = null): void {
         slot.children = []
-        if(texture) {
+        if (texture) {
             texture.flipY = false
             baseObject.children[0].material.map = texture
         }
@@ -27,7 +27,7 @@ export default class SlotsLoader {
             const colliderGeometry = Helpers.generateBoxCollider(object)
         });
     }
-    
+
     public static generateBuilding(slots: Object3D[], buildingVariations: Object3D[], isGraffed: boolean = false): void {
         slots.forEach(slot => {
             const variation = slot.name.split('__')
@@ -38,7 +38,7 @@ export default class SlotsLoader {
 
             // console.log(variation);
             // console.log(params);
- 
+
             switch (params[3]) {
                 case "1":
                     texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_TEXTURE).data
@@ -47,34 +47,34 @@ export default class SlotsLoader {
                     slot.add(buildingVariations[0].clone())
                     break;
                 case "2":
-                    
-                    if(isGraffed && (variation[1] == "nepal")) {
-                        texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data 
+
+                    if (isGraffed && (variation[1] == "nepal")) {
+                        texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_NEPAL).data
                         texture.flipY = false
                         slot.add(buildingVariations[1].clone())
 
-                        const mat = new MeshBasicMaterial({map: texture})
+                        const mat = new MeshBasicMaterial({ map: texture })
                         slot.children[0].children[0].material = mat
-                        
+
                     } else {
                         texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_2_TEXTURE).data
                         texture.flipY = false
-                         const mat = new MeshBasicMaterial({map: texture})
+                        const mat = new MeshBasicMaterial({ map: texture })
                         slot.add(buildingVariations[1].clone())
                         slot.children[0].children[0].material = mat
                     }
                     break;
                 case "3":
-                    if(isGraffed && (variation[1] == "futura")) {
-                     texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_FUTURA).data 
+                    if (isGraffed && (variation[1] == "futura")) {
+                        texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_1_FUTURA).data
                         texture.flipY = false
                         slot.add(buildingVariations[2].clone())
-                        const mat = new MeshBasicMaterial({map: texture})
+                        const mat = new MeshBasicMaterial({ map: texture })
                         slot.children[0].children[0].material = mat
                     } else {
-                       texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data
+                        texture = AssetsManager.getTexture(TEXTURE_ASSET.SLOT_BUILDING_TYPE_3_TEXTURE).data
                         texture.flipY = false
-                         const mat = new MeshBasicMaterial({map: texture})
+                        const mat = new MeshBasicMaterial({ map: texture })
                         slot.add(buildingVariations[2].clone())
                         slot.children[0].children[0].material = mat
                     }
@@ -93,9 +93,10 @@ export default class SlotsLoader {
 
     public static generateCollectible(slots: Object3D[], collectedItems: string[]): void {
         slots.forEach(slot => {
-            if(!(collectedItems?.includes(slot.name))) {
+            if (!(collectedItems?.includes(slot.name))) {
                 let model = AssetsManager.getGltf(slot.name).data.scene.clone()
-                slot.add(model) 
+                // slot.children[0]?.material.visible = false
+                slot.add(model)
                 model.children[0].position.y = 70
             } else {
                 slot.children = []

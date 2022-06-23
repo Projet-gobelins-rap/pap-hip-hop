@@ -233,7 +233,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     const end = city.getObjectByName('NPC_END')
     const affiches = city.getObjectByName('group_affiches')
     this.ground = city.getObjectByName('CITY_a_baked1')
-
+ 
     console.log(city);
     
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
@@ -302,17 +302,15 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     const npc_futura = new Npc(playerGltf, 'futura', 't-pose')
     npc_futura.model.scale.set(25, 25, 25)
-    npc_futura.animationPlayed = 'rap'
     this.npcArray.push(npc_futura)
 
     const npc_graff = new Npc(playerGltf, 'graff', 't-pose')
     npc_graff.model.scale.set(25, 25, 25)
-    npc_graff.animationPlayed = 'rap'
+    npc_graff.animationPlayed = 'graf'
     this.npcArray.push(npc_graff)
 
     const npc_nepal = new Npc(playerGltf, 'nepal', 't-pose')
     npc_nepal.model.scale.set(25, 25, 25)
-    npc_nepal.animationPlayed = 'rap'
     this.npcArray.push(npc_nepal)
 
     const npc_sitting_floor = new Npc(playerGltf, 'sitting_floor', 't-pose')

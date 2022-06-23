@@ -137,6 +137,11 @@ export default class HoodScenePage3 extends Vue {
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
 
+      $socket.io.emit("goTo", {
+        path: "/_mobile/phone",
+        replace: true,
+      });
+
       HoodScene.initCallback((toastID: string) => {
         console.log(toastID);
         this.displayToast(toastID);
@@ -404,8 +409,7 @@ export default class HoodScenePage3 extends Vue {
             },
           }
         );
-      }
-
+      },
     };
   }
 

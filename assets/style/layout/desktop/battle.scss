@@ -8,6 +8,7 @@
   &-opponentTour {
     .responseContainer {
       transform: translateX(-40%);
+      z-index: 10;
     }
     .btn-battle {
       transform: translateX(-40%);
@@ -16,6 +17,7 @@
   &-playerTour {
     .responseContainer {
       transform: translateX(40%);
+      z-index: 10;
     }
     .btn-battle {
       transform: translateX(40%);
@@ -150,6 +152,7 @@
 .responseContainer{
   display: flex;
   flex-direction: column-reverse;
+  z-index: 10;
   span {
     display: none;
     opacity: 0;

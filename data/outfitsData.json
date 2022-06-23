@@ -80,8 +80,8 @@
             },
             "body": {
                 "color": "green",
-                "textureBody": "PLAYER_TICARET_BODY_TEXTURE",
-                "textureArms": "PLAYER_TICARET_ARMS_TEXTURE"
+                "textureBody": "NPC_DAN_BODY_TEXTURE",
+                "textureArms": "BLACK_TEXTURE"
             }
         },
         {
@@ -100,15 +100,14 @@
         {
             "name": "francois",
             "head": {
-                "model": "head_graffeur",
+                "model": "head_francois",
                 "color": "green"
             },
-            "body": {
+            "body": {   
                 "color": "green",
-                "textureBody": "NPC_MOUSSA_BODY_TEXTURE",
-                "textureArms": "NPC_MOUSSA_ARMS_TEXTURE",
-                "textureLegs": "NPC_MOUSSA_LEGS_TEXTURE"
-            }
+                "textureBody": "NPC_FRANCOIS_BODY_TEXTURE",
+                "textureArms": "NPC_FRANCOIS_ARMS_TEXTURE"
+            } 
         },
         {
             "name": "break_1",
@@ -161,49 +160,52 @@
         {
             "name": "sitting_wall",
             "head": {
-                "model": "head_deenasty",
+                "model": "head_francois",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
-                "textureArms": "RED_TEXTURE"
+                "textureBody": "NPC_FRANCOIS_BODY_TEXTURE",
+                "textureArms": "NPC_FRANCOIS_ARMS_TEXTURE"
             }
         },
         {
             "name": "sitting_floor",
             "head": {
-                "model": "head_deenasty",
+                "model": "player_head",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
-                "textureArms": "RED_TEXTURE"
+                "textureBody": "WHITE_TEXTURE",
+                "textureArms": "WHITE_TEXTURE",
+                "textureLegs": "BLACK_TEXTURE"
             }
         },
         {
             "name": "nepal",
             "head": {
-                "model": "head_deenasty",
+                "model": "head_nepal",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
-                "textureArms": "RED_TEXTURE"
+                "textureBody": "WHITE_TEXTURE",
+                "textureArms": "WHITE_TEXTURE",
+                "textureLegs": "WHITE_TEXTURE"
             }
         },
         {
             "name": "futura",
             "head": {
-                "model": "head_deenasty",
+                "model": "HEAD_FUTURA",
                 "color": "green"
             },
             "body": {
                 "color": "green",
-                "textureBody": "NPC_DEENASTY_BODY_TEXTURE",
-                "textureArms": "RED_TEXTURE"
+                "textureBody": "BLUE_JEAN_TEXTURE",
+                "textureArms": "BLUE_JEAN_TEXTURE",
+                "textureLegs": "FUTURA_PANT_TEXTURE"
             }
         },
         {
@@ -221,7 +223,7 @@
         {
             "name": "graff",
             "head": {
-                "model": "head_deenasty",
+                "model": "head_graffeur",
                 "color": "green"
             },
             "body": {
@@ -230,8 +232,8 @@
                 "textureArms": "RED_TEXTURE"
             }
         }
-
     ],
+
     "player": {
         "name": "player",
         "head": {
