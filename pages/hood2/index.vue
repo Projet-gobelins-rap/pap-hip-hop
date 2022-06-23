@@ -113,6 +113,7 @@ import { IMAGE_ASSET } from "~/core/enums";
         hoodContent?.slices4,
         hoodContent?.slices5,
         hoodContent?.slices6,
+        hoodContent?.slices7,
       ];
 
       return {
@@ -151,6 +152,7 @@ export default class HoodScenePage2 extends Vue {
 
   mounted() {
     // this.displayOnboarding();
+    this.hideOnboarding();
     this.startScene();
   }
 
@@ -187,7 +189,8 @@ export default class HoodScenePage2 extends Vue {
 
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
-
+      console.log(this.npcDialogues);
+    
       HoodScene.initCallback((toastID: string) => {
         this.displayToast(toastID);
       });
@@ -245,7 +248,7 @@ export default class HoodScenePage2 extends Vue {
       this.hoodSceneStore.setIsChatDisplay(true);
       const name = point.slug.split("_");
 
-      this.talkToNpc(name[1]);
+      // this.talkToNpc(name[1]);
     });
   }
 
@@ -388,7 +391,7 @@ export default class HoodScenePage2 extends Vue {
     // this.addInteractionPoints();
     // this.talkingNpc.animationPlayed = 'idle'
     // this.talkingNpc = null
-    this.findNpc(this.talkingNpc).animationPlayed = "idle";
+    // this.findNpc(this.talkingNpc).animationPlayed = "idle";
     HoodScene.context.goToPresetPosition("reset", 2, () => {
       this.addInteractionPoints();
       this.hoodInstance.cameraFollow = true;

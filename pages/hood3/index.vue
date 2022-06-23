@@ -118,8 +118,7 @@ export default class HoodScenePage3 extends Vue {
   public popupOpen: boolean = false;
 
   mounted() {
-    // this.displayOnboarding();
-
+    this.hideOnboarding();
     this.startScene();
   }
 
