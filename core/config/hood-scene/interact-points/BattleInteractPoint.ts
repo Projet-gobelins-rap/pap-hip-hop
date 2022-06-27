@@ -5,7 +5,7 @@ import HoodScene from "../../../scene/HoodScene";
 
 const BattleInteractPoint: InteractionPoint = {
   slug: "npc_battle",
-  name: "Coach",
+  name: "Stunner",
   type: "npc",
 
   canvasCoords: () => {

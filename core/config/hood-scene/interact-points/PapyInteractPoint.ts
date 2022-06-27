@@ -4,18 +4,16 @@ import { InteractionPoint } from "./types";
 import HoodScene from "../../../scene/HoodScene";
 
 const PapyInteractPoint: InteractionPoint = {
-  slug: "npc_eric_end",
+  slug: "npc_victor_end",
   name: "Papy",
   type: "npc",
 
   canvasCoords: () => {
     const position = new Vector3();
-    const target = HoodScene.context.scene.getObjectByName("npc_eric_end")!
+    const target = HoodScene.context.scene.getObjectByName("npc_victor_end")!
     target.getWorldPosition(position);
     
-
-    // position.y = 1 + position.y;
-    // position.x = 1 + position.x;
+    position.y = 12 + position.y;
 
     return position;
   },

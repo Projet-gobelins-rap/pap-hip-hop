@@ -68,6 +68,10 @@ export default class Default extends Vue {
 
   mounted() {
     console.log(process.env.isMobile, "ismobile");
+    if(this.$device.isDesktop){
+      let main = document.querySelector('.main')
+      main.classList.add('desktop')
+    }
     this.$nuxt.$on("loadDesktopMedia", (desktopMedia) => {
       this.desktopMedias = desktopMedia.desktopMedias.slices[0].items;
       console.log(this.desktopMedias);
@@ -180,7 +184,7 @@ export default class Default extends Vue {
       ease: "elastic.in(1, 0.6)",
       onStart: () => {
         // TODO : Move to AssetManager successCallback
-        // this.$router.push({ path: "/intro", replace: true });
+        this.$router.push({ path: "/intro", replace: true });
       },
     });
 

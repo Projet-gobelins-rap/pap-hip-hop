@@ -230,8 +230,10 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     const lightSlots = city.getObjectByName('group_public_light').children
     const tower1Slots = city.getObjectByName('slot_tower')
     const tower2Slots = city.getObjectByName('slot_tower_lg')
+    const end = city.getObjectByName('NPC_END')
+    const affiches = city.getObjectByName('group_affiches')
     this.ground = city.getObjectByName('CITY_a_baked1')
-
+ 
     console.log(city);
     
     SlotsLoader.populateSlots(treeSlots, tree, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TREE_TEXTURE).data)
@@ -246,7 +248,8 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
     SlotsLoader.generateBuilding(buildingSlots, [building1, building2, building3, building4], true)
     SlotsLoader.populateSingleSlots(tower1Slots, tower1, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_TEXTURE).data)
     SlotsLoader.populateSingleSlots(tower2Slots, tower2, AssetsManager.getTexture(TEXTURE_ASSET.SLOT_TOWER_LG_TEXTURE).data)
-    
+    affiches.children = []
+    end.children = []
 
     this._scene.traverse(object => {
       if (object.isMesh) {
@@ -299,17 +302,15 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     const npc_futura = new Npc(playerGltf, 'futura', 't-pose')
     npc_futura.model.scale.set(25, 25, 25)
-    npc_futura.animationPlayed = 'rap'
     this.npcArray.push(npc_futura)
 
     const npc_graff = new Npc(playerGltf, 'graff', 't-pose')
     npc_graff.model.scale.set(25, 25, 25)
-    npc_graff.animationPlayed = 'rap'
+    npc_graff.animationPlayed = 'graf'
     this.npcArray.push(npc_graff)
 
     const npc_nepal = new Npc(playerGltf, 'nepal', 't-pose')
     npc_nepal.model.scale.set(25, 25, 25)
-    npc_nepal.animationPlayed = 'rap'
     this.npcArray.push(npc_nepal)
 
     const npc_sitting_floor = new Npc(playerGltf, 'sitting_floor', 't-pose')
@@ -347,8 +348,6 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
 
     this.bvhCollider(city)
 
-    SlotsLoader.generateCollectible(this._collectibles.children)
-
     this._collectibles = city.getObjectByName('group_collectable')
     SlotsLoader.generateCollectible(this._collectibles.children)
     
@@ -368,7 +367,7 @@ export default class HoodSceneInitializer2 extends Initializers<{ canvas: HTMLCa
   collectiblesCollider() {
     this._collectibles.children.forEach(object => {
       const colliderGeometry = Helpers.generateBoxCollider(object)
-      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: true})
+      const mat = new MeshBasicMaterial({color: 'red', wireframe: true, visible: false})
       const collider = new Mesh(colliderGeometry, mat)
       collider.name = object.name
       console.log(collider.name);

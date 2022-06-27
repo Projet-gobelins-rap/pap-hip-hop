@@ -118,7 +118,8 @@ export default class HoodScenePage3 extends Vue {
   public popupOpen: boolean = false;
 
   mounted() {
-    this.displayOnboarding();
+    this.hideOnboarding();
+    this.startScene();
   }
 
   destroyed() {
@@ -136,6 +137,11 @@ export default class HoodScenePage3 extends Vue {
     if (HoodScene.context._isStarted) {
       this.addInteractionPoints();
 
+      $socket.io.emit("goTo", {
+        path: "/_mobile/phone",
+        replace: true,
+      });
+
       HoodScene.initCallback((toastID: string) => {
         console.log(toastID);
         this.displayToast(toastID);
@@ -150,8 +156,7 @@ export default class HoodScenePage3 extends Vue {
         case "reading":
           break;
         case "hide":
-          this.hideOnboarding();
-          this.startScene();
+          // this.hideOnboarding();
           $socket.io.emit("goTo", {
             path: "/_mobile/phone",
             replace: true,
@@ -267,8 +272,6 @@ export default class HoodScenePage3 extends Vue {
   @Watch("chatStep", { immediate: true, deep: true })
   setChatStep(val: string) {
     if (val) {
-      console.log(val);
-
       switch (val) {
         case "reading":
           break;
@@ -278,6 +281,11 @@ export default class HoodScenePage3 extends Vue {
           break;
         case "goBack":
           this.goBack();
+          this.chatStore.setChatStep("reading");
+          break;
+        case "showTickets":
+          this.popupOpen = true;
+          this.hoodSceneStore.setIsChatDisplay(false);
           this.chatStore.setChatStep("reading");
           break;
         case "goGraff":
@@ -401,8 +409,7 @@ export default class HoodScenePage3 extends Vue {
             },
           }
         );
-      }
-
+      },
     };
   }
 

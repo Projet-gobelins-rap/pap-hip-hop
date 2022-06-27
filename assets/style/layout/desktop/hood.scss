@@ -5,6 +5,7 @@
     align-items: flex-end;
     justify-content: center;
     display: flex;
+    overflow: hidden;
     background: rgb(179, 229, 255);
     background: linear-gradient(0deg, rgba(179, 229, 255, 1) 0%, rgba(46, 183, 255, 1) 100%);
 
@@ -54,6 +55,20 @@
             left: 50%;
             bottom: -40px;
             transform: translate(-50%, 100%);
+
+            &.disable {
+                opacity: 0.5;
+            }
+        }
+
+        .btn {
+            span {
+                color: $black;
+            }
+
+            &::before {
+                background-color: $white;
+            }
         }
     }
 
@@ -63,7 +78,7 @@
         left: 50%;
         z-index: 100;
         transform: translateX(-50%);
-        width: 1200px;
+        width: 1264px;
         max-width: 100%;
         display: flex;
         height: calc(100% - 100px);
@@ -73,12 +88,11 @@
             opacity: 0;
             pointer-events: none;
         }
-       
     }
-
+    
     &-html {
         width: 100%;
-        height: 1926px;
+        height: 2055px;
     }
 
     // #canvasGlobalScene {
