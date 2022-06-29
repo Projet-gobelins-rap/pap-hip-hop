@@ -184,7 +184,9 @@ export default class Default extends Vue {
       ease: "elastic.in(1, 0.6)",
       onStart: () => {
         // TODO : Move to AssetManager successCallback
-        this.$router.push({ path: "/intro", replace: true });
+        if(!this.$device.isMobile) {
+          this.$router.push({ path: "/intro", replace: true });
+        }
       },
     });
 
